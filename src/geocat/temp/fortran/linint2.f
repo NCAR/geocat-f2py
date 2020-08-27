@@ -1,5 +1,5 @@
-C -----------------------------------------------------------
-C NCLFORTSTART
+c -----------------------------------------------------------
+c NCLFORTSTART
       SUBROUTINE DLININT1(NXI,XI,FI,ICYCX,NXO,XO,FO,XIW,FXIW,NXI2,XMSG,
      +                    IOPT,IER)
       IMPLICIT NONE
@@ -7,10 +7,10 @@ C NCLFORTSTART
       DOUBLE PRECISION XI(NXI),FI(NXI)
       DOUBLE PRECISION XO(NXO),FO(NXO),XMSG
       DOUBLE PRECISION XIW(NXI2),FXIW(NXI2)
-C NCLEND
+c NCLEND
 
-C This is written  with GNU f77 acceptable extensions
-C .   to allow for compilation on linux platforms.
+c This is written  with GNU f77 acceptable extensions
+c .   to allow for compilation on linux platforms.
 c .   This could be improved considerably with f90
 
 c NCL:  fo = linint1 (xi,fi, wrapX, xo, iopt)
