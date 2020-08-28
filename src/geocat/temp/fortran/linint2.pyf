@@ -82,19 +82,19 @@ python module linint2 ! in
         end subroutine dmonoid2
         ! signature : fo = dlinint2pts(xi,yi,fi,xo,yo,[icycx,xmsg])
         subroutine dlinint2pts(nxi,xi,nyi,yi,fi,icycx,nxyo,xo,yo,fo,xiw,fixw,nxi2,xmsg,ier) ! in :linint2:linint2.f
-            integer,            check(len(xi)>=nxi),depend(xi),                 intent(hide)    :: nxi=len(xi)
+            integer,            depend(xi),                                     intent(hide)    :: nxi=len(xi)
             double precision,   dimension(nxi),                                 intent(in)      :: xi
-            integer,            check(len(yi)>=nyi),depend(yi),                 intent(hide)    :: nyi=len(yi)
+            integer,            depend(yi),                                     intent(hide)    :: nyi=len(yi)
             double precision,   dimension(nyi),                                 intent(in)      :: yi
             double precision,   dimension(nxi,nyi),depend(nxi,nyi),             intent(in)      :: fi
             integer,            optional,                                       intent(in)      :: icycx=0
-            integer,            check(len(xo)>=nxyo),depend(xo),                intent(hide)    :: nxyo=len(xo)
+            integer,            depend(xo),                                     intent(hide)    :: nxyo=len(xo)
             double precision,   dimension(nxyo),                                intent(in)      :: xo
             double precision,   dimension(nxyo),                                intent(in)      :: yo
             double precision,   dimension(nxyo),depend(nxyo),                   intent(out)     :: fo(nxyo)
             double precision,   dimension(nxi2),                                intent(hide)    :: xiw(nxi2)
             double precision,   dimension(nxi2,nyi),depend(nxi2,nyi),           intent(hide)    :: fixw(nxi2,nyi)
-            integer,            check(len(xiw)>=nxi2),depend(xiw),              intent(hide)    :: nxi2=len(xiw)
+            integer,            depend(xw),                                     intent(hide)    :: nxi2=len(xi)
             double precision,   optional,                                       intent(in)      :: xmsg=-99
             integer,                                                            intent(hide)    :: ier=0
         end subroutine dlinint2pts
