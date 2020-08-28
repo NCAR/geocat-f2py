@@ -11,8 +11,8 @@ python module linint2 ! in
             integer,            check(len(xo)>=nxo),depend(xo),                 intent(hide)    :: nxo=len(xo)
             double precision,   dimension(nxo),                                 intent(in)      :: xo
             double precision,   dimension(nxo),depend(nxo),                     intent(out)     :: fo
-            double precision,   dimension(nxi2),                                intent(hide)    :: xiw=_i[0]  ! the use of _i[0] is a hack, replace when alternative is found
-            double precision,   dimension(nxi2),                                intent(hide)    :: fxiw=_i[0]  ! the use of _i[0] is a hack, replace when alternative is found
+            double precision,   dimension(nxi2),depend(nxi2),                   intent(hide)    :: xiw(nxi2)
+            double precision,   dimension(nxi2),depend(nxi2),                   intent(hide)    :: fxiw(nxi2)
             integer,            check(len(xiw)>=nxi2),depend(xiw),              intent(hide)    :: nxi2=len(xiw)
             double precision,   optional,                                       intent(in)      :: xmsg=-99
             integer,            optional,                                       intent(in)      :: iopt=0
@@ -30,8 +30,8 @@ python module linint2 ! in
             integer,            check(len(yo)>=nyo),depend(yo),                 intent(hide)    :: nyo=len(yo)
             double precision,   dimension(nyo),                                 intent(in)      :: yo
             double precision,   dimension(nxo,nyo),depend(nxo,nyo),             intent(out)     :: fo
-            double precision,   dimension(nxi2),                                intent(hide)    :: xiw=_i[0]  ! the use of _i[0] is a hack, replace when alternative is found
-            double precision,   dimension(nxi2),                                intent(hide)    :: fxiw=_i[0]  ! the use of _i[0] is a hack, replace when alternative is found
+            double precision,   dimension(nxi2),depend(nxi2),                   intent(hide)    :: xiw(nxi2)
+            double precision,   dimension(nxi2),depend(nxi2),                   intent(hide)    :: fxiw(nxi2)
             integer,            check(len(xiw)>=nxi2),depend(xiw),              intent(hide)    :: nxi2=len(xiw)
             double precision,   optional,                                       intent(in)      :: xmsg=-99
             integer,            optional,                                       intent(in)      :: iopt=0
