@@ -5,36 +5,36 @@ python module linint2 ! in
     interface  ! in :linint2
         ! signature : fo = dlinint1(xi,fi,xo,[icycx,xmsg,iopt])
         subroutine dlinint1(nxi,xi,fi,icycx,nxo,xo,fo,xiw,fxiw,nxi2,xmsg,iopt,ier) ! in :linint2:linint2.f
-            integer,            check(len(xi)>=nxi),depend(xi),                 intent(hide)    :: nxi=len(xi)
+            integer,            depend(xi),                                     intent(hide)    :: nxi=len(xi)
             double precision,   dimension(nxi),                                 intent(in)      :: xi
             double precision,   dimension(nxi),depend(nxi),                     intent(in)      :: fi
             integer,            optional,                                       intent(in)      :: icycx=0
-            integer,            check(len(xo)>=nxo),depend(xo),                 intent(hide)    :: nxo=len(xo)
+            integer,            depend(xo),                                     intent(hide)    :: nxo=len(xo)
             double precision,   dimension(nxo),                                 intent(in)      :: xo
             double precision,   dimension(nxo),depend(nxo),                     intent(out)     :: fo(nxo)
             double precision,   dimension(nxi2),depend(nxi2),                   intent(hide)    :: xiw(nxi2)
             double precision,   dimension(nxi2),depend(nxi2),                   intent(hide)    :: fxiw(nxi2)
-            integer,            check(len(xiw)>=nxi2),depend(xiw),              intent(hide)    :: nxi2=len(xiw)
+            integer,            depend(xi),                                     intent(hide)    :: nxi2=len(xi)
             double precision,   optional,                                       intent(in)      :: xmsg=-99
             integer,            optional,                                       intent(in)      :: iopt=0
             integer,                                                            intent(hide)    :: ier=0
         end subroutine dlinint1
         ! signature : fo = dlinint2(xi,yi,fi,xo,yo,[icycx,xmsg,iopt])
         subroutine dlinint2(nxi,xi,nyi,yi,fi,icycx,nxo,xo,nyo,yo,fo,xiw,fxiw,nxi2,xmsg,iopt,ier) ! in :linint2:linint2.f
-            integer,            check(len(xi)>=nxi),depend(xi),                 intent(hide)    :: nxi=len(xi)
+            integer,            depend(xi),                                     intent(hide)    :: nxi=len(xi)
             double precision,   dimension(nxi),                                 intent(in)      :: xi
-            integer,            check(len(yi)>=nyi),depend(yi),                 intent(hide)    :: nyi=len(yi)
+            integer,            depend(yi),                                     intent(hide)    :: nyi=len(yi)
             double precision,   dimension(nyi),                                 intent(in)      :: yi
             double precision,   dimension(nxi,nyi),                             intent(in)      :: fi
             integer,            optional,                                       intent(in)      :: icycx=0
-            integer,            check(len(xo)>=nxo),depend(xo),                 intent(hide)    :: nxo=len(xo)
+            integer,            depend(xo),                                     intent(hide)    :: nxo=len(xo)
             double precision,   dimension(nxo),                                 intent(in)      :: xo
-            integer,            check(len(yo)>=nyo),depend(yo),                 intent(hide)    :: nyo=len(yo)
+            integer,            depend(yo),                                     intent(hide)    :: nyo=len(yo)
             double precision,   dimension(nyo),                                 intent(in)      :: yo
             double precision,   dimension(nxo,nyo),depend(nxo,nyo),             intent(out)     :: fo(nxo,nyo)
             double precision,   dimension(nxi2),depend(nxi2),                   intent(hide)    :: xiw(nxi2)
             double precision,   dimension(nxi2),depend(nxi2),                   intent(hide)    :: fxiw(nxi2)
-            integer,            check(len(xiw)>=nxi2),depend(xiw),              intent(hide)    :: nxi2=len(xiw)
+            integer,            depend(xi),                                     intent(hide)    :: nxi2=len(xi)
             double precision,   optional,                                       intent(in)      :: xmsg=-99
             integer,            optional,                                       intent(in)      :: iopt=0
             integer,                                                            intent(hide)    :: ier=0
