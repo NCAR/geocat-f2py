@@ -10,7 +10,7 @@ python module linint2 ! in
             integer,            optional,                                       intent(in)      :: icycx=0
             integer,            check(len(xo)>=nxo),depend(xo),                 intent(hide)    :: nxo=len(xo)
             double precision,   dimension(nxo),                                 intent(in)      :: xo
-            double precision,   dimension(nxo),depend(nxo),                     intent(out)     :: fo
+            double precision,   dimension(nxo),depend(nxo),                     intent(out)     :: fo(nxo)
             double precision,   dimension(nxi2),depend(nxi2),                   intent(hide)    :: xiw(nxi2)
             double precision,   dimension(nxi2),depend(nxi2),                   intent(hide)    :: fxiw(nxi2)
             integer,            check(len(xiw)>=nxi2),depend(xiw),              intent(hide)    :: nxi2=len(xiw)
@@ -29,7 +29,7 @@ python module linint2 ! in
             double precision,   dimension(nxo),                                 intent(in)      :: xo
             integer,            check(len(yo)>=nyo),depend(yo),                 intent(hide)    :: nyo=len(yo)
             double precision,   dimension(nyo),                                 intent(in)      :: yo
-            double precision,   dimension(nxo,nyo),depend(nxo,nyo),             intent(out)     :: fo
+            double precision,   dimension(nxo,nyo),depend(nxo,nyo),             intent(out)     :: fo(nxo,nyo)
             double precision,   dimension(nxi2),depend(nxi2),                   intent(hide)    :: xiw(nxi2)
             double precision,   dimension(nxi2),depend(nxi2),                   intent(hide)    :: fxiw(nxi2)
             integer,            check(len(xiw)>=nxi2),depend(xiw),              intent(hide)    :: nxi2=len(xiw)
