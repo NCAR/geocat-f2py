@@ -1,7 +1,7 @@
 !    -*- f90 -*-
 ! Note: the context of this file is case sensitive.
 
-python module linint2 ! in 
+python module linint2 ! in
     interface  ! in :linint2
         ! signature : fo = dlinint1(xi,fi,xo,[icycx,xmsg,iopt])
         subroutine dlinint1(nxi,xi,fi,icycx,nxo,xo,fo,xiw,fxiw,nxi2,xmsg,iopt,ier) ! in :linint2:linint2.f
