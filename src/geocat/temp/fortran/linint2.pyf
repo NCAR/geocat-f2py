@@ -3,6 +3,7 @@
 
 python module linint2 ! in 
     interface  ! in :linint2
+        ! signature : fo = dlinint1(xi,fi,xo,[icycx,xmsg,iopt])
         subroutine dlinint1(nxi,xi,fi,icycx,nxo,xo,fo,xiw,fxiw,nxi2,xmsg,iopt,ier) ! in :linint2:linint2.f
             integer,            check(len(xi)>=nxi),depend(xi),                 intent(hide)    :: nxi=len(xi)
             double precision,   dimension(nxi),                                 intent(in)      :: xi
@@ -18,6 +19,7 @@ python module linint2 ! in
             integer,            optional,                                       intent(in)      :: iopt=0
             integer,                                                            intent(hide)    :: ier=0
         end subroutine dlinint1
+        ! signature : fo = dlinint2(xi,yi,fi,xo,yo,[icycx,xmsg,iopt])
         subroutine dlinint2(nxi,xi,nyi,yi,fi,icycx,nxo,xo,nyo,yo,fo,xiw,fxiw,nxi2,xmsg,iopt,ier) ! in :linint2:linint2.f
             integer,            check(len(xi)>=nxi),depend(xi),                 intent(hide)    :: nxi=len(xi)
             double precision,   dimension(nxi),                                 intent(in)      :: xi
@@ -78,6 +80,7 @@ python module linint2 ! in
             integer :: iflag
             integer :: ier
         end subroutine dmonoid2
+        ! signature : fo = dlinint2pts(xi,yi,fi,xo,yo,[icycx,xmsg])
         subroutine dlinint2pts(nxi,xi,nyi,yi,fi,icycx,nxyo,xo,yo,fo,xiw,fixw,nxi2,xmsg,ier) ! in :linint2:linint2.f
             integer,            check(len(xi)>=nxi),depend(xi),                 intent(hide)    :: nxi=len(xi)
             double precision,   dimension(nxi),                                 intent(in)      :: xi
