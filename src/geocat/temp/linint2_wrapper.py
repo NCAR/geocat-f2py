@@ -1,9 +1,8 @@
 import numpy as np
 import xarray as xr
-from .fortran.linint2 import (dlinint2)
+from .fortran import (dlinint2)
 
 
-def linint2(fi: xr.DataArray, xo: np.ndarray, yo: np.ndarray):
-
+def linint2(fi, xo, yo):
     fo = dlinint2(xi, yi, fi, xo, yo)
     return fo
