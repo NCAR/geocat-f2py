@@ -66,8 +66,8 @@ def linint2_test():
 def linint2pts_test():
     xi = np.linspace(1, 10, 10)
     yi = np.linspace(1, 10, 10)
-    xo = np.linspace(1, 10, 20)
-    yo = np.linspace(1, 10, 20)
+    xo = np.linspace(1, 10, 400)
+    yo = np.linspace(1, 10, 400)
     fi = np.linspace(1, 200, 100000).reshape((100, 10, 10, 10))
     # '''
     chunks = {
