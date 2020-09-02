@@ -35,4 +35,33 @@ def linint2_test():
     print(fo.values)
     print("done")
 
+def linint1_test():
+    xi = np.linspace(1, 10, 20)
+    xo = np.linspace(1, 10, 40)
+    fi = np.linspace(1, 200, 20000).reshape((100, 10, 20))
+    # '''
+    chunks = {
+        'time': 1,
+        'alt': 1,
+        'lon': xi.shape,
+    }
+    # '''
+
+    fi = xr.DataArray(
+        fi,
+        dims=['time', 'alt', 'lon'],
+        coords={
+            'lon': xi,
+        },
+    ).chunk(chunks)
+
+    fo = linint1(
+        fi,
+        xo,
+    )
+
+    print(fo.values)
+    print("done")
+
 linint2_test()
+linint1_test()
