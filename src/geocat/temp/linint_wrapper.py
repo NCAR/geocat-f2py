@@ -13,6 +13,8 @@ def _linint2(xi, yi, fi, xo, yo, icycx, xmsg, shape):
 
 
 def linint2(fi, xo, yo, icycx=0, xmsg=-99):
+
+    #''' Start of boilerplate
     if not isinstance(fi, xr.DataArray):
         raise Exception("fi is required to be an xarray.DataArray")
 
@@ -33,6 +35,7 @@ def linint2(fi, xo, yo, icycx=0, xmsg=-99):
     }
     fo_coords[fi.dims[-1]] = xo
     fo_coords[fi.dims[-2]] = yo
+    #''' end of boilerplate
 
     fo = map_blocks(
         _linint2,

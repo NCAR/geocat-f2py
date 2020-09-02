@@ -2,7 +2,7 @@ import numpy as np
 import xarray as xr
 from geocat.temp import *
 
-def linint2_tests():
+def linint2_test():
     xi = np.linspace(1, 10, 10)
     yi = np.linspace(1, 10, 20)
     xo = np.linspace(1, 10, 20)
@@ -35,4 +35,4 @@ def linint2_tests():
     print(fo.values)
     print("done")
 
-linint2_tests()
+linint2_test()
