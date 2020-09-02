@@ -1,1 +1,1 @@
-from .linint_wrapper import (linint2)
+from .linint2_wrapper import (linint1, linint2, linint2pts)
