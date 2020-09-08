@@ -4,17 +4,89 @@
 python module eof_scripps ! in 
     interface  ! in :eof_scripps
         subroutine deof11(d,nx,nt,nmodes,icovcor,dmsg,eigenvalues,eigenvectors,variance,princomp) ! in :eof_scripps:eof_scripps.f90
-            real :: d
-            integer :: nx
-            integer :: nt
-            integer :: nmodes
+            double precision dimension(nx,nt) :: d
+            integer, optional,check(shape(d,0)==nx),depend(d) :: nx=shape(d,0)
+            integer, optional,check(shape(d,1)==nt),depend(d) :: nt=shape(d,1)
+            integer, optional,check(len(eigenvalues)>=nmodes),depend(eigenvalues) :: nmodes=len(eigenvalues)
             integer :: icovcor
-            real :: dmsg
-            real :: eigenvalues
-            real :: eigenvectors
-            real :: variance
-            real :: princomp
+            double precision :: dmsg
+            double precision dimension(nmodes) :: eigenvalues
+            double precision dimension(nx,nmodes),depend(nx,nmodes) :: eigenvectors
+            double precision dimension(nmodes),depend(nmodes) :: variance
+            double precision dimension(nt,nmodes),depend(nt,nmodes) :: princomp
         end subroutine deof11
+        subroutine deof22(d,nx,nt,nmodes,icovcor,dmsg,eigenvalues,eigenvectors,variance,iminnxnt,imaxnxnt,princomp) ! in :eof_scripps:eof_scripps.f90
+            double precision dimension(nx,nt) :: d
+            integer, optional,check(shape(d,0)==nx),depend(d) :: nx=shape(d,0)
+            integer, optional,check(shape(d,1)==nt),depend(d) :: nt=shape(d,1)
+            integer, optional,check(len(eigenvalues)>=nmodes),depend(eigenvalues) :: nmodes=len(eigenvalues)
+            integer :: icovcor
+            double precision :: dmsg
+            double precision dimension(nmodes) :: eigenvalues
+            double precision dimension(nx,nmodes),depend(nx,nmodes) :: eigenvectors
+            double precision dimension(nmodes),depend(nmodes) :: variance
+            integer :: iminnxnt
+            integer :: imaxnxnt
+            double precision dimension(nt,nmodes),depend(nt,nmodes) :: princomp
+        end subroutine deof22
+        subroutine deof(data,nx,nt,nmodes,icovcor,dmsg,eigenvalues,eigenvectors,princomp,variance,cumvariance,iminnxnt,imaxnxnt,spacked,evals,evecs,rlawork,ilawork,ifail,tentpcs,sqrootweights) ! in :eof_scripps:eof_scripps.f90
+            double precision dimension(nx,nt) :: data
+            integer, optional,check(shape(data,0)==nx),depend(data) :: nx=shape(data,0)
+            integer, optional,check(shape(data,1)==nt),depend(data) :: nt=shape(data,1)
+            integer, optional,check(len(eigenvalues)>=nmodes),depend(eigenvalues) :: nmodes=len(eigenvalues)
+            integer :: icovcor
+            double precision :: dmsg
+            double precision dimension(nmodes) :: eigenvalues
+            double precision dimension(nx,nmodes),depend(nx,nmodes) :: eigenvectors
+            double precision dimension(nt,nmodes),depend(nt,nmodes) :: princomp
+            double precision dimension(nmodes),depend(nmodes) :: variance
+            double precision dimension(nmodes),depend(nmodes) :: cumvariance
+            integer, optional,check(len(evals)>=iminnxnt),depend(evals) :: iminnxnt=len(evals)
+            integer, optional,check(shape(tentpcs,0)==imaxnxnt),depend(tentpcs) :: imaxnxnt=shape(tentpcs,0)
+            double precision dimension(iminnxnt*(iminnxnt+1)/2),depend(iminnxnt) :: spacked
+            double precision dimension(iminnxnt) :: evals
+            double precision dimension(iminnxnt,nmodes),depend(iminnxnt,nmodes) :: evecs
+            double precision dimension(8 * iminnxnt),depend(iminnxnt) :: rlawork
+            integer dimension(5 * iminnxnt),depend(iminnxnt) :: ilawork
+            integer dimension(iminnxnt),depend(iminnxnt) :: ifail
+            double precision dimension(imaxnxnt,nmodes),depend(nmodes) :: tentpcs
+            double precision dimension(nx),depend(nx) :: sqrootweights
+        end subroutine deof
+        subroutine deofcovcor(data,nx,nt,icovcor,covariance,correlation,spacked,doswitched,iminnxnt,dmsg) ! in :eof_scripps:eof_scripps.f90
+            double precision dimension(nx,nt) :: data
+            integer, optional,check(shape(data,0)==nx),depend(data) :: nx=shape(data,0)
+            integer, optional,check(shape(data,1)==nt),depend(data) :: nt=shape(data,1)
+            integer :: icovcor
+            integer :: covariance
+            integer :: correlation
+            double precision dimension(iminnxnt*(iminnxnt+1)/2),depend(iminnxnt) :: spacked
+            logical :: doswitched
+            integer :: iminnxnt
+            double precision :: dmsg
+        end subroutine deofcovcor
+        subroutine deofpcs(data,nx,nt,nmodes,iminnxnt,imaxnxnt,evecs,doswitched,tentpcs,dmsg) ! in :eof_scripps:eof_scripps.f90
+            double precision dimension(nx,nt) :: data
+            integer, optional,check(shape(data,0)==nx),depend(data) :: nx=shape(data,0)
+            integer, optional,check(shape(data,1)==nt),depend(data) :: nt=shape(data,1)
+            integer, optional,check(shape(evecs,1)==nmodes),depend(evecs) :: nmodes=shape(evecs,1)
+            integer, optional,check(shape(evecs,0)==iminnxnt),depend(evecs) :: iminnxnt=shape(evecs,0)
+            integer, optional,check(shape(tentpcs,0)==imaxnxnt),depend(tentpcs) :: imaxnxnt=shape(tentpcs,0)
+            double precision dimension(iminnxnt,nmodes) :: evecs
+            logical :: doswitched
+            double precision dimension(imaxnxnt,nmodes),depend(nmodes) :: tentpcs
+            double precision :: dmsg
+        end subroutine deofpcs
+        subroutine deoftotvar(data,nx,nt,totvar,doswitched,icovcor,covariance,correlation,dmsg) ! in :eof_scripps:eof_scripps.f90
+            double precision dimension(nx,nt) :: data
+            integer, optional,check(shape(data,0)==nx),depend(data) :: nx=shape(data,0)
+            integer, optional,check(shape(data,1)==nt),depend(data) :: nt=shape(data,1)
+            double precision :: totvar
+            logical :: doswitched
+            integer :: icovcor
+            integer :: covariance
+            integer :: correlation
+            double precision :: dmsg
+        end subroutine deoftotvar
     end interface 
 end python module eof_scripps
 
