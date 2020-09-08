@@ -1,0 +1,22 @@
+!    -*- f90 -*-
+! Note: the context of this file is case sensitive.
+
+python module eof_scripps ! in 
+    interface  ! in :eof_scripps
+        subroutine deof11(d,nx,nt,nmodes,icovcor,dmsg,eigenvalues,eigenvectors,variance,princomp) ! in :eof_scripps:eof_scripps.f90
+            real :: d
+            integer :: nx
+            integer :: nt
+            integer :: nmodes
+            integer :: icovcor
+            real :: dmsg
+            real :: eigenvalues
+            real :: eigenvectors
+            real :: variance
+            real :: princomp
+        end subroutine deof11
+    end interface 
+end python module eof_scripps
+
+! This file was auto-generated with f2py (version:2).
+! See http://cens.ioc.ee/projects/f2py2e/
