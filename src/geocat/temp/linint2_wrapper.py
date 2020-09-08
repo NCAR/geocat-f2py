@@ -143,7 +143,7 @@ def linint2pts(fi, xo, yo, icycx=0, xmsg=-99):
     fo_coords = {
         k: v for (k, v) in fi.coords.items()
     }
-    # fo_coords.remove(fi.dims[-1]) # this dissapears
+    # fo_coords.remove(fi.dims[-1]) # this dimension dissapears
     fo_coords[fi.dims[-1]] = xo # remove this line omce dims are figured out
     fo_coords[fi.dims[-2]] = yo # maybe replace with 'pts'
     # ''' end of boilerplate
