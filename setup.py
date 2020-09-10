@@ -11,7 +11,7 @@ setup(
                    'geocat': 'src/geocat',
                    'geocat.temp': 'src/geocat/temp',
                    'geocat.temp.fortran': 'src/geocat/temp/fortran',
-                   }
+                   },
       namespace_packages=['geocat'],
       packages=['geocat','geocat.temp','geocat.temp.fortran'],
       install_requires=['numpy','dask[complete]','xarray'],
