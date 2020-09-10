@@ -4,7 +4,6 @@ from dask.array.core import map_blocks
 
 from geocat.temp.fortran import (dlinint1, dlinint2, dlinint2pts)
 
-
 def _linint1(xi, fi, xo, icycx, xmsg, shape):
     # ''' signature : fo = dlinint1(xi,fi,xo,[icycx,xmsg,iopt])
     fo = dlinint1(xi, fi, xo, icycx=icycx, xmsg=xmsg, )
