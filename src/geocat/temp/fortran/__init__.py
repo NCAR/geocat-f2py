@@ -1,1 +1,1 @@
-from .linint2 import ( dlinint1, dlinint2, dlinint2pts)
+from .import_so_files import (dlinint1, dlinint2, dlinint2pts)
