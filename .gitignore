@@ -1,0 +1,5 @@
+# gitignore all .idea and __pycache__
+
+**.idea
+**__pycache__
+
