@@ -105,8 +105,8 @@ def linint2pts_test():
 
 
 if __name__ == '__main__':
-    #cluster = dd.LocalCluster()
-    #client = dd.Client(cluster)
+    cluster = dd.LocalCluster()
+    client = dd.Client(cluster)
     t0 = time.time()
 
     #linint1_test()
