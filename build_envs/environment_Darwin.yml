@@ -7,4 +7,5 @@ dependencies:
   - numpy
   - xarray
   - dask
+  - pytest
   - gfortran_osx-64
