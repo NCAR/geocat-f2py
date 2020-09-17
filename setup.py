@@ -1,23 +1,18 @@
-try:
-    from setuptools import setup
-    from setuptools import Extension
-except ImportError:
-    from distutils.core import setup
-    from distutils.extension import Extension
+#''' setup.py is needed, but only to make namespaces happen, 
+version = '0.1'
 
-#import distutils.sysconfig
+from setuptools import setup
 
-with open("src/geocat/temp/version.py") as f:
-    exec(f.read())
-
-setup(name="geocat.temp",
+setup(
+      name='geocat.temp',
+      version=version,
       package_dir={
-          '': 'src',
-          'geocat': 'src/geocat',
-          'geocat.temp': 'src/geocat/temp',
-          'geocat.temp.fortran': 'src/geocat/temp/fortran',
-      },
+                   '': 'src',
+                   'geocat': 'src/geocat',
+                   'geocat.temp': 'src/geocat/temp',
+                   'geocat.temp.fortran': 'src/geocat/temp/fortran',
+                   },
       namespace_packages=['geocat'],
-      packages=["geocat", "geocat.temp", "geocat.temp.fortran"],
-      version=__version__,
-      install_requires=['numpy', 'xarray', 'dask[complete]'])
+      packages=['geocat','geocat.temp','geocat.temp.fortran'],
+      install_requires=['numpy','dask[complete]','xarray'],
+      )
