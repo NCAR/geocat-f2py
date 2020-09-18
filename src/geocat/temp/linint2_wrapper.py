@@ -86,7 +86,7 @@ def linint2(fi, xo, yo, icycx=0, xmsg=-99):
         raise Exception("fi must be unchunked along the last two dimensions")
 
     # fi data structure elements and modifications
-    fi_chunks = list(fi.chunks)
+    fi_chunks = list(fi.dims)
     fi_chunks[:-2] = [(k,1) for (k,v) in zip(list(fi.dims)[:-2],list(fi.chunks)[:-2])]
     fi_chunks[-2:] = [(k,v[0]) for (k,v) in zip(list(fi.dims)[-2:],list(fi.chunks)[-2:])]
     fi_chunks = dict(fi_chunks)
