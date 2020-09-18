@@ -1,6 +1,7 @@
 import numpy as np
 import xarray as xr
 import geocat.temp
+n = 10
 
 n= 10
 
@@ -12,8 +13,8 @@ yo = np.linspace(yi.min(), yi.max(), num=yi.shape[0] * 2 - 1)
 fi_np = np.random.rand(96, 3, len(yi), len(xi)).astype(np.float64)
 
 chunks = {
-    'time': 1,
-    'level': 1,
+    'time': fi_np.shape[0],
+    'level': fi_np.shape[1],
     'lat': fi_np.shape[2],
     'lon': fi_np.shape[3]
 }
