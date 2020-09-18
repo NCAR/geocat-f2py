@@ -89,7 +89,11 @@ def linint2(fi, xo, yo, icycx=0, xmsg=-99):
     fo_chunks = list(fi.chunks)
     fo_chunks[-2:] = (yo.shape, xo.shape)
     fo_chunks = tuple(fo_chunks)
+    print("fo_chunks")
+    print(fo_chunks)
     fo_shape = tuple(a[0] for a in list(fo_chunks))
+    print("fo_shape")
+    print(fo_shape)
     fo_coords = {
         k: v for (k, v) in fi.coords.items()
     }
