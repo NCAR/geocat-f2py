@@ -92,10 +92,10 @@ def linint2(fi, xo, yo, icycx=0, xmsg=-99):
     fi_chunks = dict(fi_chunks)
     print("fi_chunks")
     print(fi_chunks)
-    fi.chunk(fi_chunks)
+    fi = fi.chunk(fi_chunks)
 
     # fo datastructure elements
-    fo_chunks = [(v,) for (k,v) in list(fi_chunks.items())]
+    fo_chunks = list(fi.chunks)
     fo_chunks[-2:] = (yo.shape, xo.shape)
     fo_chunks = tuple(fo_chunks)
     print("fo_chunks")
