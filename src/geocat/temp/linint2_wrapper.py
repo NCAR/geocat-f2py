@@ -90,19 +90,13 @@ def linint2(fi, xo, yo, icycx=0, xmsg=-99):
     fi_chunks[:-2] = [(k,1) for (k,v) in zip(list(fi.dims)[:-2],list(fi.chunks)[:-2])]
     fi_chunks[-2:] = [(k,v[0]) for (k,v) in zip(list(fi.dims)[-2:],list(fi.chunks)[-2:])]
     fi_chunks = dict(fi_chunks)
-    print("fi_chunks")
-    print(fi_chunks)
     fi = fi.chunk(fi_chunks)
 
     # fo datastructure elements
     fo_chunks = list(fi.chunks)
     fo_chunks[-2:] = (yo.shape, xo.shape)
     fo_chunks = tuple(fo_chunks)
-    print("fo_chunks")
-    print(fo_chunks)
     fo_shape = tuple(a[0] for a in list(fo_chunks))
-    print("fo_shape")
-    print(fo_shape)
     fo_coords = {
         k: v for (k, v) in fi.coords.items()
     }
