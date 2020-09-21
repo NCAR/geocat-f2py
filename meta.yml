@@ -16,6 +16,7 @@ requirements:
   build:
     - python
     - numpy
+    - gfortran_osx-64
   run:
     - python
     - dask
