@@ -38,10 +38,10 @@ def linint1_test():
 
 def linint2_test():
     xi = np.linspace(1, 10, 100)
-    yi = np.linspace(1, 10, 2000)
+    yi = np.linspace(1, 10, 200)
     xo = np.linspace(1, 10, 200)
-    yo = np.linspace(1, 10, 4000)
-    fi = np.linspace(1, 200, 20000000).reshape((10, 10, 2000, 100))
+    yo = np.linspace(1, 10, 400)
+    fi = np.linspace(1, 200, 2000000).reshape((10, 10, 200, 100))
     # '''
     chunks = {
         'time': 1,
