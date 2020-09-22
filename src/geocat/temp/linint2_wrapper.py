@@ -4,6 +4,9 @@ from dask.array.core import map_blocks
 
 from geocat.temp.fortran import (dlinint1, dlinint2, dlinint2pts)
 
+# Dask Wrappers _<funcname>()
+# These Wrapper are executed within dask processes, and should do anything that
+# can benefit from parallel excution.
 
 def _linint1(xi, fi, xo, icycx, xmsg, shape):
     # ''' signature : fo = dlinint1(xi,fi,xo,[icycx,xmsg,iopt])
@@ -28,6 +31,9 @@ def _linint2pts(xi, yi, fi, xo, yo, icycx, xmsg, shape):
     fo = fo.reshape(shape)
     return fo
 
+# Outer Wrappers <funcname>()
+# These Wrappers are excecuted in the __main__ python process, and should be
+# used for any tasks which would not benefit from parallel execution.
 
 def linint1(fi, xo, icycx=0, xmsg=-99):
     # ''' signature : fo = dlinint1(xi,fi,xo,[icycx,xmsg,iopt])
