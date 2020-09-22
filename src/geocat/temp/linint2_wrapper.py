@@ -70,7 +70,7 @@ def linint1(fi, xo, icycx=0, xmsg=-99):
     return fo
 
 
-def linint2(fi, xo, yo, icycx=0, xmsg=-99):
+def linint2(fi, xo, yo, icycx=0, msg=None):
     # ''' signature : fo = dlinint2(xi,yi,fi,xo,yo,[icycx,xmsg,iopt])
 
     # ''' Start of boilerplate
@@ -115,7 +115,7 @@ def linint2(fi, xo, yo, icycx=0, xmsg=-99):
         yo,
         xo,
         icycx,
-        xmsg,
+        msg,
         fo_shape,
         chunks=fo_chunks,
         dtype=fi.dtype,
