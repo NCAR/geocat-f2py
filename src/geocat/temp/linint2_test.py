@@ -21,10 +21,10 @@ def linint1_test():
 
     fi = xr.DataArray(
         fi,
-        dims=['time', 'alt', 'lon'],
         coords={
             'lon': xi,
         },
+        dims=['time', 'alt', 'lon'],
     ).chunk(chunks)
 
     fo = linint1(
@@ -32,8 +32,6 @@ def linint1_test():
         xo,
     )
 
-    print(fo.values)
-    print("done")
 
 
 def linint2_test():
@@ -53,11 +51,11 @@ def linint2_test():
 
     fi = xr.DataArray(
         fi,
-        dims=['time', 'alt', 'lat', 'lon'],
         coords={
             'lat': yi,
             'lon': xi,
         },
+        dims=['time', 'alt', 'lat', 'lon'],
     ).chunk(chunks)
 
     fo = linint2(
@@ -66,8 +64,6 @@ def linint2_test():
         yo,
     )
 
-    print(fo.values)
-    print("done")
 
 
 def linint2pts_test():
@@ -87,11 +83,12 @@ def linint2pts_test():
 
     fi = xr.DataArray(
         fi,
-        dims=['time', 'alt', 'lat', 'lon'],
         coords={
             'lat': yi,
             'lon': xi,
         },
+        dims=['time', 'alt', 'lat', 'lon'],
+
     ).chunk(chunks)
 
     fo = linint2pts(
@@ -100,8 +97,6 @@ def linint2pts_test():
         yo,
     )
 
-    print(fo.values)
-    print("done")
 
 
 if __name__ == '__main__':
@@ -109,9 +104,9 @@ if __name__ == '__main__':
     client = dd.Client(cluster)
     t0 = time.time()
 
-    #linint1_test()
+    # linint1_test()
     linint2_test()
-    #linint2pts_test()
+    # linint2pts_test()
 
     t1 = time.time()
 
