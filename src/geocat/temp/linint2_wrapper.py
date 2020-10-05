@@ -74,8 +74,8 @@ def linint1(fi, xo, icycx=0, xmsg=-99):
         drop_axis=[fi.ndim - 1],
         new_axis=[fi.ndim - 1],
     )
-    fo.compute()
-    fo = xr.DataArray(fo, attrs=fi.attrs, dims=fi.dims, coords=fo_coords)
+
+    fo = xr.DataArray(fo.compute(), attrs=fi.attrs, dims=fi.dims, coords=fo_coords)
     return fo
 
 
@@ -136,8 +136,7 @@ def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, xmsg=-99):
         drop_axis=[fi.ndim - 2, fi.ndim - 1],
         new_axis=[fi.ndim - 2, fi.ndim - 1],
     )
-    fo.compute()
-    fo = xr.DataArray(fo, attrs=fi.attrs, dims=fi.dims, coords=fo_coords)
+    fo = xr.DataArray(fo.compute(), attrs=fi.attrs, dims=fi.dims, coords=fo_coords)
     return fo
 
 
@@ -187,6 +186,5 @@ def linint2pts(fi, xo, yo, icycx=0, xmsg=-99):
         drop_axis=[fi.ndim - 2, fi.ndim - 1],
         new_axis=[fi.ndim - 2],
     )
-    fo.compute()
-    fo = xr.DataArray(fo, attrs=fi.attrs)
+    fo = xr.DataArray(fo.compute(), attrs=fi.attrs)
     return fo
