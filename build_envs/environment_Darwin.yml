@@ -3,7 +3,7 @@ channels:
   - conda-forge
   - ncar
 dependencies:
-  - python=3.7
+  - python
   - numpy
   - xarray
   - dask
