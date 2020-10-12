@@ -91,7 +91,6 @@ def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, xmsg=-99):
             fi,
         )
         fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))])
-        fi.chunk(fi_chunk)
 
         fi = xr.DataArray(
             fi.data,
