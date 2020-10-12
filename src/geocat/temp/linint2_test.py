@@ -103,7 +103,7 @@ def linint2pts_test():
 
 
 if __name__ == '__main__':
-    cluster = dd.LocalCluster(n_workers=2)
+    cluster = dd.LocalCluster()
     client = dd.Client(cluster)
     t0 = time.time()
 
