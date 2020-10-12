@@ -36,10 +36,10 @@ def linint1_test():
 
 def linint2_test():
     xi = np.linspace(1, 10, 100)
-    yi = np.linspace(1, 10, 200)
+    yi = np.linspace(1, 10, 2000)
     xo = np.linspace(1, 10, 200)
-    yo = np.linspace(1, 10, 400)
-    fi = np.linspace(1, 200, 2000000).reshape((10, 10, 200, 100))
+    yo = np.linspace(1, 10, 4000)
+    fi = np.linspace(1, 200, 20000000).reshape((10, 10, 2000, 100))
     # '''
     chunks = {
         'time': 1,
@@ -72,15 +72,15 @@ def linint2pts_test():
     xo = np.linspace(1, 10, 400)
     yo = np.linspace(1, 10, 400)
     fi = np.linspace(1, 200, 100000).reshape((100, 10, 10, 10))
-    # '''
+    #'''
     chunks = {
         'time': 1,
         'alt': 1,
         'lat': yi.shape,
         'lon': xi.shape,
     }
-    # '''
-
+    #'''
+    '''
     fi = xr.DataArray(
         fi,
         coords={
@@ -90,17 +90,20 @@ def linint2pts_test():
         dims=['time', 'alt', 'lat', 'lon'],
 
     ).chunk(chunks)
+    #'''
 
     fo = linint2pts(
         fi,
         xo,
         yo,
+        xi=xi,
+        yi=yi,
     )
 
 
 
 if __name__ == '__main__':
-    cluster = dd.LocalCluster()
+    cluster = dd.LocalCluster(n_workers=2)
     client = dd.Client(cluster)
     t0 = time.time()
 
