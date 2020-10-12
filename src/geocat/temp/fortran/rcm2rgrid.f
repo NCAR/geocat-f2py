@@ -374,3 +374,53 @@ c                                             nw  =1 nearest neighbor
 
       RETURN
       END
+
+
+      DOUBLE PRECISION FUNCTION DGCDIST(RLAT1,RLON1,RLAT2,RLON2,IU)
+      IMPLICIT NONE
+c
+c calculate the great circle distance between two points
+c
+c usage: dist = gcdist (rlat1,rlon1,rlat2,rlon2,iu)
+c
+c nomenclature :
+c .   rlat1,rlon1 - latitude and longtitude of the first point
+c .   rlat2,rlon2 - latitude and longtitude of the second point
+c .   iu          - code for the type units gcdist is to return
+c .               = 1 : gcdist returned in radians
+c .               = 2 : gcdist returned in degrees
+c .               = 3 : gcdist returned in meters
+c .               = 4 : gcdist returned in kilometers
+c .               = 5 : gcdist returned in *not used*
+c
+c input
+      INTEGER IU
+c input types
+      DOUBLE PRECISION RLAT1,RLON1,RLAT2,RLON2
+
+c local stuff
+      DOUBLE PRECISION UNITS(5),RAD,DLONR,RLAT1R,RLAT2R
+      DATA UNITS/1.0D0,57.29577995691645D0,6371220.D0,6371.2200D0,0.D0/
+c change as required
+      DATA RAD/0.01745329238474369D0/
+
+c special test if RLAT1=RLAT2 and RLON1=RLON2
+      IF(RLAT1.EQ.RLAT2.AND.RLON1.EQ.RLON2) THEN
+         DGCDIST = 0.D0
+         RETURN
+      END IF
+      RLAT1R = RLAT1*RAD
+      RLAT2R = RLAT2*RAD
+      DLONR = DMIN1(ABS(RLON1-RLON2),ABS(360.D0-RLON1+RLON2),
+     +        ABS(360.D0-RLON2+RLON1))*RAD
+
+      DGCDIST = ATAN2(SQRT((COS(RLAT2R) * SIN(DLONR)) ** 2 +
+     +                     (COS(RLAT1R) * SIN(RLAT2R) -
+     +                      SIN(RLAT1R) * COS(RLAT2R) * COS(DLONR)) ** 2
+     +                    ),
+     +                SIN(RLAT1R)*SIN(RLAT2R)+
+     +                COS(RLAT1R)*COS(RLAT2R)*COS(DLONR)
+     +               ) * UNITS(IU)
+
+      RETURN
+      END

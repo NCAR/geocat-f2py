@@ -33,7 +33,6 @@ lon2d = np.asarray([1, 1, 1, 2, 2, 2, 5, 5, 5]).reshape((3, 3))
 
 msg64 = fi_msg[1, 1, 1].astype(np.float64)
 msg32 = fi_msg[1, 1, 1].astype(np.float32)
-
 fo_nom_expected = np.asarray([
     1.870327, 1.98253, 0.1410671, 1.872924, 1.353965, 1.877125, 2.946794,
     0.8730035, 1.931963, -0.1676207, -1.82497, 1.754721, 1.917912, 1.01385,
@@ -42,63 +41,63 @@ fo_nom_expected = np.asarray([
 ]).reshape((3, 3, 3))
 
 fo_nan_expected = np.array([
-    1.870327, 1.98253, 0.1410671, 1.872924, 1.875024, 1.877125, 2.946794,
-    0.8730035, 1.931963, -0.1676207, -1.82497, 1.754721, 1.917912, 1.547667,
+    1.870327, 1.98253, 0.1410671, 1.872924, 1.486321, 1.877125, 2.946794,
+    0.8730035, 1.931963, -0.1676207, -1.82497, 1.754721, 1.917912, 0.9684872,
     1.177423, 1.735453, 1.053591, 0.381366, 2.015617, 0.3293635, 2.510986,
-    0.4975608, 0.7624173, 1.027274, 2.169137, 2.691788, 1.351906
+    0.4975608, 1.7583, 1.027274, 2.169137, 2.691788, 1.351906
 ]).reshape((3, 3, 3))
 
 fo_msg_expected = np.array([
-    1.870327, 1.98253, 0.1410671, 1.872924, 1.875024, 1.877125, 2.946794,
-    0.8730035, 1.931963, -0.1676207, -1.82497, 1.754721, 1.917912, 1.547667,
+    1.870327, 1.98253, 0.1410671, 1.872924, 1.486321, 1.877125, 2.946794,
+    0.8730035, 1.931963, -0.1676207, -1.82497, 1.754721, 1.917912, 0.9684872,
     1.177423, 1.735453, 1.053591, 0.381366, 2.015617, 0.3293635, 2.510986,
-    0.4975608, 0.7624173, 1.027274, 2.169137, 2.691788, 1.351906
+    0.4975608, 1.7583, 1.027274, 2.169137, 2.691788, 1.351906
 ]).reshape((3, 3, 3))
 
 
 # run tests
-class Test_rcm2rgrid(ut.TestCase):
+class Test_rgrid2rcm(ut.TestCase):
     """
-    Test_rcm2rgrid_float64
-    This unit test covers the nominal, nan, and msg cases of 64 bit float input for rcm2rgrid
+    Test_rgrid2rcm_float64
+    This unit test covers the nominal, nan, and msg cases of 64 bit float input for rgrid2rcm
     """
 
-    def test_rcm2rgrid_float64_nom(self):
+    def test_rgrid2rcm_float64_nom(self):
         nt.assert_array_almost_equal(
             fo_nom_expected,
-            geocat.temp.rcm2rgrid(lat2d, lon2d, fi_nom.astype(np.float64), lat, lon))
+            geocat.temp.rgrid2rcm(lat, lon, fi_nom.astype(np.float64), lat2d, lon2d))
 
-    def test_rcm2rgrid_float64_nan(self):
+    def test_rgrid2rcm_float64_nan(self):
         nt.assert_array_almost_equal(
             fo_nan_expected,
-            geocat.temp.rcm2rgrid(lat2d, lon2d, fi_nan.astype(np.float64), lat, lon))
+            geocat.temp.rgrid2rcm(lat, lon, fi_nan.astype(np.float64), lat2d, lon2d))
 
-    def test_rcm2rgrid_float64_msg(self):
+    def test_rgrid2rcm_float64_msg(self):
         nt.assert_array_almost_equal(
             fo_msg_expected,
-            geocat.temp.rcm2rgrid(lat2d,
-                            lon2d,
-                            fi_msg.astype(np.float64),
-                            lat,
-                            lon,
-                            msg=msg64))
+            geocat.temp.rgrid2rcm(lat,
+                         lon,
+                         fi_msg.astype(np.float64),
+                         lat2d,
+                         lon2d,
+                         msg=msg64))
 
-    def test_rcm2rgrid_float32_nom(self):
+    def test_rgrid2rcm_float32_nom(self):
         nt.assert_array_almost_equal(
             fo_nom_expected,
-            geocat.temp.rcm2rgrid(lat2d, lon2d, fi_nom.astype(np.float32), lat, lon))
+            geocat.temp.rgrid2rcm(lat, lon, fi_nom.astype(np.float32), lat2d, lon2d))
 
-    def test_rcm2rgrid_float32_nan(self):
+    def test_rgrid2rcm_float32_nan(self):
         nt.assert_array_almost_equal(
             fo_nan_expected,
-            geocat.temp.rcm2rgrid(lat2d, lon2d, fi_nan.astype(np.float32), lat, lon))
+            geocat.temp.rgrid2rcm(lat, lon, fi_nan.astype(np.float32), lat2d, lon2d))
 
-    def test_rcm2rgrid_float32_msg(self):
+    def test_rgrid2rcm_float32_msg(self):
         nt.assert_array_almost_equal(
             fo_msg_expected,
-            geocat.temp.rcm2rgrid(lat2d,
-                            lon2d,
-                            fi_msg.astype(np.float32),
-                            lat,
-                            lon,
-                            msg=msg32))
+            geocat.temp.rgrid2rcm(lat,
+                         lon,
+                         fi_msg.astype(np.float32),
+                         lat2d,
+                         lon2d,
+                         msg=msg32))

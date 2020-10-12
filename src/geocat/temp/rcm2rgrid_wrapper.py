@@ -2,7 +2,8 @@ import numpy as np
 import xarray as xr
 from dask.array.core import map_blocks
 
-from geocat.temp.fortran import (drcm2rgrid, drgrid2rcm)
+# from geocat.temp.fortran import (drcm2rgrid, drgrid2rcm)
+from .fortran import (drcm2rgrid, drgrid2rcm)
 
 
 # Dask Wrappers _<funcname>()
