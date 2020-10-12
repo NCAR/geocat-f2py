@@ -42,13 +42,13 @@ def linint2_test():
     fi = np.linspace(1, 200, 20000000).reshape((10, 10, 2000, 100))
     # '''
     chunks = {
-        'time': 10,
-        'alt': 10,
+        'time': 1,
+        'alt': 1,
         'lat': yi.shape[0],
         'lon': xi.shape[0],
     }
     # '''
-    '''
+    #'''
     fi = xr.DataArray(
         fi,
         coords={
