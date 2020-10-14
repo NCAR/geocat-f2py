@@ -1,6 +1,7 @@
 # gitignore all .idea and __pycache__
 
 **.idea
+**.so
 **__pycache__
 **.DS_Store
 **.dSYM/
