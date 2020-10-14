@@ -17,8 +17,8 @@ python module rcm2rgrid ! in
             double precision,   dimension(nxo),                                 intent(in)      :: xo
             double precision,   dimension(nxo,nyo,ngrd), depend(nxo,nyo,ngrd),  intent(out)     :: fo(nxo,nyo,ngrd)
             double precision,                                                   intent(in)      :: xmsg
-            integer,                                                            intent(in)      :: ncrit
-            integer,                                                            intent(in)      :: opt
+            integer,            optional                                        intent(in)      :: ncrit=1
+            integer,            optional                                        intent(in)      :: opt=1
             integer,                                                            intent(hide)    :: ier
         end subroutine drcm2rgrid
         ! signature : fo = drgrid2rcm(yi,xi,fi,yo,xo,[xmsg,ncrit,opt])
@@ -35,8 +35,8 @@ python module rcm2rgrid ! in
             double precision,   dimension(nxo,nyo),         depend(nxo,nyo),        intent(in)      :: xo
             double precision,   dimension(nxo,nyo,ngrd),    depend(nxo,nyo,ngrd),   intent(out)     :: fo(nxo,nyo,ngrd)
             double precision,                                                       intent(in)      :: xmsg
-            integer,                                                                intent(in)      :: ncrit
-            integer,                                                                intent(in)      :: opt
+            integer,            optional                                            intent(in)      :: ncrit=1
+            integer,            optional                                            intent(in)      :: opt=1
             integer,                                                                intent(hide)    :: ier
         end subroutine drgrid2rcm
         function dgcdist(rlat1,rlon1,rlat2,rlon2,iu) ! in :rcm2rgrid:rcm2rgrid.f

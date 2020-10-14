@@ -11,15 +11,15 @@ from .fortran import (drcm2rgrid, drgrid2rcm)
 # can benefit from parallel excution.
 
 
-def _rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, ncrit, xmsg, shape):
-    fo = drcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, icycx=ncrit, xmsg=xmsg)
+def _rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, xmsg, shape):
+    fo = drcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, xmsg=xmsg)
     fo = np.asarray(fo)
     fo = fo.reshape(shape)
     return fo
 
 
-def _rgrid2rcm(lat2d, lon2d, fi, lat1d, lon1d, ncrit, xmsg, shape):
-    fo = drgrid2rcm(lat2d, lon2d, fi, lat1d, lon1d, icycx=ncrit, xmsg=xmsg)
+def _rgrid2rcm(lat2d, lon2d, fi, lat1d, lon1d, xmsg, shape):
+    fo = drgrid2rcm(lat2d, lon2d, fi, lat1d, lon1d, xmsg=xmsg)
     fo = np.asarray(fo)
     fo = fo.reshape(shape)
     return fo
@@ -29,20 +29,26 @@ def _rgrid2rcm(lat2d, lon2d, fi, lat1d, lon1d, ncrit, xmsg, shape):
 # These Wrappers are excecuted in the __main__ python process, and should be
 # used for any tasks which would not benefit from parallel execution.
 
-def rcm2rgrid(fi, lon1d, lat1d, lon2d=None, lat2d=None, ncrit=0, xmsg=None):
+def rcm2rgrid(fi, lon1d, lat1d, lon2d=None, lat2d=None, xmsg=None):
 
     # ''' Start of boilerplate
     if not isinstance(fi, xr.DataArray):
-        if (lon2d == None) | (lat2d == None):
+        if (lon2d is None) | (lat2d is None):
             raise Exception(
                 "fi is required to be an xarray.DataArray if xi and yi are not provided")
         fi = xr.DataArray(
             fi,
-            coords={
-                'xi': lon2d,
-                'yi': lat2d,
-            }
         )
+        fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))])
+
+        fi = xr.DataArray(
+            fi.data,
+            coords={
+                fi.dims[-1]: lon2d,
+                fi.dims[-2]: lat2d,
+            },
+            dims=fi.dims,
+        ).chunk(fi_chunk)
 
     lon2d = fi.coords[fi.dims[-1]]
     lat2d = fi.coords[fi.dims[-2]]
@@ -77,7 +83,6 @@ def rcm2rgrid(fi, lon1d, lat1d, lon2d=None, lat2d=None, ncrit=0, xmsg=None):
         fi.data,
         lat1d,
         lon1d,
-        ncrit,
         xmsg,
         fo_shape,
         chunks=fo_chunks,
@@ -89,20 +94,26 @@ def rcm2rgrid(fi, lon1d, lat1d, lon2d=None, lat2d=None, ncrit=0, xmsg=None):
     return fo
 
 
-def rgrid2rcm(fi, lon1d, lat1d, lon2d=None, lat2d=None, ncrit=0, xmsg=None):
+def rgrid2rcm(fi, lon1d, lat1d, lon2d=None, lat2d=None, xmsg=None):
 
     # ''' Start of boilerplate
     if not isinstance(fi, xr.DataArray):
-        if (lon2d == None) | (lat2d == None):
+        if (lon2d is None) | (lat2d is None):
             raise Exception(
                 "fi is required to be an xarray.DataArray if xi and yi are not provided")
         fi = xr.DataArray(
             fi,
-            coords={
-                'xi': lon2d,
-                'yi': lat2d,
-            }
         )
+        fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))])
+
+        fi = xr.DataArray(
+            fi.data,
+            coords={
+                fi.dims[-1]: lon2d,
+                fi.dims[-2]: lat2d,
+            },
+            dims=fi.dims,
+        ).chunk(fi_chunk)
 
     lon2d = fi.coords[fi.dims[-1]]
     lat2d = fi.coords[fi.dims[-2]]
@@ -137,7 +148,6 @@ def rgrid2rcm(fi, lon1d, lat1d, lon2d=None, lat2d=None, ncrit=0, xmsg=None):
         fi.data,
         lat1d,
         lon1d,
-        ncrit,
         xmsg,
         fo_shape,
         chunks=fo_chunks,
