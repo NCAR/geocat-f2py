@@ -3,16 +3,18 @@
 
 python module eof_scripps ! in 
     interface  ! in :eof_scripps
+        ! eigenvalues,eigenvectors,variance,princomp = deof11(d,nmodes,[icovcor,dmsg])
         subroutine deof11(d,nx,nt,nmodes,icovcor,dmsg,eigenvalues,eigenvectors,variance,princomp) ! in :eof_scripps:eof_scripps.f90
-            double precision dimension(nx,nt) :: d
-            integer, optional,check(shape(d,0)==nx),depend(d) :: nx=shape(d,0)
-            integer, optional,check(shape(d,1)==nt),depend(d) :: nt=shape(d,1)
-            integer, optional,check(len(eigenvalues)>=nmodes),depend(eigenvalues) :: nmodes=len(eigenvalues)
-            integer :: icovcor
-            double precision :: dmsg
-            double precision dimension(nmodes) :: eigenvalues
-            double precision dimension(nx,nmodes),depend(nx,nmodes) :: eigenvectors
-            double precision dimension(nmodes),depend(nmodes) :: variance
+            double precision,   dimension(nx,nt),                               intent(in)      :: d
+            integer,            depend(d),                                      intent(hide)    :: nx=shape(d,0)
+            integer,            depend(d),                                      intent(hide)    :: nt=shape(d,1)
+            integer,                                                            intent(in)      :: nmodes
+            integer,            optional,                                       intent(in)      :: icovcor=0
+            double precision,   optional,                                       intent(in)      :: dmsg=-99
+            double precision,   dimension(nmodes),                              intent(out)     :: eigenvalues(nmodes)
+            double precision,   dimension(nx,nmodes),                           intent(out)     :: eigenvectors(nx,nmodes)
+            double precision,   dimension(nmodes),                              intent(out)     :: variance(nmodes)
+            double precision,   dimension(nt,nmodes),                           intent(out)     :: princomp(nt,nmodes)
             double precision dimension(nt,nmodes),depend(nt,nmodes) :: princomp
         end subroutine deof11
         subroutine deof22(d,nx,nt,nmodes,icovcor,dmsg,eigenvalues,eigenvectors,variance,iminnxnt,imaxnxnt,princomp) ! in :eof_scripps:eof_scripps.f90
