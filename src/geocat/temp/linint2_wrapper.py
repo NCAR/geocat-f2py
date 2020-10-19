@@ -2,6 +2,7 @@ import numpy as np
 import xarray as xr
 from dask.array.core import map_blocks
 
+from .errors import (ChunkError, CoordinateError)
 from geocat.temp.fortran import (dlinint1, dlinint2, dlinint2pts)
 
 
@@ -84,23 +85,30 @@ def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, xmsg=-99):
 
     # ''' Start of boilerplate
     if not isinstance(fi, xr.DataArray):
-        if (xi == None) | (yi == None):
-            raise Exception(
-                "fi is required to be an xarray.DataArray if xi and yi are not provided")
+        if (xi is None) | (yi is None):
+            raise CoordinateError(
+                "linint2: Arguments xi and yi must be provided explicitly unless fi is an xarray.DataArray.")
         fi = xr.DataArray(
             fi,
-            coords={
-                'xi': xi,
-                'yi': yi,
-            }
         )
+        fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))])
+
+        fi = xr.DataArray(
+            fi.data,
+            coords={
+                fi.dims[-1]: xi,
+                fi.dims[-2]: yi,
+            },
+            dims=fi.dims,
+        ).chunk(fi_chunk)
 
     xi = fi.coords[fi.dims[-1]]
     yi = fi.coords[fi.dims[-2]]
 
+
     # ensure rightmost dimensions of input are not chunked
     if list(fi.chunks)[-2:] != [yi.shape, xi.shape]:
-        raise Exception("fi must be unchunked along the last two dimensions")
+        raise ChunkError("linint2: fi must be unchunked along the rightmost two dimensions")
 
     # fi data structure elements and autochunking
     fi_chunks = list(fi.dims)
