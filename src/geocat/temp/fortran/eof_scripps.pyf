@@ -15,7 +15,6 @@ python module eof_scripps ! in
             double precision,   dimension(nx,nmodes),                           intent(out)     :: eigenvectors(nx,nmodes)
             double precision,   dimension(nmodes),                              intent(out)     :: variance(nmodes)
             double precision,   dimension(nt,nmodes),                           intent(out)     :: princomp(nt,nmodes)
-            double precision dimension(nt,nmodes),depend(nt,nmodes) :: princomp
         end subroutine deof11
         subroutine deof22(d,nx,nt,nmodes,icovcor,dmsg,eigenvalues,eigenvectors,variance,iminnxnt,imaxnxnt,princomp) ! in :eof_scripps:eof_scripps.f90
             double precision dimension(nx,nt) :: d
