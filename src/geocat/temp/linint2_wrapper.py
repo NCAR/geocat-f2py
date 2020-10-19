@@ -84,19 +84,26 @@ def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, xmsg=-99):
 
     # ''' Start of boilerplate
     if not isinstance(fi, xr.DataArray):
-        if (xi == None) | (yi == None):
+        if (xi is None) | (yi is None):
             raise Exception(
                 "fi is required to be an xarray.DataArray if xi and yi are not provided")
         fi = xr.DataArray(
             fi,
-            coords={
-                'xi': xi,
-                'yi': yi,
-            }
         )
+        fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))])
+
+        fi = xr.DataArray(
+            fi.data,
+            coords={
+                fi.dims[-1]: xi,
+                fi.dims[-2]: yi,
+            },
+            dims=fi.dims,
+        ).chunk(fi_chunk)
 
     xi = fi.coords[fi.dims[-1]]
     yi = fi.coords[fi.dims[-2]]
+
 
     # ensure rightmost dimensions of input are not chunked
     if list(fi.chunks)[-2:] != [yi.shape, xi.shape]:
