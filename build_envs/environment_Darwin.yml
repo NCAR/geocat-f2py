@@ -1,0 +1,11 @@
+name: geocat_temp_build
+channels:
+  - conda-forge
+  - ncar
+dependencies:
+  - python=3.8
+  - numpy
+  - xarray
+  - dask
+  - pytest
+  - gfortran_osx-64
