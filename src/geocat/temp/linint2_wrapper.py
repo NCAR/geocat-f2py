@@ -88,6 +88,7 @@ def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, xmsg=-99):
         if (xi is None) | (yi is None):
             raise CoordinateError(
                 "linint2: Arguments xi and yi must be provided explicitly unless fi is an xarray.DataArray.")
+
         fi = xr.DataArray(
             fi,
         )
