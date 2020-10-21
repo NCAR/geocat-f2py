@@ -9,3 +9,4 @@ dependencies:
   - dask
   - pytest
   - gfortran_osx-64
+  - liblapack
