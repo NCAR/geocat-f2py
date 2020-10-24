@@ -26,10 +26,10 @@ fi_msg = fi_nan.copy()
 fi_msg[np.isnan(fi_msg)] = -99
 
 #  grids
-lat = np.asarray([1, 2, 5])
-lon = np.asarray([1, 2, 5])
-lat2d = np.asarray([1, 2, 5, 1, 2, 5, 1, 2, 5]).reshape((3, 3))
-lon2d = np.asarray([1, 1, 1, 2, 2, 2, 5, 5, 5]).reshape((3, 3))
+lat = np.asarray([1.0, 2, 5])
+lon = np.asarray([1.0, 2, 5])
+lat2d = np.asarray([1.0, 2, 5, 1, 2, 5, 1, 2, 5]).reshape((3, 3))
+lon2d = np.asarray([1.0, 1, 1, 2, 2, 2, 5, 5, 5]).reshape((3, 3))
 
 msg64 = fi_msg[1, 1, 1].astype(np.float64)
 msg32 = fi_msg[1, 1, 1].astype(np.float32)
@@ -74,14 +74,13 @@ class Test_rcm2rgrid(ut.TestCase):
             geocat.temp.rcm2rgrid(lat2d, lon2d, fi_nan.astype(np.float64), lat, lon))
 
     def test_rcm2rgrid_float64_msg(self):
-        nt.assert_array_almost_equal(
-            fo_msg_expected,
-            geocat.temp.rcm2rgrid(lat2d,
+        fo = geocat.temp.rcm2rgrid(lat2d,
                             lon2d,
                             fi_msg.astype(np.float64),
                             lat,
                             lon,
-                            xmsg=msg64))
+                            xmsg=msg64)
+        nt.assert_array_almost_equal(fo_msg_expected, fo)
 
     def test_rcm2rgrid_float32_nom(self):
         nt.assert_array_almost_equal(

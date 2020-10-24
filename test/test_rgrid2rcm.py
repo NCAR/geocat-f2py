@@ -80,7 +80,7 @@ class Test_rgrid2rcm(ut.TestCase):
                          fi_msg.astype(np.float64),
                          lat2d,
                          lon2d,
-                         msg=msg64))
+                         xmsg=msg64))
 
     def test_rgrid2rcm_float32_nom(self):
         nt.assert_array_almost_equal(
@@ -100,4 +100,4 @@ class Test_rgrid2rcm(ut.TestCase):
                          fi_msg.astype(np.float32),
                          lat2d,
                          lon2d,
-                         msg=msg32))
+                         xmsg=msg32))

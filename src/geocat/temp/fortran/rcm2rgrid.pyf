@@ -3,7 +3,7 @@
 
 python module rcm2rgrid ! in 
     interface  ! in :rcm2rgrid
-        ! signature : fo = drcm2rgrid(yi,xi,fi,yo,xo,[xmsg,ncrit,opt])
+        ! signature : fo = drcm2rgrid(yi,xi,fi,yo,xo,xmsg,[ncrit,opt])
         subroutine drcm2rgrid(ngrd,nyi,nxi,yi,xi,fi,nyo,yo,nxo,xo,fo,xmsg,ncrit,opt,ier) ! in :rcm2rgrid:rcm2rgrid.f
             integer,            depend(fi),                                     intent(hide)    :: ngrd=shape(fi,2)
             integer,            depend(yi),                                     intent(hide)    :: nyi=shape(yi,1)
@@ -22,7 +22,7 @@ python module rcm2rgrid ! in
             integer,                                                            intent(hide)    :: ier
         end subroutine drcm2rgrid
         ! signature : fo = drgrid2rcm(yi,xi,fi,yo,xo,[xmsg,ncrit,opt])
-        subroutine drgrid2rcm(ngrd,nyi,nxi,yi,xi,fi,nyo,nxo,yo,xo,fo,xmsg,ncrit,opt,ier) ! in :rcm2rgrid:rcm2rgrid.f
+        subroutine drgrid2rcm(ngrd,nyi,nxi,yi,xi,fi,nyo,nxo,yo,xo,fo,xmsg,ncrit,opt,ier) ! in :rgrid2rcm:rgrid2rcm.f
             integer,            depend(fi),                                         intent(hide)    :: ngrd=shape(fi,2)
             integer,            depend(yi),                                         intent(hide)    :: nyi=len(yi)
             integer,            depend(xi),                                         intent(hide)    :: nxi=len(xi)
