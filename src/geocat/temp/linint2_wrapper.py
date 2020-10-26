@@ -38,18 +38,40 @@ def _linint2pts(xi, yi, fi, xo, yo, icycx, xmsg, shape):
 # These Wrappers are excecuted in the __main__ python process, and should be
 # used for any tasks which would not benefit from parallel execution.
 
-def linint1(fi, xo, icycx=0, xmsg=-99):
+def linint1(fi, xo, xi=None, icycx=0, xmsg=-99):
     # ''' signature : fo = dlinint1(xi,fi,xo,[icycx,xmsg,iopt])
 
     # ''' Start of boilerplate
     if not isinstance(fi, xr.DataArray):
-        raise Exception("fi is required to be an xarray.DataArray")
+        if (xi is None):
+            raise CoordinateError(
+                "linint2: Argument xi must be provided explicitly unless fi is an xarray.DataArray.")
+
+        fi = xr.DataArray(
+            fi,
+        )
+        fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))])
+
+        fi = xr.DataArray(
+            fi.data,
+            coords={
+                fi.dims[-1]: xi,
+            },
+            dims=fi.dims,
+        ).chunk(fi_chunk)
 
     xi = fi.coords[fi.dims[-1]]
 
     # ensure rightmost dimensions of input are not chunked
     if list(fi.chunks)[-1:] != [xi.shape]:
         raise Exception("fi must be unchunked along the last dimension")
+
+    # fi data structure elements and autochunking
+    fi_chunks = list(fi.dims)
+    fi_chunks[:-1] = [(k, 1) for (k, v) in zip(list(fi.dims)[:-1], list(fi.chunks)[:-1])]
+    fi_chunks[-1:] = [(k, v[0]) for (k, v) in zip(list(fi.dims)[-1:], list(fi.chunks)[-1:])]
+    fi_chunks = dict(fi_chunks)
+    fi = fi.chunk(fi_chunks)
 
     # fo datastructure elements
     fo_chunks = list(fi.chunks)
@@ -171,7 +193,6 @@ def linint2pts(fi, xo, yo, icycx=0, xmsg=-99):
     fo_chunks[-2:] = (xo.shape,)
     fo_chunks = tuple(fo_chunks)
     fo_shape = tuple(a[0] for a in list(fo_chunks))
-    fo_shape = fo_shape
     fo_coords = {
         k: v for (k, v) in fi.coords.items()
     }
