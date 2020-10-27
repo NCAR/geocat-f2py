@@ -29,19 +29,19 @@ def _rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg_py, shape):
     return fo
 
 
-def _rgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, xmsg, shape):
+def _rgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, msg_py, shape):
 
     fi = np.transpose(fi, axes=(2,1,0))
     lat2d = np.transpose(lat2d, axes=(1,0))
     lon2d = np.transpose(lon2d, axes=(1,0))
 
-    fi, msg_fort = py2fort_msg(fi, xmsg)
+    fi, msg_py, msg_fort = py2fort_msg(fi, msg_py=msg_py)
 
-    fo = drgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, xmsg=msg_fort)
+    fo = drgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, msg=msg_fort)
     fo = np.asarray(fo)
     fo = np.transpose(fo, axes=(2,1,0))
 
-    fort2py_msg(fo, xmsg, msg_fort)
+    fort2py_msg(fo, msg_fort=msg_fort, msg_py=msg_py)
 
     return fo
 
@@ -121,7 +121,7 @@ def rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg_py=np.nan):
     return fo
 
 
-def rgrid2rcm(lat1d, lon1d, fi, lat2d=None, lon2d=None, xmsg=None):
+def rgrid2rcm(lat1d, lon1d, fi, lat2d=None, lon2d=None, msg_py=np.nan):
 
     # ''' Start of boilerplate
     if not isinstance(fi, xr.DataArray):
@@ -176,7 +176,7 @@ def rgrid2rcm(lat1d, lon1d, fi, lat2d=None, lon2d=None, xmsg=None):
         fi.data,
         lat2d,
         lon2d,
-        xmsg,
+        msg_py,
         fo_shape,
         chunks=fo_chunks,
         dtype=fi.dtype,

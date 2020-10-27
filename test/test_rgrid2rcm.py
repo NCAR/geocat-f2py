@@ -76,11 +76,11 @@ class Test_rgrid2rcm(ut.TestCase):
         nt.assert_array_almost_equal(
             fo_msg_expected,
             geocat.temp.rgrid2rcm(lat,
-                         lon,
-                         fi_msg.astype(np.float64),
-                         lat2d,
-                         lon2d,
-                         xmsg=msg64))
+                                  lon,
+                                  fi_msg.astype(np.float64),
+                                  lat2d,
+                                  lon2d,
+                                  msg_py=msg64))
 
     def test_rgrid2rcm_float32_nom(self):
         nt.assert_array_almost_equal(
@@ -96,8 +96,8 @@ class Test_rgrid2rcm(ut.TestCase):
         nt.assert_array_almost_equal(
             fo_msg_expected,
             geocat.temp.rgrid2rcm(lat,
-                         lon,
-                         fi_msg.astype(np.float32),
-                         lat2d,
-                         lon2d,
-                         xmsg=msg32))
+                                  lon,
+                                  fi_msg.astype(np.float32),
+                                  lat2d,
+                                  lon2d,
+                                  msg_py=msg32))
