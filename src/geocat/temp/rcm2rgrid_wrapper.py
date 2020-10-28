@@ -4,7 +4,7 @@ from dask.array.core import map_blocks
 
 from .fortran import (drcm2rgrid, drgrid2rcm)
 from .errors import (ChunkError, CoordinateError)
-from .missing_values import *
+from .missing_values import (fort2py_msg, py2fort_msg)
 
 
 # Dask Wrappers _<funcname>()
@@ -52,7 +52,6 @@ def _rgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, msg_py, shape):
 
 
 def rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg_py=np.nan):
-# def rcm2rgrid(fi, lon1d, lat1d, lon2d=None, lat2d=None, xmsg=None):
 
     if (lon2d is None) | (lat2d is None):
         raise CoordinateError(

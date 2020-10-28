@@ -1,8 +1,7 @@
 import numpy as np
 
 #all missing values are represented by all 1's in their dtype, int8 would be bin_11111111 or dec_-128
-MSG_CHAR        = ''
-MSG_STRING      = ""
+MSG_STRING      = ''
 MSG_INT8        = np.iinfo(np.int8).min
 MSG_INT16       = np.iinfo(np.int16).min
 MSG_INT32       = np.iinfo(np.int32).min
@@ -18,7 +17,6 @@ MSG_UINT64      = np.iinfo(np.uint64).max
 
 msg_dtype = {
     'DEFAULT'               : np.float64(MSG_FLOAT64),
-     np.dtype('S1')         : np.str(MSG_CHAR),
      np.dtype(np.str)       : np.str(MSG_STRING),
      np.dtype(np.int8)      : np.int8(MSG_INT8),
      np.dtype(np.int16)     : np.int16(MSG_INT16),
