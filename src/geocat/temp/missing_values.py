@@ -1,6 +1,7 @@
 import numpy as np
 
 #all missing values are represented by all 1's in their dtype, int8 would be bin_11111111 or dec_-128
+MSG_STRING      = ''
 MSG_INT8        = np.iinfo(np.int8).min
 MSG_INT16       = np.iinfo(np.int16).min
 MSG_INT32       = np.iinfo(np.int32).min
@@ -16,16 +17,18 @@ MSG_UINT64      = np.iinfo(np.uint64).max
 
 msg_dtype = {
     'DEFAULT'               : np.float64(MSG_FLOAT64),
+     np.dtype(np.str)       : np.str(MSG_STRING),
      np.dtype(np.int8)      : np.int8(MSG_INT8),
-     np.dtype(np.uint8)     : np.uint8(MSG_UINT8),
      np.dtype(np.int16)     : np.int16(MSG_INT16),
-     np.dtype(np.uint16)    : np.uint16(MSG_UINT16),
      np.dtype(np.int32)     : np.int32(MSG_INT32),
-     np.dtype(np.uint32)    : np.uint32(MSG_UINT32),
      np.dtype(np.int64)     : np.int64(MSG_INT64),
-     np.dtype(np.uint64)    : np.uint64(MSG_UINT64),
      np.dtype(np.float32)   : np.float32(MSG_FLOAT32),
      np.dtype(np.float64)   : np.float64(MSG_FLOAT64),
+     np.dtype(np.float128)  : np.float128(MSG_FLOAT128),
+     np.dtype(np.uint8)     : np.uint8(MSG_UINT8),
+     np.dtype(np.uint16)    : np.uint16(MSG_UINT16),
+     np.dtype(np.uint32)    : np.uint32(MSG_UINT32),
+     np.dtype(np.uint64)    : np.uint64(MSG_UINT64),
 }
 
 

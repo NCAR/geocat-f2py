@@ -20,7 +20,7 @@ def _rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg_py, shape):
 
     fi, msg_py, msg_fort = py2fort_msg(fi, msg_py=msg_py)
 
-    fo = drcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg=msg_fort)
+    fo = drcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, xmsg=msg_fort)
     fo = np.asarray(fo)
     fo = np.transpose(fo, axes=(2,1,0))
 
@@ -37,7 +37,7 @@ def _rgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, msg_py, shape):
 
     fi, msg_py, msg_fort = py2fort_msg(fi, msg_py=msg_py)
 
-    fo = drgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, msg=msg_fort)
+    fo = drgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, xmsg=msg_fort)
     fo = np.asarray(fo)
     fo = np.transpose(fo, axes=(2,1,0))
 
