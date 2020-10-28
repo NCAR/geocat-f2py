@@ -19,6 +19,7 @@ def _linint1(xi, fi, xo, icycx, msg_py, shape):
     fo = np.asarray(fo)
     fo = fo.reshape(shape)
     # missing value handling
+    fort2py_msg(fi, msg_fort=msg_fort, msg_py=msg_py)
     fort2py_msg(fo, msg_fort=msg_fort, msg_py=msg_py)
     return fo
 
@@ -48,6 +49,7 @@ def _linint2pts(xi, yi, fi, xo, yo, icycx, msg_py, shape):
     fo = np.asarray(fo)
     fo = fo.reshape(shape)
     # missing value handling
+    fort2py_msg(fi, msg_fort=msg_fort, msg_py=msg_py)
     fort2py_msg(fo, msg_fort=msg_fort, msg_py=msg_py)
     return fo
 
