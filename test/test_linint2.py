@@ -130,7 +130,7 @@ class Test_linint2_int32(ut.TestCase):
                               'lat': yi,
                               'lon': xi
                           }).chunk(chunks)
-        fo = geocat.temp.linint2(fi, xo, yo, msg_py=np.float32(np.iinfo(np.float32).min))
+        fo = geocat.temp.linint2(fi, xo, yo)
         np.testing.assert_array_equal(fi.values, fo[..., ::2, ::2].values)
 
     def test_linint2_msg_int32(self):
@@ -169,6 +169,7 @@ class Test_linint2_int64(ut.TestCase):
                           }).chunk(chunks)
         fo = geocat.temp.linint2(fi, xo, yo)
         np.testing.assert_array_equal(fi.values, fo[..., ::2, ::2].values)
+        print("Good after assertion")
 
     def test_linint2_msg_int64(self):
         fi_np_copy = (fi_np * 100).astype(np.int64)
@@ -294,3 +295,8 @@ class Test_linint2_non_contiguous(ut.TestCase):
                                   yi=yi_reverse[::-1])
         np.testing.assert_array_equal(fi[:, :, ::-1, :].values,
                                       fo[..., ::2, ::2].values)
+
+    a = Test_linint2_int32()
+    a.test_linint2_int32()
+    b = Test_linint2_int64()
+    b.test_linint2_int64()
