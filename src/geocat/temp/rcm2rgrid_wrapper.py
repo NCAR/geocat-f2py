@@ -4,7 +4,7 @@ from dask.array.core import map_blocks
 
 from .fortran import (drcm2rgrid, drgrid2rcm)
 from .errors import (ChunkError, CoordinateError)
-from .fill_missing_values import *
+from .missing_values import *
 
 
 # Dask Wrappers _<funcname>()
@@ -12,36 +12,36 @@ from .fill_missing_values import *
 # can benefit from parallel excution.
 
 
-def _rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, xmsg, shape):
+def _rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg_py, shape):
 
     fi = np.transpose(fi, axes=(2,1,0))
     lat2d = np.transpose(lat2d, axes=(1,0))
     lon2d = np.transpose(lon2d, axes=(1,0))
 
-    xmsg_fill = treat_in_msg(fi, xmsg)
+    fi, msg_py, msg_fort = py2fort_msg(fi, msg_py=msg_py)
 
-    fo = drcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, xmsg=xmsg_fill)
+    fo = drcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg=msg_fort)
     fo = np.asarray(fo)
     fo = np.transpose(fo, axes=(2,1,0))
 
-    treat_out_msg(fo, xmsg, xmsg_fill)
+    fort2py_msg(fo, msg_fort=msg_fort, msg_py=msg_py)
 
     return fo
 
 
-def _rgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, xmsg, shape):
+def _rgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, msg_py, shape):
 
     fi = np.transpose(fi, axes=(2,1,0))
     lat2d = np.transpose(lat2d, axes=(1,0))
     lon2d = np.transpose(lon2d, axes=(1,0))
 
-    xmsg_fill = treat_in_msg(fi, xmsg)
+    fi, msg_py, msg_fort = py2fort_msg(fi, msg_py=msg_py)
 
-    fo = drgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, xmsg=xmsg_fill)
+    fo = drgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, msg=msg_fort)
     fo = np.asarray(fo)
     fo = np.transpose(fo, axes=(2,1,0))
 
-    treat_out_msg(fo, xmsg, xmsg_fill)
+    fort2py_msg(fo, msg_fort=msg_fort, msg_py=msg_py)
 
     return fo
 
@@ -51,7 +51,7 @@ def _rgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, xmsg, shape):
 # used for any tasks which would not benefit from parallel execution.
 
 
-def rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, xmsg=None):
+def rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg_py=np.nan):
 # def rcm2rgrid(fi, lon1d, lat1d, lon2d=None, lat2d=None, xmsg=None):
 
     if (lon2d is None) | (lat2d is None):
@@ -110,7 +110,7 @@ def rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, xmsg=None):
         fi.data,
         lat1d,
         lon1d,
-        xmsg,
+        msg_py,
         fo_shape,
         chunks=fo_chunks,
         dtype=fi.dtype,
@@ -121,7 +121,7 @@ def rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, xmsg=None):
     return fo
 
 
-def rgrid2rcm(lat1d, lon1d, fi, lat2d=None, lon2d=None, xmsg=None):
+def rgrid2rcm(lat1d, lon1d, fi, lat2d=None, lon2d=None, msg_py=np.nan):
 
     # ''' Start of boilerplate
     if not isinstance(fi, xr.DataArray):
@@ -176,7 +176,7 @@ def rgrid2rcm(lat1d, lon1d, fi, lat2d=None, lon2d=None, xmsg=None):
         fi.data,
         lat2d,
         lon2d,
-        xmsg,
+        msg_py,
         fo_shape,
         chunks=fo_chunks,
         dtype=fi.dtype,
