@@ -1,36 +1,53 @@
 import numpy as np
 import xarray as xr
 from dask.array.core import map_blocks
-
 from .errors import (ChunkError, CoordinateError)
 from geocat.temp.fortran import (dlinint1, dlinint2, dlinint2pts)
-
+from .missing_values import (fort2py_msg, py2fort_msg)
 
 # Dask Wrappers _<funcname>()
 # These Wrapper are executed within dask processes, and should do anything that
 # can benefit from parallel excution.
 
-def _linint1(xi, fi, xo, icycx, xmsg, shape):
+def _linint1(xi, fi, xo, icycx, msg_py, shape):
     # ''' signature : fo = dlinint1(xi,fi,xo,[icycx,xmsg,iopt])
-    fo = dlinint1(xi, fi, xo, icycx=icycx, xmsg=xmsg, )
+    # missing value handling
+    fi, msg_py, msg_fort = py2fort_msg(fi, msg_py=msg_py)
+    # fortran call
+    fo = dlinint1(xi, fi, xo, icycx=icycx, xmsg=msg_fort, )
+    # numpy and reshape
     fo = np.asarray(fo)
     fo = fo.reshape(shape)
+    # missing value handling
+    fort2py_msg(fo, msg_fort=msg_fort, msg_py=msg_py)
     return fo
 
 
-def _linint2(xi, yi, fi, xo, yo, icycx, xmsg, shape):
+def _linint2(xi, yi, fi, xo, yo, icycx, msg_py, shape):
     # ''' signature : fo = dlinint2(xi,yi,fi,xo,yo,[icycx,xmsg,iopt])
-    fo = dlinint2(xi, yi, fi, xo, yo, icycx=icycx, xmsg=xmsg, )
+    # missing value handling
+    fi, msg_py, msg_fort = py2fort_msg(fi, msg_py=msg_py)
+    # fortran call
+    fo = dlinint2(xi, yi, fi, xo, yo, icycx=icycx, xmsg=msg_fort, )
+    # numpy and reshape
     fo = np.asarray(fo)
     fo = fo.reshape(shape)
+    # missing value handling
+    fort2py_msg(fo, msg_fort=msg_fort, msg_py=msg_py)
     return fo
 
 
-def _linint2pts(xi, yi, fi, xo, yo, icycx, xmsg, shape):
+def _linint2pts(xi, yi, fi, xo, yo, icycx, msg_py, shape):
     # ''' signature : fo = dlinint2pts(xi,yi,fi,xo,yo,[icycx,xmsg])
-    fo = dlinint2pts(xi, yi, fi, xo, yo, icycx=icycx, xmsg=xmsg, )
+    # missing value handling
+    fi, msg_py, msg_fort = py2fort_msg(fi, msg_py=msg_py)
+    # fortran call
+    fo = dlinint2pts(xi, yi, fi, xo, yo, icycx=icycx, xmsg=msg_fort, )
+    # numpy and reshape
     fo = np.asarray(fo)
     fo = fo.reshape(shape)
+    # missing value handling
+    fort2py_msg(fo, msg_fort=msg_fort, msg_py=msg_py)
     return fo
 
 
@@ -38,7 +55,7 @@ def _linint2pts(xi, yi, fi, xo, yo, icycx, xmsg, shape):
 # These Wrappers are excecuted in the __main__ python process, and should be
 # used for any tasks which would not benefit from parallel execution.
 
-def linint1(fi, xo, xi=None, icycx=0, xmsg=-99):
+def linint1(fi, xo, xi=None, icycx=0, msg_py=np.nan):
     # ''' signature : fo = dlinint1(xi,fi,xo,[icycx,xmsg,iopt])
 
     # ''' Start of boilerplate
@@ -90,7 +107,7 @@ def linint1(fi, xo, xi=None, icycx=0, xmsg=-99):
         fi.data,
         xo,
         icycx,
-        xmsg,
+        msg_py,
         fo_shape,
         chunks=fo_chunks,
         dtype=fi.dtype,
@@ -102,7 +119,7 @@ def linint1(fi, xo, xi=None, icycx=0, xmsg=-99):
     return fo
 
 
-def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, xmsg=-99):
+def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, msg_py=np.nan):
     # ''' signature : fo = dlinint2(xi,yi,fi,xo,yo,[icycx,xmsg,iopt])
 
     # ''' Start of boilerplate
@@ -160,7 +177,7 @@ def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, xmsg=-99):
         yo,
         xo,
         icycx,
-        xmsg,
+        msg_py,
         fo_shape,
         chunks=fo_chunks,
         dtype=fi.dtype,
@@ -171,7 +188,7 @@ def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, xmsg=-99):
     return fo
 
 
-def linint2pts(fi, xo, yo, icycx=0, xmsg=-99):
+def linint2pts(fi, xo, yo, icycx=0, msg_py=np.nan):
     # ''' signature : fo = dlinint2pts(xi,yi,fi,xo,yo,[icycx,xmsg,iopt])
 
     # ''' Start of boilerplate
@@ -209,7 +226,7 @@ def linint2pts(fi, xo, yo, icycx=0, xmsg=-99):
         yo,
         xo,
         icycx,
-        xmsg,
+        msg_py,
         fo_shape,
         chunks=fo_chunks,
         dtype=fi.dtype,
