@@ -15,32 +15,49 @@ MSG_UINT32      = np.iinfo(np.uint32).max
 MSG_UINT64      = np.iinfo(np.uint64).max
 
 
+
 msg_dtype = {
-    'DEFAULT'               : np.float64(MSG_FLOAT64),
-     np.dtype(np.str)       : np.str(MSG_STRING),
-     np.dtype(np.int8)      : np.int8(MSG_INT8),
-     np.dtype(np.int16)     : np.int16(MSG_INT16),
-     np.dtype(np.int32)     : np.int32(MSG_INT32),
-     np.dtype(np.int64)     : np.int64(MSG_INT64),
-     np.dtype(np.float32)   : np.float32(MSG_FLOAT32),
-     np.dtype(np.float64)   : np.float64(MSG_FLOAT64),
-     np.dtype(np.float128)  : np.float128(MSG_FLOAT128),
-     np.dtype(np.uint8)     : np.uint8(MSG_UINT8),
-     np.dtype(np.uint16)    : np.uint16(MSG_UINT16),
-     np.dtype(np.uint32)    : np.uint32(MSG_UINT32),
-     np.dtype(np.uint64)    : np.uint64(MSG_UINT64),
+    'DEFAULT'       : np.float64(MSG_FLOAT64),
+     np.str         : np.str(MSG_STRING),
+     np.int8        : np.int8(MSG_INT8),
+     np.int16       : np.int16(MSG_INT16),
+     np.int32       : np.int32(MSG_INT32),
+     np.int64       : np.int64(MSG_INT64),
+     np.float32     : np.float32(MSG_FLOAT32),
+     np.float64     : np.float64(MSG_FLOAT64),
+     np.float128    : np.float128(MSG_FLOAT128),
+     np.uint8       : np.uint8(MSG_UINT8),
+     np.uint16      : np.uint16(MSG_UINT16),
+     np.uint32      : np.uint32(MSG_UINT32),
+     np.uint64      : np.uint64(MSG_UINT64),
 }
 
 
-def py2fort_msg(ndarray, msg_py=np.nan, msg_fort='DEFAULT'):
+float_dtypes = [np.float32, np.float64, np.float128]
+int_dtypes = [np.int8, np.int16, np.int32, np.int64]
+uint_dtypes = [np.uint8, np.uint16, np.uint32, np.uint64]
+string_dtypes = [np.str]
+
+def py2fort_msg(ndarray, msg_py=None, msg_fort=None):
     msg_indices = None
+
+    ndtype = ndarray.dtype.type
+    if ndtype not in msg_dtype.keys():
+        raise Exception("The ndarray.dtype.type of " + np.dtype(ndtype).name +" is not a supported type")
+
+    if msg_py is None:
+        if ndtype in float_dtypes:
+            msg_py = np.nan
+        else:
+            msg_py = msg_dtype[ndtype]
+
+    if msg_fort is None:
+        msg_fort =  msg_dtype[ndtype]
 
     if np.isnan(msg_py):
         msg_indices = np.isnan(ndarray)
     else:
         msg_indices = (ndarray == msg_py)
-
-    msg_fort =  msg_dtype[ndarray.dtype]
 
     if msg_indices.any():
         ndarray[msg_indices] = msg_fort
@@ -50,12 +67,25 @@ def py2fort_msg(ndarray, msg_py=np.nan, msg_fort='DEFAULT'):
 
     #todo: Should we force output missing value to (1) always be np.nan or (2) whatever it was given in input
     #      Current code here implements (2) while most GeoCAT-ncomp functions implemented (1) (e.g. linint2)
-def fort2py_msg(ndarray, msg_fort='DEFAULT', msg_py=np.nan,):
+def fort2py_msg(ndarray, msg_fort=None, msg_py=None):
     msg_indices = None
 
-    msg_indices = (ndarray == msg_fort) # from fort to py we don't need to worry about np.nans.
+    ndtype = ndarray.dtype.type
+    if ndtype not in msg_dtype.keys():
+        raise Exception("The ndarray.dtype.type of " + np.dtype(ndtype).name +" is not a supported type")
+
+    if msg_fort is None:
+        msg_fort =  msg_dtype[ndtype]
+
+    if msg_py is None:
+        if ndtype in float_dtypes:
+            msg_py = np.nan
+        else:
+            msg_py = msg_dtype[ndtype]
+
+    msg_indices = (ndarray == msg_fort)
 
     if msg_indices.any():
-        ndarray[msg_indices] = msg_py # this does not handle integer arrays when replacing with np.nan
+        ndarray[msg_indices] = msg_py 
 
     return ndarray, msg_fort, msg_py
