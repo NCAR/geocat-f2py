@@ -12,7 +12,6 @@ MSG_UINT8       = np.iinfo(np.uint8).max
 MSG_UINT16      = np.iinfo(np.uint16).max
 MSG_UINT32      = np.iinfo(np.uint32).max
 MSG_UINT64      = np.iinfo(np.uint64).max
-MSG_STRING      = ""
 
 
 msg_dtype = {
