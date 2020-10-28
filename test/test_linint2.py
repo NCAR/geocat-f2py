@@ -130,7 +130,7 @@ class Test_linint2_int32(ut.TestCase):
                               'lat': yi,
                               'lon': xi
                           }).chunk(chunks)
-        fo = geocat.temp.linint2(fi, xo, yo)
+        fo = geocat.temp.linint2(fi, xo, yo, msg_py=np.float32(np.iinfo(np.float32).min))
         np.testing.assert_array_equal(fi.values, fo[..., ::2, ::2].values)
 
     def test_linint2_msg_int32(self):

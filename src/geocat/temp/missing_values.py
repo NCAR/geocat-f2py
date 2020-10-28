@@ -56,6 +56,6 @@ def fort2py_msg(ndarray, msg_fort='DEFAULT', msg_py=np.nan,):
     msg_indices = (ndarray == msg_fort) # from fort to py we don't need to worry about np.nans.
 
     if msg_indices.any():
-        ndarray[msg_indices] = msg_py
+        ndarray[msg_indices] = msg_py # this does not handle integer arrays when replacing with np.nan
 
     return ndarray, msg_fort, msg_py
