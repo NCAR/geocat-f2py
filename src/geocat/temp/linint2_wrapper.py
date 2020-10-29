@@ -58,7 +58,7 @@ def _linint2pts(xi, yi, fi, xo, yo, icycx, msg_py, shape):
 # These Wrappers are excecuted in the __main__ python process, and should be
 # used for any tasks which would not benefit from parallel execution.
 
-def linint1(fi, xo, xi=None, icycx=0, msg_py=np.nan):
+def linint1(fi, xo, xi=None, icycx=0, msg_py=None):
     # ''' signature : fo = dlinint1(xi,fi,xo,[icycx,xmsg,iopt])
 
     # ''' Start of boilerplate
@@ -122,7 +122,7 @@ def linint1(fi, xo, xi=None, icycx=0, msg_py=np.nan):
     return fo
 
 
-def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, msg_py=np.nan):
+def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, msg_py=None):
     # ''' signature : fo = dlinint2(xi,yi,fi,xo,yo,[icycx,xmsg,iopt])
 
     # ''' Start of boilerplate
@@ -191,7 +191,7 @@ def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, msg_py=np.nan):
     return fo
 
 
-def linint2pts(fi, xo, yo, icycx=0, msg_py=np.nan):
+def linint2pts(fi, xo, yo, icycx=0, msg_py=None):
     # ''' signature : fo = dlinint2pts(xi,yi,fi,xo,yo,[icycx,xmsg,iopt])
 
     # ''' Start of boilerplate

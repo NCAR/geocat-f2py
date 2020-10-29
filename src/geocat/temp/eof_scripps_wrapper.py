@@ -18,7 +18,7 @@ def _eof11(d, nmodes, icovcor, msg_py):
     eigenvalues, eigenvectors, variance, princomp = deof11(d,nmodes,[icovcor,msg_fort])
     return eigenvalues, eigenvectors, variance, princomp
 
-def eof11(d, nmodes, icovcor=0, msg_py=np.nan):
+def eof11(d, nmodes, icovcor=0, msg_py=None):
     # this is effectivly a stub, since this is not a parallelizable task.
     return _eof11(d, nmodes, icovcor, msg_py)
 
