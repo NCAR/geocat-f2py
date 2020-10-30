@@ -17,11 +17,11 @@ requirements:
 
   run:
     - python=3.8
-      - numpy=1.19
-      - gfortran_osx-64
-      - lapack
-      - xarray
-      - dask
+    - numpy=1.19
+    - gfortran_osx-64
+    - lapack
+    - xarray
+    - dask
 
 about:
   home: https://github.com/NCAR/geocat-temp
