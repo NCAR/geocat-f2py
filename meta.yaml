@@ -1,30 +1,22 @@
-{% set name = "geocat-temp" %}
-{% set version = "7.0" %}
-
 package:
-  name: "{{ name|lower }}"
-  version: "{{ version }}"
+  name: "geocat-temp"
+  version: "0.1"
 
 source:
   git_rev: latest
   git_url: https://github.com/NCAR/geocat-temp.git
 
-build:
-  script: python setup.py install -f
-
 requirements:
   build:
-    - python
-    - numpy
+    - python=3.8
+    - numpy=1.19
     - gfortran_osx-64
+    - lapack
   run:
     - python
     - dask
     - xarray
     - numpy
-test:
-  imports:
-    - geocat.temp
 
 about:
   home: https://github.com/NCAR/geocat-temp
