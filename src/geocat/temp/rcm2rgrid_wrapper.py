@@ -51,7 +51,7 @@ def _rgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, msg_py, shape):
 # used for any tasks which would not benefit from parallel execution.
 
 
-def rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg_py=np.nan):
+def rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg_py=None):
 
     if (lon2d is None) | (lat2d is None):
         raise CoordinateError(
@@ -120,7 +120,7 @@ def rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg_py=np.nan):
     return fo
 
 
-def rgrid2rcm(lat1d, lon1d, fi, lat2d=None, lon2d=None, msg_py=np.nan):
+def rgrid2rcm(lat1d, lon1d, fi, lat2d=None, lon2d=None, msg_py=None):
 
     # ''' Start of boilerplate
     if not isinstance(fi, xr.DataArray):
