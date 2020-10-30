@@ -1,7 +1,7 @@
 #''' setup.py is needed, but only to make namespaces happen, 
 version = '0.1'
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
       name='geocat.temp',
@@ -14,6 +14,5 @@ setup(
                    },
       namespace_packages=['geocat'],
       packages=['geocat','geocat.temp','geocat.temp.fortran'],
-      install_requires=['numpy','dask[complete]','xarray'],
       )
 
