@@ -14,6 +14,7 @@ requirements:
     - lapack
     - dask
     - xarray
+    - zict
   run:
     - python=3.8
     - dask
