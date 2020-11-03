@@ -35,11 +35,11 @@ def linint1_test():
 
 
 def linint2_test():
-    xi = np.linspace(1, 10, 100)
+    xi = np.linspace(1, 10, 500)
     yi = np.linspace(1, 10, 200)
-    xo = np.linspace(1, 10, 500)
+    xo = np.linspace(1, 10, 2000)
     yo = np.linspace(1, 10, 1000)
-    fi = np.linspace(1, 200, 2000000).reshape((10, 10, 200, 100))
+    fi = np.linspace(1, 200, 10000000).reshape((10, 10, 200, 500))
     # '''
     chunks = {
         'time': 1,
@@ -104,14 +104,14 @@ def linint2pts_test():
 
 
 if __name__ == '__main__':
-    cluster = dd.LocalCluster(n_workers=4, threads_per_worker=1)
+    cluster = dd.LocalCluster(n_workers=8, threads_per_worker=1)
     print(cluster.dashboard_link)
     client = dd.Client(cluster)
     t0 = time.time()
 
-    linint1_test()
+    #linint1_test()
     linint2_test()
-    linint2pts_test()
+    #linint2pts_test()
 
     t1 = time.time()
 
