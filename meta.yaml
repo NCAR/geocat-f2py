@@ -13,7 +13,7 @@ build:
 requirements:
   build:
     - python
-    - numpy
+    - numpy=1.19
     - gfortran_osx-64
     - lapack
     - xarray
@@ -21,7 +21,7 @@ requirements:
 
   run:
     - python
-    - numpy
+    - numpy=1.19
     - gfortran_osx-64
     - lapack
     - xarray
