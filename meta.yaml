@@ -12,16 +12,16 @@ build:
 
 requirements:
   build:
-    - python=3.8
-    - numpy=1.19
+    - python
+    - numpy
     - gfortran_osx-64
     - lapack
     - xarray
     - dask
 
   run:
-    - python=3.8
-    - numpy=1.19
+    - python
+    - numpy
     - gfortran_osx-64
     - lapack
     - xarray
