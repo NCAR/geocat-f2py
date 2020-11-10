@@ -7,22 +7,23 @@ source:
   git_url: https://github.com/NCAR/geocat-temp.git
 
 build:
-  number: 1
+  number: 2
   skip: True # [py<35]
 
 requirements:
-  build:
+  host:
     - python
+    - pip
+    - setuptools
     - numpy=1.19
-    - gfortran_osx-64
+    - {{ compiler('fortran') }}
     - lapack
     - xarray
     - dask
-
   run:
     - python
     - numpy=1.19
-    - gfortran_osx-64
+    - {{ compiler('fortran') }}
     - lapack
     - xarray
     - dask
