@@ -25,7 +25,7 @@ requirements:
     - python
     - numpy=1.19
     - {{ compiler('fortran') }}
-    - liblapacki
+    - liblapack
     - blas
     - xarray
     - dask
