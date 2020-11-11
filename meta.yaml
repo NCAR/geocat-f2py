@@ -18,7 +18,7 @@ requirements:
     - numpy=1.19
     - {{ compiler('fortran') }}
     - liblapack
-    - blas
+    - openblas
     - xarray
     - dask
   run:
@@ -26,7 +26,7 @@ requirements:
     - numpy=1.19
     - {{ compiler('fortran') }}
     - liblapack
-    - blas
+    - openblas
     - xarray
     - dask
 
