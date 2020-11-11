@@ -28,15 +28,15 @@ requirements:
     - xarray
     - dask
 
-#test:
-#  source_files:
-#    - test
-#  requires:
-#    - pytest
-#  imports:
-#    - geocat.temp
-#  commands:
-#    - pytest test
+test:
+  source_files:
+    - test
+  requires:
+    - pytest
+  imports:
+    - geocat.temp
+  commands:
+    - pytest test
 
 about:
   home: https://github.com/NCAR/geocat-temp
