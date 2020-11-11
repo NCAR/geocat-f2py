@@ -7,7 +7,7 @@ source:
   git_url: https://github.com/NCAR/geocat-temp.git
 
 build:
-  number: 0
+  number: 1
   skip: True # [py<35]
 
 requirements:
