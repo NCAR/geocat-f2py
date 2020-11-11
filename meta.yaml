@@ -1,6 +1,6 @@
 package:
   name: "geocat-temp"
-  version: "0.2"
+  version: "0.2.1"
 
 source:
   git_rev: master
@@ -11,19 +11,20 @@ build:
   skip: True # [py<35]
 
 requirements:
-  build:
+  host:
     - python
+    - pip
+    - setuptools
     - numpy=1.19
-    - gfortran_osx-64
-    - lapack
+    - {{ compiler('fortran') }}
+    - liblapack
     - xarray
     - dask
-
   run:
     - python
     - numpy=1.19
-    - gfortran_osx-64
-    - lapack
+    - {{ compiler('fortran') }}
+    - liblapack
     - xarray
     - dask
 
