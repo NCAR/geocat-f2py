@@ -6,4 +6,4 @@ f2py -c --fcompiler=gnu95 rcm2rgrid.pyf rcm2rgrid.f linmsg_dp.f
 f2py -c --fcompiler=gnu95 eof_scripps.pyf eof_scripps.f90
 cd ../../../..
 
-python -m pip install . --no-deps -vv
+{{ PYTHON }} -m pip install . --no-deps -vv
