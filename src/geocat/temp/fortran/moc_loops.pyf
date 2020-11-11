@@ -1,8 +1,8 @@
 !    -*- f90 -*-
 ! Note: the context of this file is case sensitive.
 
-python module moc_globe_atl_f2py ! in 
-    interface  ! in :moc_globe_atl_f2py
+python module moc_loops ! in
+    interface  ! in :moc_loops
         ! signature : tmp1,tmp2,tmp3 = mocloops(tlat,lat_aux_grid,rmlak,work1,work2,work3,wmsg)
         subroutine mocloops(nyaux,mlon,nlat,kdep,nrx,tlat,lat_aux_grid,rmlak,work1,work2,work3,wmsg,tmp1,tmp2,tmp3) ! in :moc_globe_atl_f2py:MOC.loops.f
             integer,    optional,                          intent(hide) :: nyaux=len(lat_aux_grid)
@@ -22,7 +22,7 @@ python module moc_globe_atl_f2py ! in
             double precision, dimension(nyaux,kdep,2),                          intent(out)  :: tmp3(nyaux,kdep,2)
         end subroutine mocloops
     end interface 
-end python module moc_globe_atl_f2py
+end python module moc_loops
 
 ! This file was auto-generated with f2py (version:2).
 ! See http://cens.ioc.ee/projects/f2py2e/
