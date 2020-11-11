@@ -17,7 +17,7 @@ requirements:
     - setuptools
     - numpy=1.19
     - {{ compiler('fortran') }}
-    - libapack
+    - liblapack
     - xarray
     - dask
   run:
