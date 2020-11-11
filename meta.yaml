@@ -18,13 +18,15 @@ requirements:
     - numpy=1.19
     - {{ compiler('fortran') }}
     - liblapack
+    - blas
     - xarray
     - dask
   run:
     - python
     - numpy=1.19
     - {{ compiler('fortran') }}
-    - liblapack
+    - liblapacki
+    - blas
     - xarray
     - dask
 
