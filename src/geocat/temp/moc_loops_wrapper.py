@@ -2,7 +2,7 @@ import numpy as np
 import xarray as xr
 from dask.array.core import map_blocks
 
-from .fortran import mocloops
+from .fortran import (mocloops)
 from .errors import (ChunkError, CoordinateError)
 from .missing_values import (fort2py_msg, py2fort_msg)
 
@@ -10,7 +10,7 @@ from .missing_values import (fort2py_msg, py2fort_msg)
 # These Wrapper are executed within dask processes, and should do anything that
 # can benefit from parallel excution.
 
-def _moc_globe_atl(lat_aux_grid, a_wvel, a_bolus, a_submeso, t_lat, rmlak, msg_py):
+def _moc_loops(lat_aux_grid, a_wvel, a_bolus, a_submeso, t_lat, rmlak, msg_py):
     # signature:  tmp1,tmp2,tmp3 = mocloops(tlat,lat_aux_grid,rmlak,work1,work2,work3,wmsg)
     work1 = a_wvel
     work2 = a_bolus
@@ -49,13 +49,13 @@ def _moc_globe_atl(lat_aux_grid, a_wvel, a_bolus, a_submeso, t_lat, rmlak, msg_p
 # These Wrappers are excecuted in the __main__ python process, and should be
 # used for any tasks which would not benefit from parallel execution.
 
-def moc_globe_atl(lat_aux_grid, a_wvel, a_bolus, a_submeso, t_lat, rmlak, msg_py=None):
+def moc_loops(lat_aux_grid, a_wvel, a_bolus, a_submeso, t_lat, rmlak, msg_py=None):
 
     # ''' Start of boilerplate
     if not isinstance(a_wvel, xr.DataArray):
         a_wvel = xr.DataArray(a_wvel)
 
-    fo = _moc_globe_atl(
+    fo = _moc_loops(
     lat_aux_grid,
     a_wvel.values,
     a_bolus,
@@ -65,3 +65,7 @@ def moc_globe_atl(lat_aux_grid, a_wvel, a_bolus, a_submeso, t_lat, rmlak, msg_py
     msg_py)
 
     return fo
+
+def moc_globe_atl(lat_aux_grid, a_wvel, a_bolus, a_submeso, t_lat, rmlak, msg_py=None):
+    #transparent wrapper for ncomp backwards compatibility
+    return moc_loops(lat_aux_grid, a_wvel, a_bolus, a_submeso, t_lat, rmlak, msg_py=msg_py)
