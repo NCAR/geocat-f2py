@@ -17,16 +17,14 @@ requirements:
     - setuptools
     - numpy=1.19
     - {{ compiler('fortran') }}
-    - liblapack
-    - openblas
+    - lapack
     - xarray
     - dask
   run:
     - python
     - numpy=1.19
     - {{ compiler('fortran') }}
-    - liblapack
-    - openblas
+    - lapack
     - xarray
     - dask
 
