@@ -13,15 +13,17 @@ contribution guidelines:
 function(s), "linint2.f" for example to be adapted to GeoCAT-f2py for NCL functions "linint1", "linint2", and 
 "linint2_points".
 
-2. Copy the Fortran file into the directory `$GEOCAT-F2PY/src/geocat/f2py/fortran`. Copy also other Fortran files 
-if the essential Fortran file has any dependency on. 
+2. Copy the Fortran file into the directory `$GEOCAT-F2PY/src/geocat/f2py/fortran`. Copy also other Fortran files, 
+if any, on which the essential Fortran file has any dependency. 
 
-3. Go to the directory `$GEOCAT-F2PY/src/geocat/f2py/fortran` and generate the f2py signature file from the 
-Fortran file, and its dependencies if any, with the following command:
+3. Go to the directory `$GEOCAT-F2PY/src/geocat/f2py/fortran` and generate the f2py signature file (`.pyf`) from 
+the Fortran file with the following command:
 
-   f2py -c --fcompiler=gnu95 <desired_signature_file_name>.pyf <fortran_file_name>.f <dependency_fortran_file_name_1>.f
+   `f2py <fortran_filename>.f -m <target_module_name> -h <desired_signature_file_name>.pyf`
    
-   For example: f2py -c --fcompiler=gnu95 rcm2rgrid.pyf rcm2rgrid.f linmsg_dp.f
+   For example: 
+   
+   `f2py rcm2rgrid.f -m rcm2rgrid -h rcm2rgrid.pyf`
    
    This command will generate the signature file (`.pyf`) in the same directory.
 
@@ -29,13 +31,57 @@ Fortran file, and its dependencies if any, with the following command:
 usually functions in the same function family are shown as "See also" in the NCL documentation webpage, 
 which would be wrapped up in the same Python script.
 
-5. The descriptions of the functions, which are determined to be wrapped in Python, need little bit manual
+5. The descriptions of the functions, which are determined to be wrapped in Python, require little bit manual
 adjustment in the `.pyf` signature file to let Numpy.f2py know "intent" of each argument in the function signatures,
 e.g. intent(in), intent(out), intent(hide). Therefore, intent keywords should be added to each argument line 
 accordingly. `linint2.pyf` can be seen for example. Keywords in each argument description line would be 
 tab-separated for readability purposes.
 
-6. To be continued...
+6. When the manual adjustment of the signature file is done, shared object file (`.so`) needs to be generated in 
+the same directory (i.e. `$GEOCAT-F2PY/src/geocat/f2py/fortran`) with the command:
+
+   `f2py -c --fcompiler=gnu95 <desired_signature_file_name>.pyf <fortran_file_name>.f <dependency_fortran_file_name_1>.f`
+
+   As can be seen from the command format above, not only the essential Fortran file but also its dependency 
+   Fortran files should be given to this command besides the `.pyf` signature file. For example:
+   
+   `f2py -c --fcompiler=gnu95 rcm2rgrid.pyf rcm2rgrid.f linmsg_dp.f`
+   
+   This command will generate the shared object file (`.so`) in the same directory.
+   
+   NOTE: `.so` files should be private to local development and shouldn't be pushed to the remote repository 
+   since they are platform-dependent object files; this is already handled by the `.gitignore` file in this repo.
+   However, in order to automate creation of many `.so` files when building GeoCAT-f2py from source code in 
+   any platform, the command above should be added to the following file:
+   
+   `$GEOCAT-F2PY/build.sh`
+   
+7. The list of functions from the `.pyf` signature file that would be wrapped in in Python 
+should be added to the following file:
+
+   `$GEOCAT-F2PY/src/geocat/f2py/fortran/_init_.py` 
+   
+   as an import. For example:
+
+   `from .rcm2rgrid import (drcm2rgrid, drgrid2rcm)`
+   
+8. Now, the wrapper function for selected Fortran functions can be implemented as a separate Python script under
+the directory `$GEOCAT-F2PY/src/geocat/f2py`. The file name can be given depending on the function family name, 
+e.g. `eof_scripps_wrapper.py` stands for the implementation of the whole eof function family.
+
+   Implementing a wrapper function would, most of time, be straightforward. A Python wrapper function 
+   for each Fortran function would handle input data preprocessing (sanity checks, auto-chunking, etc.) and then
+   would make use of a second (i.e. internal) wrapper function that handles missing value handling and 
+   Fortran function calls for every single Dask chunk, if any. For example, see 
+   `$GEOCAT-F2PY/src/geocat/f2py/linint2_wrapper.py`
+   
+   In cases where no Dask parallelization is needed, even a single wrapper function would be enough. 
+   
+9. After the wrapper is implemented, the functions should be imported in the following file:
+
+   `$GEOCAT-F2PY/src/geocat/f2py/_init_.py`
+    
+   The code should be ready for unit tests after this step.
 
 
 # Adding unit tests
