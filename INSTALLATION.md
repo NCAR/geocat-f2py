@@ -83,6 +83,11 @@ compilers, although the following commands should work on both Linux and macOS:
 Once the dependencies listed above are installed, you can install GeoCAT-f2py
 with running the following command from the root-directory:
 
+   `./build.sh`
+
+which will generate all the required shared object (`.so`) files as well as 
+automatically run the following code:
+    
     pip install .
 
 For compatibility purposes, we strongly recommend using Conda to
