@@ -1,5 +1,5 @@
 #''' setup.py is needed, but only to make namespaces happen, 
-version = 0.2.1
+version = '0.2.1'
 
 from setuptools import setup, find_packages
 
