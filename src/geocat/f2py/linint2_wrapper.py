@@ -2,7 +2,7 @@ import numpy as np
 import xarray as xr
 from dask.array.core import map_blocks
 from .errors import (ChunkError, CoordinateError)
-from geocat.temp.fortran import (dlinint1, dlinint2, dlinint2pts)
+from .fortran import (dlinint1, dlinint2, dlinint2pts)
 from .missing_values import (fort2py_msg, py2fort_msg)
 
 # Dask Wrappers _<funcname>()

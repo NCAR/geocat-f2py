@@ -2,7 +2,7 @@ import unittest as ut
 import numpy as np
 import numpy.testing as nt
 
-import geocat.temp
+import geocat.f2py
 
 # Dimensions
 nyaux = 3  # nyaux = lat_aux_grid->shape[0]
@@ -63,7 +63,7 @@ class Test_Moc_Globe_Atl(ut.TestCase):
 
     def test_moc_globe_atl_float64(self):
 
-        out_arr = geocat.temp.moc_globe_atl(
+        out_arr = geocat.f2py.moc_globe_atl(
                     lat_aux_grid,
                     tmp_a.astype(np.float64),
                     tmp_a.astype(np.float64),
@@ -76,7 +76,7 @@ class Test_Moc_Globe_Atl(ut.TestCase):
 
     def test_moc_globe_atl_float32(self):
 
-        out_arr = geocat.temp.moc_globe_atl(
+        out_arr = geocat.f2py.moc_globe_atl(
                     lat_aux_grid,
                     tmp_a.astype(np.float32),
                     tmp_a.astype(np.float32),
@@ -89,7 +89,7 @@ class Test_Moc_Globe_Atl(ut.TestCase):
 
     def test_moc_globe_atl_int64(self):
 
-        out_arr = geocat.temp.moc_globe_atl(
+        out_arr = geocat.f2py.moc_globe_atl(
                     lat_aux_grid,
                     tmp_a.astype(np.int64),
                     tmp_a.astype(np.int64),
@@ -102,14 +102,14 @@ class Test_Moc_Globe_Atl(ut.TestCase):
 
     def test_moc_globe_atl_msg_99(self):
 
-        out_arr = geocat.temp.moc_globe_atl(lat_aux_grid, tmp_a_msg, tmp_a_msg, tmp_a_msg, t_lat, rmlak, msg_py=-99)
+        out_arr = geocat.f2py.moc_globe_atl(lat_aux_grid, tmp_a_msg, tmp_a_msg, tmp_a_msg, t_lat, rmlak, msg_py=-99)
 
         nt.assert_array_almost_equal(ncl_truth_msg, out_arr)
         nt.assert_equal((3, 2, kdep, nyaux), out_arr.shape)
 
     def test_moc_globe_atl_msg_nan(self):
 
-        out_arr = geocat.temp.moc_globe_atl(lat_aux_grid, tmp_a_nan, tmp_a_nan, tmp_a_nan, t_lat, rmlak, msg_py=np.nan)
+        out_arr = geocat.f2py.moc_globe_atl(lat_aux_grid, tmp_a_nan, tmp_a_nan, tmp_a_nan, t_lat, rmlak, msg_py=np.nan)
 
         nt.assert_array_almost_equal(ncl_truth_msg, out_arr)
         nt.assert_equal((3, 2, kdep, nyaux), out_arr.shape)
