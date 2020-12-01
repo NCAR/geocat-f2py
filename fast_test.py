@@ -1,3 +1,5 @@
+# THIS IS A DEVELOPMENT PERFORMANCE TESTING CLASS, REMOVE WHEN NO LONGER NEEDED
+
 import time
 import dask
 import dask.distributed as dd
