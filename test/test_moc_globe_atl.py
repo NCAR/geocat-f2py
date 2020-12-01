@@ -2,7 +2,7 @@ import unittest as ut
 import numpy as np
 import numpy.testing as nt
 
-import geocat.temp
+import geocat.f2py
 
 # Dimensions
 nyaux = 3  # nyaux = lat_aux_grid->shape[0]

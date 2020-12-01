@@ -1,7 +1,7 @@
 import numpy as np
 import numpy.testing as nt
 import xarray as xr
-import geocat.temp
+import geocat.f2py
 
 import sys
 import time
