@@ -3,7 +3,7 @@ import xarray as xr
 from dask.array.core import map_blocks
 import time
 
-from geocat.temp.fortran import (deof11)
+from geocat.f2py.fortran import (deof11)
 from .missing_values import (fort2py_msg, py2fort_msg)
 
 # Dask Wrappers _<funcname>()

@@ -4,7 +4,7 @@ import dask.distributed as dd
 import numpy as np
 import xarray as xr
 
-from geocat.temp import *
+from geocat.f2py import *
 
 
 def linint1_test():

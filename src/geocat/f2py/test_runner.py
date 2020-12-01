@@ -1,6 +1,6 @@
 import numpy as np
 import xarray as xr
-import geocat.temp
+import geocat.f2py
 n = 10
 
 n= 10
