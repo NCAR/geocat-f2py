@@ -58,7 +58,6 @@ installed.
 - Python 3.6+
 - numpy
 - [xarray](http://xarray.pydata.org/en/stable/)
-- [cython](https://cython.org/)
 - [dask](https://dask.org/)
 - [pytest](https://docs.pytest.org/en/stable/)
 - [gfortran](https://gcc.gnu.org/wiki/GFortran)
