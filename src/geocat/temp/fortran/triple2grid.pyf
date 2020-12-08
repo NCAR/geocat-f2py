@@ -4,65 +4,65 @@
 python module triple2grid ! in 
     interface  ! in :triple2grid
         subroutine triple2grid1(kz,xi,yi,zi,zmsg,mx,ny,gx,gy,grid,domain,loop,method,distmx,mx2,ny2,x,y,z,gbigx,gbigy,gbigxy,ier) ! in :triple2grid:triple2grid.f
-            integer,    optional,               intent(hide)    :: kz=len(xi)
-            double precision,   dimension(kz)                   :: xi
-            double precision,   dimension(kz)                   :: yi
-            double precision,   dimension(kz)                   :: zi
-            double precision                                    :: zmsg
-            integer,    optional,               intent(hide)    :: mx=len(gx)
-            integer,    optional,               intent(hide)    :: ny=len(gy)
-            double precision,   dimension(mx)                   :: gx
-            double precision,   dimension(ny)                   :: gy
-            double precision,   dimension(mx,ny)                :: grid
-            double precision                                    :: domain
-            integer                                             :: loop
-            integer                                             :: method
-            double precision                                    :: distmx
-            integer,    optional,               intent(hide)    :: mx2=len(gbigx)
-            integer,    optional,               intent(hide)    :: ny2=len(gbigy)
-            double precision,   dimension(kz)                   :: x
-            double precision,   dimension(kz)                   :: y
-            double precision,   dimension(kz)                   :: z
-            double precision,   dimension(mx2)                  :: gbigx
-            double precision,   dimension(ny2)                  :: gbigy
-            double precision,   dimension(mx2,ny2)              :: gbigxy
-            integer                                             :: ier
+            integer,    optional,                   intent(hide)    :: kz=len(xi)
+            double precision,   dimension(kz)                       :: xi
+            double precision,   dimension(kz)                       :: yi
+            double precision,   dimension(kz)                       :: zi
+            double precision                                        :: zmsg
+            integer,    optional,                   intent(hide)    :: mx=len(gx)
+            integer,    optional,                   intent(hide)    :: ny=len(gy)
+            double precision,   dimension(mx)                       :: gx
+            double precision,   dimension(ny)                       :: gy
+            double precision,   dimension(mx,ny)                    :: grid
+            double precision                                        :: domain
+            integer                                                 :: loop
+            integer                                                 :: method
+            double precision                                        :: distmx
+            integer,    optional,                   intent(hide)    :: mx2=len(gbigx)
+            integer,    optional,                   intent(hide)    :: ny2=len(gbigy)
+            double precision,   dimension(kz)                       :: x
+            double precision,   dimension(kz)                       :: y
+            double precision,   dimension(kz)                       :: z
+            double precision,   dimension(mx2)                      :: gbigx
+            double precision,   dimension(ny2)                      :: gbigy
+            double precision,   dimension(mx2,ny2)                  :: gbigxy
+            integer                                 intent(hide)    :: ier
         end subroutine triple2grid1
 
         subroutine trip2grd2(kz,x,y,z,zmsg,mx,ny,gxout,gyout,gout,mflag,nflag,method,ddcrit,ier) ! in :triple2grid:triple2grid.f
-            integer,    optional,               intent(hide)    :: kz=len(x)
-            double precision,   dimension(kz)                   :: x
-            double precision,   dimension(kz)                   :: y
-            double precision,   dimension(kz)                   :: z
-            double precision                                    :: zmsg
-            integer,    optional,               intent(hide)    :: mx=len(gxout)
-            integer,    optional,               intent(hide)    :: ny=len(gyout)
-            double precision,   dimension(mx)                   :: gxout
-            double precision,   dimension(ny)                   :: gyout
-            double precision,   dimension(mx,ny)                :: gout
-            integer                                             :: mflag
-            integer                                             :: nflag
-            integer                                             :: method
-            double precision                                    :: ddcrit
-            integer                                             :: ier
+            integer,    optional,                   intent(hide)    :: kz=len(x)
+            double precision,   dimension(kz)                       :: x
+            double precision,   dimension(kz)                       :: y
+            double precision,   dimension(kz)                       :: z
+            double precision                                        :: zmsg
+            integer,    optional,                   intent(hide)    :: mx=len(gxout)
+            integer,    optional,                   intent(hide)    :: ny=len(gyout)
+            double precision,   dimension(mx)                       :: gxout
+            double precision,   dimension(ny)                       :: gyout
+            double precision,   dimension(mx,ny)                    :: gout
+            integer                                                 :: mflag
+            integer                                                 :: nflag
+            integer                                                 :: method
+            double precision                                        :: ddcrit
+            integer                                                 :: ier
         end subroutine trip2grd2
 
         subroutine trip2grd3(kz,x,y,z,zmsg,mx,ny,gxout,gyout,gout,mflag,nflag,method,ddcrit,ier) ! in :triple2grid:triple2grid.f
-            integer,    optional,               intent(hide)    :: kz=len(x)
-            double precision,   dimension(kz)                   :: x
-            double precision,   dimension(kz)                   :: y
-            double precision,   dimension(kz)                   :: z
-            double precision                                    :: zmsg
-            integer,    optional,               intent(hide)    :: mx=len(gxout)
-            integer,    optional                intent(hide)    :: ny=len(gyout)
-            double precision, dimension(mx)                     :: gxout
-            double precision, dimension(ny)                     :: gyout
-            double precision, dimension(mx,ny)                  :: gout
-            integer                                             :: mflag
-            integer                                             :: nflag
-            integer                                             :: method
-            double precision                                    :: ddcrit
-            integer                                             :: ier
+            integer,    optional,                   intent(hide)    :: kz=len(x)
+            double precision,   dimension(kz)                       :: x
+            double precision,   dimension(kz)                       :: y
+            double precision,   dimension(kz)                       :: z
+            double precision                                        :: zmsg
+            integer,    optional,                   intent(hide)    :: mx=len(gxout)
+            integer,    optional                    intent(hide)    :: ny=len(gyout)
+            double precision, dimension(mx)                         :: gxout
+            double precision, dimension(ny)                         :: gyout
+            double precision, dimension(mx,ny)                      :: gout
+            integer                                                 :: mflag
+            integer                                                 :: nflag
+            integer                                                 :: method
+            double precision                                        :: ddcrit
+            integer                                                 :: ier
         end subroutine trip2grd3
     end interface 
 end python module triple2grid
