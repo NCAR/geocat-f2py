@@ -1,5 +1,6 @@
 import numpy as np
 import xarray as xr
+
 from dask.array.core import map_blocks
 from geocat.f2py.fortran import (drcm2points)
 from geocat.f2py.errors import (CoordinateError, ChunkError)
@@ -13,7 +14,7 @@ from geocat.f2py.missing_values import (fort2py_msg, py2fort_msg)
 
 def _rcm2points(yi, xi, fi, yo, xo, msg_py, opt, shape):
     # fo = drcm2points(yi,xi,fi,yo,xo,[xmsg,opt])
-    fi = np.transpose(fi, axes=(2,1,0))
+    fi = np.transpose(fi, axes=[0,1])
     # yi = np.transpose(yi, axes=(1,0))
     # xi = np.transpose(xi, axes=(1,0))
 
