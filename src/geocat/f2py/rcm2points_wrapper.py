@@ -14,9 +14,12 @@ from geocat.f2py.missing_values import (fort2py_msg, py2fort_msg)
 
 def _rcm2points(yi, xi, fi, yo, xo, msg_py, opt, shape):
     # fo = drcm2points(yi,xi,fi,yo,xo,[xmsg,opt])
-    fi = np.transpose(fi, axes=[0,1])
-    # yi = np.transpose(yi, axes=(1,0))
-    # xi = np.transpose(xi, axes=(1,0))
+
+    # fi = np.transpose(fi, axes=[0,1])
+    fi = np.transpose(fi, axes=(2, 1, 0))
+
+    yi = np.transpose(yi, axes=(1,0))
+    xi = np.transpose(xi, axes=(1,0))
 
     fi, msg_py, msg_fort = py2fort_msg(fi, msg_py=msg_py)
     print(fi)
@@ -46,26 +49,34 @@ def rcm2points(yi,
     
          # ''' signature : fo = drcm2points(yi,xi,fi,yo,xo,[xmsg,opt])
 
+    if (xi is None) | (yi is None):
+         raise CoordinateError(
+             "rcm2points: xi and yi should always be provided")
+
     # ''' Start of boilerplate
     if not isinstance(fi, xr.DataArray):
-        if (xi is None) | (yi is None):
-            raise CoordinateError(
-                "rcm2points: Arguments xi and yi must be provided explicitly unless fi is an xarray.DataArray.")
 
         fi = xr.DataArray(
             fi,
         )
         fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))])
 
-        fi = fi.chunk(fi_chunk)
+        fi = xr.DataArray(
+            fi.data,
+            # coords={
+            #     fi.dims[-1]: lon2d,
+            #     fi.dims[-2]: lat2d,
+            # },
+            dims=fi.dims,
+        ).chunk(fi_chunk)
 
-    xi = fi.coords[fi.dims[-1]]
-    yi = fi.coords[fi.dims[-2]]
-
+    # xi = fi.coords[fi.dims[-1]]
+    # yi = fi.coords[fi.dims[-2]]
 
     # ensure rightmost dimensions of input are not chunked
-    if list(fi.chunks)[-2:] != [yi.shape, xi.shape]:
-        raise ChunkError("linint2: fi must be unchunked along the rightmost two dimensions")
+    if list(fi.chunks)[-2:] != [(yi.shape[0],), (yi.shape[1],)]:
+                            # [(xi.shape[0]), (xi.shape[1])] would also be used
+        raise ChunkError("rcm2points: fi must be unchunked along the rightmost two dimensions")
 
     # fi data structure elements and autochunking
     fi_chunks = list(fi.dims)

@@ -80,7 +80,7 @@ def rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg_py=None):
     # ensure rightmost dimensions of input are not chunked
     if list(fi.chunks)[-2:] != [(lat2d.shape[0],), (lat2d.shape[1],)]:
                              # [(lon2d.shape[0]), (lon2d.shape[1])] would also be used
-        raise ChunkError("linint2: fi must be unchunked along the rightmost two dimensions")
+        raise ChunkError("rcm2rgrid: fi must be unchunked along the rightmost two dimensions")
 
     # fi data structure elements and autochunking
     fi_chunks = list(fi.dims)

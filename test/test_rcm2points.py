@@ -118,7 +118,7 @@ class Test_rcm2points(ut.TestCase):
                           lat,
                           lon,
                           opt=0,
-                          msg=msg64))
+                          msg_py=msg64))
 
     def test_rcm2points_float64_msg_opt2(self):
         nt.assert_array_almost_equal(
@@ -129,7 +129,7 @@ class Test_rcm2points(ut.TestCase):
                           lat,
                           lon,
                           opt=2,
-                          msg=msg64))
+                          msg_py=msg64))
 
     def test_rcm2points_float32_nom_opt0(self):
         nt.assert_array_almost_equal(
@@ -180,7 +180,7 @@ class Test_rcm2points(ut.TestCase):
                           lat,
                           lon,
                           opt=0,
-                          msg=msg32))
+                          msg_py=msg32))
 
     def test_rcm2points_float32_msg_opt2(self):
         nt.assert_array_almost_equal(
@@ -191,4 +191,7 @@ class Test_rcm2points(ut.TestCase):
                           lat,
                           lon,
                           opt=2,
-                          msg=msg32))
+                          msg_py=msg32))
+
+# a = Test_rcm2points()
+# a.test_rcm2points_float32_msg_opt0()
