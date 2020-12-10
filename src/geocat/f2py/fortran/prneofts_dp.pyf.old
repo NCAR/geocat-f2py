@@ -11,7 +11,7 @@ python module prneofts_dp ! in
             integer, optional, depend(ncol)                                     intent(in)      :: msta=ncol
             double precision, optional                                          intent(in)      :: xmsg=-99
             integer, optional, depend(evec)                                     intent(hide)    :: neval=shape(evec,1)
-            double precision, depend(ncol)                                      intent(in)      :: evec
+            double precision, dimension(ncol,neval)                             intent(in)      :: evec
             integer, optional                                                   intent(in)      :: jopt=0
             integer, optional                                                   intent(hide)    :: iflag=0 %only checked if zero
             double precision, dimension(nrow,ncol),depend(nrow,ncol)            intent(hide)    :: xx(nrow,ncol)
