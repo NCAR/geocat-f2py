@@ -157,8 +157,8 @@ def rcm2points(yi, xi, fi, yo, xo, msg_py=None, opt=0):
     if fi.shape[fi.ndim - 2] != yi.shape[0] or fi.shape[fi.ndim -
                                                            1] != xi.shape[1]:
         raise DimensionError(
-            "ERROR rcm2points: The rightmost dimensions of fi must be (nlat2d x nlon2d),"
-            "where nlat2d and nlon2d are the size of the lat2d/lon2d arrays !")
+            "ERROR rcm2points: The rightmost dimensions of fi must be (nyi x nxi),"
+            "where nyi and nxi are the size of the yi/xi arrays !")
     
     # ''' Start of boilerplate
     if not isinstance(fi, xr.DataArray):
