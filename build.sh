@@ -8,4 +8,4 @@ f2py -c --fcompiler=gnu95 moc_loops.pyf moc_loops.f
 f2py -c --fcompiler=gnu95 rcm2points.pyf rcm2points.f
 cd ../../../..
 
-#python -m pip install . --no-deps -vv
+python -m pip install . --no-deps -vv

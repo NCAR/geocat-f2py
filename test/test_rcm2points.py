@@ -27,7 +27,7 @@ fi_nan[2, 1, 1] = np.nan
 fi_msg = fi_nan.copy()
 fi_msg[np.isnan(fi_msg)] = -99
 
-#  grids
+# grids
 lat = np.asarray([1, 2, 3])
 lon = np.asarray([1, 2, 3])
 lat2d = np.asarray([1, 2, 5, 1, 2, 5, 1, 2, 5]).reshape((3, 3))
@@ -192,6 +192,3 @@ class Test_rcm2points(ut.TestCase):
                           lon,
                           opt=2,
                           msg_py=msg32))
-
-# a = Test_rcm2points()
-# a.test_rcm2points_float32_msg_opt0()
