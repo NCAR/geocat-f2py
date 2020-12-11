@@ -5,7 +5,7 @@ from dask.array.core import map_blocks
 from geocat.f2py.fortran import (drcm2points)
 from geocat.f2py.errors import (CoordinateError, ChunkError)
 from geocat.f2py.missing_values import (fort2py_msg, py2fort_msg)
-from .errors import (DimensionError, MetaError)
+from .errors import (DimensionError)
 
 # Dask Wrappers _<funcname>()
 # These Wrapper are executed within dask processes, and should do anything that
@@ -13,16 +13,15 @@ from .errors import (DimensionError, MetaError)
 
 def _rcm2points(yi, xi, fi, yo, xo, msg_py, opt, shape):
    
-    '''_rcm2points(lat2d, lon2d, fi, lat1d, lon1d, msg=None)
-   
+    '''
     Interpolates data on a curvilinear grid (i.e. RCM, WRF, NARR) to an unstructured grid.
     
     Args:
-        lat2d (:class:`numpy.ndarray`):
+        yi (:class:`numpy.ndarray`):
     	    A two-dimensional array that specifies the latitudes locations
     	    of fi. The latitude order must be south-to-north.
             
-    	lon2d (:class:`numpy.ndarray`):
+    	xi (:class:`numpy.ndarray`):
     	    A two-dimensional array that specifies the longitude locations
     	    of fi. The latitude order must be west-to-east.
             
@@ -30,11 +29,11 @@ def _rcm2points(yi, xi, fi, yo, xo, msg_py, opt, shape):
     	    A multi-dimensional array to be interpolated. The rightmost two
     	    dimensions (latitude, longitude) are the dimensions to be interpolated.
             
-    	lat1dPoints (:class:`numpy.ndarray`):
+    	yo (:class:`numpy.ndarray`):
     	    A one-dimensional array that specifies the latitude coordinates of
     	    the output locations.
             
-    	lon1dPoints (:class:`numpy.ndarray`):
+    	xo (:class:`numpy.ndarray`):
     	    A one-dimensional array that specifies the longitude coordinates of
     	    the output locations.
             
@@ -42,7 +41,7 @@ def _rcm2points(yi, xi, fi, yo, xo, msg_py, opt, shape):
     	    opt=0 or 1 means use an inverse distance weight interpolation.
     	    opt=2 means use a bilinear interpolation.
             
-    	msg (:obj:`numpy.number`):
+    	msg_py (:obj:`numpy.number`):
     	    A numpy scalar value that represent a missing value in fi.
     	    This argument allows a user to use a missing value scheme
     	    other than NaN or masked arrays, similar to what NCL allows.
@@ -87,25 +86,31 @@ def rcm2points(yi, xi, fi, yo, xo, msg_py=None, opt=0):
     Interpolates data on a curvilinear grid (i.e. RCM, WRF, NARR) to an unstructured grid.
     Args:
 	
-    lat2d (:class:`numpy.ndarray`):
+    yi (:class:`numpy.ndarray`):
 	    A two-dimensional array that specifies the latitudes locations
 	    of fi. The latitude order must be south-to-north.
-	lon2d (:class:`numpy.ndarray`):
+        
+	xi (:class:`numpy.ndarray`):
 	    A two-dimensional array that specifies the longitude locations
 	    of fi. The latitude order must be west-to-east.
+        
 	fi (:class:`numpy.ndarray`):
 	    A multi-dimensional array to be interpolated. The rightmost two
 	    dimensions (latitude, longitude) are the dimensions to be interpolated.
-	lat1dPoints (:class:`numpy.ndarray`):
+        
+	yo (:class:`numpy.ndarray`):
 	    A one-dimensional array that specifies the latitude coordinates of
 	    the output locations.
-	lon1dPoints (:class:`numpy.ndarray`):
+        
+	xo (:class:`numpy.ndarray`):
 	    A one-dimensional array that specifies the longitude coordinates of
 	    the output locations.
-    msg (:obj:`numpy.number`):
+        
+    msg_py (:obj:`numpy.number`):
 	    A numpy scalar value that represent a missing value in fi.
 	    This argument allows a user to use a missing value scheme
 	    other than NaN or masked arrays, similar to what NCL allows.
+        
 	opt (:obj:`numpy.number`):
 	    opt=0 or 1 means use an inverse distance weight interpolation.
 	    opt=2 means use a bilinear interpolation.
@@ -125,6 +130,11 @@ def rcm2points(yi, xi, fi, yo, xo, msg_py=None, opt=0):
     	A inverse distance squared algorithm is used to perform the interpolation.
     	Missing values are allowed and no extrapolation is performed.
     '''
+    
+    if (xi is None) | (yi is None):
+         raise CoordinateError(
+             "rcm2points: xi and yi should always be provided")
+         
     # Basic sanity checks
     if yi.shape[0] != xi.shape[0] or yi.shape[1] != xi.shape[1]:
         raise DimensionError(
@@ -150,11 +160,6 @@ def rcm2points(yi, xi, fi, yo, xo, msg_py=None, opt=0):
             "ERROR rcm2points: The rightmost dimensions of fi must be (nlat2d x nlon2d),"
             "where nlat2d and nlon2d are the size of the lat2d/lon2d arrays !")
     
-    if (xi is None) | (yi is None):
-         raise CoordinateError(
-             "rcm2points: xi and yi should always be provided")
-   
-
     # ''' Start of boilerplate
     if not isinstance(fi, xr.DataArray):
 
