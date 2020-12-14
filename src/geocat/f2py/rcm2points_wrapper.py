@@ -11,17 +11,17 @@ from .errors import (DimensionError)
 # These Wrapper are executed within dask processes, and should do anything that
 # can benefit from parallel excution.
 
-def _rcm2points(yi, xi, fi, yo, xo, msg_py, opt, shape):
+def _rcm2points(lat2d, lon2d, fi, lat1d, lon1d, msg_py, opt, shape):
    
     '''
     Interpolates data on a curvilinear grid (i.e. RCM, WRF, NARR) to an unstructured grid.
     
     Args:
-        yi (:class:`numpy.ndarray`):
+        lat2d (:class:`numpy.ndarray`):
     	    A two-dimensional array that specifies the latitudes locations
     	    of fi. The latitude order must be south-to-north.
             
-    	xi (:class:`numpy.ndarray`):
+    	lon2d (:class:`numpy.ndarray`):
     	    A two-dimensional array that specifies the longitude locations
     	    of fi. The latitude order must be west-to-east.
             
@@ -29,11 +29,11 @@ def _rcm2points(yi, xi, fi, yo, xo, msg_py, opt, shape):
     	    A multi-dimensional array to be interpolated. The rightmost two
     	    dimensions (latitude, longitude) are the dimensions to be interpolated.
             
-    	yo (:class:`numpy.ndarray`):
+    	lat1d (:class:`numpy.ndarray`):
     	    A one-dimensional array that specifies the latitude coordinates of
     	    the output locations.
             
-    	xo (:class:`numpy.ndarray`):
+    	lon1d (:class:`numpy.ndarray`):
     	    A one-dimensional array that specifies the longitude coordinates of
     	    the output locations.
             
@@ -61,12 +61,12 @@ def _rcm2points(yi, xi, fi, yo, xo, msg_py, opt, shape):
     '''
     
     fi = np.transpose(fi, axes=(2, 1, 0))
-    yi = np.transpose(yi, axes=(1,0))
-    xi = np.transpose(xi, axes=(1,0))
+    lat2d = np.transpose(lat2d, axes=(1,0))
+    lon2d = np.transpose(lon2d, axes=(1,0))
 
     fi, msg_py, msg_fort = py2fort_msg(fi, msg_py=msg_py)
 
-    fo = drcm2points(yi, xi, fi, yo, xo, xmsg=msg_fort, opt=opt)
+    fo = drcm2points(lat2d, lon2d, fi, lat1d, lon1d, xmsg=msg_fort, opt=opt)
     fo = np.asarray(fo)
     fo = fo.reshape(shape)
     
@@ -79,18 +79,18 @@ def _rcm2points(yi, xi, fi, yo, xo, msg_py, opt, shape):
 # These Wrappers are excecuted in the __main__ python process, and should be
 # used for any tasks which would not benefit from parallel execution.
 
-def rcm2points(yi, xi, fi, yo, xo, msg_py=None, opt=0):
+def rcm2points(lat2d, lon2d, fi, lat1d, lon1d, msg_py=None, opt=0):
     # ''' signature : fo = drcm2points(yi,xi,fi,yo,xo,[xmsg,opt])
     
     '''
     Interpolates data on a curvilinear grid (i.e. RCM, WRF, NARR) to an unstructured grid.
     Args:
 	
-    yi (:class:`numpy.ndarray`):
+    lat2d (:class:`numpy.ndarray`):
 	    A two-dimensional array that specifies the latitudes locations
 	    of fi. The latitude order must be south-to-north.
         
-	xi (:class:`numpy.ndarray`):
+	lon2d (:class:`numpy.ndarray`):
 	    A two-dimensional array that specifies the longitude locations
 	    of fi. The latitude order must be west-to-east.
         
@@ -98,11 +98,11 @@ def rcm2points(yi, xi, fi, yo, xo, msg_py=None, opt=0):
 	    A multi-dimensional array to be interpolated. The rightmost two
 	    dimensions (latitude, longitude) are the dimensions to be interpolated.
         
-	yo (:class:`numpy.ndarray`):
+	lat1d (:class:`numpy.ndarray`):
 	    A one-dimensional array that specifies the latitude coordinates of
 	    the output locations.
         
-	xo (:class:`numpy.ndarray`):
+	lon1d (:class:`numpy.ndarray`):
 	    A one-dimensional array that specifies the longitude coordinates of
 	    the output locations.
         
@@ -131,21 +131,21 @@ def rcm2points(yi, xi, fi, yo, xo, msg_py=None, opt=0):
     	Missing values are allowed and no extrapolation is performed.
     '''
     
-    if (xi is None) | (yi is None):
+    if (lon2d is None) | (lat2d is None):
          raise CoordinateError(
-             "rcm2points: xi and yi should always be provided")
+             "rcm2points: lon2d and lat2d should always be provided")
          
     # Basic sanity checks
-    if yi.shape[0] != xi.shape[0] or yi.shape[1] != xi.shape[1]:
+    if lat2d.shape[0] != lon2d.shape[0] or lat2d.shape[1] != lon2d.shape[1]:
         raise DimensionError(
             "ERROR rcm2points: The input lat/lon grids must be the same size !")
 
-    if yo.shape[0] != xo.shape[0]:
+    if lat1d.shape[0] != lon1d.shape[0]:
         raise DimensionError(
             "ERROR rcm2points: The output lat/lon grids must be same size !")
 
-    if yi.shape[0] < 2 or xi.shape[0] < 2 or yi.shape[
-            1] < 2 or xi.shape[1] < 2:
+    if lat2d.shape[0] < 2 or lon2d.shape[0] < 2 or lat2d.shape[
+            1] < 2 or lon2d.shape[1] < 2:
         raise DimensionError(
             "ERROR rcm2points: The input/output lat/lon grids must have at least 2 elements !"
         )
@@ -154,11 +154,11 @@ def rcm2points(yi, xi, fi, yo, xo, msg_py=None, opt=0):
         raise DimensionError(
             "ERROR rcm2points: fi must be at least two dimensions !\n")
 
-    if fi.shape[fi.ndim - 2] != yi.shape[0] or fi.shape[fi.ndim -
-                                                           1] != xi.shape[1]:
+    if fi.shape[fi.ndim - 2] != lat2d.shape[0] or fi.shape[fi.ndim -
+                                                           1] != lon2d.shape[1]:
         raise DimensionError(
-            "ERROR rcm2points: The rightmost dimensions of fi must be (nyi x nxi),"
-            "where nyi and nxi are the size of the yi/xi arrays !")
+            "ERROR rcm2points: The rightmost dimensions of fi must be (nlat2d x nlon2d),"
+            "where nlat2d and nlon2d are the size of the lat2d/lon2d arrays !")
     
     # ''' Start of boilerplate
     if not isinstance(fi, xr.DataArray):
@@ -174,8 +174,8 @@ def rcm2points(yi, xi, fi, yo, xo, msg_py=None, opt=0):
         ).chunk(fi_chunk)
 
     # ensure rightmost dimensions of input are not chunked
-    if list(fi.chunks)[-2:] != [(yi.shape[0],), (yi.shape[1],)]:
-                            # [(xi.shape[0]), (xi.shape[1])] could also be used
+    if list(fi.chunks)[-2:] != [(lat2d.shape[0],), (lat2d.shape[1],)]:
+                            # [(lon2d.shape[0]), (lon2d.shape[1])] could also be used
         raise ChunkError("rcm2points: fi must be unchunked along the rightmost two dimensions")
 
     # fi data structure elements and autochunking
@@ -187,18 +187,18 @@ def rcm2points(yi, xi, fi, yo, xo, msg_py=None, opt=0):
 
     # fo datastructure elements
     fo_chunks = list(fi.chunks)
-    fo_chunks[-2:] = (xo.shape,)
+    fo_chunks[-2:] = (lon1d.shape,)
     fo_chunks = tuple(fo_chunks)
     fo_shape = tuple(a[0] for a in list(fo_chunks))  
     # ''' end of boilerplate
 
     fo = map_blocks(
         _rcm2points,
-        yi,
-        xi,
+        lat2d,
+        lon2d,
         fi.data,
-        yo,
-        xo,
+        lat1d,
+        lon1d,
         msg_py,
         opt,
         fo_shape,
