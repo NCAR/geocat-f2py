@@ -10,23 +10,23 @@ from .missing_values import (fort2py_msg, py2fort_msg)
 # These Wrappers are excecuted in the __main__ python process, and should be
 # used for any tasks which would not benefit from parallel execution.
 
-def dpres_plevel(plev, psfc, ptop=None, msg_py=None, meta=False):
+def dpres_plevel(pressure_levels, pressure_surface, pressure_top=None, msg_py=None, meta=False):
     """Calculates the pressure layer thicknesses of a constant pressure level coordinate system.
 
             Args:
 
-                plev (:class:`xarray.DataArray` or :class:`numpy.ndarray`):
+                pressure_levels (:class:`xarray.DataArray` or :class:`numpy.ndarray`):
                     A one dimensional array containing the constant pressure levels. May be
-                    in ascending or descending order. Must have the same units as `psfc`.
+                    in ascending or descending order. Must have the same units as `pressure_surface`.
 
-                psfc (:obj:`numpy.number` or :class:`xarray.DataArray` or :class:`numpy.ndarray`):
+                pressure_surface (:obj:`numpy.number` or :class:`xarray.DataArray` or :class:`numpy.ndarray`):
                     A scalar or an array of up to three dimensions containing the surface
                     pressure data in Pa or hPa (mb). The rightmost dimensions must be latitude
-                    and longitude. Must have the same units as `plev`.
+                    and longitude. Must have the same units as `pressure_levels`.
 
-                ptop (:class:`numpy.number`):
-                    A scalar specifying the top of the column. ptop should be <= min(plev).
-                    Must have the same units as `plev`.
+                pressure_top (:class:`numpy.number`):
+                    A scalar specifying the top of the column. pressure_top should be <= min(pressure_levels).
+                    Must have the same units as `pressure_levels`.
 
                 msg_py (:obj:`numpy.number`):
                     A numpy scalar value that represent a missing value in fi.
@@ -40,21 +40,24 @@ def dpres_plevel(plev, psfc, ptop=None, msg_py=None, meta=False):
                     Warning: this option is not currently supported.
 
             Returns:
-                :class:`xarray.DataArray`: If psfc is a scalar, the return variable will be a
-                one-dimensional array the same size as `plev`; if `psfc` is two-dimensional
-                [e.g. (lat,lon)] or three-dimensional [e.g. (time,lat,lon)], then the return
-                array will have an additional level dimension: (lev,lat,lon) or (time,lev,lat,lon).
-                The returned type will be double if `psfc` is double, float otherwise.
+                :class:`xarray.DataArray`: If pressure_surface is a scalar, the return variable will be a
+                one-dimensional array the same size as `pressure_levels`; if `pressure_surface`
+                is two-dimensional [e.g. (lat,lon)] or three-dimensional [e.g. (time,lat,lon)],
+                then the return array will have an additional level dimension: (lev,lat,lon)
+                or (time,lev,lat,lon). The returned type will be double
+                if `pressure_surface` is double, float otherwise.
 
             Description:
                 Calculates the layer pressure thickness of a constant pressure level system. It
                 is analogous to `dpres_hybrid_ccm` for hybrid coordinates. At each grid point the
-                sum of the pressure thicknesses equates to [psfc-ptop]. At each grid point, the
-                returned values above `ptop` and below `psfc` will be set to the missing value of `psfc`.
-                If there is no missing value for `psfc` then the missing value will be set to the default
-                for float or double appropriately. If `ptop` or `psfc` is between plev levels
-                then the layer thickness is modifed accordingly. If `psfc` is set to a missing value, all
-                layer thicknesses are set to the appropriate missing value.
+                sum of the pressure thicknesses equates to [pressure_surface - pressure_top]. At each
+                grid point, the returned values above `pressure_top` and below `pressure_surface` will
+                be set to the missing value of `pressure_surface`. If there is no missing value
+                for `pressure_surface` then the missing value will be set to the default for
+                float or double appropriately. If `pressure_top` or `pressure_surface` is between
+                pressure_levels levels then the layer thickness is modifed accordingly.
+                If `pressure_surface` is set to a missing value, all layer thicknesses
+                are set to the appropriate missing value.
 
                 The primary purpose of this function is to return layer thicknesses to be used to
                 weight observations for integrations.
@@ -73,22 +76,22 @@ def dpres_plevel(plev, psfc, ptop=None, msg_py=None, meta=False):
                     ds = xr.open_dataset("./SOME_NETCDF_FILE.nc")
 
                     # [INPUT] Grid & data info on the source
-                    psfc = ds.PS
-                    plev = ds.LEV
-                    ptop = 0.0
+                    pressure_surface = ds.PS
+                    pressure_levels = ds.LEV
+                    pressure_top = 0.0
 
                     # Call the function
-                    result_dp = geocat.comp.dpres_plevel(plev, psfc, ptop)
+                    result_dp = geocat.comp.dpres_plevel(pressure_levels, pressure_surface, pressure_top)
             """
 
-    plev, psfc, ptop = sanity_check(plev, psfc, ptop)
+    pressure_levels, pressure_surface, pressure_top = sanity_check(pressure_levels, pressure_surface, pressure_top)
 
     # Inner wrapper call
-    dp = _dpres_plevel(plev.values, psfc.values, ptop, msg_py)
+    dp = _dpres_plevel(pressure_levels.values, pressure_surface.values, pressure_top, msg_py)
 
-    if psfc.values.ndim == 1:
+    if pressure_surface.values.ndim == 1:
         dp = dp.reshape(dp.shape[1])
-    elif psfc.values.ndim == 2:
+    elif pressure_surface.values.ndim == 2:
         dp = dp.reshape(dp.shape[1], dp.shape[2], dp.shape[3])
 
     dp = xr.DataArray(dp)
@@ -101,19 +104,19 @@ def dpres_plevel(plev, psfc, ptop=None, msg_py=None, meta=False):
 # as well as missing value representations before
 # and after the Fortran function call.
 
-def _dpres_plevel(plev, psfc, ptop, msg_py):
+def _dpres_plevel(pressure_levels, pressure_surface, pressure_top, msg_py):
 
-    # Transpose psfc before Fortran function call
-    if psfc.ndim == 2:
-        psfc = np.transpose(psfc, axes=(1,0))
-    elif psfc.ndim == 3:
-        psfc = np.transpose(psfc, axes=(2,1,0))
+    # Transpose pressure_surface before Fortran function call
+    if pressure_surface.ndim == 2:
+        pressure_surface = np.transpose(pressure_surface, axes=(1, 0))
+    elif pressure_surface.ndim == 3:
+        pressure_surface = np.transpose(pressure_surface, axes=(2, 1, 0))
 
     # Handle Python2Fortran missing value conversion
-    plev, msg_py, msg_fort = py2fort_msg(plev, msg_py=msg_py)
+    pressure_levels, msg_py, msg_fort = py2fort_msg(pressure_levels, msg_py=msg_py)
 
     # Fortran function call
-    dp = dpresplvl(plev, psfc, ptop, pmsg=msg_fort)
+    dp = dpresplvl(pressure_levels, pressure_surface, pressure_top, pmsg=msg_fort)
 
     # Transpose output before returning it to outer wrapper
     dp = np.asarray(dp)
@@ -124,49 +127,51 @@ def _dpres_plevel(plev, psfc, ptop, msg_py):
 
     return dp
 
-def sanity_check(plev, psfc, ptop):
+def sanity_check(pressure_levels, pressure_surface, pressure_top):
     # ''' Basic sanity checks
-    if not isinstance(plev, xr.DataArray):
-        plev = xr.DataArray(plev)
+    if not isinstance(pressure_levels, xr.DataArray):
+        pressure_levels = xr.DataArray(pressure_levels)
 
-    if plev.values.ndim != 1:
+    if pressure_levels.values.ndim != 1:
         raise DimensionError(
-            "ERROR dpres_plevel: The 'plev' array must be 1 dimensional array !"
+            "ERROR dpres_plevel: The 'pressure_levels' array must be 1 dimensional array !"
         )
 
-    if np.size(psfc) == 1:  # if it is a scalar, then construct an xarray.dataarray
-        psfc = np.asarray(psfc)
-        psfc = np.ndarray([1], buffer=psfc, dtype=psfc.dtype)
-        psfc = xr.DataArray(psfc)
-    elif isinstance(psfc, np.ndarray):
-        psfc = xr.DataArray(psfc)
+    if np.size(pressure_surface) == 1:  # if it is a scalar, then construct an xarray.dataarray
+        pressure_surface = np.asarray(pressure_surface)
+        pressure_surface = np.ndarray([1], buffer=pressure_surface, dtype=pressure_surface.dtype)
+        pressure_surface = xr.DataArray(pressure_surface)
+    elif isinstance(pressure_surface, np.ndarray):
+        pressure_surface = xr.DataArray(pressure_surface)
 
-    if psfc.values.ndim > 3:
+    if pressure_surface.values.ndim > 3:
         raise DimensionError(
-            "ERROR dpres_plevel: 'psfc' must be a scalar, or 2 or 3 dimensional array with right most dimensions lat x lon !"
+            "ERROR dpres_plevel: 'pressure_surface' must be a scalar, or 2 or 3 dimensional "
+            "array with right most dimensions lat x lon !"
         )
 
-    # plev and psfc must have the same units, if they have any.
-    if "units" in plev.attrs.keys() and "units" in psfc.attrs.keys():
-        if plev.attrs["units"] != psfc.attrs["units"]:
+    # pressure_levels and pressure_surface must have the same units, if they have any.
+    if "units" in pressure_levels.attrs.keys() and "units" in pressure_surface.attrs.keys():
+        if pressure_levels.attrs["units"] != pressure_surface.attrs["units"]:
             raise AttributeError(
-                "ERROR dpres_plevel: Units of 'plev' and 'psfc' needs to match !"
+                "ERROR dpres_plevel: Units of 'pressure_levels' and 'pressure_surface' needs to match !"
             )
-    elif "units" in plev.attrs.keys() or "units" in psfc.attrs.keys():
+    elif "units" in pressure_levels.attrs.keys() or "units" in pressure_surface.attrs.keys():
         raise AttributeError(
-            "ERROR dpres_plevel: Either of 'plev' and 'psfc' has ""units"" attribute but the other does not !"
+            "ERROR dpres_plevel: Either of 'pressure_levels' and 'pressure_surface' "
+            "has ""units"" attribute but the other does not !"
         )
 
-    if isinstance(ptop, np.ndarray) or isinstance(ptop, xr.DataArray):
+    if isinstance(pressure_top, np.ndarray) or isinstance(pressure_top, xr.DataArray):
         raise DimensionError(
-            "ERROR dpres_plevel: The 'ptop' value must be a scalar !"
+            "ERROR dpres_plevel: The 'pressure_top' value must be a scalar !"
         )
 
-    if ptop is None:
-        ptop = min(plev)
+    if pressure_top is None:
+        pressure_top = min(pressure_levels)
     else:git
-        if ptop > min(plev):
+        if pressure_top > min(pressure_levels):
             raise ValueError(
-                "ERROR dpres_plevel: The 'ptop' value must be <= min(plev) !")
+                "ERROR dpres_plevel: The 'pressure_top' value must be <= min(pressure_levels) !")
 
-    return plev, psfc, ptop
+    return pressure_levels, pressure_surface, pressure_top
