@@ -190,7 +190,6 @@ def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, msg_py=None):
     fo = xr.DataArray(fo.compute(), attrs=fi.attrs, dims=fi.dims, coords=fo_coords)
     return fo
 
-
 def linint2pts(fi, xo, yo, icycx=0, msg_py=None):
     # ''' signature : fo = dlinint2pts(xi,yi,fi,xo,yo,[icycx,xmsg,iopt])
 
