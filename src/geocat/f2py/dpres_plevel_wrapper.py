@@ -169,7 +169,7 @@ def sanity_check(pressure_levels, pressure_surface, pressure_top):
 
     if pressure_top is None:
         pressure_top = min(pressure_levels)
-    else:git
+    else:
         if pressure_top > min(pressure_levels):
             raise ValueError(
                 "ERROR dpres_plevel: The 'pressure_top' value must be <= min(pressure_levels) !")
