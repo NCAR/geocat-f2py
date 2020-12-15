@@ -14,20 +14,24 @@ def _eof11(d, nmodes, icovcor, msg_py):
     #''' eigenvalues,eigenvectors,variance,princomp = deof11(d,nmodes,[icovcor,dmsg])
     # missing value handling
     d, msg_py, msg_fort = py2fort_msg(d, msg_py=msg_py)
+
     # fortran call
-    eigenvalues, eigenvectors, variance, princomp = deof11(d,nmodes,[icovcor,msg_fort])
+    eigenvalues, eigenvectors, variance, princomp = deof11(d, nmodes, icovcor=icovcor, dmsg=msg_fort )
+
+    # missing value handling
+    d, msg_fort, msg_py = fort2py_msg(d, msg_fort=msg_fort, msg_py=msg_py)
     return eigenvalues, eigenvectors, variance, princomp
 
 def eof11(d, nmodes, icovcor=0, msg_py=None):
     # this is effectivly a stub, since this is not a parallelizable task.
     return _eof11(d, nmodes, icovcor, msg_py)
 
-def eof_test():
-    d = np.random.random((1000,10000))
-    nmodes = 10
-    print(eof11(d, nmodes))
+# def eof_test():
+#     d = np.random.random((1000,10000))
+#     nmodes = 10
+#     print(eof11(d, nmodes))
 
-start = time.time()
-eof_test()
-end = time.time()
-print(end-start)
+# start = time.time()
+# eof_test()
+# end = time.time()
+# print(end-start)

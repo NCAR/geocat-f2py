@@ -3,21 +3,22 @@
 
 python module prneofts_dp ! in 
     interface  ! in :prneofts_dp
+        ! evects = deofts7(x,evec,[nobs,msta,xmsg,jopt])
         subroutine deofts7(x,nrow,ncol,nobs,msta,xmsg,neval,evec,jopt,iflag,xx,wrk,evects,evtsav,ier) ! in :prneofts_dp:prneofts_dp.f
-            double precision, dimension(nrow,ncol)                              intent(in)      :: x
-            integer, depend(x)                                                  intent(hide)    :: nrow=shape(x,0)
-            integer, depend(x)                                                  intent(hide)    :: ncol=shape(x,1)
-            integer, optional, depend(nrow)                                     intent(in)      :: nobs=nrow
-            integer, optional, depend(ncol)                                     intent(in)      :: msta=ncol
-            double precision, optional                                          intent(in)      :: xmsg=-99
-            integer, optional, depend(evec)                                     intent(hide)    :: neval=shape(evec,1)
-            double precision, dimension(ncol,neval)                             intent(in)      :: evec
-            integer, optional                                                   intent(in)      :: jopt=0
-            integer, optional                                                   intent(hide)    :: iflag=0 %only checked if zero
-            double precision, dimension(nrow,ncol),depend(nrow,ncol)            intent(hide)    :: xx(nrow,ncol)
-            double precision, dimension(nobs)                                   intent(hide)    :: wrk(nobs)
-            double precision, dimension(nrow,neval),depend(nrow,neval)          intent(out)     :: evects(nrow,neval)
-            double precision, dimension(neval),depend(neval)                    intent(hide)    :: evtsav(neval)
+            double precision, dimension(nrow,ncol),                             intent(in)      :: x
+            integer, depend(x),                                                 intent(hide)    :: nrow=shape(x,0)
+            integer, depend(x),                                                 intent(hide)    :: ncol=shape(x,1)
+            integer, optional, depend(nrow),                                    intent(in)      :: nobs=nrow
+            integer, optional, depend(ncol),                                    intent(in)      :: msta=ncol
+            double precision, optional,                                         intent(in)      :: xmsg=-99
+            integer, optional, depend(evec),                                    intent(hide)    :: neval=shape(evec,1) !this could be circular dependancy with evec.
+            double precision, dimension(ncol,neval),                            intent(in)      :: evec
+            integer, optional,                                                  intent(in)      :: jopt=0
+            integer, optional,                                                  intent(hide)    :: iflag=0 %only checked if zero
+            double precision, dimension(nrow,ncol),depend(nrow,ncol),           intent(hide)    :: xx(nrow,ncol)
+            double precision, dimension(nobs),                                  intent(hide)    :: wrk(nobs)
+            double precision, dimension(nrow,neval),depend(nrow,neval),         intent(out)     :: evects(nrow,neval)
+            double precision, dimension(neval),depend(neval),                   intent(hide)    :: evtsav(neval)
             integer,                                                            intent(hide)    :: ier
         end subroutine deofts7
         subroutine deoftsca(xx,nrow,ncol,nobs,msta,xmsg,neval,evec,jopt,iflag,evects,pcrit,ier,x,wrk) ! in :prneofts_dp:prneofts_dp.f
