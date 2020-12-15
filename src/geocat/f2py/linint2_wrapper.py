@@ -1,7 +1,7 @@
 import numpy as np
 import xarray as xr
 from dask.array.core import map_blocks
-from .errors import (ChunkError, CoordinateError)
+from .errors import (ChunkError, DimensionError, CoordinateError)
 from .fortran import (dlinint1, dlinint2, dlinint2pts)
 from .missing_values import (fort2py_msg, py2fort_msg)
 
@@ -282,6 +282,7 @@ def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, msg_py=None):
             input coordinates (yi), then the fo values at those
             coordinates will be set to missing (i.e. no extrapolation is
             performed).
+        
         xi (:class:`numpy.ndarray`):
             An array that specifies the X coordinates of the fi array.
             Most frequently, this is a 1D strictly monotonically
@@ -353,14 +354,29 @@ def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, msg_py=None):
         The return type will be double if fi is double, and float
         otherwise.
     '''
-
-
-    # ''' Start of boilerplate
+    # Basic sanity checks
+    # Relocated from below, can be restored to original location 
     if not isinstance(fi, xr.DataArray):
         if (xi is None) | (yi is None):
             raise CoordinateError(
                 "linint2: Arguments xi and yi must be provided explicitly unless fi is an xarray.DataArray.")
+   # From ncomp, not originally included
+    if xi is None:
+        xi = fi.coords[fi.dims[-1]].values
+    elif isinstance(xi, xr.DataArray):
+        xi = xi.values
 
+    if yi is None:
+        yi = fi.coords[fi.dims[-2]].values
+    elif isinstance(yi, xr.DataArray):
+        yi = yi.values
+
+    if isinstance(xo, xr.DataArray):
+        xo = xo.values
+    if isinstance(yo, xr.DataArray):
+        yo = yo.values
+
+    # ''' Start of boilerplate
         fi = xr.DataArray(
             fi,
         )
@@ -491,6 +507,21 @@ def linint2pts(fi, xo, yo, icycx=0, msg_py=None):
         same range. In addition, if the xi values span 0 to 360, then the xo
         values must also be specified in this range (i.e. -180 to 180 will not work).
     '''
+    # Basic sanity checks
+
+    if xo.shape[0] != yo.shape[0]:
+        raise DimensionError(
+            "ERROR linint2_points: xo and yo must be the same size !")
+
+    if fi.ndim < 2:
+        raise DimensionError(
+            "ERROR linint2_points: fi must be at least two dimensions !\n")
+
+    if isinstance(xo, xr.DataArray):
+        xo = xo.values
+    
+    if isinstance(yo, xr.DataArray):
+        yo = yo.values
 
     # ''' Start of boilerplate
     if not isinstance(fi, xr.DataArray):
