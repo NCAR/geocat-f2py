@@ -2,11 +2,11 @@ import numpy as np
 import xarray as xr
 
 from .fortran import (dpresplvl)
-from .errors import (DimensionError, AttributeError)
+from .errors import (DimensionError, AttributeError, MetaError)
 from .missing_values import (fort2py_msg, py2fort_msg)
 
 
-# Outer Wrapper <funcname>()
+# Single Wrapper <funcname>()
 # These Wrappers are excecuted in the __main__ python process, and should be
 # used for any tasks which would not benefit from parallel execution.
 
@@ -34,10 +34,9 @@ def dpres_plevel(pressure_levels, pressure_surface, pressure_top=None, msg_py=No
                     other than NaN or masked arrays, similar to what NCL allows.
 
                 meta (:obj:`bool`):
-                    If set to True and the input array is an Xarray, the metadata
-                    from the input array will be copied to the output array;
-                    default is False.
-                    Warning: this option is not currently supported.
+                    If set to True and the input arrays (pressure_levels and pressure_surface) are Xarray,
+                    the metadata from the input arrays will be copied to the output array; default is False.
+                    WARNING: This option is not currently supported.
 
             Returns:
                 :class:`xarray.DataArray`: If pressure_surface is a scalar, the return variable will be a
@@ -84,41 +83,56 @@ def dpres_plevel(pressure_levels, pressure_surface, pressure_top=None, msg_py=No
                     result_dp = geocat.comp.dpres_plevel(pressure_levels, pressure_surface, pressure_top)
             """
 
-    pressure_levels, pressure_surface, pressure_top = sanity_check(pressure_levels, pressure_surface, pressure_top)
+    # Apply basic sanity checks on the input data
+    pressure_levels, pressure_surface, pressure_top = sanity_check(pressure_levels,
+                                                                   pressure_surface,
+                                                                   pressure_top
+                                                                   )
 
     # Inner wrapper call
-    dp = _dpres_plevel(pressure_levels.values, pressure_surface.values, pressure_top, msg_py)
+    dp = _dpres_plevel(pressure_levels.values,
+                       pressure_surface.values,
+                       pressure_top,
+                       msg_py
+                       )
 
-    if pressure_surface.values.ndim == 1:
+    # Reshape output based on the dimensionality of pressure_surface
+    if pressure_surface.ndim == 1:
         dp = dp.reshape(dp.shape[1])
-    elif pressure_surface.values.ndim == 2:
-        dp = dp.reshape(dp.shape[1], dp.shape[2], dp.shape[3])
+    elif pressure_surface.ndim == 2:
+        dp = dp.reshape(dp.shape[0] * dp.shape[1], dp.shape[2], dp.shape[3])
 
-    dp = xr.DataArray(dp)
+    if meta:
+        raise MetaError(
+            "ERROR dpres_plevel: Retention of metadata is not yet supported !")
+
+        # TODO: Retaining possible metadata might be revised in the future
+    else:
+        dp = xr.DataArray(dp)
 
     return dp
 
 
 # Inner Wrapper _<funcname>()
-# This wrapper handles transpose of the input and output data
-# as well as missing value representations before
-# and after the Fortran function call.
+# This wrapper basically calls the Fortran function. It also handles
+# transpose of the input and output data as well as missing value
+# representations before and after the Fortran function call.
 
-def _dpres_plevel(pressure_levels, pressure_surface, pressure_top, msg_py):
+def _dpres_plevel(plev, psfc, ptop, msg_py):
 
     # Transpose pressure_surface before Fortran function call
-    if pressure_surface.ndim == 2:
-        pressure_surface = np.transpose(pressure_surface, axes=(1, 0))
-    elif pressure_surface.ndim == 3:
-        pressure_surface = np.transpose(pressure_surface, axes=(2, 1, 0))
+    if psfc.ndim == 2:
+        psfc = np.transpose(psfc, axes=(1, 0))
+    elif psfc.ndim == 3:
+        psfc = np.transpose(psfc, axes=(2, 1, 0))
 
     # Handle Python2Fortran missing value conversion
-    pressure_levels, msg_py, msg_fort = py2fort_msg(pressure_levels, msg_py=msg_py)
+    psfc, msg_py, msg_fort = py2fort_msg(psfc, msg_py=msg_py)
 
     # Fortran function call
-    dp = dpresplvl(pressure_levels, pressure_surface, pressure_top, pmsg=msg_fort)
+    dp = dpresplvl(plev, psfc, np.float64(1000), pmsg=msg_fort)
 
-    # Transpose output before returning it to outer wrapper
+    # Transpose output to corect dimension order before returning it to outer wrapper
     dp = np.asarray(dp)
     dp = np.transpose(dp, axes=(3,2,1,0))
 
@@ -132,7 +146,7 @@ def sanity_check(pressure_levels, pressure_surface, pressure_top):
     if not isinstance(pressure_levels, xr.DataArray):
         pressure_levels = xr.DataArray(pressure_levels)
 
-    if pressure_levels.values.ndim != 1:
+    if pressure_levels.ndim != 1:
         raise DimensionError(
             "ERROR dpres_plevel: The 'pressure_levels' array must be 1 dimensional array !"
         )
@@ -144,7 +158,7 @@ def sanity_check(pressure_levels, pressure_surface, pressure_top):
     elif isinstance(pressure_surface, np.ndarray):
         pressure_surface = xr.DataArray(pressure_surface)
 
-    if pressure_surface.values.ndim > 3:
+    if pressure_surface.ndim > 3:
         raise DimensionError(
             "ERROR dpres_plevel: 'pressure_surface' must be a scalar, or 2 or 3 dimensional "
             "array with right most dimensions lat x lon !"
@@ -167,10 +181,11 @@ def sanity_check(pressure_levels, pressure_surface, pressure_top):
             "ERROR dpres_plevel: The 'pressure_top' value must be a scalar !"
         )
 
+    pressure_level_min = np.min(pressure_levels.values)
     if pressure_top is None:
-        pressure_top = min(pressure_levels)
+        pressure_top = pressure_level_min
     else:
-        if pressure_top > min(pressure_levels):
+        if pressure_top > pressure_level_min:
             raise ValueError(
                 "ERROR dpres_plevel: The 'pressure_top' value must be <= min(pressure_levels) !")
 
