@@ -4,6 +4,7 @@ from dask.array.core import map_blocks
 from .errors import (ChunkError, DimensionError, CoordinateError)
 from .fortran import (dlinint1, dlinint2, dlinint2pts)
 from .missing_values import (fort2py_msg, py2fort_msg)
+from .sanity_checks import (sanity_check)
 
 # Dask Wrappers _<funcname>()
 # These Wrapper are executed within dask processes, and should do anything that
@@ -27,110 +28,6 @@ def _linint1(xi, fi, xo, icycx, msg_py, shape):
 def _linint2(xi, yi, fi, xo, yo, icycx, msg_py, shape):
     # ''' signature : fo = dlinint2(xi,yi,fi,xo,yo,[icycx,xmsg,iopt])
     # missing value handling
-    
-    '''
-    Interpolates a regular grid to a rectilinear one using bi-linear
-    interpolation.
-    
-    linint2 uses bilinear interpolation to interpolate from one
-    rectilinear grid to another. The input grid may be cyclic in the x
-    direction. The interpolation is first performed in the x direction,
-    and then in the y direction.
-    
-    Args:
-        
-        xi (:class:`numpy.ndarray`):
-            An array that specifies the X coordinates of the fi array.
-            Most frequently, this is a 1D strictly monotonically
-            increasing array that may be unequally spaced. In some
-            cases, xi can be a multi-dimensional array (see next
-            paragraph). The rightmost dimension (call it nxi) must have
-            at least two elements, and is the last (fastest varying)
-            dimension of fi.
-            
-            If xi is a multi-dimensional array, then each nxi subsection
-            of xi must be strictly monotonically increasing, but may be
-            unequally spaced. All but its rightmost dimension must be
-            the same size as all but fi's rightmost two dimensions.
-            
-            For geo-referenced data, xi is generally the longitude
-            array.
-       
-        yi (:class:`numpy.ndarray`):
-            An array that specifies the Y coordinates of the fi array.
-            Most frequently, this is a 1D strictly monotonically
-            increasing array that may be unequally spaced. In some
-            cases, yi can be a multi-dimensional array (see next
-            paragraph). The rightmost dimension (call it nyi) must have
-            at least two elements, and is the second-to-last dimension
-            of fi.
-            
-            If yi is a multi-dimensional array, then each nyi subsection
-            of yi must be strictly monotonically increasing, but may be
-            unequally spaced. All but its rightmost dimension must be
-            the same size as all but fi's rightmost two dimensions.
-            
-            For geo-referenced data, yi is generally the latitude array.
-        
-        fi (:class:`numpy.ndarray`):
-            An array of two or more dimensions. If xi is passed in as an
-            argument, then the size of the rightmost dimension of fi
-            must match the rightmost dimension of xi. Similarly, if yi
-            is passed in as an argument, then the size of the second-
-            rightmost dimension of fi must match the rightmost dimension
-            of yi.
-            
-            If missing values are present, then linint2 will perform the
-            bilinear interpolation at all points possible, but will
-            return missing values at coordinates which could not be
-            used.
-        
-        xo (:class:`numpy.ndarray`):
-            A one-dimensional array that specifies the X coordinates of
-            the return array. It must be strictly monotonically
-            increasing, but may be unequally spaced.
-            
-            For geo-referenced data, xo is generally the longitude
-            array.
-            
-            If the output coordinates (xo) are outside those of the
-            input coordinates (xi), then the fo values at those
-            coordinates will be set to missing (i.e. no extrapolation is
-            performed).
-       
-        yo (:class:`numpy.ndarray`):
-            A one-dimensional array that specifies the Y coordinates of
-            the return array. It must be strictly monotonically
-            increasing, but may be unequally spaced.
-            
-            For geo-referenced data, yo is generally the latitude array.
-            
-            If the output coordinates (yo) are outside those of the
-            input coordinates (yi), then the fo values at those
-            coordinates will be set to missing (i.e. no extrapolation is
-            performed).
-        
-        icycx (:obj:`bool`):
-            An option to indicate whether the rightmost dimension of fi
-            is cyclic. This should be set to True only if you have
-            global data, but your longitude values don't quite wrap all
-            the way around the globe. For example, if your longitude
-            values go from, say, -179.75 to 179.75, or 0.5 to 359.5,
-            then you would set this to True.
-        
-        msg_py (:obj:`numpy.number`):
-            A numpy scalar value that represent a missing value in fi.
-            This argument allows a user to use a missing value scheme
-            other than NaN or masked arrays, similar to what NCL allows.
-    
-    Returns:
-        :class:`numpy.ndarray`: The interpolated grid. The returned
-        value will have the same dimensions as fi, except for the
-        rightmost two dimensions which will have the same dimension
-        sizes as the lengths of yo and xo. The return type will be
-        double if fi is double, and float otherwise.
-    '''
-    
     fi, msg_py, msg_fort = py2fort_msg(fi, msg_py=msg_py)
     # fortran call
     fo = dlinint2(xi, yi, fi, xo, yo, icycx=icycx, xmsg=msg_fort, )
@@ -354,29 +251,16 @@ def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, msg_py=None):
         The return type will be double if fi is double, and float
         otherwise.
     '''
-    # Basic sanity checks
-    # Relocated from below, can be restored to original location 
+
+    # ''' Start of boilerplate
+    sanity_check(fi, var_name='fi', min_dimensions=2)
+
+    # Relocated from below, can be restored to original location
     if not isinstance(fi, xr.DataArray):
         if (xi is None) | (yi is None):
             raise CoordinateError(
                 "linint2: Arguments xi and yi must be provided explicitly unless fi is an xarray.DataArray.")
-   # From ncomp, not originally included
-    if xi is None:
-        xi = fi.coords[fi.dims[-1]].values
-    elif isinstance(xi, xr.DataArray):
-        xi = xi.values
 
-    if yi is None:
-        yi = fi.coords[fi.dims[-2]].values
-    elif isinstance(yi, xr.DataArray):
-        yi = yi.values
-
-    if isinstance(xo, xr.DataArray):
-        xo = xo.values
-    if isinstance(yo, xr.DataArray):
-        yo = yo.values
-
-    # ''' Start of boilerplate
         fi = xr.DataArray(
             fi,
         )
@@ -509,19 +393,7 @@ def linint2pts(fi, xo, yo, icycx=0, msg_py=None):
     '''
     # Basic sanity checks
 
-    if xo.shape[0] != yo.shape[0]:
-        raise DimensionError(
-            "ERROR linint2_points: xo and yo must be the same size !")
-
-    if fi.ndim < 2:
-        raise DimensionError(
-            "ERROR linint2_points: fi must be at least two dimensions !\n")
-
-    if isinstance(xo, xr.DataArray):
-        xo = xo.values
-    
-    if isinstance(yo, xr.DataArray):
-        yo = yo.values
+    sanity_check(fi, var_name="fi", min_dimensions=2)
 
     # ''' Start of boilerplate
     if not isinstance(fi, xr.DataArray):
