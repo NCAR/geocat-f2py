@@ -34,10 +34,7 @@ def sanity_check (user_variable_1, var_name=None, data_type=None, min_dimensions
         if not (user_variable_1.ndim >= min_dimensions):
             raise Exception(var_name + " failed min_dimensions check")
 
-
     return True
 
-
-
 my_var = np.int16([[2,2],[2,2]])
-sanity_check(my_var, var_name="my_var", dimensions=2)
+sanity_check(my_var, var_name="my_var", min_dimensions=2)
