@@ -14,19 +14,19 @@ python module prneof_dp ! in
             double precision, dimension(neval),                                 intent(out)     :: eval(neval)
             double precision, dimension(ncol,neval),                            intent(out)     :: evec(ncol,neval)
             real, dimension(neval),                                             intent(out)     :: pcvar(neval)
-            double precision, :: trace
-            integer, :: iopt
-            integer, :: jopt
-            double, precision dimension(lcssm) :: cssm
-            integer*8, optional,check(len(cssm)>=lcssm),depend(cssm) :: lcssm=len(cssm)
-            double precision, dimension(lwork) :: work
-            integer, optional,check(len(work)>=lwork),depend(work) :: lwork=len(work)
-            double precision, dimension(lifail) :: weval
-            integer, dimension(liwork) :: iwork
-            integer, optional,check(len(iwork)>=liwork),depend(iwork) :: liwork=len(iwork)
-            integer, dimension(lifail),depend(lifail) :: ifail
-            integer, optional,check(len(weval)>=lifail),depend(weval) :: lifail=len(weval)
-            integer, :: ier
+            double precision,                                                   intent(out)     :: trace
+            integer,                                                            intent(hide)    :: iopt=0 !not used
+            integer, optional,                                                  intent(in)      :: jopt=0
+            double, precision, dimension(lcssm),                                intent(hide)    :: cssm(lcssm)
+            integer*8, depend(msta),                                            intent(hide)    :: lcssm=msta*(msta+1)/2
+            double precision, dimension(lwork),                                 intent(hide)    :: work(lwork)
+            integer, depend(msta),                                              intent(hide)    :: lwork=msta*8
+            double precision, dimension(lifail),                                intent(hide)    :: weval(lifail)
+            integer, dimension(liwork),                                         intent(hide)    :: iwork(liwork)
+            integer, depend(msta),                                              intent(hide)    :: liwork=msta*5
+            integer, dimension(lifail),                                         intent(hide)    :: ifail(lifail)
+            integer, depend(msta),                                              intent(hide)    :: lifail=msta
+            integer,                                                            intent(hide)    :: ier
         end subroutine ddrveof
         subroutine dncldrv(xx,x,nrow,ncol,nobs,nsta,xmsg,neval,eval,evec,pcvar,trace,iopt,jopt,pcrit,evecx,cssm,lcssm,work,lwork,weval,iwork,liwork,ifail,lifail,ier) ! in :prneof_dp:prneof_dp.f
             double precision dimension(nrow,ncol) :: xx
