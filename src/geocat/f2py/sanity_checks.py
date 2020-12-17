@@ -3,7 +3,8 @@ import xarray as xr
 import dask as da
 
 
-def sanity_check (user_variable_1, var_name=None, data_type=None, min_dimensions=None, dimensions=None, shape=None, is_xarray=None, is_none=None):
+def sanity_check (user_variable_1, var_name=None, data_type=None, min_dimensions=None, dimensions=None,
+                  shape=None, is_xarray=None, is_none=None, num_chunks=False):
 
     if data_type is not None:
         if not (user_variable_1.dtype == data_type):
@@ -34,6 +35,9 @@ def sanity_check (user_variable_1, var_name=None, data_type=None, min_dimensions
         if not (user_variable_1.ndim >= min_dimensions):
             raise Exception(var_name + " failed min_dimensions check")
 
+    if num_chunks is not False:
+        if not (user_variable_1[0].chunks[-1] == user_variable_1[1].shape):
+            raise Exception(var_name + "must be unchunked along last dimension")
     return True
 
 my_var = np.int16([[2,2],[2,2]])
