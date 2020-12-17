@@ -280,8 +280,7 @@ def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, msg_py=None):
 
 
     # ensure rightmost dimensions of input are not chunked
-    if list(fi.chunks)[-2:] != [yi.shape, xi.shape]:
-        raise ChunkError("linint2: fi must be unchunked along the rightmost two dimensions")
+    sanity_check(tuple(fi.chunks)[-2:], comparison=(yi.shape, xi.shape), var_name="fi last two axis unchunked")
 
     # fi data structure elements and autochunking
     fi_chunks = list(fi.dims)
