@@ -18,7 +18,7 @@ python module prneof_dp ! in
             double precision,                                                   intent(out)     :: trace
             integer,                                                            intent(hide)    :: iopt=0 !not used
             integer, optional,                                                  intent(in)      :: jopt=0
-            double precision, dimension(lcssm),                                intent(hide)    :: cssm(lcssm)
+            double precision, dimension(lcssm),                                 intent(hide)    :: cssm(lcssm)
             integer*8, depend(msta),                                            intent(hide)    :: lcssm=msta*(msta+1)/2
             double precision, dimension(lwork),                                 intent(hide)    :: work(lwork)
             integer, depend(msta),                                              intent(hide)    :: lwork=msta*8
