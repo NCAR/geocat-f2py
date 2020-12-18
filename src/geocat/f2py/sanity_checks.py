@@ -29,11 +29,6 @@ def sanity_check (
         if not (user_variable_1.shape == shape):
             raise Exception(var_name + " failed shape check")
 
-    if is_xarray is not None:
-        if is_xarray is True:
-            if not isinstance(user_variable_1, xr.DataArray):
-                raise Exception(var_name + " is not a xarray.DataArray")
-
     if is_none is not None:
         if is_none is True:
             if user_variable_1 is not None:
@@ -46,13 +41,27 @@ def sanity_check (
         if not (user_variable_1.ndim >= min_dimensions):
             raise Exception(var_name + " failed min_dimensions check")
 
-    if num_chunks is not None:
-        if not (user_variable_1[0].chunks[-1] == user_variable_1[1].shape):
-            raise Exception(var_name + "must be unchunked along last dimension")
+    if max_dimensions is not None:
+        if not (user_variable_1.ndim <= max_dimensions):
+            raise Exception(var_name + " failed max_dimensions check")
 
     if comparison is not None:
         if not (user_variable_1 == comparison):
             raise Exception(var_name + "failed comparison check")
+
+    #
+    # Xarray specific checks
+    #
+
+    if is_xarray is not None:
+        if is_xarray is True:
+            if not isinstance(user_variable_1, xr.DataArray):
+                raise Exception(var_name + " is not a xarray.DataArray")
+
+    if unchunked_dims is not None:
+        for dim in unchunked_dims:
+            if len(user_variable_1.chunks[dim])>1:
+                raise Exception(var_name + " must not be chunked along dimension " + str(dim))
 
     return True
 

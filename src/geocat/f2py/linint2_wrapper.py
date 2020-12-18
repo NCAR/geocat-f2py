@@ -63,14 +63,12 @@ def linint1(fi, xo, xi=None, icycx=0, msg_py=None):
     # ''' signature : fo = dlinint1(xi,fi,xo,[icycx,xmsg,iopt])
 
     # ''' Start of boilerplate
-    if not isinstance(fi, xr.DataArray):
-        if (xi is None):
-            raise CoordinateError(
-                "linint2: Argument xi must be provided explicitly unless fi is an xarray.DataArray.")
+    if isinstance(fi, np.ndarray):
+        sanity_check(xi, var_name='xi', is_none=False)
 
         fi = xr.DataArray(
-            fi,
-        )
+                fi,
+            )
         fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))])
 
         fi = xr.DataArray(
@@ -84,10 +82,9 @@ def linint1(fi, xo, xi=None, icycx=0, msg_py=None):
     xi = fi.coords[fi.dims[-1]]
 
     # ensure rightmost dimensions of input are not chunked
-    if list(fi.chunks)[-1:] != [xi.shape]:
-        raise Exception("fi must be unchunked along the last dimension")
+    sanity_check(fi, var_name="fi", unchunked_dims=[-1])
 
-    # fi data structure elements and autochunking
+# fi data structure elements and autochunking
     fi_chunks = list(fi.dims)
     fi_chunks[:-1] = [(k, 1) for (k, v) in zip(list(fi.dims)[:-1], list(fi.chunks)[:-1])]
     fi_chunks[-1:] = [(k, v[0]) for (k, v) in zip(list(fi.dims)[-1:], list(fi.chunks)[-1:])]
@@ -255,11 +252,9 @@ def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, msg_py=None):
     # ''' Start of boilerplate
     sanity_check(fi, var_name='fi', min_dimensions=2)
 
-    # Relocated from below, can be restored to original location
-    if not isinstance(fi, xr.DataArray):
-        if (xi is None) | (yi is None):
-            raise CoordinateError(
-                "linint2: Arguments xi and yi must be provided explicitly unless fi is an xarray.DataArray.")
+    if isinstance(fi, np.ndarray):
+        sanity_check(xi, var_name='xi', is_none=False)
+        sanity_check(yi, var_name='yi', is_none=False)
 
         fi = xr.DataArray(
             fi,
@@ -278,9 +273,8 @@ def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, msg_py=None):
     xi = fi.coords[fi.dims[-1]]
     yi = fi.coords[fi.dims[-2]]
 
-
     # ensure rightmost dimensions of input are not chunked
-    sanity_check(tuple(fi.chunks)[-2:], comparison=(yi.shape, xi.shape), var_name="fi last two axis unchunked")
+    sanity_check(fi, var_name="fi", unchunked_dims=[-1,-2])
 
     # fi data structure elements and autochunking
     fi_chunks = list(fi.dims)
@@ -405,8 +399,7 @@ def linint2pts(fi, xo, yo, icycx=0, msg_py=None):
         raise Exception("xo and yo, be be of equal length")
 
     # ensure rightmost dimensions of input are not chunked
-    if list(fi.chunks)[-2:] != [yi.shape, xi.shape]:
-        raise Exception("fi must be unchunked along the last two dimensions")
+    sanity_check(fi, var_name="fi", unchunked_dims=[-1,-2])
 
     # fo datastructure elements
     fo_chunks = list(fi.chunks)
