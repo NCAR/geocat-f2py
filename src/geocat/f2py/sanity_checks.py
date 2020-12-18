@@ -2,6 +2,7 @@ import numpy as np
 import xarray as xr
 import dask as da
 
+# What a sanity check is
 
 def sanity_check (
         user_variable_1,
@@ -47,7 +48,7 @@ def sanity_check (
 
     if comparison is not None:
         if not (user_variable_1 == comparison):
-            raise Exception(var_name + "failed comparison check")
+            raise Exception(var_name + " failed comparison check")
 
     #
     # Xarray specific checks
@@ -64,6 +65,3 @@ def sanity_check (
                 raise Exception(var_name + " must not be chunked along dimension " + str(dim))
 
     return True
-
-my_var = np.int16([[2,2],[2,2]])
-sanity_check(my_var, var_name="my_var", min_dimensions=2)
