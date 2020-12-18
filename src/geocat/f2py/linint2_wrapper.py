@@ -252,7 +252,7 @@ def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, msg_py=None):
     # ''' Start of boilerplate
     sanity_check(fi, var_name='fi', min_dimensions=2)
 
-    if isinstance(fi, np.ndarray):
+    if not isinstance(fi, xr.DataArray):
         sanity_check(xi, var_name='xi', is_none=False)
         sanity_check(yi, var_name='yi', is_none=False)
 
@@ -274,7 +274,7 @@ def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, msg_py=None):
     yi = fi.coords[fi.dims[-2]]
 
     # ensure rightmost dimensions of input are not chunked
-    sanity_check(fi, var_name="fi", unchunked_dims=[-1,-2])
+    sanity_check(fi, var_name="fi", is_xarray=True, unchunked_dims=[-1,-2])
 
     # fi data structure elements and autochunking
     fi_chunks = list(fi.dims)

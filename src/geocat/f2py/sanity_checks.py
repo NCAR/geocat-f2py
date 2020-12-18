@@ -34,7 +34,7 @@ def sanity_check (
         if is_none is True:
             if user_variable_1 is not None:
                 raise Exception(var_name + " is not None")
-        else:
+        if is_none is False:
             if user_variable_1 is None:
                 raise Exception(var_name + " is None")
 
@@ -58,6 +58,9 @@ def sanity_check (
         if is_xarray is True:
             if not isinstance(user_variable_1, xr.DataArray):
                 raise Exception(var_name + " is not a xarray.DataArray")
+        if is_xarray is False:
+            if isinstance(user_variable_1, xr.DataArray):
+                raise Exception(var_name + " is an xarray.DataArray")
 
     if unchunked_dims is not None:
         for dim in unchunked_dims:
