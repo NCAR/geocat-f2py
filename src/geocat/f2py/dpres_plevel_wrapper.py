@@ -36,7 +36,8 @@ def dpres_plevel(pressure_levels, pressure_surface, pressure_top=None, msg_py=No
                 meta (:obj:`bool`):
                     If set to True and the input arrays (pressure_levels and pressure_surface) are Xarray,
                     the metadata from the input arrays will be copied to the output array; default is False.
-                    WARNING: This option is not currently supported.
+                    WARNING: This option is not currently supported. Though, even if it is false,
+                    Xarray.Dataarray.attrs of `pressure_surface` is being retained in the output.
 
             Returns:
                 :class:`xarray.DataArray`: If pressure_surface is a scalar, the return variable will be a
@@ -104,11 +105,11 @@ def dpres_plevel(pressure_levels, pressure_surface, pressure_top=None, msg_py=No
 
     if meta:
         raise MetaError(
-            "ERROR dpres_plevel: Retention of metadata is not yet supported !")
+            "ERROR dpres_plevel: Retention of metadata (other than Xarray.Dataarray.attrs) is not yet supported !")
 
         # TODO: Retaining possible metadata might be revised in the future
     else:
-        dp = xr.DataArray(dp)
+        dp = xr.DataArray(dp, attrs=pressure_surface.attrs)
 
     return dp
 
