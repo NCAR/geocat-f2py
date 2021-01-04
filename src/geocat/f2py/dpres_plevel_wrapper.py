@@ -138,10 +138,13 @@ def _dpres_plevel(plev, psfc, ptop, msg_py):
     dp = np.transpose(dp, axes=(3,2,1,0))
 
     # Handle Fortran2Python missing value conversion back
+    fort2py_msg(psfc, msg_fort=msg_fort, msg_py=msg_py)
     fort2py_msg(dp, msg_fort=msg_fort, msg_py=msg_py)
 
     return dp
 
+
+# TODO: WIll revisit this after merging sanity check module to repo.
 def sanity_check(pressure_levels, pressure_surface, pressure_top):
     # ''' Basic sanity checks
     if not isinstance(pressure_levels, xr.DataArray):
