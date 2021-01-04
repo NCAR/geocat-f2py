@@ -36,8 +36,7 @@ pressure_surface_2d_nan_asfloat32 = pressure_surface_2d_nan.astype(np.float32)
 pressure_surface_2d_msg = pressure_surface_2d_nan.copy()
 pressure_surface_2d_msg[np.isnan(pressure_surface_2d_msg)] = -99.0
 
-pressure_surface_2d_msg_asfloat32 = pressure_surface_2d_msg.ast
-ype(np.float32)
+pressure_surface_2d_msg_asfloat32 = pressure_surface_2d_msg.astype(np.float32)
 
 # Expected Output
 # for scalar pressure_surface
