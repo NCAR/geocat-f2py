@@ -14,7 +14,7 @@ python module prneof_dp ! in
             integer, optional, depend(msta)                                     intent(in)      :: neval=msta
             double precision, dimension(neval),                                 intent(out)     :: eval(neval)
             double precision, dimension(ncol,neval),                            intent(out)     :: evec(ncol,neval)
-            real, dimension(neval),                                             intent(out)     :: pcvar(neval)
+            double precision, dimension(neval),                                 intent(out)     :: pcvar(neval)
             double precision,                                                   intent(out)     :: trace
             integer,                                                            intent(hide)    :: iopt=0 !not used
             integer, optional,                                                  intent(in)      :: jopt=0
