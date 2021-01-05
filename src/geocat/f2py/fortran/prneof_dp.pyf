@@ -5,7 +5,7 @@ python module prneof_dp ! in
     interface  ! in :prneof_dp
         ! eval,evec,pcvar,trace = ddrveof(x,[nobs,msta,xmsg,neval,jopt])
         subroutine ddrveof(x,nrow,ncol,nobs,msta,xmsg,neval,eval,evec,pcvar,trace,iopt,jopt,cssm,lcssm,work,lwork,weval,iwork,liwork,ifail,lifail,ier) ! in :prneof_dp:prneof_dp.f
-            double precision, dimension(nrow,ncol) :: x
+            double precision, dimension(nrow,ncol),                             intent(in)      :: x
             integer, depend(x),                                                 intent(hide)    :: nrow=shape(x,0)
             integer, depend(x),                                                 intent(hide)    :: ncol=shape(x,1)
             integer, optional, depend(nrow),                                    intent(in)      :: nobs=nrow

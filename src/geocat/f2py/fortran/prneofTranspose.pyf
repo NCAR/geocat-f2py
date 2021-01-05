@@ -23,13 +23,13 @@ python module prneofTranspose ! in
             double precision dimension(ncsta,nrow),depend(nrow) :: xdatat
         end subroutine tdrvprc
         subroutine xrveoft(xdata,xdatat,nrow,ncol,nrobs,ncsta,xmsg,neval,eval,evec,pcvar,trace,xdvar,xave,jopt,ier) ! in :prneofTranspose:prneofTranspose.f
-            double precision dimension(nrow,ncol) :: xdata
-            double precision dimension(ncsta,nrow),depend(nrow) :: xdatat
-            integer, optional,check(shape(xdata,0)==nrow),depend(xdata) :: nrow=shape(xdata,0)
-            integer, optional,check(shape(xdata,1)==ncol),depend(xdata) :: ncol=shape(xdata,1)
-            integer :: nrobs
-            integer, optional,check(shape(xdatat,0)==ncsta),depend(xdatat) :: ncsta=shape(xdatat,0)
-            double precision :: xmsg
+            double precision, dimension(nrow,ncol),                             intent(in)      :: xdata
+            double precision, dimension(ncsta,nrow),                            intent(hide)    :: xdatat(ncsta,nrow) !smaller and transposed working area?
+            integer, depend(xdata),                                             intent(hide)    :: nrow=shape(xdata,0)
+            integer, depend(xdata),                                             intent(hide)    :: ncol=shape(xdata,1)
+            integer, optional, depend(nrow),                                    intent(in)      :: nrobs=nrow
+            integer, optional, depend(ncol),                                    intent(in)      :: ncsta=ncol
+            double precision, optional,                                         intent(in)      :: xmsg-99
             integer, optional,check(len(eval)>=neval),depend(eval) :: neval=len(eval)
             double precision dimension(neval) :: eval
             double precision dimension(ncol,neval),depend(ncol,neval) :: evec
