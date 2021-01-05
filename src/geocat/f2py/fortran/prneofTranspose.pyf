@@ -30,15 +30,15 @@ python module prneofTranspose ! in
             integer, optional, depend(nrow),                                    intent(in)      :: nrobs=nrow
             integer, optional, depend(ncol),                                    intent(in)      :: ncsta=ncol
             double precision, optional,                                         intent(in)      :: xmsg-99
-            integer, optional,check(len(eval)>=neval),depend(eval) :: neval=len(eval)
-            double precision dimension(neval) :: eval
-            double precision dimension(ncol,neval),depend(ncol,neval) :: evec
-            double precision dimension(neval),depend(neval) :: pcvar
-            double precision :: trace
-            double precision dimension(ncol),depend(ncol) :: xdvar
-            double precision dimension(ncol),depend(ncol) :: xave
-            integer :: jopt
-            integer :: ier
+            integer, optional, depend(ncsta),                                   intent(hide)    :: neval=ncsta
+            double precision, dimension(neval),                                 intent(out)     :: eval(neval)
+            double precision, dimension(ncol,neval),                            intent(out)     :: evec(ncol,neval)
+            double precision, dimension(neval),                                 intent(out)     :: pcvar(neval)
+            double precision,                                                   intent(out)     :: trace
+            double precision, dimension(ncol),                                  intent(hide)    :: xdvar(ncol)
+            double precision, dimension(ncol),                                  intent(hide)    :: xave(ncol)
+            integer, optional,                                                  intent(in)      :: jopt=0
+            integer,                                                            intent(hide)    :: ier
         end subroutine xrveoft
     end interface 
 end python module prneofTranspose
