@@ -22,6 +22,7 @@ python module prneofTranspose ! in
             double precision dimension(nrow,ncol),depend(nrow,ncol) :: xdata
             double precision dimension(ncsta,nrow),depend(nrow) :: xdatat
         end subroutine tdrvprc
+        !eval,evec,pcvar,trace = xrveoft(xdata,[nrobs,ncsta,xmsg,jopt])
         subroutine xrveoft(xdata,xdatat,nrow,ncol,nrobs,ncsta,xmsg,neval,eval,evec,pcvar,trace,xdvar,xave,jopt,ier) ! in :prneofTranspose:prneofTranspose.f
             double precision, dimension(nrow,ncol),                             intent(in)      :: xdata
             double precision, dimension(ncsta,nrow),                            intent(hide)    :: xdatat(ncsta,nrow) !smaller and transposed working area?
