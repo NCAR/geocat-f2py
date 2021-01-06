@@ -21,9 +21,12 @@ def _drveof(x, nobs, msta, msg_py, neval, jopt):
     # missing value handling
     x, msg_py, msg_fort = fort2py_msg(x, msg_fort=msg_fort, msg_py=msg_py)
 
+    #return result
     return eval, evec, pcvar, trace
 
 def drveof(x, nobs=None, msta=None, msg_py=None, neval=None, jopt=None):
+    # This is not a parallizable task
+
     # handle optionals
     if nobs is None:
         nobs = x.shape[0]
