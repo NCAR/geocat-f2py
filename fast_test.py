@@ -1,11 +1,12 @@
-import time
+# THIS IS A DEVELOPMENT PERFORMANCE TESTING CLASS, REMOVE WHEN NO LONGER NEEDED
 
+import time
+import dask
 import dask.distributed as dd
+from dask.array.core import map_blocks
 import numpy as np
 import xarray as xr
-
-from geocat.temp import *
-
+from geocat.f2py import (linint1, linint2, linint2pts)
 
 def linint1_test():
     xi = np.linspace(1, 10, 200)
@@ -101,19 +102,14 @@ def linint2pts_test():
         yo,
     )
 
-
-
 if __name__ == '__main__':
     cluster = dd.LocalCluster(n_workers=8, threads_per_worker=1)
     print(cluster.dashboard_link)
     client = dd.Client(cluster)
     t0 = time.time()
 
-    #linint1_test()
-    linint2_test()
-    #linint2pts_test()
-
+    fo = linint2_test()
     t1 = time.time()
-
     print(t1 - t0)
     client.close()
+

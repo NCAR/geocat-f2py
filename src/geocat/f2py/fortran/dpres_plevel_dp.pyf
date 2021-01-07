@@ -1,0 +1,36 @@
+!    -*- f90 -*-
+! Note: the context of this file is case sensitive.
+
+python module dpres_plevel ! in
+    interface  ! in :dpres_plevel
+        ! signature : dp = dpresplvl(plevel,psfc,ptop,[pmsg])
+        subroutine dpresplvl(klvl,plevel,ntim,nlat,mlon,psfc,pmsg,ptop,dp,iopt,kflag,ier) ! in :dpres_plevel:dpres_plevel_dp.f
+            integer,            check(len(plevel)>=klvl), depend(plevel),   intent(hide)    :: klvl=len(plevel)
+            double precision,   dimension(klvl),                            intent(in)      :: plevel
+            integer,            check(shape(psfc,2)==ntim), depend(psfc),   intent(hide)    :: ntim=shape(psfc,2)
+            integer,            check(shape(psfc,1)==nlat), depend(psfc),   intent(hide)    :: nlat=shape(psfc,1)
+            integer,            check(shape(psfc,0)==mlon), depend(psfc),   intent(hide)    :: mlon=shape(psfc,0)
+            double precision,   dimension(mlon,nlat,ntim),                  intent(in)      :: psfc
+            double precision,   optional,                                   intent(in)      :: pmsg
+            double precision,                                               intent(in)      :: ptop
+            double precision,   dimension(mlon,nlat,klvl,ntim),             intent(out)     :: dp
+            integer,                                                        intent(hide)    :: iopt=0
+            integer,                                                        intent(hide)    :: kflag
+            integer,                                                        intent(hide)    :: ier
+        end subroutine dpresplvl
+        subroutine dpres1d(klvl,plevel,psfc,pmsg,ptop,dp,iopt,kflag,ier) ! in :dpres_plevel:dpres_plevel_dp.f
+            integer, optional,check(len(plevel)>=klvl),depend(plevel) :: klvl=len(plevel)
+            double precision dimension(klvl) :: plevel
+            double precision :: psfc
+            double precision :: pmsg
+            double precision :: ptop
+            double precision dimension(klvl),depend(klvl) :: dp
+            integer :: iopt
+            integer :: kflag
+            integer :: ier
+        end subroutine dpres1d
+    end interface 
+end python module dpres_plevel
+
+! This file was auto-generated with f2py (version:2).
+! See http://cens.ioc.ee/projects/f2py2e/

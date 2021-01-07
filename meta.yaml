@@ -1,13 +1,13 @@
 package:
-  name: "geocat-temp"
-  version: "0.2.1"
+  name: "geocat-f2py"
+  version: "0.2.2"
 
 source:
   git_rev: master
-  git_url: https://github.com/NCAR/geocat-temp.git
+  git_url: https://github.com/NCAR/geocat-f2py.git
 
 build:
-  number: 1
+  number: 2
   skip: True # [py<35]
 
 requirements:
@@ -34,9 +34,9 @@ test:
   requires:
     - pytest
   imports:
-    - geocat.temp
+    - geocat.f2py
   commands:
     - pytest test
 
 about:
-  home: https://github.com/NCAR/geocat-temp
+  home: https://github.com/NCAR/geocat-f2py
