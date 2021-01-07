@@ -30,39 +30,39 @@ python module triple2grid ! in
         end subroutine triple2grid1
 
         subroutine trip2grd2(kz,x,y,z,zmsg,mx,ny,gxout,gyout,gout,mflag,nflag,method,ddcrit,ier) ! in :triple2grid:triple2grid.f
-            integer,    optional,                   intent(hide)    :: kz=len(x)
-            double precision,   dimension(kz)                       :: x
-            double precision,   dimension(kz)                       :: y
-            double precision,   dimension(kz)                       :: z
-            double precision                                        :: zmsg
-            integer,    optional,                   intent(hide)    :: mx=len(gxout)
-            integer,    optional,                   intent(hide)    :: ny=len(gyout)
-            double precision,   dimension(mx)                       :: gxout
-            double precision,   dimension(ny)                       :: gyout
-            double precision,   dimension(mx,ny)                    :: gout
-            integer                                                 :: mflag
-            integer                                                 :: nflag
-            integer                                                 :: method
-            double precision                                        :: ddcrit
-            integer                                                 :: ier
+            integer, optional,check(len(x)>=kz),depend(x) :: kz=len(x)
+            double precision dimension(kz) :: x
+            double precision dimension(kz),depend(kz) :: y
+            double precision dimension(kz),depend(kz) :: z
+            double precision :: zmsg
+            integer, optional,check(len(gxout)>=mx),depend(gxout) :: mx=len(gxout)
+            integer, optional,check(len(gyout)>=ny),depend(gyout) :: ny=len(gyout)
+            double precision dimension(mx) :: gxout
+            double precision dimension(ny) :: gyout
+            double precision dimension(mx,ny),depend(mx,ny) :: gout
+            integer :: mflag
+            integer :: nflag
+            integer :: method
+            double precision :: ddcrit
+            integer :: ier
         end subroutine trip2grd2
 
         subroutine trip2grd3(kz,x,y,z,zmsg,mx,ny,gxout,gyout,gout,mflag,nflag,method,ddcrit,ier) ! in :triple2grid:triple2grid.f
-            integer,    optional,                   intent(hide)    :: kz=len(x)
-            double precision,   dimension(kz)                       :: x
-            double precision,   dimension(kz)                       :: y
-            double precision,   dimension(kz)                       :: z
-            double precision                                        :: zmsg
-            integer,    optional,                   intent(hide)    :: mx=len(gxout)
-            integer,    optional                    intent(hide)    :: ny=len(gyout)
-            double precision, dimension(mx)                         :: gxout
-            double precision, dimension(ny)                         :: gyout
-            double precision, dimension(mx,ny)                      :: gout
-            integer                                                 :: mflag
-            integer                                                 :: nflag
-            integer                                                 :: method
-            double precision                                        :: ddcrit
-            integer                                                 :: ier
+            integer, optional,check(len(x)>=kz),depend(x) :: kz=len(x)
+            double precision dimension(kz) :: x
+            double precision dimension(kz),depend(kz) :: y
+            double precision dimension(kz),depend(kz) :: z
+            double precision :: zmsg
+            integer, optional,check(len(gxout)>=mx),depend(gxout) :: mx=len(gxout)
+            integer, optional,check(len(gyout)>=ny),depend(gyout) :: ny=len(gyout)
+            double precision dimension(mx) :: gxout
+            double precision dimension(ny) :: gyout
+            double precision dimension(mx,ny),depend(mx,ny) :: gout
+            integer :: mflag
+            integer :: nflag
+            integer :: method
+            double precision :: ddcrit
+            integer :: ier
         end subroutine trip2grd3
     end interface 
 end python module triple2grid

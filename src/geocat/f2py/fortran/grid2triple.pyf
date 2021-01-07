@@ -1,0 +1,22 @@
+!    -*- f90 -*-
+! Note: the context of this file is case sensitive.
+
+python module grid2triple ! in 
+    interface  ! in :grid2triple
+        subroutine grid2triple(x,y,z,mx,ny,d,ldmax,ld,zmsg,ier) ! in :grid2triple:grid2triple.f
+            double precision dimension(mx) :: x
+            double precision dimension(ny) :: y
+            double precision dimension(mx,ny),depend(mx,ny) :: z
+            integer, optional,check(len(x)>=mx),depend(x) :: mx=len(x)
+            integer, optional,check(len(y)>=ny),depend(y) :: ny=len(y)
+            double precision dimension(ldmax,3) :: d
+            integer, optional,check(shape(d,0)==ldmax),depend(d) :: ldmax=shape(d,0)
+            integer :: ld
+            double precision :: zmsg
+            integer :: ier
+        end subroutine grid2triple
+    end interface 
+end python module grid2triple
+
+! This file was auto-generated with f2py (version:2).
+! See http://cens.ioc.ee/projects/f2py2e/
