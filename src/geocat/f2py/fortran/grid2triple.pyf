@@ -3,17 +3,18 @@
 
 python module grid2triple ! in 
     interface  ! in :grid2triple
+        ! signature : d = grid2triple(x,y,z,ld,[mx,ny,ldmax,zmsg])
         subroutine grid2triple(x,y,z,mx,ny,d,ldmax,ld,zmsg,ier) ! in :grid2triple:grid2triple.f
-            double precision dimension(mx) :: x
-            double precision dimension(ny) :: y
-            double precision dimension(mx,ny),depend(mx,ny) :: z
-            integer, optional,check(len(x)>=mx),depend(x) :: mx=len(x)
-            integer, optional,check(len(y)>=ny),depend(y) :: ny=len(y)
-            double precision dimension(ldmax,3) :: d
-            integer, optional,check(shape(d,0)==ldmax),depend(d) :: ldmax=shape(d,0)
-            integer :: ld
-            double precision :: zmsg
-            integer :: ier
+            double precision,   dimension(mx),                      intent(in)      :: x
+            double precision,   dimension(ny),                      intent(in)      :: y
+            double precision,   dimension(mx,ny), depend(mx,ny),    intent(in)      :: z
+            integer,            check(len(x)>=mx), depend(x),       intent(hidden)  :: mx=len(x)
+            integer,            check(len(y)>=ny), depend(y),       intent(hidden)  :: ny=len(y)
+            double precision,   dimension(ldmax,3),                 intent(out)     :: d
+            integer,            check(shape(d,0)==ldmax),depend(d), intent(hidden)  :: ldmax=shape(d,0)
+            integer,                                                intent(hidden)  :: ld
+            double precision,   optional,                           intent(in)      :: zmsg
+            integer,                                                intent(hide)    :: ier
         end subroutine grid2triple
     end interface 
 end python module grid2triple

@@ -2,7 +2,7 @@ import numpy as np
 import xarray as xr
 from dask.array.core import map_blocks
 
-# from .fortran import (triple2grid1)
+from .fortran import (triple2grid1, )
 from .errors import (ChunkError, CoordinateError)
 from .missing_values import (fort2py_msg, py2fort_msg)
 
