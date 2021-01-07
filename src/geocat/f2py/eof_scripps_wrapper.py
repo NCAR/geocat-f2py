@@ -20,10 +20,15 @@ def _eof11(d, nmodes, icovcor, msg_py):
 
     # missing value handling
     d, msg_fort, msg_py = fort2py_msg(d, msg_fort=msg_fort, msg_py=msg_py)
+    
+    #return result
     return eigenvalues, eigenvectors, variance, princomp
 
 def eof11(d, nmodes, icovcor=0, msg_py=None):
     # this is effectivly a stub, since this is not a parallelizable task.
+
+    #TODO implement optional handling
+
     return _eof11(d, nmodes, icovcor, msg_py)
 
 # def eof_test():

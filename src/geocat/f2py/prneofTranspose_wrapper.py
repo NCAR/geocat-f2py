@@ -9,7 +9,7 @@ from .missing_values import (fort2py_msg, py2fort_msg)
 # These Wrapper are executed within dask processes, and should do anything that
 # can benefit from parallel excution.
 
-def _xrveoft(xdata, nrobs, ncsta, xmsg, neval, jopt):
+def _xrveoft(xdata, nrobs, ncsta, msg_py, neval, jopt):
     #eval,evec,pcvar,trace = dxrveoft(xdata,[nrobs,ncsta,xmsg,neval,jopt]) # xrveoft as dxrveoft for namespace reasons
 
     # missing value handling
@@ -39,4 +39,4 @@ def xrveoft(xdata, nrobs=None, ncsta=None, msg_py=None, neval=None,  jopt=None):
         jopt = 0;
 
     # return inner computation. No Dask call, as this is not parallelizable
-    return _xrveoft(xdata, nrobs, ncsta, xmsg, jopt)
+    return _xrveoft(xdata, nrobs, ncsta, msg_py, jopt)
