@@ -16,7 +16,7 @@ def _xrveoft(xdata, nrobs, ncsta, xmsg, neval, jopt):
     xdata, msg_py, msg_fort = py2fort_msg(xdata, msg_py=msg_py)
 
     # fortran call
-    eval, evec, pcvar, trace = dxrveoft(xdata, nrobs=nrobs, ncsta=ncsta, xmsg=msg_py, jopt=jopt)
+    eval, evec, pcvar, trace = dxrveoft(xdata, nrobs=nrobs, ncsta=ncsta, xmsg=msg_fort, jopt=jopt)
 
     # missing value handling
     xdata, msg_py, msg_fort = fort2py_msg(xdata, msg_fort=msg_fort, msg_py=msg_py)

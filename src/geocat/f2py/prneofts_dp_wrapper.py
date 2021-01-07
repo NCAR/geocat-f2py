@@ -18,7 +18,7 @@ def _eofts7(x, evec, nobs, msta, msg_py, jopt):
     x, msg_py, msg_fort = py2fort_msg(x, msg_py=msg_py)
 
     # fortran call
-    evects = deofts7(x, evec, nobs, msta, xmsg=msg_py, jopt=jopt)
+    evects = deofts7(x, evec, nobs, msta, xmsg=msg_fort, jopt=jopt)
 
     # missing value handling
     x, msg_fort, msg_py = fort2py_msg(x, msg_fort=msg_fort, msg_py=msg_py)
