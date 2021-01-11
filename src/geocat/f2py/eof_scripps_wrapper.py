@@ -20,7 +20,7 @@ def _eof11(d, nmodes, icovcor, msg_py):
 
     # missing value handling
     d, msg_fort, msg_py = fort2py_msg(d, msg_fort=msg_fort, msg_py=msg_py)
-    
+
     #return result
     return eigenvalues, eigenvectors, variance, princomp
 
