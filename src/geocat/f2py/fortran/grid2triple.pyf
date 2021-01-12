@@ -8,11 +8,11 @@ python module grid2triple ! in
             double precision,   dimension(mx),                      intent(in)      :: x
             double precision,   dimension(ny),                      intent(in)      :: y
             double precision,   dimension(mx,ny), depend(mx,ny),    intent(in)      :: z
-            integer,            check(len(x)>=mx), depend(x),       intent(hidden)  :: mx=len(x)
-            integer,            check(len(y)>=ny), depend(y),       intent(hidden)  :: ny=len(y)
-            double precision,   dimension(ldmax,3),                 intent(out)     :: d
-            integer,            check(shape(d,0)==ldmax),depend(d), intent(hidden)  :: ldmax=shape(d,0)
-            integer,                                                intent(hidden)  :: ld
+            integer,            check(len(x)>=mx), depend(x),       intent(hide)    :: mx=len(x)
+            integer,            check(len(y)>=ny), depend(y),       intent(hide)    :: ny=len(y)
+            double precision,   dimension(ldmax,3),                 intent(out)     :: d(ldmax,3)
+            integer,            depend(mx,ny),                      intent(hide)    :: ldmax=mx*ny
+            integer,                                                intent(hide)    :: ld
             double precision,   optional,                           intent(in)      :: zmsg
             integer,                                                intent(hide)    :: ier
         end subroutine grid2triple

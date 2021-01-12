@@ -2,27 +2,47 @@ import numpy as np
 import xarray as xr
 from dask.array.core import map_blocks
 
-from .fortran import (triple2grid1, )
-from .errors import (ChunkError, CoordinateError)
+# from .fortran import (grid2triple)
+from .fortran import grid2triple as grid2triple_fort
+
+from .errors import (CoordinateError, DimensionError)
 from .missing_values import (fort2py_msg, py2fort_msg)
 
 
-# Dask Wrappers _<funcname>()
+# Dask Wrappers or Internal Wrappers _<funcname>()
 # These Wrapper are executed within dask processes, and should do anything that
 # can benefit from parallel excution.
 
-# signature:  grid = _grid2triple(x,y,data,msg_py)
-def _grid2triple(x, y, data, msg_py):
-    pass
+def _grid_to_triple(x, y, z, msg_py, shape):
+    # ''' signature:  grid = grid_to_triple(x, y, z, msg_py)
 
-# signature:  grid = _triple2grid(x,y,data,xgrid,ygrid,msg_py)
-def _triple2grid(x, y, data, xgrid, ygrid, msg_py):
+    z = np.transpose(z, axes=(1,0))
+
+    # missing value handling
+    z, msg_py, msg_fort = py2fort_msg(z, msg_py=msg_py)
+
+    # fortran call
+    grid = grid2triple_fort(x, y, z, msg_fort)
+
+    # numpy and reshape
+    grid = np.asarray(grid)
+    grid = np.transpose(grid, axes=(1, 0))
+
+    # missing value handling
+    fort2py_msg(z, msg_fort=msg_fort, msg_py=msg_py)
+    fort2py_msg(grid, msg_fort=msg_fort, msg_py=msg_py)
+
+    return grid
+
+
+def _triple_to_grid(x, y, data, xgrid, ygrid, msg_py):
+    # ''' signature:  grid = _triple_to_grid(x,y,data,xgrid,ygrid,msg_py)
     pass
 
 
 # TODO: Revisit after deprecating geocat.ncomp for implementing this
-# signature:  grid = _triple2grid(x,y,data,xgrid,ygrid,msg_py)
-def _triple2grid2d(x, y, data, xgrid, ygrid, msg_py):
+def _triple_to_grid_2d(x, y, data, xgrid, ygrid, msg_py):
+    # ''' signature:  grid = _triple2grid(x,y,data,xgrid,ygrid,msg_py)
     pass
 
 
@@ -30,74 +50,121 @@ def _triple2grid2d(x, y, data, xgrid, ygrid, msg_py):
 # These Wrappers are excecuted in the __main__ python process, and should be
 # used for any tasks which would not benefit from parallel execution.
 
-# signature:  grid = grid2triple(x,y,data,msg_py)
-def grid2triple(x, y, data, msg_py=None, meta=False):
+def grid_to_triple(data, x=None, y=None, msg_py=None):
+    # ''' signature:  grid = grid2triple(x,y,z,msg_py)
     """Converts a two-dimensional grid with one-dimensional coordinate variables
            to an array where each grid value is associated with its coordinates.
 
-        Args:
+            Args:
 
-    	x (:class:`numpy.ndarray`):
-                Coordinates associated with the right dimension of the variable `z`.
-                It must be the same dimension size (call it mx) as the right
-                dimension of `z`.
+                data (:class:`xarray.DataArray` or :class:`numpy.ndarray`):
+                        Two-dimensional array of size ny x mx containing the data values.
+                        Missing values may be present in `data`, but they are ignored.
 
-    	y (:class:`numpy.ndarray`):
-                Coordinates associated with the left dimension of the variable `z`.
-                It must be the same dimension size (call it ny) as the left
-                dimension of `z`.
+                x (:class:`xarray.DataArray` or :class:`numpy.ndarray`):
+                        Coordinates associated with the right dimension of the variable `data`.
+                        If `data` is of type :class:`xarray.DataArray` and `x` is unspecified,
+                        then it comes from the associated coordinate of `data`. If `data` is of type
+                        :class:`numpy.ndarray`, then it must be explicitly given as input and it
+                        must have the same dimension (call it `mx`) as the right dimension of `data`.
 
-    	z (:class:`numpy.ndarray`):
-                Two-dimensional array of size ny x mx containing the data values.
-                Missing values may be present in `z`, but they are ignored.
+                y (:class:`xarray.DataArray` or :class:`numpy.ndarray`):
+                        Coordinates associated with the left dimension of the variable `data`.
+                        If `data` is of type :class:`xarray.DataArray` and `y` is unspecified,
+                        then it comes from the associated coordinate of `data`. If `data` is of type
+                        :class:`numpy.ndarray`, then it must be explicitly given as input and it
+                        must have the same dimension (call it `ny`) as the left dimension of `data`.
 
-    	msg (:obj:`numpy.number`):
-    	    A numpy scalar value that represent a missing value in `z`.
-    	    This argument allows a user to use a missing value scheme
-    	    other than NaN or masked arrays, similar to what NCL allows.
+                msg (:obj:`numpy.number`):
+                    A numpy scalar value that represent a missing value in `data`.
+                    This argument allows a user to use a missing value scheme
+                    other than NaN or masked arrays, similar to what NCL allows.
 
-    	meta (:obj:`bool`):
-            If set to True and the input array is an Xarray, the metadata
-            from the input array will be copied to the output array;
-            default is False.
-            Warning: this option is not currently supported.
+            Returns:
+                :class:`numpy.ndarray`: If any argument is "double" the return type
+                    will be "double"; otherwise a "float" is returned.
 
-        Returns:
-    	:class:`numpy.ndarray`: If any argument is "double" the return type
-            will be "double"; otherwise a "float" is returned.
+            Description:
+                The maximum size of the returned array will be 3 x ld where ld <= ny*mx.
+                If no missing values are encountered in `data`, then ld=ny*mx. If missing
+                values are encountered in `data`, they are not returned and hence ld will be
+                equal to ny*mx minus the number of missing values found in `data`. The return
+                array will be double if any of the input arrays are double, and float
+                otherwise.
 
-        Description:
-            The maximum size of the returned array will be 3 x ld where ld <= ny*mx.
-            If no missing values are encountered in z, then ld=ny*mx. If missing
-            values are encountered in z, they are not returned and hence ld will be
-            equal to ny*mx minus the number of missing values found in z. The return
-            array will be double if any of the input arrays are double, and float
-            otherwise.
+            Examples:
 
-        Examples:
+                Example 1: Using grid2triple with :class:`xarray.DataArray` input
 
-    	Example 1: Using grid2triple with :class:`xarray.DataArray` input
+                .. code-block:: python
 
-    	.. code-block:: python
+                    import numpy as np
+                    import xarray as xr
+                    import geocat.comp
 
-    	    import numpy as np
-    	    import xarray as xr
-    	    import geocat.comp
+                    # Open a netCDF data file using xarray default engine and load the data stream
+                    ds = xr.open_dataset("./NETCDF_FILE.nc")
 
-    	    # Open a netCDF data file using xarray default engine and load the data stream
-    	    ds = xr.open_dataset("./NETCDF_FILE.nc")
+                    # [INPUT] Grid & data info on the source curvilinear
+                    z=ds.DIST_236_CBL[:]
+                    x=ds.gridlat_236[:]
+                    y=ds.gridlon_236[:]
 
-    	    # [INPUT] Grid & data info on the source curvilinear
-    	    z=ds.DIST_236_CBL[:]
-    	    x=ds.gridlat_236[:]
-    	    y=ds.gridlon_236[:]
-
-    	    output = geocat.comp.grid2triple(x, y, z)
+                    output = geocat.comp.grid2triple(z, x, y)
         """
 
+    # TODO: Will need to be revisited after sanity_check work is finished
+    # Basic sanity checks
+    if not isinstance(data, xr.DataArray):
+        if (x is None) | (y is None):
+            raise CoordinateError(
+                "ERROR grid2triple: Argument `x` and `y` must be provided explicitly "
+                "unless `data` is an xarray.DataArray.")
 
-# signature:  grid = triple2grid(x,y,data,xgrid,ygrid,msg_py)
-def triple2grid(x, y, data, xgrid, ygrid, **kwargs):
+        data = xr.DataArray(
+            data,
+        )
+
+        data = xr.DataArray(
+            data.data,
+            coords={
+                data.dims[-1]: x,
+                data.dims[-2]: y,
+            },
+            dims=data.dims,
+        )
+
+    x = data.coords[data.dims[-1]]
+    y = data.coords[data.dims[-2]]
+
+    if data.ndim != 2:
+        raise DimensionError(
+            "ERROR grid2triple: `z` must have two dimensions !\n")
+
+    if x.ndim != 1:
+        raise DimensionError(
+            "ERROR grid2triple: `x` must have one dimension !\n")
+    elif x.shape[0] != data.shape[1]:
+        raise DimensionError(
+            "ERROR grid2triple: `x` must have the same size (call it `mx`) as the "
+            "right dimension of z. !\n")
+
+    if y.ndim != 1:
+        raise DimensionError(
+            "ERROR grid2triple: `y` must have one dimension !\n")
+    elif y.shape[0] != data.shape[0]:
+        raise DimensionError(
+            "ERROR grid2triple: `y` must have the same size (call it `ny`) as the left dimension of z. !\n")
+
+    outgrid = _grid_to_triple(x.data, y.data, data.data, msg_py, [])
+
+    outgrid = xr.DataArray(outgrid, attrs=data.attrs)
+
+    return outgrid
+
+
+def triple_to_grid(x, y, data, xgrid, ygrid, **kwargs):
+    # ''' signature:  grid = triple2grid(x,y,data,xgrid,ygrid,msg_py)
     """Places unstructured (randomly-spaced) data onto the nearest locations of a rectilinear grid.
 
         Args:
@@ -201,6 +268,13 @@ def triple2grid(x, y, data, xgrid, ygrid, **kwargs):
 
 
 # TODO: Revisit after deprecating geocat.ncomp for implementing this
-# signature:  grid = triple2grid2d(x,y,data,xgrid,ygrid,msg_py)
-def triple2grid2d(x, y, data, xgrid, ygrid, msg_py):
+def triple_to_grid_2d(x, y, data, xgrid, ygrid, msg_py):
+    # ''' signature:  grid = triple2grid2d(x,y,data,xgrid,ygrid,msg_py)
     pass
+
+
+
+# Transparent wrappers for geocat.ncomp backwards compatibility
+def grid2triple(x, y, z, msg=None, meta=False):
+
+    return grid_to_triple(z, x, y, msg)
