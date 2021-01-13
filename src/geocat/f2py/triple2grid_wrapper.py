@@ -14,25 +14,28 @@ from .missing_values import (fort2py_msg, py2fort_msg)
 # can benefit from parallel excution.
 
 def _grid_to_triple(x, y, z, msg_py, shape):
-    # ''' signature:  grid = grid_to_triple(x, y, z, msg_py)
+    # ''' signature:  out = grid_to_triple(x, y, z, msg_py)
 
     z = np.transpose(z, axes=(1,0))
 
     # missing value handling
     z, msg_py, msg_fort = py2fort_msg(z, msg_py=msg_py)
 
-    # fortran call
-    grid = grid2triple_fort(x, y, z, msg_fort)
+    # Fortran call
+    # num_elem is the total number of elements from beginning of each column in the array,
+    # which are non missing-value
+    out, num_elem = grid2triple_fort(x, y, z, msg_fort)
 
-    # numpy and reshape
-    grid = np.asarray(grid)
-    grid = np.transpose(grid, axes=(1, 0))
+    # Numpy and reshape as well as get rid of indices corresponding to missing values
+    out = np.asarray(out)
+    out = np.transpose(out, axes=(1, 0))
+    out = out[:, :num_elem]
 
-    # missing value handling
+    # Missing value handling
     fort2py_msg(z, msg_fort=msg_fort, msg_py=msg_py)
-    fort2py_msg(grid, msg_fort=msg_fort, msg_py=msg_py)
+    fort2py_msg(out, msg_fort=msg_fort, msg_py=msg_py)
 
-    return grid
+    return out
 
 
 def _triple_to_grid(x, y, data, xgrid, ygrid, msg_py):
@@ -81,8 +84,9 @@ def grid_to_triple(data, x=None, y=None, msg_py=None):
                     other than NaN or masked arrays, similar to what NCL allows.
 
             Returns:
-                :class:`numpy.ndarray`: If any argument is "double" the return type
-                    will be "double"; otherwise a "float" is returned.
+                :class:`xarray.DataArray`: The return array will have a dimension of (3, mx * ny).
+                If any argument is "double" the return type will be "double";
+                otherwise a "float" is returned.
 
             Description:
                 The maximum size of the returned array will be 3 x ld where ld <= ny*mx.
@@ -156,11 +160,11 @@ def grid_to_triple(data, x=None, y=None, msg_py=None):
         raise DimensionError(
             "ERROR grid2triple: `y` must have the same size (call it `ny`) as the left dimension of z. !\n")
 
-    outgrid = _grid_to_triple(x.data, y.data, data.data, msg_py, [])
+    out = _grid_to_triple(x.data, y.data, data.data, msg_py, [])
 
-    outgrid = xr.DataArray(outgrid, attrs=data.attrs)
+    out = xr.DataArray(out, attrs=data.attrs)
 
-    return outgrid
+    return out
 
 
 def triple_to_grid(x, y, data, xgrid, ygrid, **kwargs):
@@ -169,28 +173,28 @@ def triple_to_grid(x, y, data, xgrid, ygrid, **kwargs):
 
         Args:
 
-    	x (:class:`numpy.ndarray`):
+    	x (:class:`xarray.DataArray`: or :class:`numpy.ndarray`):
                 One-dimensional arrays of the same length containing the coordinates
                 associated with the data values. For geophysical variables, x
                 correspond to longitude.
 
-    	y (:class:`numpy.ndarray`):
+    	y (:class:`xarray.DataArray`: or :class:`numpy.ndarray`):
                 One-dimensional arrays of the same length containing the coordinates
                 associated with the data values. For geophysical variables, y
                 correspond to latitude.
 
-    	data (:class:`numpy.ndarray`):
+    	data (:class:`xarray.DataArray`: or :class:`numpy.ndarray`):
                 A multi-dimensional array, whose rightmost dimension is the same
                 length as `x` and `y`, containing the values associated with the `x`
                 and `y` coordinates. Missing values, may be present but will be ignored.
 
-    	xgrid (:class:`numpy.ndarray`):
+    	xgrid (:class:`xarray.DataArray`: or :class:`numpy.ndarray`):
                 A one-dimensional array of length M containing the `x` coordinates
                 associated with the returned two-dimensional grid. For geophysical
                 variables, these are longitudes. The coordinates' values must be
                 monotonically increasing.
 
-    	ygrid (:class:`numpy.ndarray`):
+    	ygrid (:class:`xarray.DataArray`: or :class:`numpy.ndarray`):
                 A one-dimensional array of length N containing the `y` coordinates
                 associated with the returned two-dimensional grid. For geophysical
                 variables, these are latitudes. The coordinates' values must be

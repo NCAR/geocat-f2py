@@ -23,6 +23,8 @@ chunks = {
 }
 
 
+# TODO: All of these tests should be revisited since they indeed are not
+#  checking any actually interpolated values.
 class Test_linint2_float64(ut.TestCase):
 
     def test_linint2(self):

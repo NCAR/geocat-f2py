@@ -12,7 +12,7 @@ python module grid2triple ! in
             integer,            check(len(y)>=ny), depend(y),       intent(hide)    :: ny=len(y)
             double precision,   dimension(ldmax,3),                 intent(out)     :: d(ldmax,3)
             integer,            depend(mx,ny),                      intent(hide)    :: ldmax=mx*ny
-            integer,                                                intent(hide)    :: ld
+            integer,                                                intent(out)     :: ld
             double precision,   optional,                           intent(in)      :: zmsg
             integer,                                                intent(hide)    :: ier
         end subroutine grid2triple
