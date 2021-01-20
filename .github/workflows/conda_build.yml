@@ -2,7 +2,7 @@ name: conda_build
 on: push
 jobs:
   conda_builds:
-    if: "contains(github.event.head_commit.message, 'trigger_conda_build')"
+    if: "contains(github.event.head_commit.message, 'complete_yapf')"
     name: conda_build_${{ matrix.python-version }}_${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     defaults:
@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ "ubuntu-latest", "macos-latest", "windows-latest" ]
+        os: [ "ubuntu-latest", "macos-latest"]
         python-version: [ "3.6", "3.7", "3.8", "3.9" ]
     steps:
       - name: checkout
@@ -27,9 +27,9 @@ jobs:
         run: |
           conda install conda-build
           conda build .
-      - name: push
-        run: |
-          git config --global user.name 'GitHub Actions'
-          git config --global user.email 'noreply@github.com'
-          git commit --allow-empty -am "complete_conda_build"
-          git push
+#      - name: push
+#        run: |
+#          git config --global user.name 'GitHub Actions'
+#          git config --global user.email 'noreply@github.com'
+#          git commit --allow-empty -am "complete_conda_build"
+#          git push
