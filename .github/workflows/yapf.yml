@@ -18,10 +18,3 @@ jobs:
           git config --global user.email 'noreply@github.com'
           git commit --allow-empty -am "yapf google style formatting, no trigger"
           git push
-      - name: trigger_conda_build
-        if: success()
-        uses: peter-evans/repository-dispatch@v1
-        with:
-          token: ${{ secrets.A_KOOTZ_GEOCAT_F2PY_TOKEN }}
-          repository: ${{ github.repository }}
-          event-type: trigger_conda_build
