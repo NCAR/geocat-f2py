@@ -28,8 +28,8 @@ jobs:
           conda install conda-build
           conda build .
       - name: push
-          run: |
-            git config --global user.name 'GitHub Actions'
-            git config --global user.email 'noreply@github.com'
-            git commit --allow-empty -am "complete_conda_build"
-            git push
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'noreply@github.com'
+          git commit --allow-empty -am "complete_conda_build"
+          git push
