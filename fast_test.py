@@ -8,6 +8,7 @@ import numpy as np
 import xarray as xr
 from geocat.f2py import (linint1, linint2, linint2pts)
 
+
 def linint1_test():
     xi = np.linspace(1, 10, 200)
     xo = np.linspace(1, 10, 1000)
@@ -32,7 +33,6 @@ def linint1_test():
         fi,
         xo,
     )
-
 
 
 def linint2_test():
@@ -69,7 +69,6 @@ def linint2_test():
     )
 
 
-
 def linint2pts_test():
     xi = np.linspace(1, 10, 100)
     yi = np.linspace(1, 10, 100)
@@ -92,7 +91,6 @@ def linint2pts_test():
             'lon': xi,
         },
         dims=['time', 'alt', 'lat', 'lon'],
-
     ).chunk(chunks)
     #'''
 
@@ -101,6 +99,7 @@ def linint2pts_test():
         xo,
         yo,
     )
+
 
 if __name__ == '__main__':
     cluster = dd.LocalCluster(n_workers=8, threads_per_worker=1)
@@ -112,4 +111,3 @@ if __name__ == '__main__':
     t1 = time.time()
     print(t1 - t0)
     client.close()
-
