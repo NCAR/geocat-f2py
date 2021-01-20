@@ -1,9 +1,8 @@
 name: conda_build
-on:
-  repository_dispatch:
-    types: [ trigger_conda_build ]
+on: push
 jobs:
   conda_builds:
+    if: "contains(github.event.head_commit.message, 'trigger_conda_build')"
     name: conda_build_${{ matrix.python-version }}_${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     defaults:
@@ -17,11 +16,20 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.A_KOOTZ_GEOCAT_F2PY_TOKEN }}
       - name: conda_env
         uses: conda-incubator/setup-miniconda@v2
         with:
           activate-environment: build
           channels: conda-forge, ncar
-      - run: |
+      - name: conda_build
+        run: |
           conda install conda-build
           conda build .
+      - name: push
+          run: |
+            git config --global user.name 'GitHub Actions'
+            git config --global user.email 'noreply@github.com'
+            git commit --allow-empty -am "complete_conda_build"
+            git push
