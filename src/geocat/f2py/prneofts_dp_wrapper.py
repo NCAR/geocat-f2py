@@ -26,7 +26,8 @@ def _eofts7(x, evec, nobs, msta, msg_py, jopt):
     #return result
     return evects
 
-def eofts7(x, evec, nobs = None, msta = None, msg_py = None, jopt = None):
+
+def eofts7(x, evec, nobs=None, msta=None, msg_py=None, jopt=None):
     # This is not a parallizable task
 
     # handle optionals
@@ -35,7 +36,7 @@ def eofts7(x, evec, nobs = None, msta = None, msg_py = None, jopt = None):
     if msta is None:
         msta = x.shape[1]
     if jopt is None:
-        jopt = 0;
+        jopt = 0
 
     # return inner computation. No Dask call, as this is not parallelizable
     return _eofts7(x, evec, nobs, msta, msg_py, jopt)
