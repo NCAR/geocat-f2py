@@ -9,7 +9,6 @@ jobs:
         token: ${{ secrets.A_KOOTZ_GEOCAT_F2PY_TOKEN }}
         repository: ${{ github.repository }}
         event-type: trigger_conda_build
-        client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
   yapf:
     if: "!contains(github.event.head_commit.message, 'no trigger')"
     runs-on: ubuntu-latest
@@ -19,4 +18,3 @@ jobs:
         token: ${{ secrets.A_KOOTZ_GEOCAT_F2PY_TOKEN }}
         repository: ${{ github.repository }}
         event-type: trigger_yapf
-        client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'

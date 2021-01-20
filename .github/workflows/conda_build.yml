@@ -17,8 +17,6 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
-          with:
-            ref: ${{ github.event.client_payload.sha }}
       - name: conda_env
         uses: conda-incubator/setup-miniconda@v2
           with:
