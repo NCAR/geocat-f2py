@@ -1,0 +1,30 @@
+name: yapf
+on: 
+  push:
+    branches-ignore:
+      - main
+jobs:
+  yapf_formatting:
+    if: "!contains(github.event.head_commit.message, 'skip yapf')"
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: yapf
+        run: |
+          pip3 install yapf
+          python3 -m yapf --in-place --recursive --style google .
+      - name: push
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'noreply@github.com'
+          git commit --allow-empty -am "yapf google style formatting, skip yapf"
+          git push
+      - name: trigger_conda_build
+        if: success()
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.A_KOOTZ_GEOCAT_F2PY_TOKEN }}
+          repository: ${{ github.repository }}
+          event-type: trigger_conda_build
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'

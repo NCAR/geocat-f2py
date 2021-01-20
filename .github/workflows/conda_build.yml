@@ -1,0 +1,29 @@
+name: conda_build
+on:
+  repository_dispatch:
+    types: [ trigger_conda_build ]
+jobs:
+  conda_builds:
+    name: conda_build_${{ matrix.python-version }}_${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash -l {0}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ "ubuntu-latest", "macos-latest", "windows-latest" ]
+        python-version: [ "3.6", "3.7", "3.8", "3.9" ]
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+          with:
+            ref: ${{ github.event.client_payload.sha }}
+      - name: conda_env
+        uses: conda-incubator/setup-miniconda@v2
+          with:
+            activate-environment: build
+              channels: conda-forge, ncar\
+        - run: |
+            conda install conda-build
+            conda build .
