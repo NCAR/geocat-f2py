@@ -3,18 +3,20 @@ on: push
 jobs:
   conda_build:
     runs-on: ubuntu-latest
-    - name: trigger_conda_build
-      uses: peter-evans/repository-dispatch@v1
-      with:
-        token: ${{ secrets.A_KOOTZ_GEOCAT_F2PY_TOKEN }}
-        repository: ${{ github.repository }}
-        event-type: trigger_conda_build
+    steps:
+      - name: trigger_conda_build
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.A_KOOTZ_GEOCAT_F2PY_TOKEN }}
+          repository: ${{ github.repository }}
+          event-type: trigger_conda_build
   yapf:
     if: "!contains(github.event.head_commit.message, 'no trigger')"
     runs-on: ubuntu-latest
-    - name: trigger_yapf
-      uses: peter-evans/repository-dispatch@v1
-      with:
-        token: ${{ secrets.A_KOOTZ_GEOCAT_F2PY_TOKEN }}
-        repository: ${{ github.repository }}
-        event-type: trigger_yapf
+    steps:
+      - name: trigger_yapf
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.A_KOOTZ_GEOCAT_F2PY_TOKEN }}
+          repository: ${{ github.repository }}
+          event-type: trigger_yapf

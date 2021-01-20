@@ -21,7 +21,7 @@ jobs:
         uses: conda-incubator/setup-miniconda@v2
           with:
             activate-environment: build
-              channels: conda-forge, ncar\
+            channels: conda-forge, ncar
         - run: |
             conda install conda-build
             conda build .
