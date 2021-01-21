@@ -6,7 +6,6 @@ from .fortran import (drcm2rgrid, drgrid2rcm)
 from .errors import (ChunkError, CoordinateError)
 from .missing_values import (fort2py_msg, py2fort_msg)
 
-
 # Dask Wrappers _<funcname>()
 # These Wrapper are executed within dask processes, and should do anything that
 # can benefit from parallel excution.
@@ -14,15 +13,15 @@ from .missing_values import (fort2py_msg, py2fort_msg)
 
 def _rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg_py, shape):
 
-    fi = np.transpose(fi, axes=(2,1,0))
-    lat2d = np.transpose(lat2d, axes=(1,0))
-    lon2d = np.transpose(lon2d, axes=(1,0))
+    fi = np.transpose(fi, axes=(2, 1, 0))
+    lat2d = np.transpose(lat2d, axes=(1, 0))
+    lon2d = np.transpose(lon2d, axes=(1, 0))
 
     fi, msg_py, msg_fort = py2fort_msg(fi, msg_py=msg_py)
 
     fo = drcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, xmsg=msg_fort)
     fo = np.asarray(fo)
-    fo = np.transpose(fo, axes=(2,1,0))
+    fo = np.transpose(fo, axes=(2, 1, 0))
 
     fort2py_msg(fo, msg_fort=msg_fort, msg_py=msg_py)
 
@@ -31,15 +30,15 @@ def _rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg_py, shape):
 
 def _rgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, msg_py, shape):
 
-    fi = np.transpose(fi, axes=(2,1,0))
-    lat2d = np.transpose(lat2d, axes=(1,0))
-    lon2d = np.transpose(lon2d, axes=(1,0))
+    fi = np.transpose(fi, axes=(2, 1, 0))
+    lat2d = np.transpose(lat2d, axes=(1, 0))
+    lon2d = np.transpose(lon2d, axes=(1, 0))
 
     fi, msg_py, msg_fort = py2fort_msg(fi, msg_py=msg_py)
 
     fo = drgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, xmsg=msg_fort)
     fo = np.asarray(fo)
-    fo = np.transpose(fo, axes=(2,1,0))
+    fo = np.transpose(fo, axes=(2, 1, 0))
 
     fort2py_msg(fo, msg_fort=msg_fort, msg_py=msg_py)
 
@@ -60,10 +59,9 @@ def rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg_py=None):
     # ''' Start of boilerplate
     if not isinstance(fi, xr.DataArray):
 
-        fi = xr.DataArray(
-            fi,
-        )
-        fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))])
+        fi = xr.DataArray(fi,)
+        fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
+                        ])
 
         fi = xr.DataArray(
             fi.data,
@@ -84,8 +82,14 @@ def rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg_py=None):
 
     # fi data structure elements and autochunking
     fi_chunks = list(fi.dims)
-    fi_chunks[:-2] = [(k, 1) for (k, v) in zip(list(fi.dims)[:-2], list(fi.chunks)[:-2])]
-    fi_chunks[-2:] = [(k, v[0]) for (k, v) in zip(list(fi.dims)[-2:], list(fi.chunks)[-2:])]
+    fi_chunks[:-2] = [
+        (k, 1) for (k, v) in zip(list(fi.dims)[:-2],
+                                 list(fi.chunks)[:-2])
+    ]
+    fi_chunks[-2:] = [
+        (k, v[0]) for (k, v) in zip(list(fi.dims)[-2:],
+                                    list(fi.chunks)[-2:])
+    ]
     fi_chunks = dict(fi_chunks)
     fi = fi.chunk(fi_chunks)
 
@@ -94,13 +98,10 @@ def rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg_py=None):
     fo_chunks[-2:] = (lat1d.shape, lon1d.shape)
     fo_chunks = tuple(fo_chunks)
     fo_shape = tuple(a[0] for a in list(fo_chunks))
-    fo_coords = {
-        k: v for (k, v) in fi.coords.items()
-    }
+    fo_coords = {k: v for (k, v) in fi.coords.items()}
     fo_coords[fi.dims[-1]] = lon1d
     fo_coords[fi.dims[-2]] = lat1d
     # ''' end of boilerplate
-
 
     fo = map_blocks(
         _rcm2rgrid,
@@ -116,7 +117,10 @@ def rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg_py=None):
         drop_axis=[fi.ndim - 2, fi.ndim - 1],
         new_axis=[fi.ndim - 2, fi.ndim - 1],
     )
-    fo = xr.DataArray(fo.compute(), attrs=fi.attrs, dims=fi.dims, coords=fo_coords)
+    fo = xr.DataArray(fo.compute(),
+                      attrs=fi.attrs,
+                      dims=fi.dims,
+                      coords=fo_coords)
     return fo
 
 
@@ -126,12 +130,12 @@ def rgrid2rcm(lat1d, lon1d, fi, lat2d=None, lon2d=None, msg_py=None):
     if not isinstance(fi, xr.DataArray):
         if (lon1d is None) | (lat1d is None):
             raise CoordinateError(
-                "rgrid2rcm: Arguments lon1d and lat1d must be provided explicitly unless fi is an xarray.DataArray.")
+                "rgrid2rcm: Arguments lon1d and lat1d must be provided explicitly unless fi is an xarray.DataArray."
+            )
 
-        fi = xr.DataArray(
-            fi,
-        )
-        fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))])
+        fi = xr.DataArray(fi,)
+        fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
+                        ])
 
         fi = xr.DataArray(
             fi.data,
@@ -151,8 +155,14 @@ def rgrid2rcm(lat1d, lon1d, fi, lat2d=None, lon2d=None, msg_py=None):
 
     # fi data structure elements and autochunking
     fi_chunks = list(fi.dims)
-    fi_chunks[:-2] = [(k, 1) for (k, v) in zip(list(fi.dims)[:-2], list(fi.chunks)[:-2])]
-    fi_chunks[-2:] = [(k, v[0]) for (k, v) in zip(list(fi.dims)[-2:], list(fi.chunks)[-2:])]
+    fi_chunks[:-2] = [
+        (k, 1) for (k, v) in zip(list(fi.dims)[:-2],
+                                 list(fi.chunks)[:-2])
+    ]
+    fi_chunks[-2:] = [
+        (k, v[0]) for (k, v) in zip(list(fi.dims)[-2:],
+                                    list(fi.chunks)[-2:])
+    ]
     fi_chunks = dict(fi_chunks)
     fi = fi.chunk(fi_chunks)
 
@@ -161,9 +171,7 @@ def rgrid2rcm(lat1d, lon1d, fi, lat2d=None, lon2d=None, msg_py=None):
     fo_chunks[-2:] = [(lat2d.shape[0],), (lat2d.shape[1],)]
     fo_chunks = tuple(fo_chunks)
     fo_shape = tuple(a[0] for a in list(fo_chunks))
-    fo_coords = {
-        k: v for (k, v) in fi.coords.items()
-    }
+    fo_coords = {k: v for (k, v) in fi.coords.items()}
     # fo_coords[fi.dims[-1]] = lon2d
     # fo_coords[fi.dims[-2]] = lat2d
     # ''' end of boilerplate
@@ -182,5 +190,8 @@ def rgrid2rcm(lat1d, lon1d, fi, lat2d=None, lon2d=None, msg_py=None):
         drop_axis=[fi.ndim - 2, fi.ndim - 1],
         new_axis=[fi.ndim - 2, fi.ndim - 1],
     )
-    fo = xr.DataArray(fo.compute(), attrs=fi.attrs, dims=fi.dims, coords=fo_coords)
+    fo = xr.DataArray(fo.compute(),
+                      attrs=fi.attrs,
+                      dims=fi.dims,
+                      coords=fo_coords)
     return fo
