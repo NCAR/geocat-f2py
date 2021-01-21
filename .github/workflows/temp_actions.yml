@@ -1,10 +1,16 @@
-#name: dispatcher
-#on: push
-#jobs:
-#  yapf:
-#    if: "contains(github.event.head_commit.message, 'trigger_actions')"
-#    runs-on: ubuntu-latest
-#    steps:
+name: temp_actions
+on: push
+jobs:
+  yapf:
+    if: "contains(github.event.head_commit.message, 'trigger_temp_actions')"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - run: |
+          pwd
+          ls -la
 #      - name: checkout
 #        uses: actions/checkout@v2
 #        with:

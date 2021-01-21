@@ -3,7 +3,7 @@ on: push
 jobs:
   conda_builds:
     if: "contains(github.event.head_commit.message, 'complete_yapf')"
-    name: conda_build_${{ matrix.python-version }}_${{ matrix.os }}
+    name: build_test_${{ matrix.python-version }}_${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     defaults:
       run:
@@ -26,16 +26,8 @@ jobs:
           channels: conda-forge, ncar
       - name: build_test
         run: |
-          pwd
-          ls -la
-          conda env create --file build_envs/enviroment_$(uname).yml
+          conda env create --file build_envs/environment_$(uname).yml
           conda activate geocat_f2py_build
           source build.sh
           pip install .
           pytest
-#      - name: push
-#        run: |
-#          git config --global user.name 'GitHub Actions'
-#          git config --global user.email 'noreply@github.com'
-#          git commit --allow-empty -am "complete_conda_build"
-#          git push
