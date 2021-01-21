@@ -2,7 +2,7 @@ name: yapf
 on: push
 jobs:
   yapf_formatting:
-    if: "contains(github.event.head_commit.message, 'trigger_yapf')"
+    if: "contains(github.event.head_commit.message, 'trigger_yapf') || contains(github.event.head_commit.message, 'trigger_actions')"
     name: yapf_formatting
     runs-on: ubuntu-latest
     defaults:
