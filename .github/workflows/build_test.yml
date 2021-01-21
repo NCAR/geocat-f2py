@@ -26,6 +26,8 @@ jobs:
           channels: conda-forge, ncar
       - name: build_test
         run: |
+          pwd
+          ls -la
           conda env create --file build_envs/enviroment_$(uname).yml
           conda activate geocat_f2py_build
           source build.sh
