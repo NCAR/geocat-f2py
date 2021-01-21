@@ -2,7 +2,7 @@ name: build_test
 on: push
 jobs:
   conda_builds:
-    if: "contains(github.event.head_commit.message, 'complete_yapf')"
+    if: "contains(github.event.head_commit.message, 'complete_yapf') || contains(github.event.head_commit.message, 'trigger_build_test')"
     name: build_test_${{ matrix.python-version }}_${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     defaults:
