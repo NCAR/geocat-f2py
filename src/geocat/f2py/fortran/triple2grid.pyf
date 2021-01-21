@@ -3,29 +3,30 @@
 
 python module triple2grid ! in 
     interface  ! in :triple2grid
+        ! signature: grid = triple2grid1(xi,yi,zi,gx,gy,[zmsg,domain,method,distmx])
         subroutine triple2grid1(kz,xi,yi,zi,zmsg,mx,ny,gx,gy,grid,domain,loop,method,distmx,mx2,ny2,x,y,z,gbigx,gbigy,gbigxy,ier) ! in :triple2grid:triple2grid.f
-            integer,            check(len(xi)>=kz), depend(xi),         intent(hide)    :: kz=len(xi)
+            integer,            depend(xi),                             intent(hide)    :: kz=len(xi)
             double precision,   dimension(kz),                          intent(in)      :: xi
             double precision,   dimension(kz),depend(kz),               intent(in)      :: yi
-            double precision,   dimension(kz),depend(kz),               intent(in)      :: zi
+            double precision,   dimension(kz),                          intent(in)      :: zi
             double precision,   optional,                               intent(in)      :: zmsg
             integer,            check(len(gx)>=mx), depend(gx),         intent(hide)    :: mx=len(gx)
             integer,            check(len(gy)>=ny), depend(gy),         intent(hide)    :: ny=len(gy)
             double precision,   dimension(mx),                          intent(in)      :: gx
             double precision,   dimension(ny),                          intent(in)      :: gy
-            double precision,   dimension(mx,ny), depend(mx,ny),        intent(out)     :: grid
+            double precision,   dimension(mx,ny), depend(mx,ny),        intent(out)     :: grid(mx,ny)
             double precision,   optional,                               intent(in)      :: domain=1.0
-            integer,            optional,                               intent(in)      :: loop=0
+            integer,                                                    intent(hide)    :: loop=0
             integer,            optional,                               intent(in)      :: method=1
             double precision,   optional,                               intent(in)      :: distmx=0.0
-            integer,            check(len(gbigx)>=mx2), depend(gbigx),  intent(hide)    :: mx2=len(gbigx)
-            integer,            check(len(gbigy)>=ny2), depend(gbigy),  intent(hide)    :: ny2=len(gbigy)
-            double precision,   dimension(kz), depend(kz),              intent(in)      :: x
-            double precision,   dimension(kz), depend(kz),              intent(in)      :: y
-            double precision,   dimension(kz), depend(kz),              intent(in)      :: z
-            double precision,   dimension(mx2),                         intent(in)      :: gbigx
-            double precision,   dimension(ny2),                         intent(in)      :: gbigy
-            double precision,   dimension(mx2,ny2),depend(mx2,ny2),     intent(in)      :: gbigxy
+            integer,            depend(gx),                             intent(hide)    :: mx2=mx+2
+            integer,            depend(gy),                             intent(hide)    :: ny2=ny+2
+            double precision,   dimension(kz), depend(kz),              intent(hide)    :: x(kz)
+            double precision,   dimension(kz), depend(kz),              intent(hide)    :: y(kz)
+            double precision,   dimension(kz), depend(kz),              intent(hide)    :: z(kz)
+            double precision,   dimension(mx2),                         intent(hide)    :: gbigx(mx2)
+            double precision,   dimension(ny2),                         intent(hide)    :: gbigy(mx2)
+            double precision,   dimension(mx2,ny2),depend(mx2,ny2),     intent(hide)    :: gbigxy(mx2,ny2)
             integer,            optional,                               intent(hide)    :: ier
         end subroutine triple2grid1
 

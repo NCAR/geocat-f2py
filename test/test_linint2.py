@@ -298,7 +298,3 @@ class Test_linint2_non_contiguous(ut.TestCase):
         np.testing.assert_array_equal(fi[:, :, ::-1, :].values,
                                       fo[..., ::2, ::2].values)
 
-    a = Test_linint2_int32()
-    a.test_linint2_int32()
-    b = Test_linint2_int64()
-    b.test_linint2_int64()

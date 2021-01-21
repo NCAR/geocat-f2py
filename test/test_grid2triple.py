@@ -1,9 +1,6 @@
 import numpy as np
-import xarray as xr
 import geocat.f2py
 
-import sys
-import time
 import unittest as ut
 
 
@@ -33,8 +30,7 @@ out_expected = np.asarray([1, 3, 5, 1, 3, 5, 2, 2, 2, 4, 4, 4, 2.740655, 2.74584
 out_expected_msg = np.asarray([1, 5, 1, 3, 2, 2, 4, 4, 2.740655, 4.893587, 2.965059, 1.707929])\
                     .reshape((3, 4))
 
-# TODO: These unit tests are way less than a minimum required number for a reasonable
-# TODO: coverage and will need to be revisited before or after geocat.ncomp deprecation.
+
 class Test_grid_to_triple_float64(ut.TestCase):
 
     def test_grid_to_triple_float64(self):
@@ -84,6 +80,3 @@ class Test_grid_to_triple_float32(ut.TestCase):
                                      y.astype(np.float32),
                                      msg_py=-99)
         np.testing.assert_array_equal(out_expected_msg.astype(np.float32), out)
-
-# a = Test_grid_to_triple_float32()
-# a.test_grid_to_triple_float32_msg()
