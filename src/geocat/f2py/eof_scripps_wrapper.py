@@ -3,8 +3,8 @@ import xarray as xr
 from dask.array.core import map_blocks
 import time
 
-from .fortran import (deof11)
-from .missing_values import (fort2py_msg, py2fort_msg)
+from geocat.f2py.fortran import (deof11)
+from geocat.f2py.missing_values import (fort2py_msg, py2fort_msg)
 
 # Dask Wrappers _<funcname>()
 # These Wrapper are executed within dask processes, and should do anything that
@@ -35,13 +35,13 @@ def eof11(d, nmodes, icovcor=0, msg_py=None):
     return _eof11(d, nmodes, icovcor, msg_py)
 
 
-# def eof_test():
-#     d = np.random.random((1000,10000))
-#     nmodes = 10
-#     print(eof11(d, nmodes))
+def eof_test():
+    d = np.random.random((1000,1000))
+    nmodes = 10
+    print(eof11(d, nmodes))
 
-# start = time.time()
-# eof_test()
-# end = time.time()
-# print(end-start)
+start = time.time()
+eof_test()
+end = time.time()
+print(end-start)
 
