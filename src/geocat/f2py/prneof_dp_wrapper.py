@@ -1,9 +1,10 @@
 import numpy as np
 import xarray as xr
+import time
 from dask.array.core import map_blocks
 
-from .fortran import (ddrveof)
-from .missing_values import (fort2py_msg, py2fort_msg)
+from geocat.f2py.fortran import (ddrveof)
+from geocat.f2py.missing_values import (fort2py_msg, py2fort_msg)
 
 # Dask Wrappers _<funcname>()
 # These Wrapper are executed within dask processes, and should do anything that
@@ -39,3 +40,12 @@ def drveof(x, nobs=None, msta=None, msg_py=None, neval=None, jopt=None):
 
     # return inner computation. No Dask call, as this is not parallelizable
     return _drveof(x, nobs, msta, msg_py, neval, jopt)
+
+def drveof_test():
+    x = np.random.random((1000,1000))
+    print(drveof(x))
+
+start = time.time()
+drveof_test()
+end = time.time()
+print(end-start)

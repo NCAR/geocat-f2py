@@ -1,9 +1,10 @@
 import numpy as np
 import xarray as xr
+import time
 from dask.array.core import map_blocks
 
-from .fortran import xrveoft as dxrveoft #renaming slightly to avoid collision later on
-from .missing_values import (fort2py_msg, py2fort_msg)
+from geocat.f2py.fortran import xrveoft as dxrveoft #renaming slightly to avoid collision later on
+from geocat.f2py.missing_values import (fort2py_msg, py2fort_msg)
 
 # Dask Wrappers _<funcname>()
 # These Wrapper are executed within dask processes, and should do anything that
@@ -40,3 +41,12 @@ def xrveoft(xdata, nrobs=None, ncsta=None, msg_py=None, neval=None,  jopt=None):
 
     # return inner computation. No Dask call, as this is not parallelizable
     return _xrveoft(xdata, nrobs, ncsta, msg_py, jopt)
+
+def xrveoft_test():
+    x = np.random.random((1000,1000))
+    print(xrveoft(x))
+
+start = time.time()
+xrveoft_test()
+end = time.time()
+print(end-start)
