@@ -1,5 +1,6 @@
 import numpy as np
 import xarray as xr
+import warnings
 from dask.array.core import map_blocks
 
 from .fortran import grid2triple as grid2triple_fort
@@ -437,9 +438,13 @@ def triple_to_grid_2d(x_in, y_in, data, x_out, y_out, msg_py):
 # Transparent wrappers for geocat.ncomp backwards compatibility
 
 def grid2triple(x_in, y_in, data, msg_py):
+    warnings.warn("WARNING grid_to_triple: `grid2triple` function name and signature deprecated but still " \
+                  "supported for backward compatibility purposes. Please use `grid_to_triple` in the future!")
 
     return grid_to_triple(data, x_in, y_in, msg_py)
 
 def triple2grid(x_in, y_in, data, x_out, y_out, **kwargs):
+    warnings.warn("WARNING triple_to_grid: `triple2grid` function name and signature deprecated but still " \
+                  "supported for backward compatibility purposes. Please use `triple_to_grid` in the future!")
 
     return triple_to_grid(data, x_in, y_in, x_out, y_out, **kwargs)
