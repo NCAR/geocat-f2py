@@ -18,7 +18,7 @@ python module triple2grid ! in
             double precision,   optional,                               intent(in)      :: domain=1.0
             integer,                                                    intent(hide)    :: loop=0
             integer,            optional,                               intent(in)      :: method=1
-            double precision,   optional,                               intent(in)      :: distmx=0.0
+            double precision,   optional,                               intent(in)      :: distmx=1D20
             integer,            depend(gx),                             intent(hide)    :: mx2=mx+2
             integer,            depend(gy),                             intent(hide)    :: ny2=ny+2
             double precision,   dimension(kz), depend(kz),              intent(hide)    :: x(kz)

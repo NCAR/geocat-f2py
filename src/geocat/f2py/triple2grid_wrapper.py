@@ -2,7 +2,6 @@ import numpy as np
 import xarray as xr
 from dask.array.core import map_blocks
 
-# from .fortran import (grid2triple)
 from .fortran import grid2triple as grid2triple_fort
 from .fortran import (triple2grid1)
 
@@ -54,10 +53,12 @@ def _triple_to_grid(data, x_in, y_in, x_out, y_out, shape, method=None, distmx=N
     fort2py_msg(data, msg_fort=msg_fort, msg_py=msg_py)
     fort2py_msg(grid, msg_fort=msg_fort, msg_py=msg_py)
 
+    print(grid)
+
     return grid
 
 
-# TODO: Revisit after deprecating geocat.ncomp for implementing this
+# TODO: Revisit for implementing this function after deprecating geocat.ncomp
 def _triple_to_grid_2d(x_in, y_in, data, x_out, y_out, msg_py):
     # ''' signature:  grid = _triple2grid(x_in, y_in,data,x_out,y_out,msg_py)
     pass
@@ -107,7 +108,7 @@ def grid_to_triple(data, x_in=None, y_in=None, msg_py=None):
 
             Examples:
 
-                Example 1: Using grid2triple with :class:`xarray.DataArray` input
+                Example 1: Using grid_to_triple with :class:`xarray.DataArray` input
 
                 .. code-block:: python
 
@@ -123,7 +124,7 @@ def grid_to_triple(data, x_in=None, y_in=None, msg_py=None):
                     x_in = ds.gridlat_236[:]
                     y_in = ds.gridlon_236[:]
 
-                    output = geocat.comp.grid2triple(data, x_in, y_in)
+                    output = geocat.comp.grid_to_triple(data, x_in, y_in)
         """
 
     # TODO: Will need to be revisited after sanity_check work is finished
@@ -132,7 +133,7 @@ def grid_to_triple(data, x_in=None, y_in=None, msg_py=None):
     if not isinstance(data, xr.DataArray):
         if (x_in is None) | (y_in is None):
             raise CoordinateError(
-                "ERROR grid2triple: Argument `x_in` and `y_in` must be provided explicitly "
+                "ERROR grid_to_triple: Argument `x_in` and `y_in` must be provided explicitly "
                 "unless `data` is an xarray.DataArray.")
 
         data = xr.DataArray(
@@ -154,22 +155,22 @@ def grid_to_triple(data, x_in=None, y_in=None, msg_py=None):
     # Basic sanity checks
     if data.ndim != 2:
         raise DimensionError(
-            "ERROR grid2triple: `z` must have two dimensions !\n")
+            "ERROR grid_to_triple: `z` must have two dimensions !\n")
 
     if x_in.ndim != 1:
         raise DimensionError(
-            "ERROR grid2triple: `x_in` must have one dimension !\n")
+            "ERROR grid_to_triple: `x_in` must have one dimension !\n")
     elif x_in.shape[0] != data.shape[1]:
         raise DimensionError(
-            "ERROR grid2triple: `x_in` must have the same size (call it `mx`) as the "
+            "ERROR grid_to_triple: `x_in` must have the same size (call it `mx`) as the "
             "right dimension of z. !\n")
 
     if y_in.ndim != 1:
         raise DimensionError(
-            "ERROR grid2triple: `y_in` must have one dimension !\n")
+            "ERROR grid_to_triple: `y_in` must have one dimension !\n")
     elif y_in.shape[0] != data.shape[0]:
         raise DimensionError(
-            "ERROR grid2triple: `y_in` must have the same size (call it `ny`) as the left dimension of z. !\n")
+            "ERROR grid_to_triple: `y_in` must have the same size (call it `ny`) as the left dimension of z. !\n")
     # ''' end of boilerplate
 
     out = _grid_to_triple(x_in.data, y_in.data, data.data, msg_py)
@@ -188,61 +189,68 @@ def triple_to_grid(data, x_in, y_in, x_out, y_out, **kwargs):
 
             data (:class:`xarray.DataArray`: or :class:`numpy.ndarray`):
                     A multi-dimensional array, whose rightmost dimension is the same
-                    length as `x_in` and `y_in`, containing the values associated with the `x`
-                    and `y` coordinates. Missing values, may be present but will be ignored.
+                    length as `x_in` and `y_in`, containing the values associated with 
+                    the "x" and "y" coordinates. Missing values may be present but 
+                    will be ignored.
 
             x_in (:class:`xarray.DataArray`: or :class:`numpy.ndarray`):
                     One-dimensional arrays of the same length containing the coordinates
-                    associated with the data values. For geophysical variables, x
+                    associated with the data values. For geophysical variables, "x"
                     correspond to longitude.
 
             y_in (:class:`xarray.DataArray`: or :class:`numpy.ndarray`):
                     One-dimensional arrays of the same length containing the coordinates
-                    associated with the data values. For geophysical variables, y
+                    associated with the data values. For geophysical variables, "y"
                     correspond to latitude.
 
             x_out (:class:`xarray.DataArray`: or :class:`numpy.ndarray`):
-                    A one-dimensional array of length M containing the `x` coordinates
-                    associated with the returned two-dimensional grid. For geophysical
-                    variables, these are longitudes. The coordinates' values must be
+                    A one-dimensional array of length M containing the "x" coordinates
+                    associated with the returned two-grid. For geophysical variables, 
+                    these are longitudes. The coordinates' values must be
                     monotonically increasing.
 
             y_out (:class:`xarray.DataArray`: or :class:`numpy.ndarray`):
-                    A one-dimensional array of length N containing the `y` coordinates
-                    associated with the returned two-dimensional grid. For geophysical
-                    variables, these are latitudes. The coordinates' values must be
+                    A one-dimensional array of length N containing the "y" coordinates
+                    associated with the returned grid. For geophysical variables, 
+                    these are latitudes. The coordinates' values must be
                     monotonically increasing.
 
             **kwargs:
                 extra options for the function. Currently the following are supported:
-                - ``method``: An integer value that defaults to 1 if option is True,
-                              and 0 otherwise. A value of 1 means to use the great
-                              circle distance formula for distance calculations.
+                - ``method``: An integer value that can be 0 or 1. The default value is 1. 
+                              A value of 1 means to use the great circle distance formula 
+                              for distance calculations.
+                              Warning: `method` = 0, together with `domain` = 1.0, could 
+                              result in many of the target grid points to be set to the 
+                              missing value if the number of grid points is large (ie: a 
+                              high resolution grid) and the number of observations 
+                              relatively small.
                 - ``domain``: A float value that should be set to a value >= 0. The
-                              default is 1.0. If present, the larger this factor the
-                              wider the spatial domain allowed to influence grid boundary
+                              default value is 1.0. If present, the larger this factor, 
+                              the wider the spatial domain allowed to influence grid boundary
                               points. Typically, `domain` is 1.0 or 2.0. If `domain` <= 0.0,
                               then values located outside the grid domain specified by
                               `x_out` and `y_out` arguments will not be used.
-                - ``distmx``: Setting option@distmx allows the user to specify a search
+                - ``distmx``: Setting `distmx` allows the user to specify a search
                               radius (km) beyond which observations are not considered
                               for nearest neighbor. Only applicable when `method` = 1.
                               The default `distmx`=1e20 (km) means that every grid point
                               will have a nearest neighbor. It is suggested that users
-                              specify some reasonable value for distmx.
+                              specify a reasonable value for `distmx`.
                 - ``msg`` (:obj:`numpy.number`): A numpy scalar value that represent
-                              a missing value in `data`. This argument allows a user to
-                              use a missing value scheme other than NaN or masked arrays,
-                              similar to what NCL allows.
+                              a missing value in `data`. The default value is `np.nan`. 
+                              If specified explicitly, this argument allows the user to
+                              use a missing value scheme other than NaN or masked arrays.
                 - ``meta`` (:obj:`bool`): If set to True and the input array is an Xarray,
                               the metadata from the input array will be copied to the
                               output array; default is False.
-                              Warning: this option is not currently supported.
+                              Warning: This option is not yet supported for this function.
 
         Returns:
-            :class:`xarray.DataArray`: The return array will be K x N x M, where K
-                represents the leftmost dimensions of data. It will be of type double if
-                any of the input is double, and float otherwise.
+            :class:`xarray.DataArray`: The returned array will be K x N x M, where K
+                represents the leftmost dimensions of `data`, N represent the size of `y_out`,
+                and M represent the size of `x_out` coordinate vectors. It will be of type 
+                double if any of the input is double, and float otherwise.
 
         Description:
             This function puts unstructured data (randomly-spaced) onto the nearest
@@ -282,6 +290,8 @@ def triple_to_grid(data, x_in, y_in, x_out, y_out, **kwargs):
 
     	    output = geocat.comp.triple_to_grid(data, x_out, y_out, x_in, y_in)
         """
+
+    # TODO: May need to be revisited after sanity_check work is finished
 
     if (x_in is None) | (y_in is None):
         raise CoordinateError(
@@ -325,10 +335,10 @@ def triple_to_grid(data, x_in, y_in, x_out, y_out, **kwargs):
             "ERROR triple_to_grid: `x_out` and `y_out` arguments must be one-dimensional array !\n"
         )
 
-    # Parse the options from kwargs
-    input_method = None
-    input_distmx = None
-    input_domain = None
+    # Parse the options from kwargs, first initializing with default values
+    input_method = 1
+    input_distmx = float(1e20)
+    input_domain = float(1.0)
 
     if "method" in kwargs:
         if not isinstance(kwargs["method"], int):
@@ -342,13 +352,15 @@ def triple_to_grid(data, x_in, y_in, x_out, y_out, **kwargs):
             raise TypeError(
                 'ERROR triple_to_grid: `method` arg accepts either 0 or 1.')
 
-        # `distmx` is only applicable when `method`==1
+    # `distmx` is only applicable when `method`==1
+    if "distmx" in kwargs:
         if input_method:
-            if "distmx" in kwargs:
-                input_distmx = kwargs["distmx"]
+            input_distmx = kwargs["distmx"]
 
-                if np.asarray(input_distmx).size != 1:
-                    raise ValueError("ERROR triple_to_grid: Provide a scalar value for `distmx` !")
+            if np.asarray(input_distmx).size != 1:
+                raise ValueError("ERROR triple_to_grid: Provide a scalar value for `distmx` !")
+        else:
+            raise ValueError("ERROR triple_to_grid: `distmx` is only applicable when `method`==1 !")
 
     if "domain" in kwargs:
         input_domain = kwargs["domain"]
@@ -405,7 +417,7 @@ def triple_to_grid(data, x_in, y_in, x_out, y_out, **kwargs):
     if meta:
         # grid = xr.DataArray(grid.compute(), attrs=data.attrs, dims=data.dims, coords=grid_coords)
         import warnings
-        warnings.warn("WARNING triple2grid: Retention of metadata is not yet supported; "
+        warnings.warn("WARNING triple_to_grid: Retention of metadata is not yet supported; "
                       "it will thus be ignored in the output!")
     # else:
     #     grid = xr.DataArray(grid.compute(), coords=grid_coords)
@@ -415,7 +427,7 @@ def triple_to_grid(data, x_in, y_in, x_out, y_out, **kwargs):
     return grid
 
 
-# TODO: Revisit after deprecating geocat.ncomp for implementing this
+# TODO: Revisit for implementing this function after deprecating geocat.ncomp
 def triple_to_grid_2d(x_in, y_in, data, x_out, y_out, msg_py):
     # ''' signature:  grid = triple2grid2d(x,y,data,x_out,y_out,msg_py)
     pass
@@ -423,6 +435,11 @@ def triple_to_grid_2d(x_in, y_in, data, x_out, y_out, msg_py):
 
 
 # Transparent wrappers for geocat.ncomp backwards compatibility
-def grid2triple(x, y, z, msg=None, meta=False):
 
-    return grid_to_triple(z, x, y, msg)
+def grid2triple(x_in, y_in, data, msg_py):
+
+    return grid_to_triple(data, x_in, y_in, msg_py)
+
+def triple2grid(x_in, y_in, data, x_out, y_out, **kwargs):
+
+    return triple_to_grid(data, x_in, y_in, x_out, y_out, **kwargs)
