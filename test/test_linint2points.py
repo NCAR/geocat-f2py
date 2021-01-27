@@ -79,9 +79,9 @@ class BaseTestClass(metaclass=ABCMeta):
     groundtruth_msg_99[np.isnan(groundtruth_msg_99)] = _fi_np_msg_99[0, 0, 0, 0]
 
 
-class Test_linint2points_numpy(ut.TestCase, BaseTestClass):
+class Test_linint2pts_numpy(ut.TestCase, BaseTestClass):
 
-    def test_linint2points_fi_np(self):
+    def test_linint2pts_fi_np(self):
         fo = geocat.f2py.linint2pts(self._fi_np,
                                      self._xo,
                                      self._yo,
@@ -110,11 +110,11 @@ class Test_linint2points_numpy(ut.TestCase, BaseTestClass):
         # Compare the function-generated fo array to NCL ground-truth up to 5 decimal points
         np.testing.assert_almost_equal(self._ncl_truth, fo_vals, decimal=5)
 
-    def test_linint2points_fi_np_no_xi_yi(self):
+    def test_linint2pts_fi_np_no_xi_yi(self):
         with self.assertRaises(geocat.f2py.CoordinateError):
             fo = geocat.f2py.linint2pts(self._fi_np, self._xo, self._yo, 0)
 
-    def test_linint2points_fi_np_no_yi(self):
+    def test_linint2pts_fi_np_no_yi(self):
         with self.assertRaises(geocat.f2py.CoordinateError):
             fo = geocat.f2py.linint2pts(self._fi_np,
                                              self._xo,
@@ -122,7 +122,7 @@ class Test_linint2points_numpy(ut.TestCase, BaseTestClass):
                                              0,
                                              xi=self._xi)
 
-    def test_linint2points_fi_np_no_xi(self):
+    def test_linint2pts_fi_np_no_xi(self):
         with self.assertRaises(geocat.f2py.CoordinateError):
             fo = geocat.f2py.linint2pts(self._fi_np,
                                              self._xo,
@@ -131,9 +131,9 @@ class Test_linint2points_numpy(ut.TestCase, BaseTestClass):
                                              yi=self._yi)
 
 
-class Test_linint2points_non_monotonic(ut.TestCase, BaseTestClass):
+class Test_linint2pts_non_monotonic(ut.TestCase, BaseTestClass):
 
-    def test_linint2points_non_monotonic_xr(self):
+    def test_linint2pts_non_monotonic_xr(self):
         fi = xr.DataArray(self._fi_np[:, :, ::-1, :],
                           dims=['time', 'level', 'lat', 'lon'],
                           coords={
@@ -145,7 +145,7 @@ class Test_linint2points_non_monotonic(ut.TestCase, BaseTestClass):
         with self.assertWarns(Warning):
             geocat.f2py.linint2pts(fi, self._xo, self._yo, 0).compute()
 
-    def test_linint2points_non_monotonic_np(self):
+    def test_linint2pts_non_monotonic_np(self):
         import warnings
         with self.assertWarns(Warning):
             geocat.f2py.linint2pts(self._fi_np[:, :, ::-1, :],
@@ -156,9 +156,9 @@ class Test_linint2points_non_monotonic(ut.TestCase, BaseTestClass):
                                         yi=self._yi_reverse)
 
 
-class Test_linint2points_float64(ut.TestCase, BaseTestClass):
+class Test_linint2pts_float64(ut.TestCase, BaseTestClass):
 
-    def test_linint2points(self):
+    def test_linint2pts(self):
         fi = xr.DataArray(self._fi_np,
                           dims=['time', 'level', 'lat', 'lon'],
                           coords={
@@ -181,7 +181,7 @@ class Test_linint2points_float64(ut.TestCase, BaseTestClass):
         # Compare the function-generated fo array to NCL ground-truth up to 5 decimal points
         np.testing.assert_almost_equal(self._ncl_truth, fo_vals, decimal=5)
 
-    def test_linint2points_msg_nan(self):
+    def test_linint2pts_msg_nan(self):
         # fi_msg_nan = xr.DataArray(self._fi_np_msg_nan, dims=['time', 'level', 'lat', 'lon'], coords={'lat': self._yi, 'lon': self._xi}).chunk(self._chunks)
         fi_msg_nan = xr.DataArray(self._fi_np_msg_nan,
                                   dims=['time', 'level', 'lat', 'lon'],
@@ -211,7 +211,7 @@ class Test_linint2points_float64(ut.TestCase, BaseTestClass):
                                        fo_vals,
                                        decimal=5)
 
-    def test_linint2points_msg_99(self):
+    def test_linint2pts_msg_99(self):
         # fi_msg_99 = xr.DataArray(self._fi_np_msg_nan, dims=['time', 'level', 'lat', 'lon'], coords={'lat': self._yi, 'lon': self._xi}).chunk(self._chunks)
         fi_msg_99 = xr.DataArray(self._fi_np_msg_99,
                                  dims=['time', 'level', 'lat', 'lon'],
@@ -246,8 +246,8 @@ class Test_linint2points_float64(ut.TestCase, BaseTestClass):
 
 
 #
-class Test_linint2points_dask(ut.TestCase, BaseTestClass):
-    def test_linint2points_chunked_leftmost(self):
+class Test_linint2pts_dask(ut.TestCase, BaseTestClass):
+    def test_linint2pts_chunked_leftmost(self):
         # use 1 for time and level chunk sizes
         custom_chunks = {'time': 1, 'level': 1, 'lat': self._fi_np.shape[2], 'lon': self._fi_np.shape[3]}
         fi = xr.DataArray(self._fi_np, dims=['time', 'level', 'lat', 'lon'], coords={'lat': self._yi, 'lon': self._xi}).chunk(custom_chunks)
@@ -262,7 +262,7 @@ class Test_linint2points_dask(ut.TestCase, BaseTestClass):
         # Compare the function-generated fo array to NCL ground-truth up to 5 decimal points
         np.testing.assert_almost_equal(self._ncl_truth, fo_vals, decimal=5)
 
-    def test_linint2points_chunked_interp(self):
+    def test_linint2pts_chunked_interp(self):
         # use 1 for interpolated dimension chunk sizes -- this should throw a ChunkError
         wrong_chunks = {'time': 1, 'level': 1, 'lat': 1, 'lon': 1}
         fi = xr.DataArray(self._fi_np, dims=['time', 'level', 'lat', 'lon'], coords={'lat': self._yi, 'lon': self._xi}).chunk(wrong_chunks)
