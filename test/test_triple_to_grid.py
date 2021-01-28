@@ -92,11 +92,11 @@ out_expected_distmx_msg_99[np.isnan(out_expected_distmx_msg_99)] = -99
 class Test_triple_to_grid_float64(ut.TestCase):
 
     def test_triple_to_grid_float64(self):
-        out = geocat.f2py.triple_to_grid(data.copy(),
-                                         x_in.copy(),
-                                         y_in.copy(),
-                                         x_out.copy(),
-                                         y_out.copy())
+        out = geocat.f2py.triple_to_grid(data,
+                                         x_in,
+                                         y_in,
+                                         x_out,
+                                         y_out)
 
         np.testing.assert_array_equal(out_expected, out.values)
 
@@ -112,41 +112,41 @@ class Test_triple_to_grid_float64(ut.TestCase):
         np.testing.assert_array_equal(out_expected_method_0, out.values)
 
     def test_triple_to_grid_float64_distmx(self):
-        out = geocat.f2py.triple_to_grid(data.copy(),
-                                         x_in.copy(),
-                                         y_in.copy(),
-                                         x_out.copy(),
-                                         y_out.copy(),
+        out = geocat.f2py.triple_to_grid(data,
+                                         x_in,
+                                         y_in,
+                                         x_out,
+                                         y_out,
                                          distmx=distmx)
 
         np.testing.assert_array_equal(out_expected_distmx, out.values)
 
     def test_triple_to_grid_float64_msg_nan(self):
-        out = geocat.f2py.triple_to_grid(data_msg_nan.copy(),
-                                         x_in.copy(),
-                                         y_in.copy(),
-                                         x_out.copy(),
-                                         y_out.copy(),
+        out = geocat.f2py.triple_to_grid(data_msg_nan,
+                                         x_in,
+                                         y_in,
+                                         x_out,
+                                         y_out,
                                          msg=np.nan)
 
         np.testing.assert_array_equal(out_expected_msg_nan, out.values)
 
     def test_triple_to_grid_float64_msg_99(self):
-        out = geocat.f2py.triple_to_grid(data_msg_99.copy(),
-                                         x_in.copy(),
-                                         y_in.copy(),
-                                         x_out.copy(),
-                                         y_out.copy(),
+        out = geocat.f2py.triple_to_grid(data_msg_99,
+                                         x_in,
+                                         y_in,
+                                         x_out,
+                                         y_out,
                                          msg=-99)
 
         np.testing.assert_array_equal(out_expected_msg_99, out.values)
 
     def test_triple_to_grid_float64_distmx_msg_nan(self):
-        out = geocat.f2py.triple_to_grid(data_msg_nan.copy(),
-                                         x_in.copy(),
-                                         y_in.copy(),
-                                         x_out.copy(),
-                                         y_out.copy(),
+        out = geocat.f2py.triple_to_grid(data_msg_nan,
+                                         x_in,
+                                         y_in,
+                                         x_out,
+                                         y_out,
                                          msg=np.nan,
                                          distmx=distmx)
 
