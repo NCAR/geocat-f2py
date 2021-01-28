@@ -84,7 +84,7 @@ class Test_Moc_Globe_Atl(ut.TestCase):
                     xr.DataArray(tmp_a.astype(np.float64)),
                     xr.DataArray(tmp_a.astype(np.float64)),
                     xr.DataArray(t_lat),
-                    rmlak)
+                    xr.DataArray(rmlak))
 
         nt.assert_array_almost_equal(ncl_truth, out_arr)
         nt.assert_equal((3, 2, kdep, nyaux), out_arr.shape)
@@ -128,6 +128,3 @@ class Test_Moc_Globe_Atl(ut.TestCase):
 
         nt.assert_array_almost_equal(ncl_truth_msg, out_arr)
         nt.assert_equal((3, 2, kdep, nyaux), out_arr.shape)
-
-a = Test_Moc_Globe_Atl()
-a.test_moc_globe_atl_float64()
