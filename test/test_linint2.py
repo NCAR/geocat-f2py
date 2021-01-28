@@ -291,10 +291,10 @@ class Test_linint2_non_contiguous(ut.TestCase):
                               'lon': xi
                           }).chunk(chunks)
         fo = geocat.f2py.linint2(fi[:, :, ::-1, :].values,
-                                  xo,
-                                  yo,
-                                  xi=xi,
-                                  yi=yi_reverse[::-1])
+                                 xo,
+                                 yo,
+                                 xi=xi,
+                                 yi=yi_reverse[::-1])
         np.testing.assert_array_equal(fi[:, :, ::-1, :].values,
                                       fo[..., ::2, ::2].values)
 

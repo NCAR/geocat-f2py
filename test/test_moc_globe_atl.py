@@ -16,7 +16,8 @@ nlatmlon = nlat * mlon
 kdepnlatmlon = kdep * nlatmlon
 
 # Generate arbitrary data
-tmp_a = np.linspace(1,kdepnlatmlon,num=kdepnlatmlon).reshape((kdep, nlat, mlon))
+tmp_a = np.linspace(1, kdepnlatmlon, num=kdepnlatmlon).reshape(
+    (kdep, nlat, mlon))
 
 # nan input
 tmp_a_nan = tmp_a.copy()
@@ -64,13 +65,11 @@ class Test_Moc_Globe_Atl(ut.TestCase):
 
     def test_moc_globe_atl_float64(self):
 
-        out_arr = geocat.f2py.moc_globe_atl(
-                    lat_aux_grid,
-                    tmp_a.astype(np.float64),
-                    tmp_a.astype(np.float64),
-                    tmp_a.astype(np.float64),
-                    t_lat,
-                    rmlak)
+        out_arr = geocat.f2py.moc_globe_atl(lat_aux_grid,
+                                            tmp_a.astype(np.float64),
+                                            tmp_a.astype(np.float64),
+                                            tmp_a.astype(np.float64), t_lat,
+                                            rmlak)
 
         nt.assert_array_almost_equal(ncl_truth, out_arr)
         nt.assert_equal((3, 2, kdep, nyaux), out_arr.shape)
@@ -90,40 +89,48 @@ class Test_Moc_Globe_Atl(ut.TestCase):
 
     def test_moc_globe_atl_float32(self):
 
-        out_arr = geocat.f2py.moc_globe_atl(
-                    lat_aux_grid,
-                    tmp_a.astype(np.float32),
-                    tmp_a.astype(np.float32),
-                    tmp_a.astype(np.float32),
-                    t_lat,
-                    rmlak)
+        out_arr = geocat.f2py.moc_globe_atl(lat_aux_grid,
+                                            tmp_a.astype(np.float32),
+                                            tmp_a.astype(np.float32),
+                                            tmp_a.astype(np.float32), t_lat,
+                                            rmlak)
 
         nt.assert_array_almost_equal(ncl_truth, out_arr)
         nt.assert_equal((3, 2, kdep, nyaux), out_arr.shape)
 
     def test_moc_globe_atl_int64(self):
 
-        out_arr = geocat.f2py.moc_globe_atl(
-                    lat_aux_grid,
-                    tmp_a.astype(np.int64),
-                    tmp_a.astype(np.int64),
-                    tmp_a.astype(np.int64),
-                    t_lat,
-                    rmlak)
+        out_arr = geocat.f2py.moc_globe_atl(lat_aux_grid,
+                                            tmp_a.astype(np.int64),
+                                            tmp_a.astype(np.int64),
+                                            tmp_a.astype(np.int64), t_lat,
+                                            rmlak)
 
         nt.assert_array_almost_equal(ncl_truth, out_arr)
         nt.assert_equal((3, 2, kdep, nyaux), out_arr.shape)
 
     def test_moc_globe_atl_msg_99(self):
 
-        out_arr = geocat.f2py.moc_globe_atl(lat_aux_grid, tmp_a_msg, tmp_a_msg, tmp_a_msg, t_lat, rmlak, msg=-99)
+        out_arr = geocat.f2py.moc_globe_atl(lat_aux_grid,
+                                            tmp_a_msg,
+                                            tmp_a_msg,
+                                            tmp_a_msg,
+                                            t_lat,
+                                            rmlak,
+                                            msg=-99)
 
         nt.assert_array_almost_equal(ncl_truth_msg, out_arr)
         nt.assert_equal((3, 2, kdep, nyaux), out_arr.shape)
 
     def test_moc_globe_atl_msg_nan(self):
 
-        out_arr = geocat.f2py.moc_globe_atl(lat_aux_grid, tmp_a_nan, tmp_a_nan, tmp_a_nan, t_lat, rmlak, msg=np.nan)
+        out_arr = geocat.f2py.moc_globe_atl(lat_aux_grid,
+                                            tmp_a_nan,
+                                            tmp_a_nan,
+                                            tmp_a_nan,
+                                            t_lat,
+                                            rmlak,
+                                            msg=np.nan)
 
         nt.assert_array_almost_equal(ncl_truth_msg, out_arr)
         nt.assert_equal((3, 2, kdep, nyaux), out_arr.shape)
