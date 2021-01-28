@@ -1,5 +1,6 @@
 import unittest as ut
 import numpy as np
+import xarray as xr
 import numpy.testing as nt
 
 import geocat.f2py
@@ -75,8 +76,6 @@ class Test_Moc_Globe_Atl(ut.TestCase):
         nt.assert_equal((3, 2, kdep, nyaux), out_arr.shape)
 
     def test_moc_globe_atl_float64_xr(self):
-
-        import xarray as xr
 
         out_arr = geocat.f2py.moc_globe_atl(
                     xr.DataArray(lat_aux_grid),

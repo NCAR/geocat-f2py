@@ -82,14 +82,16 @@ def grid_to_triple(data, x_in=None, y_in=None, msg_py=None):
                 x_in (:class:`xarray.DataArray` or :class:`numpy.ndarray`):
                         Coordinates associated with the right dimension of the variable `data`.
                         If `data` is of type :class:`xarray.DataArray` and `x_in` is unspecified,
-                        then it comes from the associated coordinate of `data`. If `data` is of type
+                        then it comes as the associated coordinate of `data` (if `x_in` is explicitly
+                        given, then it will be used for calculations). If `data` is of type
                         :class:`numpy.ndarray`, then it must be explicitly given as input and it
                         must have the same dimension (call it `mx`) as the right dimension of `data`.
 
                 y_in (:class:`xarray.DataArray` or :class:`numpy.ndarray`):
                         Coordinates associated with the left dimension of the variable `data`.
                         If `data` is of type :class:`xarray.DataArray` and `y_in` is unspecified,
-                        then it comes from the associated coordinate of `data`. If `data` is of type
+                        then it comes as the associated coordinate of `data` (if `y_in` is explicitly
+                        given, then it will be used for calculations). If `data` is of type
                         :class:`numpy.ndarray`, then it must be explicitly given as input and it
                         must have the same dimension (call it `ny`) as the left dimension of `data`.
 
@@ -150,8 +152,10 @@ def grid_to_triple(data, x_in=None, y_in=None, msg_py=None):
             dims=data.dims,
         )
 
-    x_in = data.coords[data.dims[-1]]
-    y_in = data.coords[data.dims[-2]]
+    if(x_in is None):
+        x_in = data.coords[data.dims[-1]]
+    if(y_in is None):
+        y_in = data.coords[data.dims[-2]]
 
     # Basic sanity checks
     if data.ndim != 2:
