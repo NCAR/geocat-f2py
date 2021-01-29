@@ -28,5 +28,4 @@ jobs:
       - name: build_test
         run: |
           source build.sh
-          pip install .
           pytest
