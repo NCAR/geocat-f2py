@@ -444,7 +444,6 @@ def triple_to_grid_2d(x_in, y_in, data, x_out, y_out, msg_py):
     pass
 
 
-
 # Transparent wrappers for geocat.ncomp backwards compatibility
 
 def grid2triple(x_in, y_in, data, msg_py):
