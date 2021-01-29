@@ -9,14 +9,14 @@ from .fortran import (triple2grid1)
 from .errors import (ChunkError, CoordinateError, DimensionError)
 from .missing_values import (fort2py_msg, py2fort_msg)
 
-
 # Dask Wrappers or Internal Wrappers _<funcname>()
 # These Wrapper are executed within dask processes, and should do anything that
 # can benefit from parallel excution.
 
+
 def _grid_to_triple(x, y, z, msg_py):
     # Transpose z before Fortran function call
-    z = np.transpose(z, axes=(1,0))
+    z = np.transpose(z, axes=(1, 0))
 
     # Handle Python2Fortran missing value conversion
     z, msg_py, msg_fort = py2fort_msg(z, msg_py=msg_py)
@@ -39,12 +39,29 @@ def _grid_to_triple(x, y, z, msg_py):
     return out
 
 
-def _triple_to_grid(data, x_in, y_in, x_out, y_out, shape, method=None, distmx=None, domain=None, msg_py=None):
+def _triple_to_grid(data,
+                    x_in,
+                    y_in,
+                    x_out,
+                    y_out,
+                    shape,
+                    method=None,
+                    distmx=None,
+                    domain=None,
+                    msg_py=None):
     # Handle Python2Fortran missing value conversion
     data, msg_py, msg_fort = py2fort_msg(data, msg_py=msg_py)
 
     # Fortran function call
-    grid = triple2grid1(x_in, y_in, data, x_out, y_out, zmsg=msg_fort, domain=domain, method=method, distmx=distmx)
+    grid = triple2grid1(x_in,
+                        y_in,
+                        data,
+                        x_out,
+                        y_out,
+                        zmsg=msg_fort,
+                        domain=domain,
+                        method=method,
+                        distmx=distmx)
 
     # Reshape output to correct the dimensionality  before returning it to the outer wrapper
     grid = np.asarray(grid)
@@ -68,6 +85,7 @@ def _triple_to_grid_2d(x_in, y_in, data, x_out, y_out, msg_py):
 # Outer Wrappers <funcname>()
 # These Wrappers are excecuted in the __main__ python process, and should be
 # used for any tasks which would not benefit from parallel execution.
+
 
 def grid_to_triple(data, x_in=None, y_in=None, msg_py=None):
     """Converts a two-dimensional grid with one-dimensional coordinate variables
@@ -139,9 +157,7 @@ def grid_to_triple(data, x_in=None, y_in=None, msg_py=None):
                 "ERROR grid_to_triple: Argument `x_in` and `y_in` must be provided explicitly "
                 "unless `data` is an xarray.DataArray.")
 
-        data = xr.DataArray(
-            data,
-        )
+        data = xr.DataArray(data,)
 
         data = xr.DataArray(
             data.data,
@@ -152,9 +168,9 @@ def grid_to_triple(data, x_in=None, y_in=None, msg_py=None):
             dims=data.dims,
         )
 
-    if(x_in is None):
+    if (x_in is None):
         x_in = data.coords[data.dims[-1]]
-    if(y_in is None):
+    if (y_in is None):
         y_in = data.coords[data.dims[-2]]
 
     # Basic sanity checks
@@ -175,7 +191,8 @@ def grid_to_triple(data, x_in=None, y_in=None, msg_py=None):
             "ERROR grid_to_triple: `y_in` must have one dimension !\n")
     elif y_in.shape[0] != data.shape[0]:
         raise DimensionError(
-            "ERROR grid_to_triple: `y_in` must have the same size (call it `ny`) as the left dimension of z. !\n")
+            "ERROR grid_to_triple: `y_in` must have the same size (call it `ny`) as the left dimension of z. !\n"
+        )
     # ''' end of boilerplate
 
     out = _grid_to_triple(x_in.data, y_in.data, data.data, msg_py)
@@ -300,15 +317,16 @@ def triple_to_grid(data, x_in, y_in, x_out, y_out, **kwargs):
 
     if (x_in is None) | (y_in is None):
         raise CoordinateError(
-            "ERROR triple_to_grid: Arguments x_in and y_in must always be explicitly provided")
+            "ERROR triple_to_grid: Arguments x_in and y_in must always be explicitly provided"
+        )
 
     # ''' Start of boilerplate
     # If a Numpy input is given, convert it to Xarray and chunk it just with its dims
     if not isinstance(data, xr.DataArray):
-        data = xr.DataArray(
-            data,
-        )
-        data_chunk = dict([(k, v) for (k, v) in zip(list(data.dims), list(data.shape))])
+        data = xr.DataArray(data,)
+        data_chunk = dict([
+            (k, v) for (k, v) in zip(list(data.dims), list(data.shape))
+        ])
 
         data = xr.DataArray(
             data.data,
@@ -321,22 +339,26 @@ def triple_to_grid(data, x_in, y_in, x_out, y_out, **kwargs):
     else:
         # If an unchunked Xarray input is given, chunk it just with its dims
         if (data.chunks is None):
-            data_chunk = dict([(k, v) for (k, v) in zip(list(data.dims), list(data.shape))])
+            data_chunk = dict([
+                (k, v) for (k, v) in zip(list(data.dims), list(data.shape))
+            ])
             data = data.chunk(data_chunk)
 
         # Ensure the rightmost dimension of input is not chunked
         elif list(data.chunks)[-1:] != [x_in.shape]:
-            raise ChunkError("ERROR triple_to_grid: Data must be unchunked along the rightmost two dimensions")
+            raise ChunkError(
+                "ERROR triple_to_grid: Data must be unchunked along the rightmost two dimensions"
+            )
 
     # x_in = data.coords[data.dims[-1]]
     # y_in = data.coords[data.dims[-2]]
 
     # Basic sanity checks
-    if x_in.shape[0] != y_in.shape[0] or x_in.shape[0] != data.shape[data.ndim - 1]:
+    if x_in.shape[0] != y_in.shape[0] or x_in.shape[0] != data.shape[data.ndim -
+                                                                     1]:
         raise DimensionError(
             "ERROR triple_to_grid: The length of `x_in` and `y_in` must be the same "
-            "as the rightmost dimension of `data` !"
-        )
+            "as the rightmost dimension of `data` !")
     if x_in.ndim > 1 or y_in.ndim > 1:
         raise DimensionError(
             "ERROR triple_to_grid: `x_in` and `y_in` arguments must be one-dimensional arrays !\n"
@@ -369,9 +391,13 @@ def triple_to_grid(data, x_in, y_in, x_out, y_out, **kwargs):
             input_distmx = kwargs["distmx"]
 
             if np.asarray(input_distmx).size != 1:
-                raise ValueError("ERROR triple_to_grid: Provide a scalar value for `distmx` !")
+                raise ValueError(
+                    "ERROR triple_to_grid: Provide a scalar value for `distmx` !"
+                )
         else:
-            raise ValueError("ERROR triple_to_grid: `distmx` is only applicable when `method`==1 !")
+            raise ValueError(
+                "ERROR triple_to_grid: `distmx` is only applicable when `method`==1 !"
+            )
 
     if "domain" in kwargs:
         input_domain = kwargs["domain"]
@@ -380,14 +406,20 @@ def triple_to_grid(data, x_in, y_in, x_out, y_out, **kwargs):
             raise ValueError(
                 "ERROR triple_to_grid: Provide a scalar value for `domain` !")
 
-
     msg = kwargs.get("msg", np.nan)
     meta = kwargs.get("meta", False)
 
     # data data structure elements and autochunking
     data_chunks = list(data.dims)
-    data_chunks[:-1] = [(k, 1) for (k, v) in zip(list(data.dims)[:-1], list(data.chunks)[:-1])]
-    data_chunks[-1:] = [(k, v[0]) for (k, v) in zip(list(data.dims)[-1:], list(data.chunks)[-1:])]
+    data_chunks[:-1] = [
+        (k, 1) for (k, v) in zip(list(data.dims)[:-1],
+                                 list(data.chunks)[:-1])
+    ]
+    data_chunks[-1:] = [
+        (k, v[0])
+        for (k, v) in zip(list(data.dims)[-1:],
+                          list(data.chunks)[-1:])
+    ]
     data_chunks = dict(data_chunks)
     data = data.chunk(data_chunks)
 
@@ -396,9 +428,7 @@ def triple_to_grid(data, x_in, y_in, x_out, y_out, **kwargs):
     grid_chunks[-1] = (y_out.shape[0] * x_out.shape[0],)
     grid_chunks = tuple(grid_chunks)
     dask_grid_shape = tuple(a[0] for a in list(grid_chunks))
-    grid_coords = {
-        k: v for (k, v) in data.coords.items()
-    }
+    grid_coords = {k: v for (k, v) in data.coords.items()}
     grid_coords[data.dims[-1]] = x_out
     grid_coords[data.dims[-2]] = y_out
     # ''' end of boilerplate
@@ -428,8 +458,9 @@ def triple_to_grid(data, x_in, y_in, x_out, y_out, **kwargs):
     if meta:
         # grid = xr.DataArray(grid.compute(), attrs=data.attrs, dims=data.dims, coords=grid_coords)
         import warnings
-        warnings.warn("WARNING triple_to_grid: Retention of metadata is not yet supported; "
-                      "it will thus be ignored in the output!")
+        warnings.warn(
+            "WARNING triple_to_grid: Retention of metadata is not yet supported; "
+            "it will thus be ignored in the output!")
     # else:
     #     grid = xr.DataArray(grid.compute(), coords=grid_coords)
 
@@ -446,11 +477,13 @@ def triple_to_grid_2d(x_in, y_in, data, x_out, y_out, msg_py):
 
 # Transparent wrappers for geocat.ncomp backwards compatibility
 
+
 def grid2triple(x_in, y_in, data, msg_py):
     warnings.warn("WARNING grid_to_triple: `grid2triple` function name and signature deprecated but still " \
                   "supported for backward compatibility purposes. Please use `grid_to_triple` in the future!")
 
     return grid_to_triple(data, x_in, y_in, msg_py)
+
 
 def triple2grid(x_in, y_in, data, x_out, y_out, **kwargs):
     warnings.warn("WARNING triple_to_grid: `triple2grid` function name and signature deprecated but still " \

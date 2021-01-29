@@ -63,22 +63,21 @@ def _linint2pts(xi, yi, fi, xo, yo, icycx, msg_py, shape):
 
     # fortran call
 
-    fo, error_code = dlinint2pts(xi,
-                                 yi,
-                                 fi,
-                                 xo,
-                                 yo,
-                                 icycx=icycx,
-                                 xmsg=msg_fort
-                                 )
+    fo, error_code = dlinint2pts(xi, yi, fi, xo, yo, icycx=icycx, xmsg=msg_fort)
 
     # Catch warnings
     if error_code == 1:
-        warnings.warn("WARNING linint2pts: Not enough points in input arrays or output coordinates!")
+        warnings.warn(
+            "WARNING linint2pts: Not enough points in input arrays or output coordinates!"
+        )
     elif error_code == 2:
-        warnings.warn("WARNING linint2pts: x_in should be a monotonically increasing array !")
+        warnings.warn(
+            "WARNING linint2pts: x_in should be a monotonically increasing array !"
+        )
     elif error_code == 3:
-        warnings.warn("WARNING linint2pts: y_in should be a monotonically increasing array !")
+        warnings.warn(
+            "WARNING linint2pts: y_in should be a monotonically increasing array !"
+        )
 
     # numpy and reshape
     fo = np.asarray(fo)
@@ -362,12 +361,12 @@ def linint2pts(fi, xo, yo, icycx=False, msg_py=None, xi=None, yi=None):
     if not isinstance(fi, xr.DataArray):
         if (xi is None) | (yi is None):
             raise CoordinateError(
-                "linint2pts: Arguments xi and yi must be provided explicitly unless fi is an xarray.DataArray.")
+                "linint2pts: Arguments xi and yi must be provided explicitly unless fi is an xarray.DataArray."
+            )
 
-        fi = xr.DataArray(
-            fi,
-        )
-        fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))])
+        fi = xr.DataArray(fi,)
+        fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
+                        ])
 
         fi = xr.DataArray(
             fi.data,
@@ -382,7 +381,9 @@ def linint2pts(fi, xo, yo, icycx=False, msg_py=None, xi=None, yi=None):
     else:
         # If an unchunked Xarray input is given, chunk it just with its dims
         if (fi.chunks is None):
-            fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))])
+            fi_chunk = dict([
+                (k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
+            ])
             data = fi.chunk(fi_chunk)
 
     xi = fi.coords[fi.dims[-1]]
@@ -390,15 +391,23 @@ def linint2pts(fi, xo, yo, icycx=False, msg_py=None, xi=None, yi=None):
 
     # Ensure the rightmost dimension of input is not chunked
     if list(fi.chunks)[-2:] != [yi.shape, xi.shape]:
-        raise ChunkError("ERROR linint2pts: fi must be unchunked along the rightmost two dimensions")
+        raise ChunkError(
+            "ERROR linint2pts: fi must be unchunked along the rightmost two dimensions"
+        )
 
     if xo.shape != yo.shape:
         raise Exception("ERROR linint2pts xo and yo must be of equal length")
 
     # fi data structure elements and autochunking
     fi_chunks = list(fi.dims)
-    fi_chunks[:-2] = [(k, 1) for (k, v) in zip(list(fi.dims)[:-2], list(fi.chunks)[:-2])]
-    fi_chunks[-2:] = [(k, v[0]) for (k, v) in zip(list(fi.dims)[-2:], list(fi.chunks)[-2:])]
+    fi_chunks[:-2] = [
+        (k, 1) for (k, v) in zip(list(fi.dims)[:-2],
+                                 list(fi.chunks)[:-2])
+    ]
+    fi_chunks[-2:] = [
+        (k, v[0]) for (k, v) in zip(list(fi.dims)[-2:],
+                                    list(fi.chunks)[-2:])
+    ]
     fi_chunks = dict(fi_chunks)
     fi = fi.chunk(fi_chunks)
 
@@ -433,6 +442,7 @@ def linint2pts(fi, xo, yo, icycx=False, msg_py=None, xi=None, yi=None):
 
 
 # Transparent wrappers for geocat.ncomp backwards compatibility
+
 
 def linint2_points(fi, xo, yo, icycx, msg=None, meta=False, xi=None, yi=None):
     warnings.warn("WARNING linint2pts: `linint2_points` function name and signature deprecated but still " \

@@ -297,4 +297,3 @@ class Test_linint2_non_contiguous(ut.TestCase):
                                  yi=yi_reverse[::-1])
         np.testing.assert_array_equal(fi[:, :, ::-1, :].values,
                                       fo[..., ::2, ::2].values)
-

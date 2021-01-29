@@ -83,11 +83,11 @@ class Test_linint2pts_numpy(ut.TestCase, BaseTestClass):
 
     def test_linint2pts_fi_np(self):
         fo = geocat.f2py.linint2pts(self._fi_np,
-                                     self._xo,
-                                     self._yo,
-                                     0,
-                                     xi=self._xi,
-                                     yi=self._yi)
+                                    self._xo,
+                                    self._yo,
+                                    0,
+                                    xi=self._xi,
+                                    yi=self._yi)
 
         self.assertEqual((self._shape0, self._shape1), fo.shape[:-1])
 
@@ -117,18 +117,18 @@ class Test_linint2pts_numpy(ut.TestCase, BaseTestClass):
     def test_linint2pts_fi_np_no_yi(self):
         with self.assertRaises(geocat.f2py.CoordinateError):
             fo = geocat.f2py.linint2pts(self._fi_np,
-                                             self._xo,
-                                             self._yo,
-                                             0,
-                                             xi=self._xi)
+                                        self._xo,
+                                        self._yo,
+                                        0,
+                                        xi=self._xi)
 
     def test_linint2pts_fi_np_no_xi(self):
         with self.assertRaises(geocat.f2py.CoordinateError):
             fo = geocat.f2py.linint2pts(self._fi_np,
-                                             self._xo,
-                                             self._yo,
-                                             0,
-                                             yi=self._yi)
+                                        self._xo,
+                                        self._yo,
+                                        0,
+                                        yi=self._yi)
 
 
 class Test_linint2pts_non_monotonic(ut.TestCase, BaseTestClass):
@@ -149,11 +149,11 @@ class Test_linint2pts_non_monotonic(ut.TestCase, BaseTestClass):
         import warnings
         with self.assertWarns(Warning):
             geocat.f2py.linint2pts(self._fi_np[:, :, ::-1, :],
-                                        self._xo,
-                                        self._yo,
-                                        0,
-                                        xi=self._xi,
-                                        yi=self._yi_reverse)
+                                   self._xo,
+                                   self._yo,
+                                   0,
+                                   xi=self._xi,
+                                   yi=self._yi_reverse)
 
 
 class Test_linint2pts_float64(ut.TestCase, BaseTestClass):
@@ -191,10 +191,10 @@ class Test_linint2pts_float64(ut.TestCase, BaseTestClass):
                                   }).chunk(self._chunks)
 
         fo = geocat.f2py.linint2pts(fi_msg_nan,
-                                         self._xo,
-                                         self._yo,
-                                         0,
-                                         msg_py=np.nan)
+                                    self._xo,
+                                    self._yo,
+                                    0,
+                                    msg_py=np.nan)
 
         self.assertEqual((self._shape0, self._shape1), fo.shape[:-1])
 
@@ -221,10 +221,10 @@ class Test_linint2pts_float64(ut.TestCase, BaseTestClass):
                                  }).chunk(self._chunks)
 
         fo = geocat.f2py.linint2pts(fi_msg_99,
-                                         self._xo,
-                                         self._yo,
-                                         0,
-                                         msg_py=self._fi_np_msg_99[0, 0, 0, 0])
+                                    self._xo,
+                                    self._yo,
+                                    0,
+                                    msg_py=self._fi_np_msg_99[0, 0, 0, 0])
 
         self.assertEqual((self._shape0, self._shape1), fo.shape[:-1])
 
@@ -247,10 +247,21 @@ class Test_linint2pts_float64(ut.TestCase, BaseTestClass):
 
 #
 class Test_linint2pts_dask(ut.TestCase, BaseTestClass):
+
     def test_linint2pts_chunked_leftmost(self):
         # use 1 for time and level chunk sizes
-        custom_chunks = {'time': 1, 'level': 1, 'lat': self._fi_np.shape[2], 'lon': self._fi_np.shape[3]}
-        fi = xr.DataArray(self._fi_np, dims=['time', 'level', 'lat', 'lon'], coords={'lat': self._yi, 'lon': self._xi}).chunk(custom_chunks)
+        custom_chunks = {
+            'time': 1,
+            'level': 1,
+            'lat': self._fi_np.shape[2],
+            'lon': self._fi_np.shape[3]
+        }
+        fi = xr.DataArray(self._fi_np,
+                          dims=['time', 'level', 'lat', 'lon'],
+                          coords={
+                              'lat': self._yi,
+                              'lon': self._xi
+                          }).chunk(custom_chunks)
         fo = geocat.f2py.linint2pts(fi, self._xo, self._yo, 0)
 
         newshape = (self._shape0 * self._shape1 * self._no,)
@@ -265,6 +276,11 @@ class Test_linint2pts_dask(ut.TestCase, BaseTestClass):
     def test_linint2pts_chunked_interp(self):
         # use 1 for interpolated dimension chunk sizes -- this should throw a ChunkError
         wrong_chunks = {'time': 1, 'level': 1, 'lat': 1, 'lon': 1}
-        fi = xr.DataArray(self._fi_np, dims=['time', 'level', 'lat', 'lon'], coords={'lat': self._yi, 'lon': self._xi}).chunk(wrong_chunks)
+        fi = xr.DataArray(self._fi_np,
+                          dims=['time', 'level', 'lat', 'lon'],
+                          coords={
+                              'lat': self._yi,
+                              'lon': self._xi
+                          }).chunk(wrong_chunks)
         with self.assertRaises(geocat.f2py.ChunkError):
             fo = geocat.f2py.linint2pts(fi, self._xo, self._yo, 0)

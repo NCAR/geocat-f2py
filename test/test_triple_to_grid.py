@@ -21,7 +21,6 @@ msg_99 = -99
 distmx = 275
 method_0 = 0
 
-
 # Nominal input
 data = np.asarray([2.740654945373535, 2.745847702026367, 4.893587112426758, 2.965059041976929, 1.707929134368896,
                    0.746006965637207, -0.7178658246994019, 2.754249572753906, 2.863926410675049, -1.335241436958313,
@@ -29,7 +28,6 @@ data = np.asarray([2.740654945373535, 2.745847702026367, 4.893587112426758, 2.96
                    2.509441375732422, 1.35484516620636, -0.2372681051492691, 3.031233072280884, -0.004878446459770203,
                    3.338273763656616, -0.3412730693817139, 0.3352730870246887, 4.383576393127441])\
                 .reshape((dim0, dim1, m_x_i))
-
 
 # Missing value = np.nan input
 data_msg_nan = data.copy()
@@ -48,7 +46,6 @@ y_in = np.asarray([2.0, 4.0, 6.0, 8.0])
 x_out = np.asarray([1.5, 2.5, 3.5])
 y_out = np.asarray([2.2, 7.8])
 
-
 # Expected output for default optional arguments
 out_expected = np.asarray([2.740654945373535,   np.nan, np.nan, np.nan, np.nan, 2.745847702026367,
                            1.707929134368896,   np.nan, np.nan, np.nan, np.nan, 0.746006965637207,
@@ -59,7 +56,7 @@ out_expected = np.asarray([2.740654945373535,   np.nan, np.nan, np.nan, np.nan, 
                         .reshape((dim0, dim1, n_y_out, m_x_out))
 
 out_expected_msg_nan = out_expected.copy()
-out_expected_msg_nan[0,0,1,2] = np.nan
+out_expected_msg_nan[0, 0, 1, 2] = np.nan
 
 out_expected_msg_99 = out_expected_msg_nan.copy()
 out_expected_msg_99[np.isnan(out_expected_msg_99)] = -99
@@ -70,7 +67,6 @@ out_expected_method_0 = out_expected.copy()
 out_expected_method_0_msg_nan = out_expected_msg_nan.copy()
 
 out_expected_method_0_msg_99 = out_expected_msg_99.copy()
-
 
 # Expected output for `distmx=275`
 out_expected_distmx = np.asarray([2.740654945373535,    np.nan, np.nan, np.nan, np.nan, np.nan,
@@ -92,21 +88,15 @@ out_expected_distmx_msg_99[np.isnan(out_expected_distmx_msg_99)] = -99
 class Test_triple_to_grid_float64(ut.TestCase):
 
     def test_triple_to_grid_float64(self):
-        out = geocat.f2py.triple_to_grid(data,
-                                         x_in,
-                                         y_in,
-                                         x_out,
-                                         y_out)
+        out = geocat.f2py.triple_to_grid(data, x_in, y_in, x_out, y_out)
 
         np.testing.assert_array_equal(out_expected, out.values)
 
     def test_triple_to_grid_float64_xr(self):
-        out = geocat.f2py.triple_to_grid(xr.DataArray(data),
-                                         xr.DataArray(x_in),
+        out = geocat.f2py.triple_to_grid(xr.DataArray(data), xr.DataArray(x_in),
                                          xr.DataArray(y_in),
                                          xr.DataArray(x_out),
-                                         xr.DataArray(y_out)
-                                         )
+                                         xr.DataArray(y_out))
 
         np.testing.assert_array_equal(out_expected, out.values)
 
@@ -182,7 +172,8 @@ class Test_triple_to_grid_float32(ut.TestCase):
                                          y_in.astype(np.float32),
                                          x_out.astype(np.float32),
                                          y_out.astype(np.float32))
-        np.testing.assert_array_equal(out_expected.astype(np.float32), out.values)
+        np.testing.assert_array_equal(out_expected.astype(np.float32),
+                                      out.values)
 
     def test_triple_to_grid_float32_method_0(self):
         out = geocat.f2py.triple_to_grid(data.astype(np.float32),
@@ -191,7 +182,8 @@ class Test_triple_to_grid_float32(ut.TestCase):
                                          x_out.astype(np.float32),
                                          y_out.astype(np.float32),
                                          method=method_0)
-        np.testing.assert_array_equal(out_expected_method_0.astype(np.float32), out.values)
+        np.testing.assert_array_equal(out_expected_method_0.astype(np.float32),
+                                      out.values)
 
     def test_triple_to_grid_float32_distmx(self):
         out = geocat.f2py.triple_to_grid(data.astype(np.float32),
@@ -200,7 +192,8 @@ class Test_triple_to_grid_float32(ut.TestCase):
                                          x_out.astype(np.float32),
                                          y_out.astype(np.float32),
                                          distmx=distmx)
-        np.testing.assert_array_equal(out_expected_distmx.astype(np.float32), out.values)
+        np.testing.assert_array_equal(out_expected_distmx.astype(np.float32),
+                                      out.values)
 
     def test_triple_to_grid_float32_msg_nan(self):
         out = geocat.f2py.triple_to_grid(data_msg_nan.astype(np.float32),
@@ -209,7 +202,8 @@ class Test_triple_to_grid_float32(ut.TestCase):
                                          x_out.astype(np.float32),
                                          y_out.astype(np.float32),
                                          msg=np.nan)
-        np.testing.assert_array_equal(out_expected_msg_nan.astype(np.float32), out.values)
+        np.testing.assert_array_equal(out_expected_msg_nan.astype(np.float32),
+                                      out.values)
 
     def test_triple_to_grid_float32_msg_99(self):
         out = geocat.f2py.triple_to_grid(data_msg_99.astype(np.float32),
@@ -228,7 +222,9 @@ class Test_triple_to_grid_float32(ut.TestCase):
                                          y_out.astype(np.float32),
                                          msg=np.nan,
                                          distmx=distmx)
-        np.testing.assert_array_equal(out_expected_distmx_msg_nan.astype(np.float32), out.values.astype(np.float32))
+        np.testing.assert_array_equal(
+            out_expected_distmx_msg_nan.astype(np.float32),
+            out.values.astype(np.float32))
 
     def test_triple_to_grid_float32_distmx_msg_99(self):
         out = geocat.f2py.triple_to_grid(data_msg_99.astype(np.float32),
@@ -238,5 +234,5 @@ class Test_triple_to_grid_float32(ut.TestCase):
                                          y_out.astype(np.float32),
                                          msg=-99,
                                          distmx=distmx)
-        np.testing.assert_array_equal(out_expected_distmx_msg_99.astype(np.float32), out.values)
-
+        np.testing.assert_array_equal(
+            out_expected_distmx_msg_99.astype(np.float32), out.values)

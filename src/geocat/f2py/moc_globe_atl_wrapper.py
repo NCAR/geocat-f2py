@@ -10,6 +10,7 @@ from .missing_values import (fort2py_msg, py2fort_msg)
 # These Wrapper are executed within dask processes, and should do anything that
 # can benefit from parallel excution.
 
+
 def _moc_loops(lat_aux_grid, a_wvel, a_bolus, a_submeso, t_lat, rmlak, msg_py):
     # signature:  tmp1,tmp2,tmp3 = mocloops(tlat,lat_aux_grid,rmlak,work1,work2,work3,wmsg)
     work1 = a_wvel
@@ -28,7 +29,8 @@ def _moc_loops(lat_aux_grid, a_wvel, a_bolus, a_submeso, t_lat, rmlak, msg_py):
     work1, msg_py, msg_fort = py2fort_msg(work1, msg_py=msg_py)
 
     # fortran call
-    tmp1, tmp2, tmp3 = mocloops(t_lat, lat_aux_grid, rmlak, work1, work2, work3, msg_fort)
+    tmp1, tmp2, tmp3 = mocloops(t_lat, lat_aux_grid, rmlak, work1, work2, work3,
+                                msg_fort)
 
     # Un-transpose arrays for output
     tmp1 = np.transpose(tmp1, axes=(2, 1, 0))
@@ -45,11 +47,20 @@ def _moc_loops(lat_aux_grid, a_wvel, a_bolus, a_submeso, t_lat, rmlak, msg_py):
 
     return tmp_out
 
+
 # Outer Wrappers <funcname>()
 # These Wrappers are excecuted in the __main__ python process, and should be
 # used for any tasks which would not benefit from parallel execution.
 
-def moc_globe_atl(lat_aux_grid, a_wvel, a_bolus, a_submeso, t_lat, rmlak, msg=None, meta=False):
+
+def moc_globe_atl(lat_aux_grid,
+                  a_wvel,
+                  a_bolus,
+                  a_submeso,
+                  t_lat,
+                  rmlak,
+                  msg=None,
+                  meta=False):
     """Facilitates calculating the meridional overturning circulation for the
         globe and Atlantic.
 
@@ -146,12 +157,7 @@ def moc_globe_atl(lat_aux_grid, a_wvel, a_bolus, a_submeso, t_lat, rmlak, msg=No
     if not isinstance(rmlak, xr.DataArray):
         rmlak = xr.DataArray(rmlak)
 
-    fo = _moc_loops(lat_aux_grid.values,
-                    a_wvel.values,
-                    a_bolus.values,
-                    a_submeso.values,
-                    t_lat.values,
-                    rmlak.values,
-                    msg)
+    fo = _moc_loops(lat_aux_grid.values, a_wvel.values, a_bolus.values,
+                    a_submeso.values, t_lat.values, rmlak.values, msg)
 
     return fo

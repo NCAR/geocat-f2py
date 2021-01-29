@@ -4,13 +4,13 @@ import geocat.f2py
 
 import unittest as ut
 
-
 # Size of the grids
 ny = 2
 mx = 3
 
 # Nominal input
-data = np.asarray([2.740655, 2.745848, 4.893587, 2.965059, 1.707929, 0.746007]).reshape((ny, mx))
+data = np.asarray([2.740655, 2.745848, 4.893587, 2.965059, 1.707929,
+                   0.746007]).reshape((ny, mx))
 
 # Missing value = np.nan input
 data_nan = data.copy()
@@ -75,34 +75,34 @@ class Test_grid_to_triple_float64(ut.TestCase):
 
         np.testing.assert_array_equal(out_expected_msg, out.values)
 
+
 class Test_grid_to_triple_float32(ut.TestCase):
 
     def test_grid_to_triple_float32(self):
         data_asfloat32 = data.astype(np.float32)
-        out = geocat.f2py.grid_to_triple(data_asfloat32,
-                                     x.astype(np.float32),
-                                     y.astype(np.float32))
+        out = geocat.f2py.grid_to_triple(data_asfloat32, x.astype(np.float32),
+                                         y.astype(np.float32))
         np.testing.assert_array_equal(out_expected.astype(np.float32), out)
 
     def test_grid_to_triple_float32_nan(self):
         data_asfloat32_nan = data_nan.astype(np.float32)
         out = geocat.f2py.grid_to_triple(data_asfloat32_nan,
-                                     x.astype(np.float32),
-                                     y.astype(np.float32))
+                                         x.astype(np.float32),
+                                         y.astype(np.float32))
         np.testing.assert_array_equal(out_expected_msg.astype(np.float32), out)
 
     def test_grid_to_triple_float32_nan_2(self):
         data_asfloat32_nan = data_nan.astype(np.float32)
         out = geocat.f2py.grid_to_triple(data_asfloat32_nan,
-                                     x.astype(np.float32),
-                                     y.astype(np.float32),
-                                     msg_py=np.nan)
+                                         x.astype(np.float32),
+                                         y.astype(np.float32),
+                                         msg_py=np.nan)
         np.testing.assert_array_equal(out_expected_msg.astype(np.float32), out)
 
     def test_grid_to_triple_float32_msg(self):
         data_asfloat32_msg = data_msg.astype(np.float32)
         out = geocat.f2py.grid_to_triple(data_asfloat32_msg,
-                                     x.astype(np.float32),
-                                     y.astype(np.float32),
-                                     msg_py=-99)
+                                         x.astype(np.float32),
+                                         y.astype(np.float32),
+                                         msg_py=-99)
         np.testing.assert_array_equal(out_expected_msg.astype(np.float32), out)
