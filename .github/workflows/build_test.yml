@@ -21,13 +21,12 @@ jobs:
       - name: conda_env
         uses: conda-incubator/setup-miniconda@v2
         with:
-          activate-environment: temp
+          activate-environment: geocat_f2py_build
+          environment-file: build_envs/environment_$(uname).yml
           python-version: ${{ matrix.python-version }}
           channels: conda-forge, ncar
       - name: build_test
         run: |
-          conda env create --file build_envs/environment_$(uname).yml
-          conda activate geocat_f2py_build
           source build.sh
           pip install .
           pytest
