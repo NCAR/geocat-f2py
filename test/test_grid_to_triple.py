@@ -9,8 +9,7 @@ ny = 2
 mx = 3
 
 # Nominal input
-data = np.asarray([2.740655, 2.745848, 4.893587, 2.965059, 1.707929,
-                   0.746007]).reshape((ny, mx))
+data = np.asarray([2.740655, 2.745848, 4.893587, 2.965059, 1.707929, 0.746007]).reshape((ny, mx))
 
 # Missing value = np.nan input
 data_nan = data.copy()
@@ -80,7 +79,8 @@ class Test_grid_to_triple_float32(ut.TestCase):
 
     def test_grid_to_triple_float32(self):
         data_asfloat32 = data.astype(np.float32)
-        out = geocat.f2py.grid_to_triple(data_asfloat32, x.astype(np.float32),
+        out = geocat.f2py.grid_to_triple(data_asfloat32,
+                                         x.astype(np.float32),
                                          y.astype(np.float32))
         np.testing.assert_array_equal(out_expected.astype(np.float32), out)
 

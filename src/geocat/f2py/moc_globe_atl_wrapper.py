@@ -157,7 +157,12 @@ def moc_globe_atl(lat_aux_grid,
     if not isinstance(rmlak, xr.DataArray):
         rmlak = xr.DataArray(rmlak)
 
-    fo = _moc_loops(lat_aux_grid.values, a_wvel.values, a_bolus.values,
-                    a_submeso.values, t_lat.values, rmlak.values, msg)
+    fo = _moc_loops(lat_aux_grid.values,
+                    a_wvel.values,
+                    a_bolus.values,
+                    a_submeso.values,
+                    t_lat.values,
+                    rmlak.values,
+                    msg)
 
     return fo

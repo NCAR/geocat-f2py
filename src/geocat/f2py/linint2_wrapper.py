@@ -364,9 +364,10 @@ def linint2pts(fi, xo, yo, icycx=False, msg_py=None, xi=None, yi=None):
                 "linint2pts: Arguments xi and yi must be provided explicitly unless fi is an xarray.DataArray."
             )
 
-        fi = xr.DataArray(fi,)
-        fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
-                        ])
+        fi = xr.DataArray(fi)
+        fi_chunk = dict([
+            (k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
+        ])
 
         fi = xr.DataArray(
             fi.data,

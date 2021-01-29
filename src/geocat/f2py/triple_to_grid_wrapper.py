@@ -49,6 +49,7 @@ def _triple_to_grid(data,
                     distmx=None,
                     domain=None,
                     msg_py=None):
+
     # Handle Python2Fortran missing value conversion
     data, msg_py, msg_fort = py2fort_msg(data, msg_py=msg_py)
 
@@ -157,7 +158,7 @@ def grid_to_triple(data, x_in=None, y_in=None, msg_py=None):
                 "ERROR grid_to_triple: Argument `x_in` and `y_in` must be provided explicitly "
                 "unless `data` is an xarray.DataArray.")
 
-        data = xr.DataArray(data,)
+        data = xr.DataArray(data)
 
         data = xr.DataArray(
             data.data,
@@ -323,7 +324,7 @@ def triple_to_grid(data, x_in, y_in, x_out, y_out, **kwargs):
     # ''' Start of boilerplate
     # If a Numpy input is given, convert it to Xarray and chunk it just with its dims
     if not isinstance(data, xr.DataArray):
-        data = xr.DataArray(data,)
+        data = xr.DataArray(data)
         data_chunk = dict([
             (k, v) for (k, v) in zip(list(data.dims), list(data.shape))
         ])
