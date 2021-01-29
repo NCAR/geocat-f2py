@@ -21,13 +21,18 @@ jobs:
       - name: conda_env
         uses: conda-incubator/setup-miniconda@v2
         with:
-          activate-environment: temp
+          activate-environment: geocat_f2py_build
           python-version: ${{ matrix.python-version }}
           channels: conda-forge, ncar
+      - name: conda_install_darwin
+        if: matrix.os == 'macos-latest'
+        run: |
+          conda install numpy=1.19 xarray dask pytest gfortran_osx-64 liblapack
+      - name: conda_install_linux
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          conda install numpy=1.19 xarray dask pytest gfortran_linux-64 liblapack
       - name: build_test
         run: |
-          conda env create --file build_envs/environment_$(uname).yml
-          conda activate geocat_f2py_build
           source build.sh
-          pip install .
           pytest
