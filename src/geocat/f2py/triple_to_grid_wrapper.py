@@ -300,9 +300,10 @@ def triple_to_grid(data, x_in, y_in, x_out, y_out, **kwargs):
 
     if (x_in is None) | (y_in is None):
         raise CoordinateError(
-            "triple_to_grid: Arguments x_in and y_in must always be explicitly provided")
+            "ERROR triple_to_grid: Arguments x_in and y_in must always be explicitly provided")
 
     # ''' Start of boilerplate
+    # If a Numpy input is given, convert it to Xarray and chunk it just with its dims
     if not isinstance(data, xr.DataArray):
         data = xr.DataArray(
             data,
@@ -317,13 +318,18 @@ def triple_to_grid(data, x_in, y_in, x_out, y_out, **kwargs):
             # },
             dims=data.dims,
         ).chunk(data_chunk)
+    else:
+        # If an unchunked Xarray input is given, chunk it just with its dims
+        if (data.chunks is None):
+            data_chunk = dict([(k, v) for (k, v) in zip(list(data.dims), list(data.shape))])
+            data = data.chunk(data_chunk)
+
+        # Ensure the rightmost dimension of input is not chunked
+        elif list(data.chunks)[-1:] != [x_in.shape]:
+            raise ChunkError("ERROR triple_to_grid: Data must be unchunked along the rightmost two dimensions")
 
     # x_in = data.coords[data.dims[-1]]
     # y_in = data.coords[data.dims[-2]]
-
-    # ensure the rightmost dimension of input is not chunked
-    if list(data.chunks)[-1:] != [x_in.shape]:
-        raise ChunkError("triple_to_grid: Data must be unchunked along the rightmost two dimensions")
 
     # Basic sanity checks
     if x_in.shape[0] != y_in.shape[0] or x_in.shape[0] != data.shape[data.ndim - 1]:

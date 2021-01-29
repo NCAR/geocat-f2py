@@ -100,6 +100,16 @@ class Test_triple_to_grid_float64(ut.TestCase):
 
         np.testing.assert_array_equal(out_expected, out.values)
 
+    def test_triple_to_grid_float64_xr(self):
+        out = geocat.f2py.triple_to_grid(xr.DataArray(data),
+                                         xr.DataArray(x_in),
+                                         xr.DataArray(y_in),
+                                         xr.DataArray(x_out),
+                                         xr.DataArray(y_out)
+                                         )
+
+        np.testing.assert_array_equal(out_expected, out.values)
+
     def test_triple_to_grid_float64_method_0(self):
 
         out = geocat.f2py.triple_to_grid(data,
@@ -229,3 +239,7 @@ class Test_triple_to_grid_float32(ut.TestCase):
                                          msg=-99,
                                          distmx=distmx)
         np.testing.assert_array_equal(out_expected_distmx_msg_99.astype(np.float32), out.values)
+
+a=Test_triple_to_grid_float64()
+a.test_triple_to_grid_float64()
+a.test_triple_to_grid_float64_xr()

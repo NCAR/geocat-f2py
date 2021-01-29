@@ -358,6 +358,7 @@ def linint2pts(fi, xo, yo, icycx=False, msg_py=None, xi=None, yi=None):
         """
 
     # ''' Start of boilerplate
+    # If a Numpy input is given, convert it to Xarray and chunk it just with its dims
     if not isinstance(fi, xr.DataArray):
         if (xi is None) | (yi is None):
             raise CoordinateError(
@@ -377,15 +378,22 @@ def linint2pts(fi, xo, yo, icycx=False, msg_py=None, xi=None, yi=None):
             dims=fi.dims,
         ).chunk(fi_chunk)
 
+    # Xarray input
+    else:
+        # If an unchunked Xarray input is given, chunk it just with its dims
+        if (fi.chunks is None):
+            fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))])
+            data = fi.chunk(fi_chunk)
+
     xi = fi.coords[fi.dims[-1]]
     yi = fi.coords[fi.dims[-2]]
 
-    if xo.shape != yo.shape:
-        raise Exception("ERROR linint2pts xo and yo must be of equal length")
-
-    # ensure rightmost dimensions of input are not chunked
+    # Ensure the rightmost dimension of input is not chunked
     if list(fi.chunks)[-2:] != [yi.shape, xi.shape]:
         raise ChunkError("ERROR linint2pts: fi must be unchunked along the rightmost two dimensions")
+
+    if xo.shape != yo.shape:
+        raise Exception("ERROR linint2pts xo and yo must be of equal length")
 
     # fi data structure elements and autochunking
     fi_chunks = list(fi.dims)
