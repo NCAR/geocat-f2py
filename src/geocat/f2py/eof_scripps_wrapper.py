@@ -35,13 +35,13 @@ def eof11(d, nmodes, icovcor=0, msg_py=None):
     return _eof11(d, nmodes, icovcor, msg_py)
 
 
-def eof_test():
-    d = np.random.random((1000,1000))
-    nmodes = 10
-    print(eof11(d, nmodes))
-
-start = time.time()
-eof_test()
-end = time.time()
-print(end-start)
+# def eof_test():
+#     d = np.random.random((1000,1000))
+#     nmodes = 10
+#     print(eof11(d, nmodes))
+#
+# start = time.time()
+# eof_test()
+# end = time.time()
+# print(end-start)
 

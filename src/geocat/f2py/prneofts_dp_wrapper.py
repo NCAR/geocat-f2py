@@ -39,12 +39,12 @@ def eofts7(x, evec, nobs = None, msta = None, msg_py = None, jopt = None):
     # return inner computation. No Dask call, as this is not parallelizable
     return _eofts7(x, evec, nobs, msta, msg_py, jopt)
 
-def eofts7_test():
-    x = np.random.random((1000,1000))
-    evec = x
-    print(eofts7(x, evec))
-
-start = time.time()
-eofts7_test()
-end = time.time()
-print(end-start)
+# def eofts7_test():
+#     x = np.random.random((1000,1000))
+#     evec = x
+#     print(eofts7(x, evec))
+#
+# start = time.time()
+# eofts7_test()
+# end = time.time()
+# print(end-start)

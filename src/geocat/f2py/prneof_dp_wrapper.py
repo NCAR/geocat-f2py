@@ -41,11 +41,11 @@ def drveof(x, nobs=None, msta=None, msg_py=None, neval=None, jopt=None):
     # return inner computation. No Dask call, as this is not parallelizable
     return _drveof(x, nobs, msta, msg_py, neval, jopt)
 
-def drveof_test():
-    x = np.random.random((1000,1000))
-    print(drveof(x))
-
-start = time.time()
-drveof_test()
-end = time.time()
-print(end-start)
+# def drveof_test():
+#     x = np.random.random((1000,1000))
+#     print(drveof(x))
+#
+# start = time.time()
+# drveof_test()
+# end = time.time()
+# print(end-start)
