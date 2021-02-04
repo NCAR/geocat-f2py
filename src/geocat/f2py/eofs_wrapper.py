@@ -90,9 +90,13 @@ def eofunc(data, neval, **kwargs):
         #                           accepted_neval,
         #                           options,
         #                           missing_value=missing_value)
-        solver = Eof(data.values, weights="cos")
+
+        data_transpose = np.transpose(data.values, axes=(2, 1, 0))
+
+        solver = Eof(data_transpose)
 
         eofs = solver.eofs(neofs=neval)
+        pcs = solver.pcs(npcs=neval, pcscaling=0)
         eigenvalues = solver.eigenvalues()
         varianceFraction = solver.varianceFraction()
         totalAnomalyVariance = solver.totalAnomalyVariance()
