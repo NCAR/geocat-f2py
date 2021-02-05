@@ -8,10 +8,11 @@ import time
 from geocat.f2py.missing_values import (fort2py_msg, py2fort_msg)
 
 from eofs.standard import Eof
+# from eofs.xarray import Eof
 
 
 
-def eofunc(data, neval, **kwargs):
+def eofunc_eofs(data, num_eofs=1, weights=None, time_dim=None, meta=False):
     """
     Computes empirical orthogonal functions (EOFs, aka: Principal Component Analysis).
 
@@ -21,101 +22,46 @@ def eofunc(data, neval, **kwargs):
             is assumed to be the number of observations. Generally this is the time time dimension. If your right-most
             dimension is not time, you could pass ``time_dim=x`` as an argument to define which dimension must be
             treated as time and/or number of observations. Data must be convertible to numpy.array
-        neval:
+        num_eofs:
             A scalar integer that specifies the number of eigenvalues and eigenvectors to be returned. This is usually
             less than or equal to the minimum number of observations or number of variables.
-        **kwargs:
-            extra options controlling the behavior of the function. Currently the following are supported:
-            - ``jopt``: a string that indicates whether to use the covariance matrix or the correlation
-                        matrix. The default is to use the covariance matrix.
-            - ``pcrit``: a float value between ``0`` and ``100`` that indicates the percentage of non-missing points
-                         that must exist at any single point in order to be calculated. The default is 50%. Points that
-                         contain all missing values will automatically be set to missing.
-            - ''time_dim``: an integer defining the time dimension. it must be between ``0`` and ``data.ndim - 1`` or it
-                            could be ``-1`` indicating the last dimension. The default value is -1.
-            - ``missing_value``: a value defining the missing value. The default is ``np.nan``.
-            - ``meta``:  If set to True and the input array is an Xarray, the metadata from the input array will be
-                         copied to the output array; default is False.
+        weights:
+        time_dim: an integer defining the time dimension. it must be between ``0`` and ``data.ndim - 1`` or it
+            could be ``-1`` indicating the last dimension. The default value is -1.
     """
-
-    # Parsing Options
-    options = {}
-    jopt = "covariance"
-    if "jopt" in kwargs:
-        if not isinstance(kwargs["jopt"], str) or \
-                str.lower(kwargs["jopt"]) not in {"covariance", "correlation"}:
-            raise ValueError(
-                'WARNING eofunc: jopt must be a string set to either "correlation" or "covariance". '
-                'For this run, "covariance" will be used as default'
-            )
-
-        options[b'jopt'] = np.asarray(1) if str.lower(
-            kwargs["jopt"]) == "correlation" else np.asarray(0)
-        jopt = str.lower(kwargs["jopt"])
-
-    if "pcrit" in kwargs:
-        provided_pcrit = np.asarray(kwargs["pcrit"]).astype(np.float64)
-        if provided_pcrit.size != 1:
-            raise ValueError("Only a single number must be provided for pcrit.")
-
-        if (provided_pcrit >= 0.0) and (provided_pcrit <= 100.0):
-            options[b'pcrit'] = provided_pcrit
-        else:
-            raise ValueError("pcrit must be between 0 and 100")
-
-    missing_value = kwargs.get("missing_value", np.nan)
 
     # ''' Start of boilerplate
     if not isinstance(data, xr.DataArray):
         data = xr.DataArray(data)
 
-    time_dim = int(kwargs.get("time_dim", -1))
+    if time_dim is None:
+        time_dim = data.ndim-1
 
-    if (time_dim >= data.ndim) or (time_dim < -data.ndim):
-        raise ValueError(
-            f"dimension out of bound. The input data has {data.ndim} dimension."
-            f" hence, time_dim must be between {-data.ndim} and {data.ndim - 1}"
-        )
+    # Checking number of EOFs
+    if num_eofs <= 0:
+        raise ValueError("ERROR eofunc_eofs: num_eofs must be a positive non-zero integer value.")
 
-    if time_dim < 0:
-        time_dim = data.ndim + time_dim
+    # TODO: Find a generic solution based on which dimension is "time"
+    data_transpose = np.transpose(data.values, axes=(2, 1, 0))
 
-    # checking neval
-    accepted_neval = int(neval)
-    if accepted_neval <= 0:
-        raise ValueError("neval must be a positive non-zero integer value.")
+    solver = Eof(data_transpose, weights=weights)
 
-    if (time_dim == (data.ndim - 1)):
-        # response = _ncomp._eofunc(np_data,
-        #                           accepted_neval,
-        #                           options,
-        #                           missing_value=missing_value)
+    eofs = solver.eofs(neofs=num_eofs)
+    pcs = solver.pcs(npcs=num_eofs, pcscaling=0)
 
-        data_transpose = np.transpose(data.values, axes=(2, 1, 0))
+    # Populate attributes for output
+    attrs = {}
 
-        solver = Eof(data_transpose)
+    if meta:
+        attrs = data.attrs
 
-        eofs = solver.eofs(neofs=neval)
-        pcs = solver.pcs(npcs=neval, pcscaling=0)
-        eigenvalues = solver.eigenvalues()
-        varianceFraction = solver.varianceFraction()
-        totalAnomalyVariance = solver.totalAnomalyVariance()
+    attrs['eigenvalues'] = solver.eigenvalues()
+    attrs['varianceFraction'] = solver.varianceFraction()
+    attrs['totalAnomalyVariance'] = solver.totalAnomalyVariance()
+    attrs['eofsAsCovariance'] = solver.eofsAsCovariance(neofs=num_eofs)
+    attrs['eofsAsCorrelation'] = solver.eofsAsCorrelation(neofs=num_eofs)
 
-        if (jopt == "covariance"):
-            eofs = solver.eofsAsCovariance(neofs=neval)
-        else:
-            eofs = solver.eofsAsCorrelation(neofs=neval)
-    # else:
-    #     response = _ncomp._eofunc_n(np_data,
-    #                                 accepted_neval,
-    #                                 time_dim,
-    #                                 options,
-    #                                 missing_value=missing_value)
-
-    attrs = data.attrs if isinstance(data, xr.DataArray) and bool(kwargs.get("meta", False)) else {}
-    attrs["missing_value"] = np.nan
-
-    if bool(kwargs.get("meta", False)):
+    if meta:
         dims = ["evn"] + [data.dims[i] for i in range(data.ndim) if i != time_dim]
         coords = {
             k: v for (k, v) in data.coords.items() if k != data.dims[time_dim]
@@ -125,6 +71,59 @@ def eofunc(data, neval, **kwargs):
         coords = {}
 
     return xr.DataArray(eofs, attrs=attrs, dims=dims, coords=coords)
+
+def eofunc_pcs(data, num_pcs=1, weights=None, time_dim=None, meta=False):
+    """
+        Computes the principal components (time projection) in the empirical orthogonal function
+        analysis.
+
+        Args:
+            data:
+                an iterable object containing numbers. It must be at least a 2-dimensional array. The right-most dimension
+                is assumed to be the number of observations. Generally this is the time time dimension. If your right-most
+                dimension is not time, you could pass ``time_dim=x`` as an argument to define which dimension must be
+                treated as time and/or number of observations. Data must be convertible to numpy.array
+            num_pcs:
+                A scalar integer that specifies the number of principal components to be returned. This is usually
+                less than or equal to the minimum number of observations or number of variables.
+            weights:
+            time_dim: an integer defining the time dimension. it must be between ``0`` and ``data.ndim - 1`` or it
+                could be ``-1`` indicating the last dimension. The default value is -1.
+        """
+
+    # ''' Start of boilerplate
+    if not isinstance(data, xr.DataArray):
+        data = xr.DataArray(data)
+
+    if time_dim is None:
+        time_dim = data.ndim - 1
+
+    # Checking number of EOFs
+    if num_pcs <= 0:
+        raise ValueError("ERROR eofunc_pcs: num_pcs must be a positive non-zero integer value.")
+
+    # TODO: Find a generic solution based on which dimension is "time"
+    data_transpose = data.values
+    # data_transpose = np.transpose(data.values, axes=(2, 1, 0))
+
+    solver = Eof(data_transpose, weights=weights)
+
+    pcs = solver.pcs(npcs=num_pcs, pcscaling=0)
+    pcs = pcs.transpose()
+
+    # Populate attributes for output
+    attrs = {}
+
+    if meta:
+        attrs = data.attrs
+
+    dims = ["neval", "time"]
+    if meta:
+        coords = {"time": data.coords[data.dims[time_dim]]}
+    else:
+        coords = {}
+
+    return xr.DataArray(pcs, attrs=attrs, dims=dims, coords=coords)
 
 
 # def eofunc_ts(data: Iterable, evec, **kwargs) -> xr.DataArray:
