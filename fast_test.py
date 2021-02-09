@@ -6,15 +6,16 @@ import dask.distributed as dd
 from dask.array.core import map_blocks
 import numpy as np
 import xarray as xr
-from geocat.f2py import (eof11, drveof, deofts7)
+# from geocat.f2py import (eof11, drveof, deofts7)
 
 
 def full_test():
-    x = np.random.random((1000, 1000))
-    d = drveof(x)
-    # print(d[2])
-    nmodes = 10
-    return eof11(d[1], nmodes)
+    # x = np.random.random((1000, 1000))
+    # d = drveof(x)
+    # # print(d[2])
+    # nmodes = 10
+    # return eof11(d[1], nmodes)
+    pass
 
 
 if __name__ == '__main__':
