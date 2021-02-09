@@ -18,7 +18,10 @@ def _eof11(d, nmodes, icovcor, msg_py):
 
     # fortran call
 
-    eigenvalues, eigenvectors, variance, princomp = deof11(d, nmodes, icovcor=icovcor, dmsg=msg_fort )
+    eigenvalues, eigenvectors, variance, princomp = deof11(d,
+                                                           nmodes,
+                                                           icovcor=icovcor,
+                                                           dmsg=msg_fort)
 
     # missing value handling
     d, msg_fort, msg_py = fort2py_msg(d, msg_fort=msg_fort, msg_py=msg_py)
@@ -44,4 +47,3 @@ def eof11(d, nmodes, icovcor=0, msg_py=None):
 # eof_test()
 # end = time.time()
 # print(end-start)
-

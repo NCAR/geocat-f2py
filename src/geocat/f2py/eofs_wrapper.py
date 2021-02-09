@@ -14,13 +14,12 @@ def generate_eofs_solver(data, time_dim=0, weights=None, center=True, ddof=1):
         data = np.asarray(data)
 
         if (time_dim >= data.ndim) or (time_dim < -data.ndim):
-            raise ValueError(
-                "ERROR eofunc_efs: `time_dim` out of bound."
-            )
+            raise ValueError("ERROR eofunc_efs: `time_dim` out of bound.")
 
         # Transpose data if time_dim is not 0 (i.e. the first/left-most dimension)
         dims_to_transpose = np.arange(data.ndim).tolist()
-        dims_to_transpose.insert(0, dims_to_transpose.pop(dims_to_transpose.index(time_dim)))
+        dims_to_transpose.insert(
+            0, dims_to_transpose.pop(dims_to_transpose.index(time_dim)))
         data = np.transpose(data, axes=dims_to_transpose)
 
         dims = [f"dim_{i}" for i in range(data.ndim)]
@@ -36,7 +35,15 @@ def generate_eofs_solver(data, time_dim=0, weights=None, center=True, ddof=1):
     return data, solver
 
 
-def eofunc_eofs(data, neofs=1, time_dim=0, eofscaling=0, weights=None, center=True, ddof=1, vfscaled=False, meta=False):
+def eofunc_eofs(data,
+                neofs=1,
+                time_dim=0,
+                eofscaling=0,
+                weights=None,
+                center=True,
+                ddof=1,
+                vfscaled=False,
+                meta=False):
     """
     Computes empirical orthogonal functions (EOFs, aka: Principal Component Analysis).
 
@@ -143,11 +150,17 @@ def eofunc_eofs(data, neofs=1, time_dim=0, eofscaling=0, weights=None, center=Tr
 
     """
 
-    data, solver = generate_eofs_solver(data, time_dim=time_dim, weights=weights, center=center, ddof=ddof)
+    data, solver = generate_eofs_solver(data,
+                                        time_dim=time_dim,
+                                        weights=weights,
+                                        center=center,
+                                        ddof=ddof)
 
     # Checking number of EOFs
     if neofs <= 0:
-        raise ValueError("ERROR eofunc_eofs: num_eofs must be a positive non-zero integer value.")
+        raise ValueError(
+            "ERROR eofunc_eofs: num_eofs must be a positive non-zero integer value."
+        )
 
     eofs = solver.eofs(neofs=neofs, eofscaling=eofscaling)
 
@@ -163,7 +176,8 @@ def eofunc_eofs(data, neofs=1, time_dim=0, eofscaling=0, weights=None, center=Tr
     attrs['varianceFraction'] = solver.varianceFraction(neigs=neofs)
 
     if meta:
-        dims = ["eof"] + [data.dims[i] for i in range(data.ndim) if i != time_dim]
+        dims = ["eof"
+               ] + [data.dims[i] for i in range(data.ndim) if i != time_dim]
         coords = {
             k: v for (k, v) in data.coords.items() if k != data.dims[time_dim]
         }
@@ -173,7 +187,15 @@ def eofunc_eofs(data, neofs=1, time_dim=0, eofscaling=0, weights=None, center=Tr
 
     return xr.DataArray(eofs, attrs=attrs, dims=dims, coords=coords)
 
-def eofunc_pcs(data, npcs=1, time_dim=0, pcscaling=0, weights=None, center=True, ddof=1, meta=False):
+
+def eofunc_pcs(data,
+               npcs=1,
+               time_dim=0,
+               pcscaling=0,
+               weights=None,
+               center=True,
+               ddof=1,
+               meta=False):
     """
     Computes the principal components (time projection) in the empirical orthogonal function
     analysis.
@@ -250,11 +272,17 @@ def eofunc_pcs(data, npcs=1, time_dim=0, pcscaling=0, weights=None, center=True,
 
     """
 
-    data, solver = generate_eofs_solver(data, time_dim=time_dim, weights=weights, center=center, ddof=ddof)
+    data, solver = generate_eofs_solver(data,
+                                        time_dim=time_dim,
+                                        weights=weights,
+                                        center=center,
+                                        ddof=ddof)
 
     # Checking number of EOFs
     if npcs <= 0:
-        raise ValueError("ERROR eofunc_pcs: num_pcs must be a positive non-zero integer value.")
+        raise ValueError(
+            "ERROR eofunc_pcs: num_pcs must be a positive non-zero integer value."
+        )
 
     solver = Eof(data, weights=weights, center=center, ddof=ddof)
 
@@ -278,29 +306,33 @@ def eofunc_pcs(data, npcs=1, time_dim=0, pcscaling=0, weights=None, center=True,
 
 # Transparent wrappers for geocat.comp backwards compatibility
 
+
 def eofunc(data: Iterable, neval, **kwargs) -> xr.DataArray:
     warnings.warn(
         "eofunc will be deprecated soon in a future version and may not currently generate proper results for some of "
-        "its arguments including `pcrit`, `jopt=""correlation""`, and 'missing_value' other than np.nan. The output "
+        "its arguments including `pcrit`, `jopt="
+        "correlation"
+        "`, and 'missing_value' other than np.nan. The output "
         " and its attributes may thus not be as expected, too. Use `eofunc_eofs` instead.",
-        PendingDeprecationWarning
-    )
+        PendingDeprecationWarning)
 
     if not isinstance(data, xr.DataArray) or not isinstance(data, np.ndarray):
         data = np.asarray(data)
 
-    time_dim = int(kwargs.get("time_dim", data.ndim-1))
+    time_dim = int(kwargs.get("time_dim", data.ndim - 1))
     meta = bool(kwargs.get("meta"))
 
     return eofunc_eofs(data, neofs=neval, time_dim=time_dim, meta=meta)
 
+
 def eofunc_ts(data: Iterable, evec, **kwargs) -> xr.DataArray:
     warnings.warn(
         "eofunc_ts will be deprecated soon in a future version and may not currently generate proper results for "
-        "some of its arguments including `evec`, `jopt=""correlation""`, and 'missing_value' other than np.nan. The output "
+        "some of its arguments including `evec`, `jopt="
+        "correlation"
+        "`, and 'missing_value' other than np.nan. The output "
         " and its attributes may thus not be as expected, too. Use `eofunc_pcs` instead.",
-        PendingDeprecationWarning
-    )
+        PendingDeprecationWarning)
 
     if not isinstance(data, xr.DataArray) or not isinstance(data, np.ndarray):
         data = np.asarray(data)
