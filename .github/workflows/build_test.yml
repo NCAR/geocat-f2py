@@ -27,11 +27,11 @@ jobs:
       - name: conda_install_darwin
         if: matrix.os == 'macos-latest'
         run: |
-          conda install numpy=1.19 xarray dask pytest gfortran_osx-64 liblapack eofs
+          conda install numpy=1.19 xarray dask pytest gfortran_osx-64 liblapack eofs netcdf4
       - name: conda_install_linux
         if: matrix.os == 'ubuntu-latest'
         run: |
-          conda install numpy=1.19 xarray dask pytest gfortran_linux-64 liblapack eofs
+          conda install numpy=1.19 xarray dask pytest gfortran_linux-64 liblapack eofs netcdf4
       - name: build_test
         run: |
           source build.sh
