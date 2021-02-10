@@ -15,7 +15,7 @@ m_x_out = 3
 
 # Options for function call
 # For default inputs and unit tests, optiona are not set
-# To explicitly test options, msg_py and distmx will be set
+# To explicitly test options, missing_value and distmx will be set
 msg_nan = np.nan
 msg_99 = -99
 distmx = 275
@@ -128,7 +128,7 @@ class Test_triple_to_grid_float64(ut.TestCase):
                                          y_in,
                                          x_out,
                                          y_out,
-                                         msg=np.nan)
+                                         missing_value=np.nan)
 
         np.testing.assert_array_equal(out_expected_msg_nan, out.values)
 
@@ -138,7 +138,7 @@ class Test_triple_to_grid_float64(ut.TestCase):
                                          y_in,
                                          x_out,
                                          y_out,
-                                         msg=-99)
+                                         missing_value=-99)
 
         np.testing.assert_array_equal(out_expected_msg_99, out.values)
 
@@ -148,7 +148,7 @@ class Test_triple_to_grid_float64(ut.TestCase):
                                          y_in,
                                          x_out,
                                          y_out,
-                                         msg=np.nan,
+                                         missing_value=np.nan,
                                          distmx=distmx)
 
         np.testing.assert_array_equal(out_expected_distmx_msg_nan, out.values)
@@ -159,7 +159,7 @@ class Test_triple_to_grid_float64(ut.TestCase):
                                          y_in,
                                          x_out,
                                          y_out,
-                                         msg=-99,
+                                         missing_value=-99,
                                          distmx=distmx)
 
         np.testing.assert_array_equal(out_expected_distmx_msg_99, out.values)
@@ -199,7 +199,7 @@ class Test_triple_to_grid_float32(ut.TestCase):
                                          y_in.astype(np.float32),
                                          x_out.astype(np.float32),
                                          y_out.astype(np.float32),
-                                         msg=np.nan)
+                                         missing_value=np.nan)
         np.testing.assert_array_equal(out_expected_msg_nan.astype(np.float32), out.values)
 
     def test_triple_to_grid_float32_msg_99(self):
@@ -208,7 +208,7 @@ class Test_triple_to_grid_float32(ut.TestCase):
                                          y_in.astype(np.float32),
                                          x_out.astype(np.float32),
                                          y_out.astype(np.float32),
-                                         msg=-99)
+                                         missing_value=-99)
         np.testing.assert_array_almost_equal(out_expected_msg_99, out.values)
 
     def test_triple_to_grid_float32_distmx_msg_nan(self):
@@ -217,7 +217,7 @@ class Test_triple_to_grid_float32(ut.TestCase):
                                          y_in.astype(np.float32),
                                          x_out.astype(np.float32),
                                          y_out.astype(np.float32),
-                                         msg=np.nan,
+                                         missing_value=np.nan,
                                          distmx=distmx)
         np.testing.assert_array_equal(out_expected_distmx_msg_nan.astype(np.float32), out.values.astype(np.float32))
 
@@ -227,6 +227,9 @@ class Test_triple_to_grid_float32(ut.TestCase):
                                          y_in.astype(np.float32),
                                          x_out.astype(np.float32),
                                          y_out.astype(np.float32),
-                                         msg=-99,
+                                         missing_value=-99,
                                          distmx=distmx)
         np.testing.assert_array_equal(out_expected_distmx_msg_99.astype(np.float32), out.values)
+
+# a = Test_triple_to_grid_float64()
+# a.test_triple_to_grid_float64_method_0()

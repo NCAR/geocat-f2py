@@ -203,115 +203,131 @@ def grid_to_triple(data, x_in=None, y_in=None, msg_py=None):
     return out
 
 
-def triple_to_grid(data, x_in, y_in, x_out, y_out, **kwargs):
-    pass
-    # ''' signature:  grid = triple_to_grid(data,x_out,y_out,x_in,y_in,msg_py)
-    """Places unstructured (randomly-spaced) data onto the nearest locations of a rectilinear grid.
+def triple_to_grid(data, x_in, y_in, x_out, y_out, method=1, domain=float(1.0), distmx=None, missing_value=np.nan, meta=False):
+    """
+    Places unstructured (randomly-spaced) data onto the nearest locations of a rectilinear grid.
 
-        Args:
+    Parameters
+    ----------
 
-            data (:class:`xarray.DataArray`: or :class:`numpy.ndarray`):
-                    A multi-dimensional array, whose rightmost dimension is the same
-                    length as `x_in` and `y_in`, containing the values associated with 
-                    the "x" and "y" coordinates. Missing values may be present but 
-                    will be ignored.
+    data : :class:`xarray.DataArray`: or :class:`numpy.ndarray`:
+        A multi-dimensional array, whose rightmost dimension is the same
+        length as `x_in` and `y_in`, containing the values associated with
+        the "x" and "y" coordinates. Missing values may be present but
+        will be ignored.
 
-            x_in (:class:`xarray.DataArray`: or :class:`numpy.ndarray`):
-                    One-dimensional arrays of the same length containing the coordinates
-                    associated with the data values. For geophysical variables, "x"
-                    correspond to longitude.
+    x_in : :class:`xarray.DataArray`: or :class:`numpy.ndarray`:
+        One-dimensional arrays of the same length containing the coordinates
+        associated with the data values. For geophysical variables, "x"
+        correspond to longitude.
 
-            y_in (:class:`xarray.DataArray`: or :class:`numpy.ndarray`):
-                    One-dimensional arrays of the same length containing the coordinates
-                    associated with the data values. For geophysical variables, "y"
-                    correspond to latitude.
+    y_in : :class:`xarray.DataArray`: or :class:`numpy.ndarray`:
+        One-dimensional arrays of the same length containing the coordinates
+        associated with the data values. For geophysical variables, "y"
+        correspond to latitude.
 
-            x_out (:class:`xarray.DataArray`: or :class:`numpy.ndarray`):
-                    A one-dimensional array of length M containing the "x" coordinates
-                    associated with the returned two-grid. For geophysical variables, 
-                    these are longitudes. The coordinates' values must be
-                    monotonically increasing.
+    x_out : :class:`xarray.DataArray`: or :class:`numpy.ndarray`:
+        A one-dimensional array of length M containing the "x" coordinates
+        associated with the returned two-grid. For geophysical variables,
+        these are longitudes. The coordinates' values must be
+        monotonically increasing.
 
-            y_out (:class:`xarray.DataArray`: or :class:`numpy.ndarray`):
-                    A one-dimensional array of length N containing the "y" coordinates
-                    associated with the returned grid. For geophysical variables, 
-                    these are latitudes. The coordinates' values must be
-                    monotonically increasing.
+    y_out : :class:`xarray.DataArray`: or :class:`numpy.ndarray`:
+        A one-dimensional array of length N containing the "y" coordinates
+        associated with the returned grid. For geophysical ~variables,
+        these are latitudes. The coordinates' values must be
+        monotonically increasing.
 
-            **kwargs:
-                extra options for the function. Currently the following are supported:
-                - ``method``: An integer value that can be 0 or 1. The default value is 1. 
-                              A value of 1 means to use the great circle distance formula 
-                              for distance calculations.
-                              Warning: `method` = 0, together with `domain` = 1.0, could 
-                              result in many of the target grid points to be set to the 
-                              missing value if the number of grid points is large (ie: a 
-                              high resolution grid) and the number of observations 
-                              relatively small.
-                - ``domain``: A float value that should be set to a value >= 0. The
-                              default value is 1.0. If present, the larger this factor, 
-                              the wider the spatial domain allowed to influence grid boundary
-                              points. Typically, `domain` is 1.0 or 2.0. If `domain` <= 0.0,
-                              then values located outside the grid domain specified by
-                              `x_out` and `y_out` arguments will not be used.
-                - ``distmx``: Setting `distmx` allows the user to specify a search
-                              radius (km) beyond which observations are not considered
-                              for nearest neighbor. Only applicable when `method` = 1.
-                              The default `distmx`=1e20 (km) means that every grid point
-                              will have a nearest neighbor. It is suggested that users
-                              specify a reasonable value for `distmx`.
-                - ``msg`` (:obj:`numpy.number`): A numpy scalar value that represent
-                              a missing value in `data`. The default value is `np.nan`. 
-                              If specified explicitly, this argument allows the user to
-                              use a missing value scheme other than NaN or masked arrays.
-                - ``meta`` (:obj:`bool`): If set to True and the input array is an Xarray,
-                              the metadata from the input array will be copied to the
-                              output array; default is False.
-                              Warning: This option is not yet supported for this function.
+    Optional Parameters
+    -------------------
 
-        Returns:
-            :class:`xarray.DataArray`: The returned array will be K x N x M, where K
-                represents the leftmost dimensions of `data`, N represent the size of `y_out`,
-                and M represent the size of `x_out` coordinate vectors. It will be of type 
-                double if any of the input is double, and float otherwise.
+    method :
+        An integer value that can be 0 or 1. The default value is 1.
+        A value of 1 means to use the great circle distance formula
+        for distance calculations.
+        Warning: `method` = 0, together with `domain` = 1.0, could
+        result in many of the target grid points to be set to the
+        missing value if the number of grid points is large (ie: a
+        high resolution grid) and the number of observations
+        relatively small.
 
-        Description:
-            This function puts unstructured data (randomly-spaced) onto the nearest
-            locations of a rectilinear grid. A default value of `domain` option is
-            now set to 1.0 instead of 0.0.
+    domain :
+        A float value that should be set to a value >= 0. The
+        default value is 1.0. If present, the larger this factor,
+        the wider the spatial domain allowed to influence grid boundary
+        points. Typically, `domain` is 1.0 or 2.0. If `domain` <= 0.0,
+        then values located outside the grid domain specified by
+        `x_out` and `y_out` arguments will not be used.
 
-            This function does not perform interpolation; rather, each individual
-            data point is assigned to the nearest grid point. It is possible that
-            upon return, grid will contain grid points set to missing value if
-            no `x_in(n)`, `y_in(n)` are nearby.
+    distmx :
+        Setting `distmx` allows the user to specify a search
+        radius (km) beyond which observations are not considered
+        for nearest neighbor. Only applicable when `method` = 1.
+        The default `distmx`=1e20 (km) means that every grid point
+        will have a nearest neighbor. It is suggested that users
+        specify a reasonable value for `distmx`.
 
-        Examples:
+    missing_value : :obj:`numpy.number`:
+        A numpy scalar value that represent
+        a missing value in `data`. The default value is `np.nan`.
+        If specified explicitly, this argument allows the user to
+        use a missing value scheme other than NaN or masked arrays.
 
-    	Example 1: Using triple_to_grid with :class:`xarray.DataArray` input
+    meta : :obj:`bool`:
+        If set to True and the input array is an Xarray,
+        the metadata from the input array will be copied to the
+        output array; default is False.
+        Warning: This option is not yet supported for this function.
 
-    	.. code-block:: python
+    Returns
+    -------
 
-    	    import numpy as np
-    	    import xarray as xr
-    	    import geocat.comp
+    grid : :class:`xarray.DataArray`:
+        The returned array will be K x N x M, where K
+        represents the leftmost dimensions of `data`, N represent the size of `y_out`,
+        and M represent the size of `x_out` coordinate vectors. It will be of type
+        double if any of the input is double, and float otherwise.
 
-    	    # Open a netCDF data file using xarray default engine and load the data stream
-    	    ds = xr.open_dataset("./ruc.nc")
+    Description
+    -----------
 
-    	    # [INPUT] Grid & data info on the source curvilinear
-    	    data = ds.DIST_236_CBL[:]
-    	    x_in = ds.gridlat_236[:]
-    	    y_in = ds.gridlon_236[:]
-    	    x_out = ds.gridlat_236[:]
-    	    y_out = ds.gridlon_236[:]
+        This function puts unstructured data (randomly-spaced) onto the nearest
+        locations of a rectilinear grid. A default value of `domain` option is
+        now set to 1.0 instead of 0.0.
+
+        This function does not perform interpolation; rather, each individual
+        data point is assigned to the nearest grid point. It is possible that
+        upon return, grid will contain grid points set to missing value if
+        no `x_in(n)`, `y_in(n)` are nearby.
+
+    Examples
+    --------
+
+    Example 1: Using triple_to_grid with :class:`xarray.DataArray` input
+
+    .. code-block:: python
+
+        import numpy as np
+        import xarray as xr
+        import geocat.comp
+
+        # Open a netCDF data file using xarray default engine and load the data stream
+        ds = xr.open_dataset("./ruc.nc")
+
+        # [INPUT] Grid & data info on the source curvilinear
+        data = ds.DIST_236_CBL[:]
+        x_in = ds.gridlat_236[:]
+        y_in = ds.gridlon_236[:]
+        x_out = ds.gridlat_236[:]
+        y_out = ds.gridlon_236[:]
 
 
-    	    # [OUTPUT] Grid on destination points grid (or read the 1D lat and lon from
-    	    #	       an other .nc file.
-    	    newlat1D_points=np.linspace(lat2D_curv.min(), lat2D_curv.max(), 100)
-    	    newlon1D_points=np.linspace(lon2D_curv.min(), lon2D_curv.max(), 100)
+        # [OUTPUT] Grid on destination points grid (or read the 1D lat and lon from
+        #	       an other .nc file.
+        newlat1D_points=np.linspace(lat2D_curv.min(), lat2D_curv.max(), 100)
+        newlon1D_points=np.linspace(lon2D_curv.min(), lon2D_curv.max(), 100)
 
-    	    output = geocat.comp.triple_to_grid(data, x_out, y_out, x_in, y_in)
+        output = geocat.comp.triple_to_grid(data, x_out, y_out, x_in, y_in)
         """
 
     # TODO: May need to be revisited after sanity_check work is finished
@@ -369,48 +385,32 @@ def triple_to_grid(data, x_in, y_in, x_out, y_out, **kwargs):
             "ERROR triple_to_grid: `x_out` and `y_out` arguments must be one-dimensional array !\n"
         )
 
-    # Parse the options from kwargs, first initializing with default values
-    input_method = 1
-    input_distmx = float(1e20)
-    input_domain = float(1.0)
+    if not isinstance(method, int):
+        raise TypeError(
+            'ERROR triple_to_grid: `method` arg must be an integer. Set it to either 1 or 0.'
+        )
 
-    if "method" in kwargs:
-        if not isinstance(kwargs["method"], int):
-            raise TypeError(
-                'ERROR triple_to_grid: `method` arg must be an integer. Set it to either 1 or 0.'
-            )
-
-        input_method = kwargs["method"]
-
-        if (input_method != 0) and (input_method != 1):
-            raise TypeError(
-                'ERROR triple_to_grid: `method` arg accepts either 0 or 1.')
+    if (method != 0) and (method != 1):
+        raise TypeError(
+            'ERROR triple_to_grid: `method` arg accepts either 0 or 1.')
 
     # `distmx` is only applicable when `method`==1
-    if "distmx" in kwargs:
-        if input_method:
-            input_distmx = kwargs["distmx"]
-
-            if np.asarray(input_distmx).size != 1:
-                raise ValueError(
-                    "ERROR triple_to_grid: Provide a scalar value for `distmx` !"
-                )
-        else:
+    if method:
+        if np.asarray(distmx).size != 1:
+            raise ValueError(
+                "ERROR triple_to_grid: Provide a scalar value for `distmx` !"
+            )
+    else:
+        if distmx is not None:
             raise ValueError(
                 "ERROR triple_to_grid: `distmx` is only applicable when `method`==1 !"
             )
 
-    if "domain" in kwargs:
-        input_domain = kwargs["domain"]
+    if np.asarray(domain).size != 1:
+        raise ValueError(
+            "ERROR triple_to_grid: Provide a scalar value for `domain` !")
 
-        if np.asarray(input_domain).size != 1:
-            raise ValueError(
-                "ERROR triple_to_grid: Provide a scalar value for `domain` !")
-
-    msg = kwargs.get("msg", np.nan)
-    meta = kwargs.get("meta", False)
-
-    # data data structure elements and autochunking
+    # `data` data structure elements and autochunking
     data_chunks = list(data.dims)
     data_chunks[:-1] = [
         (k, 1) for (k, v) in zip(list(data.dims)[:-1],
@@ -442,10 +442,10 @@ def triple_to_grid(data, x_in, y_in, x_out, y_out, **kwargs):
         x_out,
         y_out,
         dask_grid_shape,
-        input_method,
-        input_distmx,
-        input_domain,
-        msg,
+        method=method,
+        distmx=distmx,
+        domain=domain,
+        msg_py=missing_value,
         chunks=grid_chunks,
         dtype=data.dtype,
         drop_axis=[data.ndim - 1],
