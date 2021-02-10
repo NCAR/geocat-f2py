@@ -89,64 +89,69 @@ def _triple_to_grid_2d(x_in, y_in, data, x_out, y_out, msg_py):
 
 
 def grid_to_triple(data, x_in=None, y_in=None, msg_py=None):
-    """Converts a two-dimensional grid with one-dimensional coordinate variables
-           to an array where each grid value is associated with its coordinates.
+    """
+    Converts a two-dimensional grid with one-dimensional coordinate variables
+    to an array where each grid value is associated with its coordinates.
 
-            Args:
+    Parameters
+    ----------
 
-                data (:class:`xarray.DataArray` or :class:`numpy.ndarray`):
-                        Two-dimensional array of size ny x mx containing the data values.
-                        Missing values may be present in `data`, but they are ignored.
+    data : :class:`xarray.DataArray` or :class:`numpy.ndarray`:
+        Two-dimensional array of size ny x mx containing the data values.
+        Missing values may be present in `data`, but they are ignored.
 
-                x_in (:class:`xarray.DataArray` or :class:`numpy.ndarray`):
-                        Coordinates associated with the right dimension of the variable `data`.
-                        If `data` is of type :class:`xarray.DataArray` and `x_in` is unspecified,
-                        then it comes as the associated coordinate of `data` (if `x_in` is explicitly
-                        given, then it will be used for calculations). If `data` is of type
-                        :class:`numpy.ndarray`, then it must be explicitly given as input and it
-                        must have the same dimension (call it `mx`) as the right dimension of `data`.
+    x_in : :class:`xarray.DataArray` or :class:`numpy.ndarray`:
+        Coordinates associated with the right dimension of the variable `data`.
+        If `data` is of type :class:`xarray.DataArray` and `x_in` is unspecified,
+        then it comes as the associated coordinate of `data` (if `x_in` is explicitly
+        given, then it will be used for calculations). If `data` is of type
+        :class:`numpy.ndarray`, then it must be explicitly given as input and it
+        must have the same dimension (call it `mx`) as the right dimension of `data`.
 
-                y_in (:class:`xarray.DataArray` or :class:`numpy.ndarray`):
-                        Coordinates associated with the left dimension of the variable `data`.
-                        If `data` is of type :class:`xarray.DataArray` and `y_in` is unspecified,
-                        then it comes as the associated coordinate of `data` (if `y_in` is explicitly
-                        given, then it will be used for calculations). If `data` is of type
-                        :class:`numpy.ndarray`, then it must be explicitly given as input and it
-                        must have the same dimension (call it `ny`) as the left dimension of `data`.
+    y_in : :class:`xarray.DataArray` or :class:`numpy.ndarray`:
+        Coordinates associated with the left dimension of the variable `data`.
+        If `data` is of type :class:`xarray.DataArray` and `y_in` is unspecified,
+        then it comes as the associated coordinate of `data` (if `y_in` is explicitly
+        given, then it will be used for calculations). If `data` is of type
+        :class:`numpy.ndarray`, then it must be explicitly given as input and it
+        must have the same dimension (call it `ny`) as the left dimension of `data`.
 
-                msg_py (:obj:`numpy.number`):
-                    A numpy scalar value that represent a missing value in `data`.
-                    This argument allows a user to use a missing value scheme
-                    other than NaN or masked arrays, similar to what NCL allows.
+    msg_py : :obj:`numpy.number`:
+        A numpy scalar value that represent a missing value in `data`.
+        This argument allows a user to use a missing value scheme
+        other than NaN or masked arrays, similar to what NCL allows.
 
-            Returns:
-                :class:`xarray.DataArray`: The maximum size of the returned array will be 3 x ld,
-                where ld <= ny x mx.
-                If no missing values are encountered in `data`, then ld = ny x mx. If missing
-                values are encountered in `data`, they are not returned and hence ld will be
-                equal to ny x mx minus the number of missing values found in `data`.
-                The return array will be double if any of the input arrays are double, and float
-                otherwise.
+    Returns
+    -------
 
-            Examples:
+    out : :class:`xarray.DataArray`:
+        The maximum size of the returned array will be 3 x ld, where ld <= ny x mx.
+        If no missing values are encountered in `data`, then ld = ny x mx. If missing
+        values are encountered in `data`, they are not returned and hence ld will be
+        equal to ny x mx minus the number of missing values found in `data`.
+        The return array will be double if any of the input arrays are double, and float
+        otherwise.
 
-                Example 1: Using grid_to_triple with :class:`xarray.DataArray` input
+    Examples
+    --------
 
-                .. code-block:: python
+        Example 1: Using grid_to_triple with :class:`xarray.DataArray` input
 
-                    import numpy as np
-                    import xarray as xr
-                    import geocat.comp
+        .. code-block:: python
 
-                    # Open a netCDF data file using xarray default engine and load the data stream
-                    ds = xr.open_dataset("./NETCDF_FILE.nc")
+            import numpy as np
+            import xarray as xr
+            import geocat.comp
 
-                    # [INPUT] Grid & data info on the source curvilinear
-                    data = ds.DIST_236_CBL[:]
-                    x_in = ds.gridlat_236[:]
-                    y_in = ds.gridlon_236[:]
+            # Open a netCDF data file using xarray default engine and load the data stream
+            ds = xr.open_dataset("./NETCDF_FILE.nc")
 
-                    output = geocat.comp.grid_to_triple(data, x_in, y_in)
+            # [INPUT] Grid & data info on the source curvilinear
+            data = ds.DIST_236_CBL[:]
+            x_in = ds.gridlat_236[:]
+            y_in = ds.gridlon_236[:]
+
+            output = geocat.comp.grid_to_triple(data, x_in, y_in)
         """
 
     # TODO: Will need to be revisited after sanity_check work is finished
