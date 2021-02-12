@@ -7,7 +7,7 @@ source:
   git_url: https://github.com/NCAR/geocat-f2py.git
 
 build:
-  number: 2
+  number: 0
   skip: True # [py<35]
 
 requirements:
