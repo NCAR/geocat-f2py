@@ -537,9 +537,8 @@ def linint2pts(fi, xo, yo, icycx=False, msg_py=None, xi=None, yi=None):
             )
 
         fi = xr.DataArray(fi)
-        fi_chunk = dict([
-            (k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
-        ])
+        fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
+                        ])
 
         fi = xr.DataArray(
             fi.data,
@@ -616,9 +615,11 @@ def linint2pts(fi, xo, yo, icycx=False, msg_py=None, xi=None, yi=None):
 
 # Transparent wrappers for geocat.ncomp backwards compatibility
 
+
 def linint2_points(fi, xo, yo, icycx, msg=None, meta=False, xi=None, yi=None):
-    warnings.warn("linint2_points function name and signature will be deprecated soon "
-                  "in a future version. Use `linint2pts` instead!",
-                  PendingDeprecationWarning)
+    warnings.warn(
+        "linint2_points function name and signature will be deprecated soon "
+        "in a future version. Use `linint2pts` instead!",
+        PendingDeprecationWarning)
 
     return linint2pts(fi, xo, yo, icycx=icycx, msg_py=msg, xi=xi, yi=yi)
