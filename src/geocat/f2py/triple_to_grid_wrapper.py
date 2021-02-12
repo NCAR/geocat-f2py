@@ -208,7 +208,16 @@ def grid_to_triple(data, x_in=None, y_in=None, msg_py=None):
     return out
 
 
-def triple_to_grid(data, x_in, y_in, x_out, y_out, method=1, domain=float(1.0), distmx=None, missing_value=np.nan, meta=False):
+def triple_to_grid(data,
+                   x_in,
+                   y_in,
+                   x_out,
+                   y_out,
+                   method=1,
+                   domain=float(1.0),
+                   distmx=None,
+                   missing_value=np.nan,
+                   meta=False):
     """
     Places unstructured (randomly-spaced) data onto the nearest locations of a rectilinear grid.
 
@@ -403,8 +412,7 @@ def triple_to_grid(data, x_in, y_in, x_out, y_out, method=1, domain=float(1.0), 
     if method:
         if np.asarray(distmx).size != 1:
             raise ValueError(
-                "ERROR triple_to_grid: Provide a scalar value for `distmx` !"
-            )
+                "ERROR triple_to_grid: Provide a scalar value for `distmx` !")
     else:
         if distmx is not None:
             raise ValueError(

@@ -2,7 +2,6 @@
 
 cd src/geocat/f2py/fortran
 f2py -c --fcompiler=gnu95 dpres_plevel_dp.pyf dpres_plevel_dp.f
-f2py -c -llapack --fcompiler=gnu95 eof_scripps.pyf eof_scripps.f90
 f2py -c --fcompiler=gnu95 grid2triple.pyf grid2triple.f
 f2py -c --fcompiler=gnu95 linint2.pyf linint2.f
 f2py -c --fcompiler=gnu95 moc_loops.pyf moc_loops.f
