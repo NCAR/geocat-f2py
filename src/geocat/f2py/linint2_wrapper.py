@@ -95,6 +95,136 @@ def _linint2pts(xi, yi, fi, xo, yo, icycx, msg_py, shape):
 
 
 def linint1(fi, xo, xi=None, icycx=0, msg_py=None):
+    """Need new description line, this one was copied from linint2 in
+    geocat-ncomp.
+    The following information needs to be updated as it refers to the
+    arguments, etc., from linint2 in geocat-ncomp.  This paragraph
+    should also be updated to reflect the in-depth information about
+    linint1.
+    Args:
+        fi (:class:`xarray.DataArray` or :class:`numpy.ndarray`):
+            An array of two or more dimensions. If xi is passed in as an
+            argument, then the size of the rightmost dimension of fi
+            must match the rightmost dimension of xi. Similarly, if yi
+            is passed in as an argument, then the size of the second-
+            rightmost dimension of fi must match the rightmost dimension
+            of yi.
+            If missing values are present, then linint2 will perform the
+            bilinear interpolation at all points possible, but will
+            return missing values at coordinates which could not be
+            used.
+            Note:
+                This variable must be
+                supplied as a :class:`xarray.DataArray` in order to copy
+                the dimension names to the output. Otherwise, default
+                names will be used.
+        xo (:class:`xarray.DataArray` or :class:`numpy.ndarray`):
+            A one-dimensional array that specifies the X coordinates of
+            the return array. It must be strictly monotonically
+            increasing, but may be unequally spaced.
+            For geo-referenced data, xo is generally the longitude
+            array.
+            If the output coordinates (xo) are outside those of the
+            input coordinates (xi), then the fo values at those
+            coordinates will be set to missing (i.e. no extrapolation is
+            performed).
+        yo (:class:`xarray.DataArray` or :class:`numpy.ndarray`):
+            A one-dimensional array that specifies the Y coordinates of
+            the return array. It must be strictly monotonically
+            increasing, but may be unequally spaced.
+            For geo-referenced data, yo is generally the latitude array.
+            If the output coordinates (yo) are outside those of the
+            input coordinates (yi), then the fo values at those
+            coordinates will be set to missing (i.e. no extrapolation is
+            performed).
+        icycx (:obj:`bool`):
+            An option to indicate whether the rightmost dimension of fi
+            is cyclic. This should be set to True only if you have
+            global data, but your longitude values don't quite wrap all
+            the way around the globe. For example, if your longitude
+            values go from, say, -179.75 to 179.75, or 0.5 to 359.5,
+            then you would set this to True.
+        msg (:obj:`numpy.number`):
+            A numpy scalar value that represent a missing value in fi.
+            This argument allows a user to use a missing value scheme
+            other than NaN or masked arrays, similar to what NCL allows.
+        meta (:obj:`bool`):
+            If set to True and the input array is an Xarray, the metadata
+            from the input array will be copied to the output array;
+            default is False.
+        xi (:class:`numpy.ndarray`):
+            An array that specifies the X coordinates of the fi array.
+            Most frequently, this is a 1D strictly monotonically
+            increasing array that may be unequally spaced. In some
+            cases, xi can be a multi-dimensional array (see next
+            paragraph). The rightmost dimension (call it nxi) must have
+            at least two elements, and is the last (fastest varying)
+            dimension of fi.
+            If xi is a multi-dimensional array, then each nxi subsection
+            of xi must be strictly monotonically increasing, but may be
+            unequally spaced. All but its rightmost dimension must be
+            the same size as all but fi's rightmost two dimensions.
+            For geo-referenced data, xi is generally the longitude
+            array.
+            Note:
+                If fi is of type :class:`xarray.DataArray` and xi is
+                left unspecified, then the rightmost coordinate
+                dimension of fi will be used. If fi is not of type
+                :class:`xarray.DataArray`, then xi becomes a mandatory
+                parameter. This parameter must be specified as a keyword
+                argument.
+        yi (:class:`numpy.ndarray`):
+            An array that specifies the Y coordinates of the fi array.
+            Most frequently, this is a 1D strictly monotonically
+            increasing array that may be unequally spaced. In some
+            cases, yi can be a multi-dimensional array (see next
+            paragraph). The rightmost dimension (call it nyi) must have
+            at least two elements, and is the second-to-last dimension
+            of fi.
+            If yi is a multi-dimensional array, then each nyi subsection
+            of yi must be strictly monotonically increasing, but may be
+            unequally spaced. All but its rightmost dimension must be
+            the same size as all but fi's rightmost two dimensions.
+            For geo-referenced data, yi is generally the latitude array.
+            Note:
+                If fi is of type :class:`xarray.DataArray` and xi is
+                left unspecified, then the second-to-rightmost
+                coordinate dimension of fi will be used. If fi is not of
+                type :class:`xarray.DataArray`, then xi becomes a
+                mandatory parameter. This parameter must be specified as
+                a keyword argument.
+    Returns:
+        :class:`xarray.DataArray`: The interpolated grid. If the *meta*
+        parameter is True, then the result will include named dimensions
+        matching the input array. The returned value will have the same
+        dimensions as fi, except for the rightmost two dimensions which
+        will have the same dimension sizes as the lengths of yo and xo.
+        The return type will be double if fi is double, and float
+        otherwise.
+    Examples:
+        Example 1: Using linint2 with :class:`xarray.DataArray` input
+        .. code-block:: python
+            import numpy as np
+            import xarray as xr
+            import geocat.comp
+            fi_np = np.random.rand(30, 80)  # random 30x80 array
+            # xi and yi do not have to be equally spaced, but they are
+            # in this example
+            xi = np.arange(80)
+            yi = np.arange(30)
+            # create target coordinate arrays, in this case use the same
+            # min/max values as xi and yi, but with different spacing
+            xo = np.linspace(xi.min(), xi.max(), 100)
+            yo = np.linspace(yi.min(), yi.max(), 50)
+            # create :class:`xarray.DataArray` and chunk it using the
+            # full shape of the original array.
+            # note that xi and yi are attached as coordinate arrays
+            fi = xr.DataArray(fi_np,
+                              dims=['lat', 'lon'],
+                              coords={'lat': yi, 'lon': xi}
+                             ).chunk(fi_np.shape)
+            fo = geocat.comp.linint2(fi, xo, yo, 0)
+    """
     # ''' signature : fo = dlinint1(xi,fi,xo,[icycx,xmsg,iopt])
 
     # ''' Start of boilerplate
