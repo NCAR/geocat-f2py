@@ -1,6 +1,6 @@
 package:
   name: "geocat-f2py"
-  version: "2021.02.0"
+  version: '2021.02.0'
 
 source:
   git_rev: main
