@@ -7,8 +7,6 @@ import sys
 import time
 import unittest as ut
 
-
-
 # nominal input
 fi_nom = np.asarray([
     1.870327, 1.872924, 2.946794, 1.98253, 1.353965, 0.8730035, 0.1410671,
@@ -39,27 +37,33 @@ msg32 = fi_msg[1, 1, 1].astype(np.float32)
 # expected output
 fo_nom_opt0_expected = np.asarray([
     1.870327, 1.353965, 1.588746, -0.1676207, 1.01385, 0.7974159, 2.015617,
-    0.6676366, 1.249507]).reshape((3, 3))
+    0.6676366, 1.249507
+]).reshape((3, 3))
 
 fo_nom_opt2_expected = np.asarray([
     1.870327, 1.353965, 1.588746, -0.1676207, 1.01385, 0.7974159, 2.015617,
-    0.6676366, 1.249507]).reshape((3, 3))
+    0.6676366, 1.249507
+]).reshape((3, 3))
 
 fo_nan_opt0_expected = np.asarray([
     1.870327, 1.486811, 1.679019, -0.1676207, 0.9685476, 0.7141976, 2.015617,
-    1.757489, 1.473235]).reshape((3, 3))
+    1.757489, 1.473235
+]).reshape((3, 3))
 
 fo_nan_opt2_expected = np.asarray([
     1.870327, 1.851139, 1.679019, -0.1676207, 0.2114156, 0.7141976, 2.015617,
-    0.9372569, 1.473235]).reshape((3, 3))
+    0.9372569, 1.473235
+]).reshape((3, 3))
 
 fo_msg_opt0_expected = np.asarray([
     1.870327, 1.486811, 1.679019, -0.1676207, 0.9685476, 0.7141976, 2.015617,
-    1.757489, 1.473235]).reshape((3, 3))
+    1.757489, 1.473235
+]).reshape((3, 3))
 
 fo_msg_opt2_expected = np.asarray([
     1.870327, 1.851139, 1.679019, -0.1676207, 0.2114156, 0.7141976, 2.015617,
-    0.9372569, 1.473235]).reshape((3, 3))
+    0.9372569, 1.473235
+]).reshape((3, 3))
 
 
 # run tests
@@ -73,41 +77,41 @@ class Test_rcm2points(ut.TestCase):
         nt.assert_array_almost_equal(
             fo_nom_opt0_expected,
             geocat.f2py.rcm2points(lat2d,
-                          lon2d,
-                          fi_nom.astype(np.float64),
-                          lat,
-                          lon,
-                          opt=0))
+                                   lon2d,
+                                   fi_nom.astype(np.float64),
+                                   lat,
+                                   lon,
+                                   opt=0))
 
     def test_rcm2points_float64_nom_opt2(self):
         nt.assert_array_almost_equal(
             fo_nom_opt2_expected,
             geocat.f2py.rcm2points(lat2d,
-                          lon2d,
-                          fi_nom.astype(np.float64),
-                          lat,
-                          lon,
-                          opt=2))
+                                   lon2d,
+                                   fi_nom.astype(np.float64),
+                                   lat,
+                                   lon,
+                                   opt=2))
 
     def test_rcm2points_float64_nan_opt0(self):
         nt.assert_array_almost_equal(
             fo_nan_opt0_expected,
             geocat.f2py.rcm2points(lat2d,
-                          lon2d,
-                          fi_nan.astype(np.float64),
-                          lat,
-                          lon,
-                          opt=0))
+                                   lon2d,
+                                   fi_nan.astype(np.float64),
+                                   lat,
+                                   lon,
+                                   opt=0))
 
     def test_rcm2points_float64_nan_opt2(self):
         nt.assert_array_almost_equal(
             fo_nan_opt2_expected,
             geocat.f2py.rcm2points(lat2d,
-                          lon2d,
-                          fi_nan.astype(np.float64),
-                          lat,
-                          lon,
-                          opt=2))
+                                   lon2d,
+                                   fi_nan.astype(np.float64),
+                                   lat,
+                                   lon,
+                                   opt=2))
 
     def test_rcm2points_float64_msg_opt0(self):
         nt.assert_array_almost_equal(
@@ -135,41 +139,41 @@ class Test_rcm2points(ut.TestCase):
         nt.assert_array_almost_equal(
             fo_nom_opt0_expected,
             geocat.f2py.rcm2points(lat2d,
-                          lon2d,
-                          fi_nom.astype(np.float32),
-                          lat,
-                          lon,
-                          opt=0))
+                                   lon2d,
+                                   fi_nom.astype(np.float32),
+                                   lat,
+                                   lon,
+                                   opt=0))
 
     def test_rcm2points_float32_nom_opt2(self):
         nt.assert_array_almost_equal(
             fo_nom_opt2_expected,
             geocat.f2py.rcm2points(lat2d,
-                          lon2d,
-                          fi_nom.astype(np.float32),
-                          lat,
-                          lon,
-                          opt=2))
+                                   lon2d,
+                                   fi_nom.astype(np.float32),
+                                   lat,
+                                   lon,
+                                   opt=2))
 
     def test_rcm2points_float32_nan_opt0(self):
         nt.assert_array_almost_equal(
             fo_nan_opt0_expected,
             geocat.f2py.rcm2points(lat2d,
-                          lon2d,
-                          fi_nan.astype(np.float32),
-                          lat,
-                          lon,
-                          opt=0))
+                                   lon2d,
+                                   fi_nan.astype(np.float32),
+                                   lat,
+                                   lon,
+                                   opt=0))
 
     def test_rcm2points_float32_nan_opt2(self):
         nt.assert_array_almost_equal(
             fo_nan_opt2_expected,
             geocat.f2py.rcm2points(lat2d,
-                          lon2d,
-                          fi_nan.astype(np.float32),
-                          lat,
-                          lon,
-                          opt=2))
+                                   lon2d,
+                                   fi_nan.astype(np.float32),
+                                   lat,
+                                   lon,
+                                   opt=2))
 
     def test_rcm2points_float32_msg_opt0(self):
         nt.assert_array_almost_equal(

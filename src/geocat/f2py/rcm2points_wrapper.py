@@ -11,26 +11,29 @@ from .errors import (DimensionError)
 # These Wrapper are executed within dask processes, and should do anything that
 # can benefit from parallel excution.
 
+
 def _rcm2points(lat2d, lon2d, fi, lat1d, lon1d, msg_py, opt, shape):
 
     fi = np.transpose(fi, axes=(2, 1, 0))
-    lat2d = np.transpose(lat2d, axes=(1,0))
-    lon2d = np.transpose(lon2d, axes=(1,0))
+    lat2d = np.transpose(lat2d, axes=(1, 0))
+    lon2d = np.transpose(lon2d, axes=(1, 0))
 
     fi, msg_py, msg_fort = py2fort_msg(fi, msg_py=msg_py)
 
     fo = drcm2points(lat2d, lon2d, fi, lat1d, lon1d, xmsg=msg_fort, opt=opt)
     fo = np.asarray(fo)
     fo = fo.reshape(shape)
-    
+
     fort2py_msg(fi, msg_fort=msg_fort, msg_py=msg_py)
     fort2py_msg(fo, msg_fort=msg_fort, msg_py=msg_py)
-    
+
     return fo
-    
+
+
 # Outer Wrappers <funcname>()
 # These Wrappers are excecuted in the __main__ python process, and should be
 # used for any tasks which would not benefit from parallel execution.
+
 
 def rcm2points(lat2d, lon2d, fi, lat1d, lon1d, opt=0, msg=None, meta=False):
     """
@@ -92,11 +95,11 @@ def rcm2points(lat2d, lon2d, fi, lat1d, lon1d, opt=0, msg=None, meta=False):
     	Missing values are allowed and no extrapolation is performed.
 
     """
-    
+
     if (lon2d is None) | (lat2d is None):
-         raise CoordinateError(
-             "rcm2points: lon2d and lat2d should always be provided")
-         
+        raise CoordinateError(
+            "rcm2points: lon2d and lat2d should always be provided")
+
     # Basic sanity checks
     if lat2d.shape[0] != lon2d.shape[0] or lat2d.shape[1] != lon2d.shape[1]:
         raise DimensionError(
@@ -121,14 +124,13 @@ def rcm2points(lat2d, lon2d, fi, lat1d, lon1d, opt=0, msg=None, meta=False):
         raise DimensionError(
             "ERROR rcm2points: The rightmost dimensions of fi must be (nlat2d x nlon2d),"
             "where nlat2d and nlon2d are the size of the lat2d/lon2d arrays !")
-    
+
     # ''' Start of boilerplate
     if not isinstance(fi, xr.DataArray):
 
-        fi = xr.DataArray(
-            fi,
-        )
-        fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))])
+        fi = xr.DataArray(fi,)
+        fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
+                        ])
 
         fi = xr.DataArray(
             fi.data,
@@ -137,13 +139,21 @@ def rcm2points(lat2d, lon2d, fi, lat1d, lon1d, opt=0, msg=None, meta=False):
 
     # ensure rightmost dimensions of input are not chunked
     if list(fi.chunks)[-2:] != [(lat2d.shape[0],), (lat2d.shape[1],)]:
-                            # [(lon2d.shape[0]), (lon2d.shape[1])] could also be used
-        raise ChunkError("rcm2points: fi must be unchunked along the rightmost two dimensions")
+        # [(lon2d.shape[0]), (lon2d.shape[1])] could also be used
+        raise ChunkError(
+            "rcm2points: fi must be unchunked along the rightmost two dimensions"
+        )
 
     # fi data structure elements and autochunking
     fi_chunks = list(fi.dims)
-    fi_chunks[:-2] = [(k, 1) for (k, v) in zip(list(fi.dims)[:-2], list(fi.chunks)[:-2])]
-    fi_chunks[-2:] = [(k, v[0]) for (k, v) in zip(list(fi.dims)[-2:], list(fi.chunks)[-2:])]
+    fi_chunks[:-2] = [
+        (k, 1) for (k, v) in zip(list(fi.dims)[:-2],
+                                 list(fi.chunks)[:-2])
+    ]
+    fi_chunks[-2:] = [
+        (k, v[0]) for (k, v) in zip(list(fi.dims)[-2:],
+                                    list(fi.chunks)[-2:])
+    ]
     fi_chunks = dict(fi_chunks)
     fi = fi.chunk(fi_chunks)
 
@@ -151,7 +161,7 @@ def rcm2points(lat2d, lon2d, fi, lat1d, lon1d, opt=0, msg=None, meta=False):
     fo_chunks = list(fi.chunks)
     fo_chunks[-2:] = (lon1d.shape,)
     fo_chunks = tuple(fo_chunks)
-    fo_shape = tuple(a[0] for a in list(fo_chunks))  
+    fo_shape = tuple(a[0] for a in list(fo_chunks))
     # ''' end of boilerplate
 
     fo = map_blocks(
@@ -169,6 +179,6 @@ def rcm2points(lat2d, lon2d, fi, lat1d, lon1d, opt=0, msg=None, meta=False):
         drop_axis=[fi.ndim - 2, fi.ndim - 1],
         new_axis=[fi.ndim - 2],
     )
-    
+
     fo = xr.DataArray(fo.compute(), attrs=fi.attrs)
     return fo
