@@ -70,7 +70,7 @@ the `/build_envs` folder under the root directory that can be used to create a
 development environment containing all of the packages required to build GeoCAT-f2py.  
 The file `environment_Linux.yml` is intended to be used on Linux systems, while
 `environment_Darwin.yml` should be used on macOS.  It is necessary to have
-separate `environment_*.yml` files because Linux and macOS use different C
+separate `environment_*.yml` files because Linux and macOS use different
 compilers, although the following commands should work on both Linux and macOS:
 
     conda env create -f build_envs/environment_$(uname).yml
