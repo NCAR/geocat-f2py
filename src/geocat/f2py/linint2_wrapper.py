@@ -5,7 +5,7 @@ from dask.array.core import map_blocks
 from .errors import (ChunkError, DimensionError, CoordinateError)
 from .fortran import (dlinint1, dlinint2, dlinint2pts)
 from .missing_values import (fort2py_msg, py2fort_msg)
-from .sanity_checks import (sanity_check)
+from .checks import (sanity_check)
 
 # Dask Wrappers _<funcname>()
 # These Wrapper are executed within dask processes, and should do anything that

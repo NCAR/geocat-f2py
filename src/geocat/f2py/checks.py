@@ -4,17 +4,18 @@ import dask as da
 
 # What a sanity check is
 
-def sanity_check (
+def check(
         user_variable_1,
-        var_name=None,
+        var_name='variable',
         data_type=None,
+        max_dimensions=None,
         min_dimensions=None,
         dimensions=None,
         shape=None,
         is_xarray=None,
         is_none=None,
-        num_chunks=None,
         comparison=None,
+        unchunked_dims=None
 
 ):
 
