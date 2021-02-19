@@ -4,20 +4,18 @@ import dask as da
 
 # What a sanity check is
 
-def check(
-        user_variable_1,
-        var_name='variable',
-        data_type=None,
-        max_dimensions=None,
-        min_dimensions=None,
-        dimensions=None,
-        shape=None,
-        is_xarray=None,
-        is_none=None,
-        comparison=None,
-        unchunked_dims=None
 
-):
+def check(user_variable_1,
+          var_name='variable',
+          data_type=None,
+          max_dimensions=None,
+          min_dimensions=None,
+          dimensions=None,
+          shape=None,
+          is_xarray=None,
+          is_none=None,
+          comparison=None,
+          unchunked_dims=None):
 
     if data_type is not None:
         if not (user_variable_1.dtype == data_type):
@@ -65,7 +63,9 @@ def check(
 
     if unchunked_dims is not None:
         for dim in unchunked_dims:
-            if len(user_variable_1.chunks[dim])>1:
-                raise Exception(var_name + " must not be chunked along dimension " + str(dim))
+            if len(user_variable_1.chunks[dim]) > 1:
+                raise Exception(var_name +
+                                " must not be chunked along dimension " +
+                                str(dim))
 
     return True

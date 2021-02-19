@@ -125,7 +125,6 @@ def rcm2points(lat2d, lon2d, fi, lat1d, lon1d, opt=0, msg=None, meta=False):
     #         "ERROR rcm2points: The rightmost dimensions of fi must be (nlat2d x nlon2d),"
     #         "where nlat2d and nlon2d are the size of the lat2d/lon2d arrays !")
 
-
     # ''' Start of boilerplate
 
     if not isinstance(fi, xr.DataArray):
