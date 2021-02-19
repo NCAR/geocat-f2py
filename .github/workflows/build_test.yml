@@ -1,0 +1,39 @@
+  
+name: build_test
+on: push
+jobs:
+  conda_builds:
+    if: "contains(github.event.head_commit.message, 'trigger_build_test')"
+    name: build_test_${{ matrix.python-version }}_${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash -l {0}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ "ubuntu-latest", "macos-latest"]
+        python-version: [ "3.6", "3.7", "3.8", "3.9" ]
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.A_KOOTZ_GEOCAT_F2PY_TOKEN }}
+      - name: conda_env
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: geocat_f2py_build
+          python-version: ${{ matrix.python-version }}
+          channels: conda-forge, ncar
+      - name: conda_install_darwin
+        if: matrix.os == 'macos-latest'
+        run: |
+          conda install numpy=1.19 xarray dask pytest gfortran_osx-64 liblapack
+      - name: conda_install_linux
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          conda install numpy=1.19 xarray dask pytest gfortran_linux-64 liblapack
+      - name: build_test
+        run: |
+          source build.sh
+          pytest

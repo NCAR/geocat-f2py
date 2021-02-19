@@ -65,12 +65,14 @@ class Test_rgrid2rcm(ut.TestCase):
     def test_rgrid2rcm_float64_nom(self):
         nt.assert_array_almost_equal(
             fo_nom_expected,
-            geocat.f2py.rgrid2rcm(lat, lon, fi_nom.astype(np.float64), lat2d, lon2d))
+            geocat.f2py.rgrid2rcm(lat, lon, fi_nom.astype(np.float64), lat2d,
+                                  lon2d))
 
     def test_rgrid2rcm_float64_nan(self):
         nt.assert_array_almost_equal(
             fo_nan_expected,
-            geocat.f2py.rgrid2rcm(lat, lon, fi_nan.astype(np.float64), lat2d, lon2d))
+            geocat.f2py.rgrid2rcm(lat, lon, fi_nan.astype(np.float64), lat2d,
+                                  lon2d))
 
     def test_rgrid2rcm_float64_msg(self):
         nt.assert_array_almost_equal(
@@ -80,17 +82,19 @@ class Test_rgrid2rcm(ut.TestCase):
                                   fi_msg.astype(np.float64),
                                   lat2d,
                                   lon2d,
-                                  msg_py=msg64))
+                                  msg=msg64))
 
     def test_rgrid2rcm_float32_nom(self):
         nt.assert_array_almost_equal(
             fo_nom_expected,
-            geocat.f2py.rgrid2rcm(lat, lon, fi_nom.astype(np.float32), lat2d, lon2d))
+            geocat.f2py.rgrid2rcm(lat, lon, fi_nom.astype(np.float32), lat2d,
+                                  lon2d))
 
     def test_rgrid2rcm_float32_nan(self):
         nt.assert_array_almost_equal(
             fo_nan_expected,
-            geocat.f2py.rgrid2rcm(lat, lon, fi_nan.astype(np.float32), lat2d, lon2d))
+            geocat.f2py.rgrid2rcm(lat, lon, fi_nan.astype(np.float32), lat2d,
+                                  lon2d))
 
     def test_rgrid2rcm_float32_msg(self):
         nt.assert_array_almost_equal(
@@ -100,4 +104,4 @@ class Test_rgrid2rcm(ut.TestCase):
                                   fi_msg.astype(np.float32),
                                   lat2d,
                                   lon2d,
-                                  msg_py=msg32))
+                                  msg=msg32))

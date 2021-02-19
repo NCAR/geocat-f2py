@@ -1,13 +1,13 @@
 package:
-  name: "geocat-f2py"
-  version: "0.2.2"
+  name: 'geocat-f2py'
+  version: '2021.02.0'
 
 source:
-  git_rev: master
+  git_rev: main
   git_url: https://github.com/NCAR/geocat-f2py.git
 
 build:
-  number: 2
+  number: 0
   skip: True # [py<35]
 
 requirements:
@@ -17,16 +17,12 @@ requirements:
     - setuptools
     - numpy=1.19
     - {{ compiler('fortran') }}
-    - liblapack
-    - xarray
-    - dask
   run:
     - python
-    - numpy=1.19
-    - {{ compiler('fortran') }}
-    - liblapack
     - xarray
     - dask
+    - numpy=1.19
+    - {{ compiler('fortran') }}
 
 test:
   source_files:

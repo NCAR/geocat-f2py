@@ -23,6 +23,8 @@ chunks = {
 }
 
 
+# TODO: All of these tests should be revisited since they indeed are not
+#  checking any actually interpolated values.
 class Test_linint2_float64(ut.TestCase):
 
     def test_linint2(self):
@@ -289,14 +291,9 @@ class Test_linint2_non_contiguous(ut.TestCase):
                               'lon': xi
                           }).chunk(chunks)
         fo = geocat.f2py.linint2(fi[:, :, ::-1, :].values,
-                                  xo,
-                                  yo,
-                                  xi=xi,
-                                  yi=yi_reverse[::-1])
+                                 xo,
+                                 yo,
+                                 xi=xi,
+                                 yi=yi_reverse[::-1])
         np.testing.assert_array_equal(fi[:, :, ::-1, :].values,
                                       fo[..., ::2, ::2].values)
-
-    a = Test_linint2_int32()
-    a.test_linint2_int32()
-    b = Test_linint2_int64()
-    b.test_linint2_int64()
