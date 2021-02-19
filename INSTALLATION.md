@@ -17,17 +17,17 @@ activated using:
 
     conda activate geocat
 
-Example codes, if any, provided with this documentation might make use of other
-software packages, such as Matplotlib, Cartopy, Jupyter, etc. which you
-may wish to install into your geocat environment.  The following `conda create`
-command can be used to create a new conda environment that includes some of
-these additional commonly used Python packages pre-installed::
+If you somewhat need to make use of other software packages, such as Matplotlib, 
+Cartopy, Jupyter, etc. with GeoCAT-f2py, you may wish to install into your `geocat`
+environment.  The following `conda create` command can be used to create a new 
+`conda` environment that includes some of these additional commonly used Python 
+packages pre-installed:
 
     conda create -n geocat -c conda-forge -c ncar geocat-f2py matplotlib cartopy jupyter
 
 Alternatively, if you already created a conda environment using the first
 command (without the extra packages), you can activate and install the packages
-in an existing environment with the following commands::
+in an existing environment with the following commands:
 
     conda activate geocat   # or whatever your environment is called
     conda install -c conda-forge matplotlib cartopy jupyter
@@ -36,10 +36,10 @@ Please note that the use of the **conda-forge** channel is essential to guarante
 compatibility between dependency packages.
 
 Also, note that the Conda package manager automatically installs all `required`
-dependencies, meaning it is not necessary to explicitly install Python, NumPy,
-Xarray, or Dask when creating an environment.  Although packages like Matplotlib
-might be often used with GeoCAT-f2py, they are considered `optional` dependencies and
-need to be explicitly installed.
+dependencies of GeoCAT-f2py, meaning it is not necessary to explicitly install 
+Python, NumPy, Xarray, or Dask when creating an environment and installing GeoCAT-f2py.  
+Although packages like Matplotlib are often used with GeoCAT-f2py, they are considered 
+`optional` dependencies and must be explicitly installed.
 
 If you are interested in learning more about how Conda environments work, please visit the 
 [managing environments](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html) 
