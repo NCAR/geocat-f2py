@@ -5,7 +5,7 @@ from dask.array.core import map_blocks
 from .errors import (ChunkError, DimensionError, CoordinateError)
 from .fortran import (dlinint1, dlinint2, dlinint2pts)
 from .missing_values import (fort2py_msg, py2fort_msg)
-from .checks import (sanity_check)
+from .checks import (check)
 
 # Dask Wrappers _<funcname>()
 # These Wrapper are executed within dask processes, and should do anything that
@@ -101,7 +101,7 @@ def linint1(fi, xo, xi=None, icycx=0, msg_py=None):
     # ''' Start of boilerplate
 
     if isinstance(fi, np.ndarray):
-        sanity_check(xi, var_name='xi', is_none=False)
+        check(xi, var_name='xi', is_none=False)
 
         fi = xr.DataArray(fi,)
         fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
@@ -128,7 +128,7 @@ def linint1(fi, xo, xi=None, icycx=0, msg_py=None):
     xi = fi.coords[fi.dims[-1]]
 
     # ensure rightmost dimensions of input are not chunked
-    sanity_check(fi, var_name="fi", unchunked_dims=[-1])
+    check(fi, var_name="fi", unchunked_dims=[-1])
 
     # fi data structure elements and autochunking
     fi_chunks = list(fi.dims)
@@ -470,8 +470,8 @@ def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, msg_py=None):
 
     if not isinstance(fi, xr.DataArray):
 
-        sanity_check(xi, var_name='xi', is_none=False)
-        sanity_check(yi, var_name='yi', is_none=False)
+        check(xi, var_name='xi', is_none=False)
+        check(yi, var_name='yi', is_none=False)
 
         if (xi is None) | (yi is None):
             raise CoordinateError(
@@ -496,7 +496,7 @@ def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, msg_py=None):
 
     # ensure rightmost dimensions of input are not chunked
 
-    sanity_check(fi, var_name="fi", is_xarray=True, unchunked_dims=[-1, -2])
+    check(fi, var_name="fi", is_xarray=True, unchunked_dims=[-1, -2])
 
     if list(fi.chunks)[-2:] != [yi.shape, xi.shape]:
         raise ChunkError(
@@ -618,7 +618,7 @@ def linint2pts(fi, xo, yo, icycx=0, msg_py=None):
     '''
     # Basic sanity checks
 
-    sanity_check(fi, var_name="fi", min_dimensions=2)
+    check(fi, var_name="fi", min_dimensions=2)
 
 
 def linint2pts(fi, xo, yo, icycx=False, msg_py=None, xi=None, yi=None):
@@ -787,7 +787,7 @@ def linint2pts(fi, xo, yo, icycx=False, msg_py=None, xi=None, yi=None):
         raise Exception("ERROR linint2pts xo and yo must be of equal length")
 
     # ensure rightmost dimensions of input are not chunked
-    sanity_check(fi, var_name="fi", unchunked_dims=[-1, -2])
+    check(fi, var_name="fi", unchunked_dims=[-1, -2])
 
     # fi data structure elements and autochunking
     fi_chunks = list(fi.dims)

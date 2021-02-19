@@ -6,7 +6,7 @@ from .fortran import (drcm2points)
 from .errors import (CoordinateError, ChunkError)
 from .missing_values import (fort2py_msg, py2fort_msg)
 from .errors import (DimensionError)
-from .checks import sanity_check
+from .checks import check
 # Dask Wrappers _<funcname>()
 # These Wrapper are executed within dask processes, and should do anything that
 # can benefit from parallel excution.
