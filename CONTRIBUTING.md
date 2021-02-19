@@ -7,8 +7,8 @@ contribution guidelines:
 
 # Adding new functions to GeoCAT-f2py repo
 
-Adding a new function to GeoCAT-f2py may almost always be due to the need for replicating a NCL function
-under GeoCAT-comp.
+Replicating NCL functions by wrapping up their Fortran routines in Python requires adding a new function to 
+GeoCAT-f2py.
 
 ## Converting NCL functions to GeoCAT-f2py functions
 
@@ -114,9 +114,9 @@ etc.) and then would make use of a second (i.e. internal) wrapper function that 
 value handling and Fortran function calls for every single Dask chunk (where Dask paralelization is applicable). 
 For example, see 
 
-    `$GEOCAT-F2PY/src/geocat/f2py/rcm2rgrid_wrapper.py`.
+     `$GEOCAT-F2PY/src/geocat/f2py/rcm2rgrid_wrapper.py`.
    
-    In cases where no Dask parallelization is needed, even a single wrapper function would be enough. 
+     In cases where no built-in Dask parallelization is needed, even a single wrapper function would be enough. 
    
 11. After the wrapper is implemented, the user API functions should be imported in the following file:
     
