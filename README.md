@@ -9,12 +9,13 @@ computational functions for operating on geosciences data. Many of these functio
 Python with the help of GeoCAT-comp; however, developers are welcome to come up with novel computational functions 
 for geosciences data.
 
-Many of the computational functions under GeoCAT-comp are implemented in Fortran 
-(or possibly C). However, others can be implemented in a pure Python fashion. To facilitate 
-contribution, the whole GeoCAT-comp computational component is split into Github repositories with respect to 
-being based on either pure-Python or Python with compiled code dependencies (i.e. Fortran). While pure Python 
-implementation as well as user API are implemented within [GeoCAT-comp](https://github.com/NCAR/geocat-comp), 
-Python codes that calls the Fortran functionality with the help of Numpy.f2py are handled within GeoCAT-f2py 
+Many of the computational functions in GeoCAT are implemented in a pure Python fashion. However, 
+there are some others that are implemented in Fortran but wrapped up in Python. To facilitate 
+contribution, the whole GeoCAT-comp structure is split into two repositories with respect to 
+being pure-Python or Python with compiled codes (i.e. Fortran) implementations. While pure Python 
+implementation as well as user API are implemented within 
+[GeoCAT-comp](https://github.com/NCAR/geocat-comp), Python codes that calls the Fortran functionality 
+with the help of [Numpy's f2py](https://numpy.org/doc/stable/f2py/) are handled within GeoCAT-f2py 
 (i.e. this repository).
 
 
