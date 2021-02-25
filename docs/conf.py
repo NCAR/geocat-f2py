@@ -12,7 +12,6 @@
 #
 import os
 import sys
-import geocat.f2py
 # sys.path.insert(0, os.path.abspath('.'))
 
 
@@ -36,6 +35,16 @@ version = read_version()
 release = read_version()
 
 # -- General configuration ---------------------------------------------------
+
+# Add any Sphinx extension module names here, as strings. They can be
+# extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
+# ones.
+extensions = [
+    'sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'sphinx.ext.autosummary',
+    'sphinx.ext.intersphinx', 'sphinx.ext.mathjax'
+]
+
+autosummary_generate = True
 
 # The master toctree document.
 master_doc = 'index'
