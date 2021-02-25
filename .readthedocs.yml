@@ -5,9 +5,6 @@
 # Required
 version: 2
 
-script:
-  - ./build.sh
-
 python:
    version: 3.7
    install:

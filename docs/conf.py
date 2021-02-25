@@ -12,7 +12,6 @@
 #
 import os
 import sys
-import geocat.f2py
 # sys.path.insert(0, os.path.abspath('.'))
 
 
@@ -44,6 +43,9 @@ extensions = [
     'sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'sphinx.ext.autosummary',
     'sphinx.ext.intersphinx', 'sphinx.ext.mathjax'
 ]
+
+napoleon_use_admonition_for_examples = True
+napoleon_include_special_with_doc = True
 
 autosummary_generate = True
 
