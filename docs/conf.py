@@ -12,6 +12,7 @@
 #
 import os
 import sys
+import geocat.f2py
 # sys.path.insert(0, os.path.abspath('.'))
 
 
