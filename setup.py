@@ -3,8 +3,6 @@ from setuptools import setup, find_packages
 
 from pathlib import Path
 
-xxx = ""
-
 #''' moved into function, can now be used other places
 def version():
     for line in open('meta.yaml').readlines():
