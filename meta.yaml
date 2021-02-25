@@ -1,10 +1,13 @@
+{% set version = "2021.02.0" %}
+
 package:
   name: 'geocat-f2py'
-  version: '2021.02.0'
+  version: {{ version }}
 
 source:
-  git_rev: main
-  git_url: https://github.com/NCAR/geocat-f2py.git
+#  git_rev: main
+#  git_url: https://github.com/NCAR/geocat-f2py.git
+  url: https://github.com/NCAR/geocat-f2py/archive/v{{ version }}.tar.gz   # Fetch from Github repo tags
 
 build:
   number: 0
