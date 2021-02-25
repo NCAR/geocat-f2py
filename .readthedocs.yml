@@ -5,10 +5,11 @@
 # Required
 version: 2
 
+script:
+  - ./build.sh
+
 python:
    version: 3.7
-   script:
-     - ./build.sh
    install:
      - method: pip
        path: .
