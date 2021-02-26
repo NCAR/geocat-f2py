@@ -5,9 +5,10 @@ package:
   version: {{ version }}
 
 source:
-#  git_rev: main
-#  git_url: https://github.com/NCAR/geocat-f2py.git
-  url: https://github.com/NCAR/geocat-f2py/archive/v{{ version }}.tar.gz   # Fetch from Github repo tags
+#  git_rev: main     # For building from main branch for debugging purposes
+  git_tag: v{{ version }}   # For building from a specific tag
+  git_url: https://github.com/NCAR/geocat-f2py.git
+#  url: https://github.com/NCAR/geocat-f2py/archive/v{{ version }}.tar.gz   # For building from a specific tag's tarball
 
 build:
   number: 0
