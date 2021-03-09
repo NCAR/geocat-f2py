@@ -96,35 +96,6 @@ def rcm2points(lat2d, lon2d, fi, lat1d, lon1d, opt=0, msg=None, meta=False):
 
     """
 
-    # if (lon2d is None) | (lat2d is None):
-    #     raise CoordinateError(
-    #         "rcm2points: lon2d and lat2d should always be provided")
-    #
-    # # Basic sanity checks
-    # if lat2d.shape[0] != lon2d.shape[0] or lat2d.shape[1] != lon2d.shape[1]:
-    #     raise DimensionError(
-    #         "ERROR rcm2points: The input lat/lon grids must be the same size !")
-    #
-    # if lat1d.shape[0] != lon1d.shape[0]:
-    #     raise DimensionError(
-    #         "ERROR rcm2points: The output lat/lon grids must be same size !")
-    #
-    # if lat2d.shape[0] < 2 or lon2d.shape[0] < 2 or lat2d.shape[
-    #         1] < 2 or lon2d.shape[1] < 2:
-    #     raise DimensionError(
-    #         "ERROR rcm2points: The input/output lat/lon grids must have at least 2 elements !"
-    #     )
-    #
-    # if fi.ndim < 2:
-    #     raise DimensionError(
-    #         "ERROR rcm2points: fi must be at least two dimensions !\n")
-    #
-    # if fi.shape[fi.ndim - 2] != lat2d.shape[0] or fi.shape[fi.ndim -
-    #                                                        1] != lon2d.shape[1]:
-    #     raise DimensionError(
-    #         "ERROR rcm2points: The rightmost dimensions of fi must be (nlat2d x nlon2d),"
-    #         "where nlat2d and nlon2d are the size of the lat2d/lon2d arrays !")
-
     # ''' Start of boilerplate
 
     if not isinstance(fi, xr.DataArray):
