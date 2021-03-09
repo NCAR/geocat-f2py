@@ -7,6 +7,7 @@ from .errors import (CoordinateError, ChunkError)
 from .missing_values import (fort2py_msg, py2fort_msg)
 from .errors import (DimensionError)
 from .checks import check
+
 # Dask Wrappers _<funcname>()
 # These Wrapper are executed within dask processes, and should do anything that
 # can benefit from parallel excution.
@@ -39,7 +40,7 @@ def rcm2points(lat2d, lon2d, fi, lat1d, lon1d, opt=0, msg=None, meta=False):
     """
     Interpolates data on a curvilinear grid (i.e. RCM, WRF, NARR) to an unstructured grid.
 
-    Paraemeters
+    Parameters
     -----------
 
     lat2d : :class:`numpy.ndarray`:
@@ -50,7 +51,7 @@ def rcm2points(lat2d, lon2d, fi, lat1d, lon1d, opt=0, msg=None, meta=False):
 	    A two-dimensional array that specifies the longitude locations
 	    of fi. The latitude order must be west-to-east.
         
-	fi : :class:`numpy.ndarray`:
+	fi : :class:`numpy.ndarray` or :class: `xarray.DataArray`:
 	    A multi-dimensional array to be interpolated. The rightmost two
 	    dimensions (latitude, longitude) are the dimensions to be interpolated.
         
@@ -97,17 +98,26 @@ def rcm2points(lat2d, lon2d, fi, lat1d, lon1d, opt=0, msg=None, meta=False):
     """
 
     # ''' Start of boilerplate
+    # Run data checks
 
-    if not isinstance(fi, xr.DataArray):
+    check(lat2d, data_type=np.ndarray)
+    check(lon2d, data_type=np.ndarray)
+    check(lat1d, data_type=np.ndarray)
+    check(lon1d, data_type=np.ndarray)
 
-        fi = xr.DataArray(fi,)
-        fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
-                        ])
+    # Check if xarray and format as needed
 
-        fi = xr.DataArray(
-            fi.data,
-            dims=fi.dims,
-        ).chunk(fi_chunk)
+    if check(fi, is_xarray=False) == True:
+        if not isinstance(fi, xr.DataArray):
+            fi = xr.DataArray(fi,)
+            fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
+                            ])
+
+            fi = xr.DataArray(
+                fi.data,
+                dims=fi.dims,
+            ).chunk(fi_chunk)
+    else: pass
 
     # ensure rightmost dimensions of input are not chunked
     if list(fi.chunks)[-2:] != [(lat2d.shape[0],), (lat2d.shape[1],)]:
