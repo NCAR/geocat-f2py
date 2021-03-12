@@ -23,7 +23,7 @@ def check(user_variable_1,
         data_type input of type or tuple of types
         ex: data_type=np.ndarray
         '''
-        if not isinstance(user_variable_1, data_type): #== data_type):
+        if not isinstance(user_variable_1, data_type):
             raise Exception(var_name + " failed data_type check")
 
     if dimensions is not None:
@@ -81,7 +81,9 @@ def check(user_variable_1,
         '''
         if is_xarray is True:
             if not isinstance(user_variable_1, xr.DataArray):
-                raise Exception(var_name + " is not a xarray.DataArray")
+                print(var_name + " is not xarray.DataArray, reformatting...")
+                return False
+                # raise Exception(var_name + " is not a xarray.DataArray")
             else: pass
         if is_xarray is False:
             if isinstance(user_variable_1, xr.DataArray):

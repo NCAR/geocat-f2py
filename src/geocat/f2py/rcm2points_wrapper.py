@@ -106,7 +106,6 @@ def rcm2points(lat2d, lon2d, fi, lat1d, lon1d, opt=0, msg=None, meta=False):
     check(lon1d, data_type=np.ndarray)
 
     # Check if xarray and format as needed
-
     if check(fi, is_xarray=False) == True:
         if not isinstance(fi, xr.DataArray):
             fi = xr.DataArray(fi,)

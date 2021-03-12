@@ -5,7 +5,7 @@ from dask.array.core import map_blocks
 from .errors import (ChunkError, CoordinateError)
 from .fortran import (dlinint1, dlinint2, dlinint2pts)
 from .missing_values import (fort2py_msg, py2fort_msg)
-
+from .checks import check
 # Dask Wrappers _<funcname>()
 # These Wrapper are executed within dask processes, and should do anything that
 # can benefit from parallel excution.
@@ -98,23 +98,33 @@ def linint1(fi, xo, xi=None, icycx=0, msg_py=None):
     # ''' signature : fo = dlinint1(xi,fi,xo,[icycx,xmsg,iopt])
 
     # ''' Start of boilerplate
-    if not isinstance(fi, xr.DataArray):
-        if (xi is None):
-            raise CoordinateError(
-                "linint2: Argument xi must be provided explicitly unless fi is an xarray.DataArray."
-            )
 
-        fi = xr.DataArray(fi,)
-        fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
-                        ])
+    # Check input data type
+    check(xo, data_type=np.ndarray)
+    check(yo, data_type=np.ndarray)
+    if (xi is not None) | (yi is not None):
+        check(xi, data_type=np.ndarray)
+        check(yi, data_type=np.ndarray)
 
-        fi = xr.DataArray(
-            fi.data,
-            coords={
-                fi.dims[-1]: xi,
-            },
-            dims=fi.dims,
-        ).chunk(fi_chunk)
+    # Check if fi is xarray.DataArray, if not change it
+    if check(fi, is_xarray=False) == True:
+        if not isinstance(fi, xr.DataArray):
+            if (xi is None):
+                raise CoordinateError(
+                    "linint2: Argument xi must be provided explicitly unless fi is an xarray.DataArray."
+                )
+
+            fi = xr.DataArray(fi,)
+            fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
+                            ])
+
+            fi = xr.DataArray(
+                fi.data,
+                coords={
+                    fi.dims[-1]: xi,
+                },
+                dims=fi.dims,
+            ).chunk(fi_chunk)
 
     xi = fi.coords[fi.dims[-1]]
 
@@ -299,24 +309,32 @@ def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, msg_py=None):
     """
 
     # ''' Start of boilerplate
-    if not isinstance(fi, xr.DataArray):
-        if (xi is None) | (yi is None):
-            raise CoordinateError(
-                "linint2: Arguments xi and yi must be provided explicitly unless fi is an xarray.DataArray."
-            )
+    # Check data type for input variables
+    check(xo, data_type=np.ndarray)
+    check(yo, data_type=np.ndarray)
+    if (xi is not None) | (yi is not None):
+        check(xi, data_type=np.ndarray)
+        check(yi, data_type=np.ndarray)
 
-        fi = xr.DataArray(fi,)
-        fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
-                        ])
+    if check(fi, is_xarray=False) == True:
+        if not isinstance(fi, xr.DataArray):
+            if (xi is None) | (yi is None):
+                raise CoordinateError(
+                    "linint2: Arguments xi and yi must be provided explicitly unless fi is an xarray.DataArray."
+                )
 
-        fi = xr.DataArray(
-            fi.data,
-            coords={
-                fi.dims[-1]: xi,
-                fi.dims[-2]: yi,
-            },
-            dims=fi.dims,
-        ).chunk(fi_chunk)
+            fi = xr.DataArray(fi,)
+            fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
+                            ])
+
+            fi = xr.DataArray(
+                fi.data,
+                coords={
+                    fi.dims[-1]: xi,
+                    fi.dims[-2]: yi,
+                },
+                dims=fi.dims,
+            ).chunk(fi_chunk)
 
     xi = fi.coords[fi.dims[-1]]
     yi = fi.coords[fi.dims[-2]]
@@ -468,25 +486,33 @@ def linint2pts(fi, xo, yo, icycx=False, msg_py=None, xi=None, yi=None):
     """
 
     # ''' Start of boilerplate
+    # Check input data type
+    check(xo, data_type=np.ndarray)
+    check(yo, data_type=np.ndarray)
+    if (xi is not None) | (yi is not None):
+        check(xi, data_type=np.ndarray)
+        check(yi, data_type=np.ndarray)
+
     # If a Numpy input is given, convert it to Xarray and chunk it just with its dims
-    if not isinstance(fi, xr.DataArray):
-        if (xi is None) | (yi is None):
-            raise CoordinateError(
-                "linint2pts: Arguments xi and yi must be provided explicitly unless fi is an xarray.DataArray."
-            )
+    if check(fi, is_xarray=False) == True:
+        if not isinstance(fi, xr.DataArray):
+            if (xi is None) | (yi is None):
+                raise CoordinateError(
+                    "linint2pts: Arguments xi and yi must be provided explicitly unless fi is an xarray.DataArray."
+                )
 
-        fi = xr.DataArray(fi)
-        fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
-                        ])
+            fi = xr.DataArray(fi)
+            fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
+                            ])
 
-        fi = xr.DataArray(
-            fi.data,
-            coords={
-                fi.dims[-1]: xi,
-                fi.dims[-2]: yi,
-            },
-            dims=fi.dims,
-        ).chunk(fi_chunk)
+            fi = xr.DataArray(
+                fi.data,
+                coords={
+                    fi.dims[-1]: xi,
+                    fi.dims[-2]: yi,
+                },
+                dims=fi.dims,
+            ).chunk(fi_chunk)
 
     # Xarray input
     else:
