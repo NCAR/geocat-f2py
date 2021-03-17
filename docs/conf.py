@@ -14,12 +14,19 @@ import os
 import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
+import geocat.f2py
+
 
 # -- Project information -----------------------------------------------------
 
 project = 'GeoCAT-f2py'
-copyright = u'2021, University Corporation for Atmospheric Research'
-author = u'Orhan Eroglu, Austin Kootz, Michaela Sizemore, Anissa Zacharias'
+
+import datetime
+
+current_year = datetime.datetime.now().year
+copyright = u'{}, University Corporation for Atmospheric Research'.format(
+    current_year)
+author = u'GeoCAT'
 
 # The version info for the project being documented
 def read_version():
