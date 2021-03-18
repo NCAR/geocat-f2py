@@ -15,7 +15,7 @@ import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
 import subprocess
-process = subprocess.Popen(['../build.sh'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+process = subprocess.Popen(['./build.sh'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 process.wait() # Wait for process to complete.
 
 # iterate on the stdout line by line
@@ -24,36 +24,29 @@ for line in process.stdout.readlines():
 
 import geocat.f2py
 
+try:
+    from unittest.mock import MagicMock
+except ImportError:
+    from mock import Mock as MagicMock
 
-# -- Project information -----------------------------------------------------
 
-project = 'GeoCAT-f2py'
+class Mock(MagicMock):
 
-import datetime
+    @classmethod
+    def __getattr__(cls, name):
+        return MagicMock()
 
-current_year = datetime.datetime.now().year
-copyright = u'{}, University Corporation for Atmospheric Research'.format(
-    current_year)
-author = u'GeoCAT'
 
-# The version info for the project being documented
-def read_version():
-    for line in open('../meta.yaml').readlines():
-        index = line.find('version')
-        if index > -1:
-            return line[index + 8:].replace('\'', '').strip()
+MOCK_MODULES = ["xarray", "dask", "dask.array", "dask.array.core"]
+sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
-# The short X.Y version.
-version = read_version()
-
-# The full version, including alpha/beta/rc tags.
-release = read_version()
 
 # -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
+
 extensions = [
     'sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'sphinx.ext.autosummary',
     'sphinx.ext.intersphinx', 'sphinx.ext.mathjax'
@@ -88,6 +81,31 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = False
+
+
+# -- Project information -----------------------------------------------------
+
+project = 'GeoCAT-f2py'
+
+import datetime
+
+current_year = datetime.datetime.now().year
+copyright = u'{}, University Corporation for Atmospheric Research'.format(
+    current_year)
+author = u'GeoCAT'
+
+# The version info for the project being documented
+def read_version():
+    for line in open('../meta.yaml').readlines():
+        index = line.find('version')
+        if index > -1:
+            return line[index + 8:].replace('\'', '').strip()
+
+# The short X.Y version.
+version = read_version()
+
+# The full version, including alpha/beta/rc tags.
+release = read_version()
 
 
 # -- Options for HTML output -------------------------------------------------
