@@ -108,23 +108,23 @@ def linint1(fi, xo, xi=None, icycx=0, msg_py=None):
 
     # Check if fi is xarray.DataArray, if not change it
     if check(fi, is_xarray=False) == True:
-        if not isinstance(fi, xr.DataArray):
-            if (xi is None):
-                raise CoordinateError(
-                    "linint2: Argument xi must be provided explicitly unless fi is an xarray.DataArray."
-                )
+        # if not isinstance(fi, xr.DataArray):
+        # if (xi is None):
+        #     raise CoordinateError(
+        #         "linint2: Argument xi must be provided explicitly unless fi is an xarray.DataArray."
+        #     )
 
-            fi = xr.DataArray(fi,)
-            fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
-                            ])
+        fi = xr.DataArray(fi,)
+        fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
+                        ])
 
-            fi = xr.DataArray(
-                fi.data,
-                coords={
-                    fi.dims[-1]: xi,
-                },
-                dims=fi.dims,
-            ).chunk(fi_chunk)
+        fi = xr.DataArray(
+            fi.data,
+            coords={
+                fi.dims[-1]: xi,
+            },
+            dims=fi.dims,
+        ).chunk(fi_chunk)
 
     xi = fi.coords[fi.dims[-1]]
 

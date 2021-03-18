@@ -107,15 +107,15 @@ def rcm2points(lat2d, lon2d, fi, lat1d, lon1d, opt=0, msg=None, meta=False):
 
     # Check if xarray and format as needed
     if check(fi, is_xarray=False) == True:
-        if not isinstance(fi, xr.DataArray):
-            fi = xr.DataArray(fi,)
-            fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
-                            ])
+        # if not isinstance(fi, xr.DataArray):
+        fi = xr.DataArray(fi,)
+        fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
+                        ])
 
-            fi = xr.DataArray(
-                fi.data,
-                dims=fi.dims,
-            ).chunk(fi_chunk)
+        fi = xr.DataArray(
+            fi.data,
+            dims=fi.dims,
+        ).chunk(fi_chunk)
     else: pass
 
     # ensure rightmost dimensions of input are not chunked
