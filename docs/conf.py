@@ -22,7 +22,7 @@ import sys
 # for line in process.stdout.readlines():
 #     print(line)
 #
-# import geocat.f2py
+import geocat.f2py
 
 try:
     from unittest.mock import MagicMock
