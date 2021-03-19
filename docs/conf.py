@@ -27,6 +27,9 @@ list_files = subprocess.Popen(["f2py", "-c", "--fcompiler=gnu95", "triple2grid.p
 list_files = subprocess.Popen(["cd", "../../../.."])
 list_files = subprocess.Popen(["python", "-m", "pip", "install", ".", "--no-deps", "-vv"])
 
+# result = subprocess.run(['/bin/bash', '/home/user1/myfile.run'], stdout=subprocess.PIPE)
+
+subprocess.call(['sh', './build.sh'])
 
 # process = subprocess.Popen(['./build.sh'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 # process.wait() # Wait for process to complete.
