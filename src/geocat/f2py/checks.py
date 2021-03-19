@@ -2,10 +2,6 @@ import xarray as xr
 import numpy as np
 import dask as da
 
-'''
-Checks wrapper functions to ensure data is correctly formatted and stops code from running if not.
-'''
-
 def check(user_variable,
           var_name='variable',
           data_type=None,
