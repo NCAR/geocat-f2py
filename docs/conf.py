@@ -12,22 +12,9 @@
 #
 import os
 import sys
-# sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('.'))
 
 import subprocess
-
-# list_files = subprocess.Popen(["cd", "src/geocat/f2py/fortran"])
-# list_files = subprocess.Popen(["f2py", "-c", "--fcompiler=gnu95", "dpres_plevel_dp.pyf", "dpres_plevel_dp.f"])
-# list_files = subprocess.Popen(["f2py", "-c", "--fcompiler=gnu95", "grid2triple.pyf", "grid2triple.f"])
-# list_files = subprocess.Popen(["f2py", "-c", "--fcompiler=gnu95", "linint2.pyf", "linint2.f"])
-# list_files = subprocess.Popen(["f2py", "-c", "--fcompiler=gnu95", "moc_loops.pyf", "moc_loops.f"])
-# list_files = subprocess.Popen(["f2py", "-c", "--fcompiler=gnu95", "rcm2points.pyf", "rcm2points.f", "rcm2rgrid.f", "linmsg_dp.f", "linint2.f"])
-# list_files = subprocess.Popen(["f2py", "-c", "--fcompiler=gnu95", "rcm2rgrid.pyf", "rcm2rgrid.f", "linmsg_dp.f", "linint2.f"])
-# list_files = subprocess.Popen(["f2py", "-c", "--fcompiler=gnu95", "triple2grid.pyf", "triple2grid.f"])
-# list_files = subprocess.Popen(["cd", "../../../.."])
-# list_files = subprocess.Popen(["python", "-m", "pip", "install", ".", "--no-deps", "-vv"])
-
-# result = subprocess.run(['/bin/bash', '/home/user1/myfile.run'], stdout=subprocess.PIPE)
 
 subprocess.call(['sh', './build.sh'])
 
@@ -38,6 +25,7 @@ subprocess.call(['sh', './build.sh'])
 # for line in process.stdout.readlines():
 #     print(line)
 #
+
 import geocat.f2py
 
 try:
