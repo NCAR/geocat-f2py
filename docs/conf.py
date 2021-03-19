@@ -14,7 +14,20 @@ import os
 import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
-# import subprocess
+import subprocess
+
+list_files = subprocess.run(["cd", "src/geocat/f2py/fortran"])
+list_files = subprocess.run(["f2py", "-c", "--fcompiler=gnu95", "dpres_plevel_dp.pyf", "dpres_plevel_dp.f"])
+list_files = subprocess.run(["f2py", "-c", "--fcompiler=gnu95", "grid2triple.pyf", "grid2triple.f"])
+list_files = subprocess.run(["f2py", "-c", "--fcompiler=gnu95", "linint2.pyf", "linint2.f"])
+list_files = subprocess.run(["f2py", "-c", "--fcompiler=gnu95", "moc_loops.pyf", "moc_loops.f"])
+list_files = subprocess.run(["f2py", "-c", "--fcompiler=gnu95", "rcm2points.pyf", "rcm2points.f", "rcm2rgrid.f", "linmsg_dp.f", "linint2.f"])
+list_files = subprocess.run(["f2py", "-c", "--fcompiler=gnu95", "rcm2rgrid.pyf", "rcm2rgrid.f", "linmsg_dp.f", "linint2.f"])
+list_files = subprocess.run(["f2py", "-c", "--fcompiler=gnu95", "triple2grid.pyf", "triple2grid.f"])
+list_files = subprocess.run(["cd", "../../../.."])
+list_files = subprocess.run(["python", "-m", "pip", "install", ".", "--no-deps", "-vv"])
+
+
 # process = subprocess.Popen(['./build.sh'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 # process.wait() # Wait for process to complete.
 #
