@@ -14,15 +14,15 @@ import os
 import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
-import subprocess
-process = subprocess.Popen(['./build.sh'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-process.wait() # Wait for process to complete.
-
-# iterate on the stdout line by line
-for line in process.stdout.readlines():
-    print(line)
-
-import geocat.f2py
+# import subprocess
+# process = subprocess.Popen(['./build.sh'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+# process.wait() # Wait for process to complete.
+#
+# # iterate on the stdout line by line
+# for line in process.stdout.readlines():
+#     print(line)
+#
+# import geocat.f2py
 
 try:
     from unittest.mock import MagicMock
