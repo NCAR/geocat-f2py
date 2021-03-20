@@ -29,7 +29,8 @@ themselves with GeoCAT-f2py.
    :maxdepth: 2
 
    ./installation
-   ./api
+..   ./api
+
    ./examples
    ./support
 

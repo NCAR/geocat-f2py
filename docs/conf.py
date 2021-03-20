@@ -12,11 +12,10 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('.'))
 
-import subprocess
-
-subprocess.call(['sh', './build.sh'])
+# sys.path.insert(0, os.path.abspath('.'))
+# import subprocess
+# subprocess.call(['sh', './build.sh'])
 
 # process = subprocess.Popen(['./build.sh'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 # process.wait() # Wait for process to complete.
@@ -26,7 +25,7 @@ subprocess.call(['sh', './build.sh'])
 #     print(line)
 #
 
-import geocat.f2py
+# import geocat.f2py
 
 try:
     from unittest.mock import MagicMock
@@ -57,8 +56,10 @@ sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 extensions = [
     'sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'sphinx.ext.autosummary',
-    'sphinx.ext.intersphinx', 'sphinx.ext.mathjax'
+    'sphinx.ext.intersphinx', 'sphinx.ext.mathjax', 'autoapi.extension'
 ]
+
+autoapi_dirs = ['../src']
 
 #mathjax_path = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
 
