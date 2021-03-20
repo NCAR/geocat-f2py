@@ -9,3 +9,5 @@ dependencies:
   - pytest
   - gfortran_linux-64
   - liblapack
+  - pip:
+      - autoapi

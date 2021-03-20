@@ -20,7 +20,7 @@ setup(
         '': 'src',
         'geocat': 'src/geocat',
         'geocat.f2py': 'src/geocat/f2py',
-        'geocat.f2py.fortran': 'src/geocat/f2py/fortran',
+        # 'geocat.f2py.fortran': 'src/geocat/f2py/fortran',
     },
     package_data={'geocat.f2py.fortran': files},
     namespace_packages=['geocat'],

@@ -59,7 +59,7 @@ extensions = [
     'sphinx.ext.intersphinx', 'sphinx.ext.mathjax', 'autoapi.extension'
 ]
 
-autoapi_dirs = ['../src']
+autoapi_dirs = ['../src/geocat']
 
 #mathjax_path = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
 
