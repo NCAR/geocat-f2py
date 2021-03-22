@@ -10,4 +10,4 @@ dependencies:
   - gfortran_linux-64
   - liblapack
   - pip:
-      - autoapi
+      - sphinx-autoapi
