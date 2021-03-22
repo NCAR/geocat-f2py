@@ -11,3 +11,5 @@ build/
 
 # Sphinx documentation
 docs/_build/
+docs/internal_api/generated/
+docs/user_api/generated/*

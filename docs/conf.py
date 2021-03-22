@@ -13,20 +13,6 @@
 import os
 import sys
 
-# sys.path.insert(0, os.path.abspath('.'))
-# import subprocess
-# subprocess.call(['sh', './build.sh'])
-
-# process = subprocess.Popen(['./build.sh'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-# process.wait() # Wait for process to complete.
-#
-# # iterate on the stdout line by line
-# for line in process.stdout.readlines():
-#     print(line)
-#
-
-# import geocat.f2py
-
 try:
     from unittest.mock import MagicMock
 except ImportError:
@@ -55,11 +41,15 @@ sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 # ones.
 
 extensions = [
-    'sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'sphinx.ext.autosummary',
+    'sphinx.ext.napoleon', 'sphinx.ext.autosummary',
     'sphinx.ext.intersphinx', 'sphinx.ext.mathjax', 'autoapi.extension'
 ]
 
+# Due to the Fortran compiler (Gnu95FCompiler) issue with ReadTheDocs (builds locally, fails remote),
+# see https://github.com/readthedocs/readthedocs.org/issues/6282 for a similar reference,
+# `autoapi` is used instead of autodoc
 autoapi_dirs = ['../src/geocat']
+autoapi_add_toctree_entry = False
 
 #mathjax_path = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
 
