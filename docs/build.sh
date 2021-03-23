@@ -11,3 +11,5 @@ f2py -c --fcompiler=gnu95 triple2grid.pyf triple2grid.f
 cd ../../../..
 
 python -m pip install . --no-deps -vv
+
+cd docs

@@ -13,6 +13,12 @@
 import os
 import sys
 
+sys.path.insert(0, os.path.abspath('.'))
+import subprocess
+subprocess.call(['sh', './build.sh'])
+
+import geocat.f2py
+
 try:
     from unittest.mock import MagicMock
 except ImportError:
@@ -48,7 +54,7 @@ extensions = [
 # Due to the Fortran compiler (Gnu95FCompiler) issue with ReadTheDocs (builds locally, fails remote),
 # see https://github.com/readthedocs/readthedocs.org/issues/6282 for a similar reference,
 # `autoapi` is used instead of autodoc
-autoapi_dirs = ['../src/geocat']
+autoapi_dirs = ['../src']
 autoapi_add_toctree_entry = False
 
 #mathjax_path = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
