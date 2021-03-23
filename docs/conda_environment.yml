@@ -9,5 +9,4 @@ dependencies:
   - pytest
   - gfortran_osx-64
   - liblapack
-  - pip:
-      - sphinx-autoapi
+  - sphinx-autoapi
