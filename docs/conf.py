@@ -48,14 +48,14 @@ sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 extensions = [
     'sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'sphinx.ext.autosummary',
-    'sphinx.ext.intersphinx', 'sphinx.ext.mathjax', 'autoapi.extension'
+    'sphinx.ext.intersphinx', 'sphinx.ext.mathjax'
 ]
 
-# Due to the Fortran compiler (Gnu95FCompiler) issue with ReadTheDocs (builds locally, fails remote),
-# see https://github.com/readthedocs/readthedocs.org/issues/6282 for a similar reference,
-# `autoapi` is used instead of autodoc
-autoapi_dirs = ['../src']
-autoapi_add_toctree_entry = False
+# # Due to the Fortran compiler (Gnu95FCompiler) issue with ReadTheDocs (builds locally, fails remote),
+# # see https://github.com/readthedocs/readthedocs.org/issues/6282 for a similar reference,
+# # `autoapi` is used instead of autodoc
+# autoapi_dirs = ['../src']
+# autoapi_add_toctree_entry = False
 
 #mathjax_path = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
 
