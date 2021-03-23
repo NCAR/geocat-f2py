@@ -51,6 +51,9 @@ extensions = [
     'sphinx.ext.intersphinx', 'sphinx.ext.mathjax'
 ]
 
+autodoc_warningiserror = False
+# autodoc_mock_imports = ["geocat.f2py.fortran.*"]
+
 # # Due to the Fortran compiler (Gnu95FCompiler) issue with ReadTheDocs (builds locally, fails remote),
 # # see https://github.com/readthedocs/readthedocs.org/issues/6282 for a similar reference,
 # # `autoapi` is used instead of autodoc
