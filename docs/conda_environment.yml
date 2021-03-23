@@ -7,7 +7,7 @@ dependencies:
   - xarray
   - dask
   - pytest
-  - gfortran_linux-64
+  - gfortran_osx-64
   - liblapack
   - pip:
       - sphinx-autoapi
