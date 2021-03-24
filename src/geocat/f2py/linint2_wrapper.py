@@ -310,8 +310,9 @@ def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, msg_py=None):
 
     # ''' Start of boilerplate
     # Check data type for input variables
-    check(xo, data_type=np.ndarray)
+    check(xo, data_type=np.ndarray) # ToDo: check necessity
     check(yo, data_type=np.ndarray)
+
     if (xi is not None) | (yi is not None):
         check(xi, data_type=np.ndarray)
         check(yi, data_type=np.ndarray)
