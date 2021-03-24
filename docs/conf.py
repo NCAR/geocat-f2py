@@ -13,35 +13,11 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath('..'))
-
-# sys.path.insert(1, os.path.abspath('.'))
-# import subprocess
-# subprocess.call(['sh', './build.sh'])
-
-# import geocat.f2py
-
-
-# try:
-#     from unittest.mock import MagicMock
-# except ImportError:
-#     from mock import Mock as MagicMock
-#
-#
-# class Mock(MagicMock):
-#
-#     @classmethod
-#     def __getattr__(cls, name):
-#         return MagicMock()
-#
-#
-# MOCK_MODULES = ["xarray", "dask", "dask.array", "dask.array.core"]
-# sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('..'))
 
 # -- General configuration ---------------------------------------------------
 
@@ -52,23 +28,21 @@ sys.path.insert(0, os.path.abspath('..'))
 extensions = [
     'sphinx.ext.autodoc', 'sphinx.ext.napoleon', #'sphinx.ext.autosummary',
     'sphinx.ext.intersphinx', 'sphinx.ext.mathjax',
-    'sphinx.ext.inheritance_diagram',
-    'autoapi.extension'
+    'sphinx.ext.inheritance_diagram', 'autoapi.extension'
 ]
 
 autodoc_warningiserror = False
-# autodoc_mock_imports = ["geocat.f2py"]
 
-# Due to the Fortran compiler (Gnu95FCompiler) issue with ReadTheDocs (builds locally, fails remote),
-# see https://github.com/readthedocs/readthedocs.org/issues/6282 for a similar reference,
-# `autoapi` is used instead of autodoc
+# Due to the Fortran compiler (Gnu95FCompiler) issue with ReadTheDocs (i.e. builds locally
+# but fails in remote because ReadTheDocs build system does not support installing random C binaries
+# see https://docs.readthedocs.io/en/latest/faq.html#i-get-import-errors-on-libraries-that-depend-on-c-modules),
+# for a similar issue see https://github.com/readthedocs/readthedocs.org/issues/6282 for a similar reference,
+# `autoapi` is used instead of autodoc to provide API documentation from source code instead if imports.
 autoapi_dirs = ['../src']
 autoapi_add_toctree_entry = False
 autoapi_root = 'autoapi/generated'
 # autoapi_generate_api_docs = False
 autoapi_keep_files = True
-
-#mathjax_path = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
 
 intersphinx_mapping = {
     'dask': ('https://docs.dask.org/en/latest/', None),

@@ -6,7 +6,5 @@ dependencies:
   - numpy=1.19
   - xarray
   - dask
-  - pytest
-#  - gfortran_osx-64
   - liblapack
   - sphinx-autoapi
