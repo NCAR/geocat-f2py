@@ -64,6 +64,9 @@ autodoc_warningiserror = False
 # `autoapi` is used instead of autodoc
 autoapi_dirs = ['../src']
 autoapi_add_toctree_entry = False
+autoapi_root = 'autoapi/generated'
+# autoapi_generate_api_docs = False
+autoapi_keep_files = True
 
 #mathjax_path = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
 
