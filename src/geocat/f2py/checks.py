@@ -119,6 +119,7 @@ def check(user_variable,
 
     return True
 <<<<<<< HEAD
+<<<<<<< HEAD
 n = 127
 
 xi = np.linspace(0, n, num=n // 2 + 1, dtype=np.float64)
@@ -168,5 +169,7 @@ dtype_1d(xi, str(yo))
 
 
 
+=======
+>>>>>>> 5620a37ecc6b9ccaba5c0deef207330a24ba7bb6
 =======
 >>>>>>> 5620a37ecc6b9ccaba5c0deef207330a24ba7bb6
