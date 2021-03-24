@@ -13,9 +13,9 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath('../src/geocat/f2py'))
+sys.path.insert(0, os.path.abspath('..'))
 
-sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(1, os.path.abspath('.'))
 import subprocess
 subprocess.call(['sh', './build.sh'])
 
@@ -55,7 +55,7 @@ extensions = [
 ]
 
 autodoc_warningiserror = False
-autodoc_mock_imports = ["geocat.f2py.dpres_plevel"]
+# autodoc_mock_imports = ["geocat.f2py.dpres_plevel"]
 
 # # Due to the Fortran compiler (Gnu95FCompiler) issue with ReadTheDocs (builds locally, fails remote),
 # # see https://github.com/readthedocs/readthedocs.org/issues/6282 for a similar reference,
