@@ -8,3 +8,7 @@
 **.dSYM/
 dask-worker-space/
 build/
+
+# Sphinx documentation
+docs/_build/
+docs/autoapi/

@@ -2,9 +2,9 @@
 [![Documentation Status](https://readthedocs.org/projects/geocat-f2py/badge/?version=latest)](https://geocat-f2py.readthedocs.io/en/latest/?badge=latest)
 
 
-GeoCAT-comp is both the whole computational component of the [GeoCAT](https://ncar.github.io/GeoCAT) 
+GeoCAT-comp is both the whole computational component of the [GeoCAT](https://geocat.ucar.edu/) 
 project and a single Github repository as described in [GeoCAT-comp](https://github.com/NCAR/geocat-comp). 
-As the computational component of [GeoCAT](https://ncar.github.io/GeoCAT), GeoCAT-comp provides implementations of 
+As the computational component of [GeoCAT](https://geocat.ucar.edu/), GeoCAT-comp provides implementations of 
 computational functions for operating on geosciences data. Many of these functions originated in NCL are pivoted into 
 Python with the help of GeoCAT-comp; however, developers are welcome to come up with novel computational functions 
 for geosciences data.
