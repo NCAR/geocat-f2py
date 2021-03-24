@@ -2,6 +2,7 @@ import xarray as xr
 import numpy as np
 import dask as da
 
+
 def check(user_variable,
           var_name='variable',
           data_type=None,
@@ -97,7 +98,8 @@ def check(user_variable,
             if not isinstance(user_variable, xr.DataArray):
                 # print(var_name + " is not xarray.DataArray, reformatting...")
                 return False
-            else: pass
+            else:
+                pass
         if is_xarray is False:
             if isinstance(user_variable, xr.DataArray):
                 pass

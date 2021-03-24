@@ -116,7 +116,8 @@ def rcm2points(lat2d, lon2d, fi, lat1d, lon1d, opt=0, msg=None, meta=False):
             fi.data,
             dims=fi.dims,
         ).chunk(fi_chunk)
-    else: pass
+    else:
+        pass
 
     # ensure rightmost dimensions of input are not chunked
     if list(fi.chunks)[-2:] != [(lat2d.shape[0],), (lat2d.shape[1],)]:
