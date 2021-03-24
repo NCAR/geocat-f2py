@@ -50,18 +50,20 @@ sys.path.insert(0, os.path.abspath('..'))
 # ones.
 
 extensions = [
-    'sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'sphinx.ext.autosummary',
-    'sphinx.ext.intersphinx', 'sphinx.ext.mathjax'
+    'sphinx.ext.autodoc', 'sphinx.ext.napoleon', #'sphinx.ext.autosummary',
+    'sphinx.ext.intersphinx', 'sphinx.ext.mathjax',
+    'sphinx.ext.inheritance_diagram',
+    'autoapi.extension'
 ]
 
 autodoc_warningiserror = False
-autodoc_mock_imports = ["geocat.f2py"]
+# autodoc_mock_imports = ["geocat.f2py"]
 
-# # Due to the Fortran compiler (Gnu95FCompiler) issue with ReadTheDocs (builds locally, fails remote),
-# # see https://github.com/readthedocs/readthedocs.org/issues/6282 for a similar reference,
-# # `autoapi` is used instead of autodoc
-# autoapi_dirs = ['../src']
-# autoapi_add_toctree_entry = False
+# Due to the Fortran compiler (Gnu95FCompiler) issue with ReadTheDocs (builds locally, fails remote),
+# see https://github.com/readthedocs/readthedocs.org/issues/6282 for a similar reference,
+# `autoapi` is used instead of autodoc
+autoapi_dirs = ['../src']
+autoapi_add_toctree_entry = False
 
 #mathjax_path = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML"
 
@@ -76,7 +78,7 @@ intersphinx_mapping = {
 napoleon_use_admonition_for_examples = True
 napoleon_include_special_with_doc = True
 
-autosummary_generate = True
+autosummary_generate = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
