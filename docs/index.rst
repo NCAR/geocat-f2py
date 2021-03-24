@@ -25,6 +25,9 @@ Therefore, the end users of `GeoCAT-comp <https://geocat-comp.readthedocs.io/en/
 and/or developers basing their implementations entirely in Python need not concern
 themselves with GeoCAT-f2py.
 
+.. automodule:: setup
+   :members:
+
 .. toctree::
    :maxdepth: 2
 
