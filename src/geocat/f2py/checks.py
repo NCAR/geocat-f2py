@@ -58,7 +58,9 @@ def check(user_variable,
     '''
     if data_type is not None:
         if not isinstance(user_variable, data_type):
-            raise Exception(var_name + " failed data_type check")
+            dtype = str(type(user_variable))
+            dtype = dtype.strip(' <>class')
+            raise TypeError(var_name + " failed data_type check.")
 
     if dimensions is not None:
         if not (user_variable.ndim == dimensions):
@@ -114,3 +116,52 @@ def check(user_variable,
                                 str(dim))
 
     return True
+n = 127
+
+xi = np.linspace(0, n, num=n // 2 + 1, dtype=np.float64)
+yi = np.linspace(0, n, num=n // 2 + 1, dtype=np.float64)
+yi_reverse = yi[::-1].copy()
+xo = np.linspace(xi.min(), xi.max(), num=xi.shape[0] * 2 - 1)
+yo = np.linspace(yi.min(), yi.max(), num=yi.shape[0] * 2 - 1)
+
+xt = xi
+
+def dtype_2d(xi=None, yi=None):
+    try:
+        if (xi is None) | (yi is None):
+            pass
+
+        elif (xi is not None) | (yi is not None):
+            try:
+                check(xi, data_type=xr.DataArray)
+                check(yi, data_type=xr.DataArray)
+            except:
+                check(xi, data_type=np.ndarray)
+                check(yi, data_type=np.ndarray)
+    except:
+        raise Exception("Must be type xarray.DataArray or numpy.ndarray")
+
+dtype_2d(xi, yi)
+
+def dtype_1d(xo, yo):
+    try:
+        if (xo is None) | (yo is None):
+            raise Exception("xo and yo must be provided")
+
+        elif (xo is not None) | (yo is not None):
+            try:
+                check(xo, var_name='xo', data_type=xr.DataArray)
+                check(yo, var_name='yo', data_type=xr.DataArray)
+            except:
+                check(xo, var_name='xo', data_type=np.ndarray)
+                check(yo, var_name='yo', data_type=np.ndarray)
+
+        else:
+            pass
+    except:
+        raise Exception("Must be type xarray.DataArray or numpy.ndarray")
+
+dtype_1d(xi, str(yo))
+
+
+
