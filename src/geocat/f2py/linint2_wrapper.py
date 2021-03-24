@@ -325,8 +325,9 @@ def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, msg_py=None):
                 )
 
             fi = xr.DataArray(fi,)
-            fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
-                            ])
+            fi_chunk = dict([
+                (k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
+            ])
 
             fi = xr.DataArray(
                 fi.data,
@@ -503,8 +504,9 @@ def linint2pts(fi, xo, yo, icycx=False, msg_py=None, xi=None, yi=None):
                 )
 
             fi = xr.DataArray(fi)
-            fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
-                            ])
+            fi_chunk = dict([
+                (k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
+            ])
 
             fi = xr.DataArray(
                 fi.data,

@@ -53,7 +53,7 @@ doing so should not be necessary for most users. If you are interested in
 building GeoCAT-f2py from source, you will need the following packages to be
 installed.
 
-### Required dependencies for building GeoCAT-comp
+### Required dependencies for building GeoCAT-f2py
 
 - Python 3.6+
 - numpy
@@ -97,6 +97,7 @@ configure your build environment as described above.
 
 A GeoCAT-f2py build can be tested from the root directory of the source code
 repository using the following command (Explicit installation of the 
-[pytest](https://docs.pytest.org/en/stable/) package may be required):
+[pytest](https://docs.pytest.org/en/stable/) package may be required, please 
+see above):
 
     pytest test
