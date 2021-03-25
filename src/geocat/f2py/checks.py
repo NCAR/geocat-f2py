@@ -166,10 +166,3 @@ def dtype_1d(xo, yo):
         raise Exception("Must be type xarray.DataArray or numpy.ndarray")
 
 dtype_1d(xi, str(yo))
-
-
-
-=======
->>>>>>> 5620a37ecc6b9ccaba5c0deef207330a24ba7bb6
-=======
->>>>>>> 5620a37ecc6b9ccaba5c0deef207330a24ba7bb6
