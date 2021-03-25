@@ -2,7 +2,6 @@ import xarray as xr
 import numpy as np
 import dask as da
 
-
 def check(user_variable,
           var_name='variable',
           data_type=None,
@@ -59,8 +58,6 @@ def check(user_variable,
     '''
     if data_type is not None:
         if not isinstance(user_variable, data_type):
-            dtype = str(type(user_variable))
-            dtype = dtype.strip(' <>class')
             raise TypeError(var_name + " failed data_type check.")
 
     if dimensions is not None:
@@ -118,8 +115,7 @@ def check(user_variable,
                                 str(dim))
 
     return True
-<<<<<<< HEAD
-<<<<<<< HEAD
+
 n = 127
 
 xi = np.linspace(0, n, num=n // 2 + 1, dtype=np.float64)
