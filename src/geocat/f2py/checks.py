@@ -9,6 +9,7 @@ def check(user_variable,
           min_dimensions=None,
           dimensions=None,
           shape=None,
+          no_except=None,
           is_xarray=None,
           is_none=None,
           comparison=None,
@@ -88,24 +89,18 @@ def check(user_variable,
         if not (user_variable == comparison):
             raise Exception(var_name + " failed comparison check")
 
+
+
     #
     # Xarray specific checks
     #
 
-    if is_xarray is not None:
-        if is_xarray is True:
-            if not isinstance(user_variable, xr.DataArray):
-                # print(var_name + " is not xarray.DataArray, reformatting...")
-                return False
-            else:
-                pass
-        if is_xarray is False:
-            if isinstance(user_variable, xr.DataArray):
-                pass
-                # raise Exception(var_name + " is an xarray.DataArray")
-            else:
-                # print(var_name + " is not xarray.DataArray, reformatting...")
-                return True
+    if is_xarray is True:
+        if not isinstance(user_variable_1, xr.DataArray):
+            raise Exception(var_name + " is not a xarray.DataArray")
+    if is_xarray is False:
+        if isinstance(user_variable_1, xr.DataArray):
+            raise Exception(var_name + " is an xarray.DataArray")
 
     if unchunked_dims is not None:
         for dim in unchunked_dims:
@@ -162,3 +157,5 @@ def dtype_1d(xo, yo):
         raise Exception("Must be type xarray.DataArray or numpy.ndarray")
 
 dtype_1d(xi, str(yo))
+
+#todo: is xarray chunked function
