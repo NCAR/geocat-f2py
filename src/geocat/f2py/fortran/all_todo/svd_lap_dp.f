@@ -85,8 +85,8 @@ c partition the work array. pointers to initial array location
 C This returns the expansion coefficients.
 
       K  = 0
-      K5 = IPT5-1 
-      K6 = IPT6-1 
+      K5 = IPT5-1
+      K6 = IPT6-1
       DO N=1,NSV
          DO M=1,MRT
             K     = K + 1

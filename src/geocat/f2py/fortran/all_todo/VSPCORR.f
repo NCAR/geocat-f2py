@@ -1,7 +1,7 @@
 C
 C This subroutine removes missing values before
 C calling SPCORR. It keeps count of the missing
-C values via NMSG. 
+C values via NMSG.
 C
        SUBROUTINE SPCORRZ(X,Y,N,IWRITE,SPC,HASXMSG,XMSG,
      +                    HASYMSG,YMSG,NMSG)
@@ -23,7 +23,7 @@ C LOCAL
        ELSE
           NN   = 0
           DO K=1,N
-             IF (.NOT.((HASXMSG.EQ.1.AND.X(K).EQ.XMSG) .OR. 
+             IF (.NOT.((HASXMSG.EQ.1.AND.X(K).EQ.XMSG) .OR.
      +                 (HASYMSG.EQ.1.AND.Y(K).EQ.YMSG))) THEN
                 NN = NN+1
                 XX(NN) = X(K)
@@ -132,13 +132,13 @@ C
       HOLD = X(1)
       DO I = 2,N
           IF (X(I).NE.HOLD) GO TO 65
-      END DO   
+      END DO
 c c   WRITE (IPR,FMT=9) HOLD
       IFLAG = 1
    65 HOLD = Y(1)
       DO I = 2,N
           IF (Y(I).NE.HOLD) GO TO 80
-      END DO   
+      END DO
 
 c c c WRITE (IPR,FMT=19) HOLD
       IFLAG = 1
@@ -147,7 +147,7 @@ c c c WRITE (IPR,FMT=19) HOLD
 c c50 WRITE (IPR,FMT=27) IUPPER
 c c   WRITE (IPR,FMT=47) N
 c c   RETURN
-   55 CONTINUE  
+   55 CONTINUE
 c c   WRITE (IPR,FMT=28)
       RETURN
    90 CONTINUE
@@ -169,11 +169,11 @@ C-----START POINT-----------------------------------------------------
 C
       CALL SPRANK(X,N,XR)
       CALL SPRANK(Y,N,YR)
- 
+
       SUM = 0.0D0
       DO I = 1,N
           SUM = SUM + (XR(I)-YR(I))**2
-      END DO  
+      END DO
       SPC = 1.0D0 - (6.0D0*SUM/ ((AN-1.0D0)*AN* (AN+1.0D0)))
 C
 c c   IF (IWRITE.NE.0) WRITE (IPR,FMT=105) N,SPC
@@ -307,13 +307,13 @@ C
       HOLD = X(1)
       DO I = 2,N
           IF (X(I).NE.HOLD) GO TO 90
-      END DO   
+      END DO
 
 c c   WRITE (IPR,FMT=9) HOLD
       AVRANK = (AN+1.0D0)/2.0D0
       DO I = 1,N
           XR(I) = AVRANK
-      END DO   
+      END DO
       RETURN
 
    50 CONTINUE
@@ -387,14 +387,14 @@ c 101     FORMAT (1H ,'JMIN = ',I8)
               JP1 = J + 1
               DO K = JP1,N
                   IF (XS(K).NE.XS(J)) GO TO 950
-              END DO   
+              END DO
               K = N + 1
   950         CONTINUE
               AVRANK = J + K - 1
               AVRANK = AVRANK/2.0D0
               XR(I) = AVRANK
               GO TO 880
-  800     CONTINUE 
+  800     CONTINUE
   820     CONTINUE
           J = N
           K = N + 1
@@ -409,13 +409,13 @@ c 102     FORMAT (1H ,'X(I) = ',F15.7,'   XS(J) = ',F15.7)
   880     CONTINUE
           XPREV = X(I)
           RPREV = XR(I)
-      END DO   
+      END DO
 C
       RETURN
       END
 c ======================================================
- 
- 
+
+
       SUBROUTINE SPSORT(X, N, Y)
       INTEGER N
       DOUBLE PRECISION  X(N), Y(N)
@@ -526,15 +526,15 @@ c c      WRITE (IPR, FMT=9) HOLD
          DO I = 1, N
             Y(I) = X(I)
          END DO
-         RETURN 
+         RETURN
       ENDIF
 c c   WRITE (IPR, FMT=15)
 c c   WRITE (IPR, FMT=47) N
-      RETURN 
+      RETURN
    55 CONTINUE
 c c   WRITE (IPR, FMT=18)
       Y(1) = X(1)
-      RETURN 
+      RETURN
    90 CONTINUE
 c c 9 FORMAT(1H ,
 c c  1108H***** NON-FATAL DIAGNOSTIC--THE FIRST  INPUT ARGUMENT (A VECTO
@@ -561,7 +561,7 @@ C
          IP1 = I + 1
          IF (Y(I) .GT. Y(IP1)) GO TO 250
       END DO
-      RETURN 
+      RETURN
   250 CONTINUE
       M = 1
       I = 1
@@ -614,7 +614,7 @@ C
       GO TO 380
   370 CONTINUE
       M = M - 1
-      IF (M .EQ. 0) RETURN 
+      IF (M .EQ. 0) RETURN
       I = IL(M)
       J = IU(M)
   380 CONTINUE
@@ -634,4 +634,4 @@ C
       IF (AMED .LT. Y(K)) GO TO 395
       Y(K+1) = AMED
       GO TO 390
-      END 
+      END

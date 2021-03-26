@@ -42,13 +42,13 @@ c .   jave      - smoothing to be performed on the periodiogram
 c .               this should be an odd number (>=3) , if not, the
 c .               routine will force it to the next largest odd number.
 c .               jave=0 : do no smoothing
-c .                        spcx contains raw spectral estimates 
+c .                        spcx contains raw spectral estimates
 c .                        (periodogram)
 c .               jave>0 : average jave periodogram estimates together
 c .                        utilizing modified daniell smoothing (good
 c .                        stability but may lead to large bias ).
 c .                        all weights are 1/jave except wgt(1) and
-c .                        wgt(jave) which are 1/(2*jave). this is 
+c .                        wgt(jave) which are 1/(2*jave). this is
 c .                        the recommended option.
 c .   pct       - % of the series to be tapered [0.<=pct>=1.]
 c .               if pct=0. no tapering will be done
@@ -70,7 +70,7 @@ c .                          input series.
 c .               scl= 2 or -1. is recommended
 c .   work      - work array
 c .               if jave.ne.0 then upon return work(1 thru nspc) will
-c .               contain the raw spectral estimates [i.e. , 
+c .               contain the raw spectral estimates [i.e. ,
 c .               periodogram]
 c .   lwork     - length of work [ must be >= 5*nx + 17 +iabs(jave) + 1]
 c .
@@ -246,7 +246,7 @@ c .               return)
 c .   nx        - number of points in x and y (need not be a power of 2)
 c .   iopt      - detrending option
 c .               iopt<0 : do no detrending.
-c .               iopt=0 : remove series mean (minimum recommended 
+c .               iopt=0 : remove series mean (minimum recommended
 c .                        option)
 c .               iopt=1 : remove the series mean and lst sqrs linear
 c .                        trend
@@ -270,7 +270,7 @@ c .                          input series
 c .               scl = 1. : spcx estimates are as calculated  by g13cbf
 c .               scl = 2. : spcx estimates are scaled so that the area
 c .                          under the curve [ s(f)*df ] equals the
-c .                          variance of the detrended (optional) 
+c .                          variance of the detrended (optional)
 c .                          input series.
 c .   work      - work array
 c .   lwork     - length of work [ must be >= 10*nx ]
@@ -757,7 +757,7 @@ c .               nptav must be odd and >= 3
 c .   kopt      - end-point option
 c .               kopt < 0 : utilize cyclic conditions
 c .                          e.g.,  nptav=3 at n=1
-c .                          x(1)=(wgt(1)*x(npts)+wgt(2)*x(1)+ 
+c .                          x(1)=(wgt(1)*x(npts)+wgt(2)*x(1)+
 c .                                wgt(3)*x(2))/(wgt(1)+wgt(2)+wgt(3))
 c .               kopt = 0 : set unsmoothed beginning and end pts to
 c .                          spvl

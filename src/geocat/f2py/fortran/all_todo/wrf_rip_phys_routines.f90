@@ -332,4 +332,3 @@ SUBROUTINE VIRTUAL_TEMP(temp, ratmix, tv, nx, ny, nz)
     RETURN
 
 END SUBROUTINE VIRTUAL_TEMP
-

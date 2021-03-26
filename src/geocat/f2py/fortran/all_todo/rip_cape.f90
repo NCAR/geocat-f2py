@@ -57,7 +57,7 @@ REAL(KIND=8) FUNCTION TONPSADIABAT(thte, prs, psadithte, psadiprs, psaditmk, gam
     REAL(KIND=8) :: fracjt2
     REAL(KIND=8) :: fracip
     REAL(KIND=8) :: fracip2
-    
+
     INTEGER :: l1, h1, mid1, rang1, l2, h2, mid2, rang2
     INTEGER :: ip, jt
 
@@ -85,9 +85,9 @@ REAL(KIND=8) FUNCTION TONPSADIABAT(thte, prs, psadithte, psadiprs, psaditmk, gam
     mid1 = (h1 + l1) / 2
     DO WHILE(rang1 .GT. 1)
         IF (thte .GE. psadithte(mid1)) THEN
-           l1 = mid1 
+           l1 = mid1
         ELSE
-           h1 = mid1 
+           h1 = mid1
         END IF
         rang1 = h1 - l1
         mid1 = (h1 + l1) / 2
@@ -109,9 +109,9 @@ REAL(KIND=8) FUNCTION TONPSADIABAT(thte, prs, psadithte, psadiprs, psaditmk, gam
     mid2 = (h2 + l2) / 2
     DO WHILE(rang2 .GT. 1)
         IF (prs .LE. psadiprs(mid2)) THEN
-           l2 = mid2 
+           l2 = mid2
         ELSE
-           h2 = mid2 
+           h2 = mid2
         END IF
         rang2 = h2 - l2
         mid2 = (h2 + l2) / 2
@@ -225,7 +225,7 @@ SUBROUTINE DPFCALC(prs, sfp, pf, mix, mjy, mkzh, ter_follow)
     INTEGER, INTENT(IN) :: ter_follow,mix,mjy,mkzh
 
     INTEGER :: i,j,k
-    
+
     !$OMP PARALLEL DO COLLAPSE(3) SCHEDULE(runtime)
     DO j = 1,mjy
         DO i = 1,mix
@@ -371,7 +371,7 @@ SUBROUTINE DCAPECALC3D(prs,tmk,qvp,ght,ter,sfp,cape,cin,&
         END DO
     END DO
     !$OMP END PARALLEL DO
-    
+
     CALL DPFCALC(prs_new, sfp, prsf, mix, mjy, mkzh, ter_follow)
 
     !  before looping, set lookup table for getting temperature on
@@ -393,19 +393,19 @@ SUBROUTINE DCAPECALC3D(prs,tmk,qvp,ght,ter,sfp,cape,cin,&
         DO i = 1,mix
             cape(i,j,1) = 0.D0
             cin(i,j,1) = 0.D0
-             
+
             !!$OMP SIMD
             DO kpar = 2, mkzh
 
                 ! Calculate temperature and moisture properties of parcel
                 ! (note, qvppari and tmkpari already calculated above for 2d case.)
-             
+
                 tlcl = TLCLC1/(LOG(tmk_new(kpar,i,j)**TLCLC2/(MAX(1.D-20,qvp_new(kpar,i,j)*prs_new(kpar,i,j)/ &
                        (EPS + qvp_new(kpar,i,j))))) - TLCLC3) + TLCLC4
-             
+
                 ethpari = tmk_new(kpar,i,j)*(1000.D0/prs_new(kpar,i,j))**(GAMMA*(1.D0 + GAMMAMD*qvp_new(kpar,i,j)))* &
                           EXP((THTECON1/tlcl - THTECON2)*qvp_new(kpar,i,j)*(1.D0 + THTECON3*qvp_new(kpar,i,j)))
-                
+
                 zlcl = ght_new(kpar,i,j) + (tmk_new(kpar,i,j) - tlcl)/(G/CP * (1.D0 + CPMD*qvp_new(kpar,i,j)))
 
                 ! Calculate buoyancy and relative height of lifted parcel at
@@ -475,7 +475,7 @@ SUBROUTINE DCAPECALC3D(prs,tmk,qvp,ght,ter,sfp,cape,cin,&
                     END IF
 
                 END DO
-              
+
                 kmax = kk
                 ! IF (kmax .GT. 150) THEN
                 !      print *,'kmax got too big'

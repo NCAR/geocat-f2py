@@ -154,10 +154,10 @@ C -----------------------------------------------------
       IMPLICIT NONE
       INTEGER  N, NOISE
       DOUBLE PRECISION  Y(N), YMEAN, YVAR, YSD, LAG1
-      
+
       DOUBLE PRECISION  YTMP
       INTEGER K
- 
+
       YMEAN = 0.0
       YVAR  = 0.0
       DO K=1,N
@@ -171,7 +171,7 @@ C -----------------------------------------------------
 
       DO K=1,N-1
          LAG1 = LAG1 + (Y(K+1)-YMEAN)*(Y(K)-YMEAN)
-      END DO 
+      END DO
       LAG1 = (LAG1/(N-1.))/YVAR
 
       YSD   = SQRT(YVAR)
@@ -773,4 +773,3 @@ C   see Eqn(26)
       END IF
 
       END
-

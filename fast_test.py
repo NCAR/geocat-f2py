@@ -1,12 +1,14 @@
 # THIS IS A DEVELOPMENT PERFORMANCE TESTING CLASS, REMOVE WHEN NO LONGER NEEDED
 
 import time
+
 import dask
 import dask.distributed as dd
-from dask.array.core import map_blocks
 import numpy as np
 import xarray as xr
-from geocat.f2py import (linint1, linint2, linint2pts)
+from dask.array.core import map_blocks
+
+from geocat.f2py import linint1, linint2, linint2pts
 
 
 def linint1_test():

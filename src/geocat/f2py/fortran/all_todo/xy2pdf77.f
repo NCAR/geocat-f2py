@@ -7,7 +7,7 @@ C NCLFORTSTART
      *                ,binxbnd(mbxp1), binybnd(nbyp1)
       double precision pdf(mbx,nby)
 C NCLEND
-      integer m, n, mb, nb, kxy, unit, msgflg 
+      integer m, n, mb, nb, kxy, unit, msgflg
 
       ier = 0
       do nb=1,nby
@@ -17,7 +17,7 @@ C NCLEND
       end do
 
       kxy = 0
-      do n=1,nxy 
+      do n=1,nxy
          if (x(n).ne.xmsg .and. y(n).ne.ymsg) kxy = kxy + 1
       end do
 
@@ -28,7 +28,7 @@ c Valid data check
           return
       end if
 
-c Very large arrays can result in slow execution times. 
+c Very large arrays can result in slow execution times.
 c .   To minimize unnecessary do loop checks, see if missing
 c .   values are present.
 
@@ -40,12 +40,12 @@ c Binning
       if (msgflg.eq.1) then
           do nb=1,nby
             do mb=1,mbx
-              do n=1,nxy 
+              do n=1,nxy
                  if (x(n).ne.xmsg .and. y(n).ne.ymsg) then
-                     if (x(n).ge.binxbnd(mb)  .and. 
-     *                   x(n).lt.binxbnd(mb+1).and. 
+                     if (x(n).ge.binxbnd(mb)  .and.
+     *                   x(n).lt.binxbnd(mb+1).and.
      *                   y(n).ge.binybnd(nb)  .and.
-     *                   y(n).lt.binybnd(nb+1)) then 
+     *                   y(n).lt.binybnd(nb+1)) then
                          pdf(mb,nb) = pdf(mb,nb) + 1
                      end if
                  end if
@@ -55,11 +55,11 @@ c Binning
       else
           do nb=1,nby
             do mb=1,mbx
-               do n=1,nxy 
-                  if (x(n).ge.binxbnd(mb)  .and. 
-     *                x(n).lt.binxbnd(mb+1).and. 
+               do n=1,nxy
+                  if (x(n).ge.binxbnd(mb)  .and.
+     *                x(n).lt.binxbnd(mb+1).and.
      *                y(n).ge.binybnd(nb)  .and.
-     *                y(n).lt.binybnd(nb+1)) then 
+     *                y(n).lt.binybnd(nb+1)) then
                       pdf(mb,nb) = pdf(mb,nb) + 1
                   end if
                end do

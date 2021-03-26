@@ -2,9 +2,9 @@ import numpy as np
 import xarray as xr
 from dask.array.core import map_blocks
 
-from .fortran import (mocloops)
-from .errors import (ChunkError, CoordinateError)
-from .missing_values import (fort2py_msg, py2fort_msg)
+from .errors import ChunkError, CoordinateError
+from .fortran import mocloops
+from .missing_values import fort2py_msg, py2fort_msg
 
 # Dask Wrappers _<funcname>()
 # These Wrapper are executed within dask processes, and should do anything that
@@ -61,8 +61,7 @@ def moc_globe_atl(lat_aux_grid,
                   rmlak,
                   msg=None,
                   meta=False):
-    """
-    Facilitates calculating the meridional overturning circulation for the
+    """Facilitates calculating the meridional overturning circulation for the
     globe and Atlantic.
 
     Args:
@@ -140,7 +139,6 @@ def moc_globe_atl(lat_aux_grid,
         # (4) Calling with Numpy inputs and user-defined arguments (Missing value = np.nan, NO meta information)
         out_arr = moc_globe_atl(lat_aux_grid.values, a_wvel.values, a_bolus.values, a_submeso.values,
                                 tlat.values, rmlak.values, msg=-99.0, meta=True)
-
     """
 
     # ''' Start of boilerplate

@@ -1,7 +1,7 @@
 !    -*- f90 -*-
 ! Note: the context of this file is case sensitive.
 
-python module vinth2p_ecmwf ! in 
+python module vinth2p_ecmwf ! in
     interface  ! in :vinth2p_ecmwf
         subroutine vinth2pecmwf(dati,dato,hbcofa,hbcofb,p0,plevi,plevo,intyp,ilev,psfc,spvl,kxtrp,imax,nlat,nlevi,nlevip1,nlevo,varflg,tbot,phis) ! in :vinth2p_ecmwf:vinth2p_ecmwf.f
             double precision dimension(imax,nlat,nlevi) :: dati
@@ -33,7 +33,7 @@ python module vinth2p_ecmwf ! in
             integer :: is
             integer :: js
         end subroutine dprnt
-    end interface 
+    end interface
 end python module vinth2p_ecmwf
 
 ! This file was auto-generated with f2py (version:2).

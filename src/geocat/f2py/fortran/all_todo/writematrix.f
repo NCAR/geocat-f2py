@@ -90,46 +90,46 @@ C NCLEND
 
       if (titsp.gt.0) then
           write(titspc,"(i2)") titsp
-          titfmt = "(" // titspc // "x, a)" 
+          titfmt = "(" // titspc // "x, a)"
       else
-          titfmt = "(x, a)" 
+          titfmt = "(x, a)"
       end if
 
-      if (fname.ne."*") then 
+      if (fname.ne."*") then
 c write to a file
           open  (31,file=fname,form="formatted")
           if (.not.(title.eq." ")) then
               write (31,titfmt) title
           end if
 
-          newfmt = "(" // fmtx // ")" 
+          newfmt = "(" // fmtx // ")"
 
           if (iopt.eq.0) then
-              newfmt = "(" // fmtx // ")" 
+              newfmt = "(" // fmtx // ")"
               do nr=1,nrow
                  write (31,newfmt) (x(nc,nr),nc=1,ncol)
               end do
           else
-              newfmt = "(i5," // "1X," // fmtx // ")" 
+              newfmt = "(i5," // "1X," // fmtx // ")"
               do nr=1,nrow
                  write (31,newfmt) nr-1, (x(nc,nr),nc=1,ncol)
               end do
           end if
-          close (31) 
+          close (31)
       else
 c write to standard out
           if (.not.(title.eq." ")) then
               write (*,titfmt) title
           end if
-          
+
           print *, " "
           if (iopt.eq.0) then
-              newfmt = "(" // fmtx // ")" 
+              newfmt = "(" // fmtx // ")"
               do nr=1,nrow
                  write (*,newfmt) (x(nc,nr),nc=1,ncol)
               end do
           else
-              newfmt = "(i5," // "1X," // fmtx // ")" 
+              newfmt = "(i5," // "1X," // fmtx // ")"
               do nr=1,nrow
                  write (*,newfmt) nr-1, (x(nc,nr),nc=1,ncol)
               end do

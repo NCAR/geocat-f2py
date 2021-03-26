@@ -1,11 +1,17 @@
-import numpy as np
-import numpy.testing as nt
-import xarray as xr
-import geocat.f2py
-
 import sys
 import time
 import unittest as ut
+
+import numpy as np
+import numpy.testing as nt
+import xarray as xr
+
+# Import from directory structure if coverage test, or from installed
+# packages otherwise
+if "--cov" in str(sys.argv):
+    from src.geocat.f2py import dpres_plevel
+else:
+    from geocat.f2py import dpres_plevel
 
 # Expected Output
 # Pressure levels (Pa)
@@ -13,16 +19,16 @@ pressure_levels = np.array([
     1000., 950., 900., 850., 800., 750., 700., 650., 600., 550., 500., 450.,
     400., 350., 300., 250., 200., 175., 150., 125., 100., 80., 70., 60., 50.,
     40., 30., 25., 20., 10.
-])  # units hPa
+])    # units hPa
 # convert hPa to Pa
 pressure_levels = pressure_levels * 100.0
 
 pressure_levels_asfloat32 = pressure_levels.astype(np.float32)
 
 # Surface pressure (scalar and 2D, as well as 2D with np.nan and -99 missing values)
-pressure_surface_scalar = 101800.0  # Units of Pa
+pressure_surface_scalar = 101800.0    # Units of Pa
 pressure_surface_2d = np.array([1018.0, 1016.0, 1014.0,
-                                1012.0]).reshape(2, 2)  # Units of Pa
+                                1012.0]).reshape(2, 2)    # Units of Pa
 pressure_surface_2d = pressure_surface_2d * 100
 
 pressure_surface_2d_asfloat32 = pressure_surface_2d.astype(np.float32)
@@ -103,27 +109,24 @@ expected_dp_psfc_2d_msg_99[np.isnan(expected_dp_psfc_2d_msg_99)] = -99.0
 class Test_dpres_plevel_float64_psfc_scalar(ut.TestCase):
 
     def test_dpres_plevel_float64(self):
-        result_dp = geocat.f2py.dpres_plevel(pressure_levels,
-                                             pressure_surface_scalar)
+        result_dp = dpres_plevel(pressure_levels, pressure_surface_scalar)
         nt.assert_array_equal(expected_dp_psfc_scalar, result_dp.values)
 
 
 class Test_dpres_plevel_float64_psfc_2d(ut.TestCase):
 
     def test_dpres_plevel_float64(self):
-        result_dp = geocat.f2py.dpres_plevel(pressure_levels,
-                                             pressure_surface_2d)
+        result_dp = dpres_plevel(pressure_levels, pressure_surface_2d)
         nt.assert_array_equal(expected_dp_psfc_2d, result_dp.values)
 
     def test_dpres_plevel_float64_msg_nan(self):
-        result_dp = geocat.f2py.dpres_plevel(pressure_levels,
-                                             pressure_surface_2d_nan)
+        result_dp = dpres_plevel(pressure_levels, pressure_surface_2d_nan)
         nt.assert_array_equal(expected_dp_psfc_2d_msg_nan, result_dp.values)
 
     def test_dpres_plevel_float64_msg_99(self):
-        result_dp = geocat.f2py.dpres_plevel(pressure_levels,
-                                             pressure_surface_2d_msg,
-                                             msg_py=-99.0)
+        result_dp = dpres_plevel(pressure_levels,
+                                 pressure_surface_2d_msg,
+                                 msg_py=-99.0)
         nt.assert_array_equal(expected_dp_psfc_2d_msg_99, result_dp.values)
 
 
@@ -131,27 +134,26 @@ class Test_dpres_plevel_float32_psfc_scalar(ut.TestCase):
 
     def test_dpres_plevel_float32(self):
         plev_asfloat32 = pressure_levels.astype(np.float32)
-        result_dp = geocat.f2py.dpres_plevel(plev_asfloat32,
-                                             pressure_surface_scalar)
+        result_dp = dpres_plevel(plev_asfloat32, pressure_surface_scalar)
         nt.assert_array_equal(expected_dp_psfc_scalar, result_dp.values)
 
 
 class Test_dpres_plevel_float32_psfc_2d(ut.TestCase):
 
     def test_dpres_plevel_float32(self):
-        result_dp = geocat.f2py.dpres_plevel(pressure_levels_asfloat32,
-                                             pressure_surface_2d_asfloat32)
+        result_dp = dpres_plevel(pressure_levels_asfloat32,
+                                 pressure_surface_2d_asfloat32)
         nt.assert_array_equal(expected_dp_psfc_2d, result_dp.values)
 
     def test_dpres_plevel_float32_msg_nan(self):
-        result_dp = geocat.f2py.dpres_plevel(pressure_levels_asfloat32,
-                                             pressure_surface_2d_nan_asfloat32)
+        result_dp = dpres_plevel(pressure_levels_asfloat32,
+                                 pressure_surface_2d_nan_asfloat32)
         asd = np.sum(result_dp.values != expected_dp_psfc_2d_msg_nan)
         nt.assert_array_almost_equal(expected_dp_psfc_2d_msg_nan,
                                      result_dp.values)
 
     def test_dpres_plevel_float32_msg_99(self):
-        result_dp = geocat.f2py.dpres_plevel(pressure_levels_asfloat32,
-                                             pressure_surface_2d_msg_asfloat32,
-                                             msg_py=-99)
+        result_dp = dpres_plevel(pressure_levels_asfloat32,
+                                 pressure_surface_2d_msg_asfloat32,
+                                 msg_py=-99)
         nt.assert_array_equal(expected_dp_psfc_2d_msg_99, result_dp.values)

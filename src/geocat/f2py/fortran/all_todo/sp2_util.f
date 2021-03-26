@@ -36,7 +36,7 @@ c
       return
       end
 c ---------------------------------------------------------
-      subroutine matgeov(nlat,nlon,u,v,work)  
+      subroutine matgeov(nlat,nlon,u,v,work)
 c
 c pay special attention to subscript order
 c .   nlat is first dim  [ u(nlat,nlon), v(nlat,nlon) ]
@@ -130,14 +130,14 @@ c
       implicit none
       integer n,m,i,j,ij,ji
       real data(*),work(*)
- 
+
       do j=1,m
 	do i=1,n
 	  ij = (j-1)*n+i
 	  work(ij) = data(ij)
 	end do
       end do
- 
+
       do i=1,n
 	do j=1,m
 	  ji = (i-1)*m+j
@@ -145,7 +145,7 @@ c
 	  data(ji) = work(ij)
 	end do
       end do
- 
+
       return
       end
 c ----------------------------------------------------
@@ -156,7 +156,7 @@ c
       implicit none
       integer nlat,nlon,nlat2,i,ib,j
       real data(nlat,nlon),temp
-  
+
       nlat2 = nlat/2
       do i=1,nlat2
 	ib = nlat-i+1
@@ -166,19 +166,19 @@ c
 	  data(ib,j) = temp
 	end do
       end do
- 
+
       return
       end
 c ------------------------------------
       subroutine chkerr (string1, string2, ier,jer,ker,mer)
       implicit none
 
-      integer       ier, jer, ker, mer 
+      integer       ier, jer, ker, mer
       character*(*) string1, string2
 
-      if (ier.ne.0 .or. jer.ne.0 .or. ker.ne.0 .or. mer.ne.0) then 
+      if (ier.ne.0 .or. jer.ne.0 .or. ker.ne.0 .or. mer.ne.0) then
           write (*,'('' ERROR: '',a,'' : '',a
-     *              ,'' : ier,jer,ker,mer='',4i3)')    
+     *              ,'' : ier,jer,ker,mer='',4i3)')
      *                  string1, string2, ier,jer,ker,mer
           stop
       endif
@@ -201,10 +201,10 @@ c .   (possibly) taper the spectral coef
       real  twgt(ntwgt)
 
       ier = 0
-      if (mwave.eq.0) return 
+      if (mwave.eq.0) return
 
       mw2 = iabs(mwave)+2
- 
+
       do k=1,nt
        do n=mw2,nlat
         do m=1,n
@@ -215,25 +215,25 @@ c .   (possibly) taper the spectral coef
       enddo
 
       if (mwave.gt.0) return
-      
+
       iwave = iabs(mwave)
-                                 ! perform exponential tapering 
+                                 ! perform exponential tapering
       jp = max0(iwave/10,1)      ! exponent; determines fall-off rate
       jw = jp*10                 ! coef which has wgt=exp(-1)
 
       if ((iwave+1).gt.ntwgt) then
-         write (*,'(''taprwv: ntwgt exceeded='',2i5)') ntwgt,(iwave+1)  
+         write (*,'(''taprwv: ntwgt exceeded='',2i5)') ntwgt,(iwave+1)
          return
       endif
-          
+
       con = 1./real(jw*(jw+1))
       do j=0,iwave
          twgt(j+1) = exp(-(real(j*(j+1))*con)**jp)
-c c c    write (*,'(''taprwv: j, twgt(j)='',2i5,1x,f15.7)') 
-c c c*                        j, (j+1),twgt(j+1)   
+c c c    write (*,'(''taprwv: j, twgt(j)='',2i5,1x,f15.7)')
+c c c*                        j, (j+1),twgt(j+1)
       enddo
                                   ! now wgt the coef by the wgts
-      do k=1,nt 
+      do k=1,nt
        do n=iwave+1,1,-1          ! traverse the diagonal
          do m=1,n
             a(m,n,k) = a(m,n,k)*twgt(n)
@@ -250,7 +250,7 @@ c ----------------------------------------------------
       integer  mlon, nlat, nt, ner
       real     x(mlon,nlat,nt), scale
 
-      integer  n, ml, nl               
+      integer  n, ml, nl
 
 c scale an array
 
@@ -260,7 +260,7 @@ c scale an array
       do n=1,nt
        do nl=1,nlat
         do ml=1,mlon
-           x(ml,nl,n) = x(ml,nl,n)*scale 
+           x(ml,nl,n) = x(ml,nl,n)*scale
         enddo
        enddo
       enddo

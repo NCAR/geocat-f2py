@@ -704,7 +704,7 @@ c     iplot             (i)     plotting flag: plots (=1); no plots (=other).
 c                             the parcel and environmental temperature
 c                             profiles are plotted throughout the
 c                             sounding depth; the CAPE profile is
-c                             plotted only between the LFC and the 
+c                             plotted only between the LFC and the
 c                             crossing level.
 c
 c     iprnt             (i)     printing flag: print (>0); no print (=0). DJS

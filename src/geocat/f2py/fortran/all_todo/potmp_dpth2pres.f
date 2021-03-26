@@ -91,36 +91,36 @@ C
         END
 c ------------
 C NCLFORTSTART
-        subroutine dpth2pres(nd, depth, has_msg_depth, depth_msg, 
+        subroutine dpth2pres(nd, depth, has_msg_depth, depth_msg,
      +             pressure)
         implicit none
 c  DESCRIPTION:
 c  This function computes pressure in bars from depth in meters
-c  using a mean density derived from depth-dependent global 
-c  average temperatures and salinities from Levitus 1994, and 
+c  using a mean density derived from depth-dependent global
+c  average temperatures and salinities from Levitus 1994, and
 c  integrating using hydrostatic balance.
-c 
+c
 c  References:
-c 
-c  Levitus, S., R. Burgett, and T.P. Boyer, World Ocean Atlas 
+c
+c  Levitus, S., R. Burgett, and T.P. Boyer, World Ocean Atlas
 c  Volume 3: Salinity, NOAA Atlas NESDIS 3, US Dept. of ! Commerce, 1994.
-c 
+c
 c  Levitus, S. and T.P. Boyer, World Ocean Atlas 1994, ! Volume 4:
 c  Temperature, NOAA Atlas NESDIS 4, US Dept. of ! Commerce, 1994.
-c 
+c
 c  Dukowicz, J. K., 2000: Reduction of Pressure and Pressure
 c  Gradient Errors in Ocean Simulations, J. Phys. Oceanogr.,
 c  submitted.
 
 c  INPUT PARAMETERS:
-c  nd     - size of 
+c  nd     - size of
 c  depth  - depth in meters. No units check is made
 
       integer  nd, has_msg_depth
       double precision depth(nd), depth_msg
 
 c  OUTPUT PARAMETERS:
-c  pressure - pressure in bars 
+c  pressure - pressure in bars
 
       double precision pressure(nd)
 C NCLEND

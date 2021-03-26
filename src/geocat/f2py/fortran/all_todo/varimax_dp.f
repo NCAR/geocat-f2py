@@ -41,10 +41,10 @@ C Scale the input eigenvector matrix
       END DO
 
       IF (KFLAG.EQ.0) THEN
-          CALL VORS(NV,NF,V,A,B,C,ND) 
+          CALL VORS(NV,NF,V,A,B,C,ND)
       ELSE
-          CALL VORSMSG(NV,NF,V,A,B,C,ND,VMSG) 
-      END IF  
+          CALL VORSMSG(NV,NF,V,A,B,C,ND,VMSG)
+      END IF
 
       DO N=1,NF
         ROTVAR(N) = 0.0D0
@@ -54,19 +54,19 @@ C Scale the input eigenvector matrix
            END IF
         END DO
       END DO
-      
+
 C % variance explained
 
       IF (IOPT.NE.0) THEN
           DO N=1,NF
             ROTPCV(N) = (ROTVAR(N)/TVAR)*100D0
           END DO
-      ELSE 
+      ELSE
           DO N=1,NF
             ROTPCV(N) = 100.D0/ND
           END DO
       END IF
-      
+
       IF (IOPT.LE.0) RETURN
 
 C unscale [denormalize]
@@ -121,7 +121,7 @@ c    is rotated to maximize the column-variance criterion
 c    in turn until a complete pass through all combinations
 c    does not result in any rotations of more than "reps" radians.
 c The percentages of trace are recomputed for each factor vector
-c    and returned in vector "a" (actually, the first "nfac" 
+c    and returned in vector "a" (actually, the first "nfac"
 c    elements of "a").
 c The percentages of trace are computed for each row of the
 c    rotated matrix and returned in vector "b". When  computed
@@ -353,19 +353,19 @@ c local
          NVTMP = 0
         DO M=1,ND
            IF (V(M,N).NE.VMSG) THEN
-               NVTMP = NVTMP+1 
+               NVTMP = NVTMP+1
                VTMP(NVTMP,N) = V(M,N)
            END IF
         END DO
       END DO
 
-      CALL VORS(NVTMP,NF,VTMP,A,B,C,ND) 
+      CALL VORS(NVTMP,NF,VTMP,A,B,C,ND)
 
       DO N=1,NF
          NVTMP = 0
         DO M=1,ND
            IF (V(M,N).NE.VMSG) THEN
-               NVTMP = NVTMP+1 
+               NVTMP = NVTMP+1
                V(M,N) = VTMP(NVTMP,N)
            END IF
         END DO

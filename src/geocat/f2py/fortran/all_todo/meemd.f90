@@ -94,7 +94,7 @@
 
 !         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           enddo                     ! siftings loop
-!         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~     
+!         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
           rem=remp-ximf
 
@@ -144,7 +144,7 @@
       real, parameter :: am=1./im1, eps=1.2e-7, rnmx=1.-eps
       integer :: idum2=123456789, iy=0, j, k
       integer, dimension(ntab) :: iv
-      
+
       save iv,iy,idum2
 
 
@@ -174,7 +174,7 @@
       iv(j)=idum
       if(iy.lt.1) iy=iy+imm1
       ran2=min(am*iy,rnmx)
-      
+
       end function ran2
 
 !**********************************************************************
@@ -184,7 +184,7 @@
 !----------------------------------------------------------------------
 !  Gaussian white noise generator using uniformly distributed white
 !  noise generator
-!---------------------------------------------------------------------- 
+!----------------------------------------------------------------------
 
       implicit none
       real:: gasdev, ran2
@@ -218,7 +218,7 @@
       real, dimension(LEX), intent(out):: spmax, spmin
       integer, intent(out):: nmax, nmin
       integer:: i
-      
+
       nmax=0
       nmin=0
 
@@ -255,17 +255,17 @@
       subroutine endmax(LEX, temp, nmax)
 !--------------------------------------------------------------------
 ! This is a subroutine to determine end values of the upper envolope
-! using the method described in Appendix B of Wu and Huang (2009, 
+! using the method described in Appendix B of Wu and Huang (2009,
 ! AADA, Vol. 1, pp1).
 !--------------------------------------------------------------------
       implicit none
 
       integer, intent(in) :: nmax, LEX
-      real, dimension(LEX), intent(inout):: temp 
+      real, dimension(LEX), intent(inout):: temp
       real, dimension(nmax) :: exmax, X
       integer :: I, J, lend
       real :: slope1, slope2, tmp1, tmp2
-     
+
       lend=nmax
 
       J=1
@@ -283,14 +283,14 @@
         if(tmp1 > exmax(1)) then
           temp(1)=tmp1
         endif
-        
+
         slope2=(exmax(lend-1)-exmax(lend-2))/(X(lend-1)-X(lend-2))
         tmp2=slope2*(X(lend)-X(lend-1))+exmax(lend-1)
         if(tmp2 > exmax(lend)) then
           temp(LEX)=tmp2
         endif
       endif
-      
+
       end subroutine endmax
 
 
@@ -299,17 +299,17 @@
       subroutine endmin(LEX, temp, nmax)
 !--------------------------------------------------------------------
 ! This is a subroutine to determine end values of the lower envolope
-! using the method described in Appendix B of Wu and Huang (2009, 
+! using the method described in Appendix B of Wu and Huang (2009,
 ! AADA, Vol. 1, pp1).
 !--------------------------------------------------------------------
       implicit none
 
       integer, intent(in) :: nmax, LEX
-      real, dimension(LEX), intent(inout):: temp 
+      real, dimension(LEX), intent(inout):: temp
       real, dimension(nmax) :: exmax, X
       integer :: I, J, lend
       real :: slope1, slope2, tmp1, tmp2
-     
+
       lend=nmax
 
       J=1
@@ -327,14 +327,14 @@
         if(tmp1 < exmax(1)) then
           temp(1)=tmp1
         endif
-        
+
         slope2=(exmax(lend-1)-exmax(lend-2))/(X(lend-1)-X(lend-2))
         tmp2=slope2*(X(lend)-X(lend-1))+exmax(lend-1)
         if(tmp2 < exmax(lend)) then
           temp(LEX)=tmp2
         endif
       endif
-      
+
       end subroutine endmin
 
 
@@ -345,17 +345,17 @@
 !  series, YA have a length of LEX, with N numbers of value
 !  not equal to 1.0E31. The program is to use the cubic line to
 !  interpolate the values for the points other thatn these N
-!  numbers.        
+!  numbers.
 !-----------------------------------------------------------------------
 
       implicit none
 
-      integer, intent(in):: N, LEX      
+      integer, intent(in):: N, LEX
       real, dimension(LEX), intent(inout):: YA
       real, dimension(N):: Y, Y2
       integer, dimension(N):: LX
       integer:: J, I, KLO, KHI
-      real:: YP1, YPN, H, A, B 
+      real:: YP1, YPN, H, A, B
 
 
 !  The following code is to realocate the series of X(N), Y(N)
@@ -369,7 +369,7 @@
         ENDIF
       ENDDO
 
-!  The following code is used to calculate the second order derivative, 
+!  The following code is used to calculate the second order derivative,
 !  set the derivatives at both ends for a natural cubic spline.
       YP1=1.0E31
       YPN=1.0E31
@@ -400,11 +400,11 @@
 !  see NUMEIRCAL RECIPES to find out meaning of each variables
 !-----------------------------------------------------------------
       implicit none
-    
+
       integer, intent(in) :: N, YP1, YPN
       integer, dimension(N), intent(in):: LX
       real, dimension(N) :: X, U
-      real, dimension(N), intent(inout):: Y, Y2 
+      real, dimension(N), intent(inout):: Y, Y2
       integer:: I, K
       real:: SIG, P, QN, UN
 
@@ -414,7 +414,7 @@
 
       Y2(1)=0.
       U(1)=0.
-      
+
       DO I=2,N-1
         SIG=(X(I)-X(I-1))/(X(I+1)-X(I-1))
         P=SIG*Y2(I-1)+2.
@@ -439,7 +439,7 @@
 !-------------------------------------------------------------------
 !  This is a program to obtain standard deviation of the linearly
 !  detrended data
-!  
+!
 !  PARAMETERS:
 !  nsize    :    indata size
 !  indata   :    input data

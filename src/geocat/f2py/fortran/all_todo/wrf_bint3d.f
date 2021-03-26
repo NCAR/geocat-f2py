@@ -10,8 +10,8 @@ C
 C Input vars:        DSKMC, MIYCORS, MJXCORS, NPROJ, XLATC, XLONC,
 C                    NPROJ, IDIR
 C Input/output vars: RIY, RIX, RLAT
-C Output vars:       TRUE1, TRUE2, RLON 
-C 
+C Output vars:       TRUE1, TRUE2, RLON
+C
 C
 C Possible NCL interface:
 C

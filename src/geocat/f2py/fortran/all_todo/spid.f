@@ -1,7 +1,7 @@
 C NCLFORTSTART
       subroutine spigamd (ntim, pp, pmsg, nrun, index)
       implicit none
-      integer ntim, nrun 
+      integer ntim, nrun
       double precision pp(ntim), index(ntim), pmsg
 C NCLEND
 c compute SPI: Standardized Precipitation Index using gamma distribution
@@ -14,10 +14,10 @@ c local/dynamic
 
       maxyrs = ntim/12
 c
-c	Initialize index and check for all missing values 
+c	Initialize index and check for all missing values
 c
       kmsg = 0
-      do j=1,ntim    
+      do j=1,ntim
          index(j) = pmsg
          if (pp(j).eq.pmsg) then
              kmsg = kmsg+1
@@ -27,7 +27,7 @@ c
 c
 c	check for all constant values; can not fit a distribution
 c
-      do j=1,ntim    
+      do j=1,ntim
          if (pp(j).ne.pmsg) then
              pcon = pp(j)
              go to 13
@@ -35,7 +35,7 @@ c
       end do
    13 continue
 
-      do j=1,ntim    
+      do j=1,ntim
          if (pp(j).ne.pmsg .and. pp(j).ne.pcon) then
              go to 18
          end if
@@ -80,7 +80,7 @@ c
               n=n+1
               tmparr(n) = index(j)
            endif
-        end do   
+        end do
         im = mod (nrun+i-1, 12) + 1
 c
 c	Here's where we do the fitting.
@@ -90,7 +90,7 @@ c
 c avoid trying to fit a series of constant values
 c
             do k=2,n
-               if (tmparr(k).ne.tmparr(1)) then     
+               if (tmparr(k).ne.tmparr(1)) then
                    call gamfitd(tmparr,n
      +                  ,alpha(im), beta(im), gamm(im), pzero(im))
                    go to 37
@@ -170,7 +170,7 @@ cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       double precision datarr(*), alpha, beta, gamm, pzero
 
       integer nact, i
-      double precision sum, sumlog, av 
+      double precision sum, sumlog, av
 
       if (n .le. 0) then
           write(*, *) 'Error in gamfitd - empty data array'
@@ -210,7 +210,7 @@ c	They were all zeroes.
          return
       endif
 
-c	Use MLE 
+c	Use MLE
 c       A Note on the Gamma Distribution
 c       Thom (1958): Monthly Weather Review, pp 117-122.
 c       eqn 22 for gamma; just above eqn 21 "A" => alpha
@@ -218,7 +218,7 @@ c       eqn 22 for gamma; just above eqn 21 "A" => alpha
       alpha = log(av) - sumlog / nact
       gamm  = (1.0d0 + sqrt(1.0d0 + 4.0d0*alpha/ 3.0d0)) /(4.0d0*alpha)
       beta  = av / gamm
-      
+
       return
       end
 cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
@@ -458,7 +458,7 @@ c
       double precision function gammlnd(xx)
       implicit none
       double precision xx
-       
+
       integer j
       double precision cof(6), x, tmp, ser
       data cof / 76.18009173d0, -86.50532033d0, 24.01409822d0
@@ -478,4 +478,3 @@ c
 
       return
       end
-

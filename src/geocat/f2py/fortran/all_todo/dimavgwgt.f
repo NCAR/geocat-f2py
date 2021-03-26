@@ -8,7 +8,7 @@ C                                 OUTPUT
       double precision xavg
 C NCLEND
       integer n, npts
-      double precision xsum, wsum 
+      double precision xsum, wsum
 
 C NCL:  xWgtAvg = dim_avg_wgt(x, wgt, opt)
 

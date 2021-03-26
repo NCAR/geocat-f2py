@@ -11,8 +11,8 @@ C NCLEND
       double precision work(n)      ! automatic (allocate)
 
 C                                   ! work array
-      nn = 0 
-      do k=1,n 
+      nn = 0
+      do k=1,n
          if (x(k).ne.xmsg) then
              nn = nn+1
              work(nn) = x(k)
@@ -20,9 +20,9 @@ C                                   ! work array
       end do
 C                                   !return if nn=0
       if (nn.eq.0) then
-          do k=1,m 
+          do k=1,m
              f(k) = xmsg
-          end do 
+          end do
           h = xmsg
          return
       end if
@@ -31,32 +31,32 @@ C                                   ! ascending order
 C
       call plugin(work,nn,z,m,f,h)
 
-      return 
+      return
       end
 C====================================
-         
-      
-      SUBROUTINE PLUGIN(X,N,Z,M,F,H)                      
+
+
+      SUBROUTINE PLUGIN(X,N,Z,M,F,H)
 C-----------------------------------------------------------------------
 C       Version: 1995
-C       fortran77 
-C                                                                       
-C       Purpose:                                                        
-C                                                                       
-C       Simple  Subroutine for kernel density estimation 
+C       fortran77
+C
+C       Purpose:
+C
+C       Simple  Subroutine for kernel density estimation
 c       with iterative plug-in bandwidth selection
-C       
+C
 C       This version only uses the gauss kernel and estimates only
 c       the density itself and not its derivatives.
-C                                                                       
+C
 C  INPUT    X(N)   DOUBLE PRECISION   sorted data
 C  INPUT    N      INTEGER            length of  X
 C  INPUT    Z(M)   DOUBLE PRECISION   output grid (sorted)
 C  INPUT    M      INTEGER            length of Z
 C  OUTPUT   F(M)   DOUBLE PRECISION   estimated density
 C  OUTPUT   H      DOUBLE PRECISION   estimated iterative plugin bandwidth
-C                                                                       
-C                                                                       
+C
+C
 C-----------------------------------------------------------------------
       IMPLICIT DOUBLE PRECISION (A-H,O-Z)
       DIMENSION X(N),Z(M),F(M)
@@ -96,10 +96,10 @@ C
 C------  Loop over iterations
 C-
        DO 100 IT=1,ITER
-C-                                                                     
+C-
 C-------  Estimate functional
 C
-        S=0.D0                                                    
+        S=0.D0
         DO 40 I = 1, N-1
            DO 50 J = I+1, N
                      D2 = ((X(I) - X(J))/A)**2
@@ -110,19 +110,19 @@ C
 40       CONTINUE
         R2 = (2.D0*S)/((XN**2)*(A**5)*RT2PI)
         R2 = R2 + 3.D0/(RT2PI*XN*(A**5))
-C-                                                                     
+C-
 C-------  Estimate bandwidth by asymptotic formula
 C-
-         H=(CONST/(R2*XN))**(.2D0)                                    
+         H=(CONST/(R2*XN))**(.2D0)
          A=CO1*H**(5./7.)
 100     CONTINUE
 C-
 C------- Estimate density with plugin bandwidth
-C-             
+C-
       JBEGIN=1
-      JEND=1                                             
-      DO 200 I=1,M                                                      
-         S=0.D0    
+      JEND=1
+      DO 200 I=1,M
+         S=0.D0
          DO 210 J=JBEGIN,JEND
                 T=(Z(I)-X(J))/H
                 IF(T.GT.5.0.AND.JBEGIN.LT.N) THEN
@@ -130,7 +130,7 @@ C-
                    GOTO 210
                 END IF
                 S=S+DEXP(-T*T/2.)
-210             CONTINUE         
+210             CONTINUE
          DO 220 JEND=J,N
                 T=(Z(I)-X(JEND))/H
                 IF(T.LT.-5.0) GOTO 230
@@ -138,7 +138,7 @@ C-
 220             CONTINUE
 230         F(I)=S/(XN*H*RT2PI)
             JEND=JEND-1
-C-                         
-200      CONTINUE                                             
-      RETURN                                                            
-      END                                                               
+C-
+200      CONTINUE
+      RETURN
+      END

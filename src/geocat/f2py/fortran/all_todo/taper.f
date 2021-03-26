@@ -29,7 +29,7 @@ C NCLEND
 
       kopt = iopt
 
-c pathological case: all values constant  
+c pathological case: all values constant
 c force taper to xav=0.0
 
       do i=2,n
@@ -39,7 +39,7 @@ c force taper to xav=0.0
       end do
       kopt = 1
    10 continue
-  
+
       XAV = 0.0D0
       if (kopt.ne.1) then
           DO I = 1,N

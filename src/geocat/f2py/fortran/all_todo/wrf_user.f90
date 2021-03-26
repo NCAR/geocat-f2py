@@ -1016,13 +1016,3 @@ SUBROUTINE DCOMPUTEICLW(iclw, pressure, qc_in, nx, ny, nz)
     RETURN
 
 END SUBROUTINE DCOMPUTEICLW
-
-
-
-
-
-
-
-
-
-

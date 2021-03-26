@@ -1,9 +1,9 @@
 import numpy as np
 import xarray as xr
 
-from .fortran import (dpresplvl)
-from .errors import (DimensionError, AttributeError, MetaError)
-from .missing_values import (fort2py_msg, py2fort_msg)
+from .errors import AttributeError, DimensionError, MetaError
+from .fortran import dpresplvl
+from .missing_values import fort2py_msg, py2fort_msg
 
 # Single Wrapper <funcname>()
 # These Wrappers are excecuted in the __main__ python process, and should be
@@ -15,8 +15,8 @@ def dpres_plevel(pressure_levels,
                  pressure_top=None,
                  msg_py=None,
                  meta=False):
-    """
-    Calculates the pressure layer thicknesses of a constant pressure level coordinate system.
+    """Calculates the pressure layer thicknesses of a constant pressure level
+    coordinate system.
 
     Parameters
     ----------
@@ -94,7 +94,6 @@ def dpres_plevel(pressure_levels,
 
         # Call the function
         result_dp = geocat.comp.dpres_plevel(pressure_levels, pressure_surface, pressure_top)
-
     """
 
     # Apply basic sanity checks on the input data
@@ -166,7 +165,7 @@ def _sanity_check(pressure_levels, pressure_surface, pressure_top):
         )
 
     if np.size(pressure_surface
-              ) == 1:  # if it is a scalar, then construct an xarray.dataarray
+              ) == 1:    # if it is a scalar, then construct an xarray.dataarray
         pressure_surface = np.asarray(pressure_surface)
         pressure_surface = np.ndarray([1],
                                       buffer=pressure_surface,

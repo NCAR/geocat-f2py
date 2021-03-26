@@ -46,9 +46,9 @@ c
 c                                               ! Max # of box segments
       integer max_segs
       parameter (max_segs = 100000 )
-c                                               
+c
       integer i, j, ii, jj, k, jfirst, jfirsto ! Indices
-      integer nx, ny, nx_max, ny_max          
+      integer nx, ny, nx_max, ny_max
 
       integer plon2, plonhalf
       integer i_in(max_segs),i_out(max_segs)
@@ -164,7 +164,7 @@ c
          call binning_get_global_lats_wgts(nlato, flato_glob, gwo_glob)
       end if
 c
-c Copy input data to wrap-around array (wrap half-way around globe 
+c Copy input data to wrap-around array (wrap half-way around globe
 c at each end of x-direction)
 c
 
@@ -189,7 +189,7 @@ c
          if(ii .gt. plon    )      ii = 1
          if(i  .le. plonhalf)      flon(i) = clon(ii)*pio180-4*pio2
          if(i  .gt. plonhalf+plon) flon(i) = clon(ii)*pio180+4*pio2
-         if(i  .gt. plonhalf .and. i .le. plonhalf+plon) 
+         if(i  .gt. plonhalf .and. i .le. plonhalf+plon)
      &                             flon(i) = clon(ii)*pio180
       end do
 
@@ -220,10 +220,10 @@ c
 c Compute box edges for input and output grids
 c
       call binning_map_edges(plat      , plon2 , nlat      , jfirst  ,
-     1                       flon      , flat  , gw_glob   , 
+     1                       flon      , flat  , gw_glob   ,
      2                       grid_flag , floni , flati     )
       call binning_map_edges(plato     , plono , nlato     , jfirsto ,
-     1                       flono     , flato , gwo_glob  , 
+     1                       flono     , flato , gwo_glob  ,
      2                       grido_flag, flonoi, flatoi    )
 c
 c Copy grid interfaces to "edge" arrays
@@ -291,7 +291,7 @@ c
       ny = 0
       do j = 1,plato
          do jj = 1,plat
-            if(edge_n (jj) .gt. edgeo_s( j) .and. 
+            if(edge_n (jj) .gt. edgeo_s( j) .and.
      &         edgeo_n( j) .gt. edge_s (jj) ) then
                ny = ny + 1
                if(ny .gt. max_segs) then
@@ -373,14 +373,14 @@ c
       deallocate( flato_glob )
       deallocate( gwo_glob   )
 c
-c CRUDE .... 
+c CRUDE ....
 c .   At any level where the input "xx" has a missing value
 c .   set the corresponding "yy" level to missing.
 c
       do k = 1,plev
 
          do j = 1,plat
-            do i = 1,plon 
+            do i = 1,plon
                if (xx(i,j,k).eq.xxmsg) then
                    do jj = 1,plato
                       do ii = 1,plono
@@ -394,7 +394,7 @@ c
 
   100    continue
       end do
-    
+
       return
       end
 c
@@ -444,7 +444,7 @@ c
      &                                                           ierror
          if(ierror .eq. 1) then
             write(6,*) "Not enough work space declared for number of"
-            write(6,*) "Gaussian latitudes" 
+            write(6,*) "Gaussian latitudes"
             write(6,*) 'lwork, nlat     = ', lwork,nlat
             write(6,*) 'lwork should be = ', 4*nlat*(nlat+1)+2
          end if

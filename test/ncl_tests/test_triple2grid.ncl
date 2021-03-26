@@ -8,7 +8,7 @@ begin
     ; Set different options
     option = True
     option@method = 1    ; Just to show it is already set to 1 as default when option is True
-    
+
     option_method_0 = False
     option_method_0@method = 0    ; Just to show it is already set to 0 as default when option is False
 

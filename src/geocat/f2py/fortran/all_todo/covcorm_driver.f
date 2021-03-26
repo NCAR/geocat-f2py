@@ -7,7 +7,7 @@ c     subroutine BOGUS (ntim,nvar,x,xmsg,iopt,ier)
 c     implicit none
 c                                              ! input
 c     integer ntim, nvar, iopt(2), ier
-c     double precision x(ntim,nvar), xmsg, trace 
+c     double precision x(ntim,nvar), xmsg, trace
 c                                              ! output
 c     integer lvcm
 c
@@ -18,7 +18,7 @@ c                                              ; return sym storage mode
 c         real, allocatable, dimension(:)   :: vcm
 c         allocate (vcm1d(lvcm), stat=ier)
 c         call dcovcormssm (ntim,nvar,x,xmsg,iopt(2)
-c    +                     ,vcm1d,lvcm,trace,ier) 
+c    +                     ,vcm1d,lvcm,trace,ier)
 c         return(vcm1d)
 c     else
 c                                              ; return as 2D
@@ -29,7 +29,7 @@ c    +                  ,vcm2d, lvcm,trace,ier)
 c         return(vcm2d)
 c     end if
 
-c     return 
+c     return
 c     end
 
 C NCLFORTSTART
@@ -109,4 +109,3 @@ c
 
       return
       end
-

@@ -1,10 +1,16 @@
-import numpy as np
-import xarray as xr
-import geocat.f2py
-
 import sys
 import time
 import unittest as ut
+
+import numpy as np
+import xarray as xr
+
+# Import from directory structure if coverage test, or from installed
+# packages otherwise
+if "--cov" in str(sys.argv):
+    from src.geocat.f2py import ChunkError, CoordinateError, linint2
+else:
+    from geocat.f2py import ChunkError, CoordinateError, linint2
 
 n = 127
 
@@ -34,7 +40,7 @@ class Test_linint2_float64(ut.TestCase):
                               'lat': yi,
                               'lon': xi
                           }).chunk(chunks)
-        fo = geocat.f2py.linint2(fi, xo, yo)
+        fo = linint2(fi, xo, yo)
         np.testing.assert_array_equal(fi.values, fo[..., ::2, ::2].values)
 
     def test_linint2_msg(self):
@@ -44,7 +50,7 @@ class Test_linint2_float64(ut.TestCase):
                               'lat': yi,
                               'lon': xi
                           }).chunk(chunks)
-        fo = geocat.f2py.linint2(fi, xo, yo, msg_py=fi_np[0, 0, 0, 0])
+        fo = linint2(fi, xo, yo, msg_py=fi_np[0, 0, 0, 0])
         np.testing.assert_array_equal(fi.values, fo[..., ::2, ::2].values)
 
     def test_linint2_nan(self):
@@ -56,7 +62,7 @@ class Test_linint2_float64(ut.TestCase):
                               'lat': yi,
                               'lon': xi
                           }).chunk(chunks)
-        fo = geocat.f2py.linint2(fi, xo, yo)
+        fo = linint2(fi, xo, yo)
         np.testing.assert_array_equal(fi.values, fo[..., ::2, ::2].values)
 
     def test_linint2_masked(self):
@@ -69,7 +75,7 @@ class Test_linint2_float64(ut.TestCase):
                               'lat': yi,
                               'lon': xi
                           }).chunk(chunks)
-        fo = geocat.f2py.linint2(fi, xo, yo)
+        fo = linint2(fi, xo, yo)
         np.testing.assert_array_equal(fi, fo[..., ::2, ::2].values)
 
 
@@ -82,7 +88,7 @@ class Test_linint2_float32(ut.TestCase):
                               'lat': yi,
                               'lon': xi
                           }).chunk(chunks)
-        fo = geocat.f2py.linint2(fi, xo, yo)
+        fo = linint2(fi, xo, yo)
         np.testing.assert_array_equal(fi.values, fo[..., ::2, ::2].values)
 
     def test_linint2_msg_float32(self):
@@ -93,7 +99,7 @@ class Test_linint2_float32(ut.TestCase):
                               'lat': yi,
                               'lon': xi
                           }).chunk(chunks)
-        fo = geocat.f2py.linint2(fi, xo, yo, msg_py=fi_np_copy[0, 0, 0, 0])
+        fo = linint2(fi, xo, yo, msg_py=fi_np_copy[0, 0, 0, 0])
         np.testing.assert_array_equal(fi.values, fo[..., ::2, ::2].values)
 
     def test_linint2_nan_float32(self):
@@ -105,7 +111,7 @@ class Test_linint2_float32(ut.TestCase):
                               'lat': yi,
                               'lon': xi
                           }).chunk(chunks)
-        fo = geocat.f2py.linint2(fi, xo, yo)
+        fo = linint2(fi, xo, yo)
         np.testing.assert_array_equal(fi.values, fo[..., ::2, ::2].values)
 
     def test_linint2_masked_float32(self):
@@ -119,7 +125,7 @@ class Test_linint2_float32(ut.TestCase):
                               'lat': yi,
                               'lon': xi
                           }).chunk(chunks)
-        fo = geocat.f2py.linint2(fi, xo, yo)
+        fo = linint2(fi, xo, yo)
         np.testing.assert_array_equal(fi, fo[..., ::2, ::2].values)
 
 
@@ -132,7 +138,7 @@ class Test_linint2_int32(ut.TestCase):
                               'lat': yi,
                               'lon': xi
                           }).chunk(chunks)
-        fo = geocat.f2py.linint2(fi, xo, yo)
+        fo = linint2(fi, xo, yo)
         np.testing.assert_array_equal(fi.values, fo[..., ::2, ::2].values)
 
     def test_linint2_msg_int32(self):
@@ -143,7 +149,7 @@ class Test_linint2_int32(ut.TestCase):
                               'lat': yi,
                               'lon': xi
                           }).chunk(chunks)
-        fo = geocat.f2py.linint2(fi, xo, yo, msg_py=fi_np_copy[0, 0, 0, 0])
+        fo = linint2(fi, xo, yo, msg_py=fi_np_copy[0, 0, 0, 0])
         np.testing.assert_array_equal(fi.values, fo[..., ::2, ::2].values)
 
     def test_linint2_masked_int32(self):
@@ -156,7 +162,7 @@ class Test_linint2_int32(ut.TestCase):
                               'lat': yi,
                               'lon': xi
                           }).chunk(chunks)
-        fo = geocat.f2py.linint2(fi, xo, yo)
+        fo = linint2(fi, xo, yo)
         np.testing.assert_array_equal(fi, fo[..., ::2, ::2].values)
 
 
@@ -169,7 +175,7 @@ class Test_linint2_int64(ut.TestCase):
                               'lat': yi,
                               'lon': xi
                           }).chunk(chunks)
-        fo = geocat.f2py.linint2(fi, xo, yo)
+        fo = linint2(fi, xo, yo)
         np.testing.assert_array_equal(fi.values, fo[..., ::2, ::2].values)
         print("Good after assertion")
 
@@ -181,7 +187,7 @@ class Test_linint2_int64(ut.TestCase):
                               'lat': yi,
                               'lon': xi
                           }).chunk(chunks)
-        fo = geocat.f2py.linint2(fi, xo, yo, msg_py=fi_np_copy[0, 0, 0, 0])
+        fo = linint2(fi, xo, yo, msg_py=fi_np_copy[0, 0, 0, 0])
         np.testing.assert_array_equal(fi.values, fo[..., ::2, ::2].values)
 
     def test_linint2_masked_int64(self):
@@ -194,7 +200,7 @@ class Test_linint2_int64(ut.TestCase):
                               'lat': yi,
                               'lon': xi
                           }).chunk(chunks)
-        fo = geocat.f2py.linint2(fi, xo, yo)
+        fo = linint2(fi, xo, yo)
         np.testing.assert_array_equal(fi, fo[..., ::2, ::2].values)
 
 
@@ -214,7 +220,7 @@ class Test_linint2_dask(ut.TestCase):
                               'lat': yi,
                               'lon': xi
                           }).chunk(chunks)
-        fo = geocat.f2py.linint2(fi, xo, yo)
+        fo = linint2(fi, xo, yo)
         np.testing.assert_array_equal(fi.values, fo[..., ::2, ::2].values)
 
     def test_linint2_chunked_interp(self):
@@ -226,27 +232,27 @@ class Test_linint2_dask(ut.TestCase):
                               'lat': yi,
                               'lon': xi
                           }).chunk(chunks)
-        with self.assertRaises(geocat.f2py.ChunkError):
-            fo = geocat.f2py.linint2(fi, xo, yo)
+        with self.assertRaises(ChunkError):
+            fo = linint2(fi, xo, yo)
 
 
 class Test_linint2_numpy(ut.TestCase):
 
     def test_linint2_fi_np(self):
-        fo = geocat.f2py.linint2(fi_np, xo, yo, xi=xi, yi=yi)
+        fo = linint2(fi_np, xo, yo, xi=xi, yi=yi)
         np.testing.assert_array_equal(fi_np, fo[..., ::2, ::2].values)
 
     def test_linint2_fi_np_no_xi_yi(self):
-        with self.assertRaises(geocat.f2py.CoordinateError):
-            fo = geocat.f2py.linint2(fi_np, xo, yo, 0)
+        with self.assertRaises(CoordinateError):
+            fo = linint2(fi_np, xo, yo, 0)
 
     def test_linint2_fi_np_no_yi(self):
-        with self.assertRaises(geocat.f2py.CoordinateError):
-            fo = geocat.f2py.linint2(fi_np, xo, yo, xi=xi)
+        with self.assertRaises(CoordinateError):
+            fo = linint2(fi_np, xo, yo, xi=xi)
 
     def test_linint2_fi_np_no_xi(self):
-        with self.assertRaises(geocat.f2py.CoordinateError):
-            fo = geocat.f2py.linint2(fi_np, xo, yo, yi=yi)
+        with self.assertRaises(CoordinateError):
+            fo = linint2(fi_np, xo, yo, yi=yi)
 
 
 # class Test_linint2_non_monotonic(ut.TestCase):
@@ -258,12 +264,12 @@ class Test_linint2_numpy(ut.TestCase):
 #                               'lat': yi_reverse,
 #                               'lon': xi
 #                           }).chunk(chunks)
-#         with self.assertWarns(geocat.f2py._ncomp.NcompWarning):
-#             geocat.f2py.linint2(fi, xo, yo).compute()
+#         with self.assertWarns(_ncomp.NcompWarning):
+#             linint2(fi, xo, yo).compute()
 #
 #     def test_linint2_non_monotonic_np(self):
 #         with self.assertWarns(geocat.ncomp._ncomp.NcompWarning):
-#             geocat.f2py.linint2(fi_np[:, :, ::-1, :],
+#             linint2(fi_np[:, :, ::-1, :],
 #                                  xo,
 #                                  yo,
 #                                  xi=xi,
@@ -279,7 +285,7 @@ class Test_linint2_non_contiguous(ut.TestCase):
                               'lat': yi_reverse,
                               'lon': xi
                           }).chunk(chunks)
-        fo = geocat.f2py.linint2(fi[:, :, ::-1, :], xo, yo)
+        fo = linint2(fi[:, :, ::-1, :], xo, yo)
         np.testing.assert_array_equal(fi[:, :, ::-1, :].values,
                                       fo[..., ::2, ::2].values)
 
@@ -290,10 +296,10 @@ class Test_linint2_non_contiguous(ut.TestCase):
                               'lat': yi_reverse,
                               'lon': xi
                           }).chunk(chunks)
-        fo = geocat.f2py.linint2(fi[:, :, ::-1, :].values,
-                                 xo,
-                                 yo,
-                                 xi=xi,
-                                 yi=yi_reverse[::-1])
+        fo = linint2(fi[:, :, ::-1, :].values,
+                     xo,
+                     yo,
+                     xi=xi,
+                     yi=yi_reverse[::-1])
         np.testing.assert_array_equal(fi[:, :, ::-1, :].values,
                                       fo[..., ::2, ::2].values)

@@ -8,7 +8,7 @@ C                                 OUTPUT
       double precision sumx
 C NCLEND
       integer n, npts
-      double precision xsum 
+      double precision xsum
 
 C NCL:  xWgtSum = dim_sum_wgt(x, wgt, opt)
 

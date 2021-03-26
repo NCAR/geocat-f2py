@@ -7,9 +7,9 @@ c This code was designed for one simple task. It has since
 c been mangled and abused for assorted reasons. For example,
 c early gfortran compilers had some issues with automatic arrays.
 c Hence, the C-Wrapper was used to create 'work' arrays which
-c were then passed to this code.  The original focused (non-NCL) 
-c task was to handle PPIN & PPOUT that had the same 'monotonicity.' 
-c Extra code was added to handle the more general case. 
+c were then passed to this code.  The original focused (non-NCL)
+c task was to handle PPIN & PPOUT that had the same 'monotonicity.'
+c Extra code was added to handle the more general case.
 c Blah-Blah:  Punch line: it is embarrassingly convoluted!!!
 c
 c                                                ! input types
@@ -60,10 +60,10 @@ c copy to 'work'  arrays
 
       NP1 = 0
       NO1 = 0
-      IF (PPIN(1).LT.PPIN(2)) THEN    
+      IF (PPIN(1).LT.PPIN(2)) THEN
           NP1 = NPIN + 1
       END IF
-      IF (PPOUT(1).LT.PPOUT(2)) THEN 
+      IF (PPOUT(1).LT.PPOUT(2)) THEN
           NO1 = NPOUT + 1
       END IF
 
@@ -72,11 +72,11 @@ c copy to 'work'  arrays
           XIN(NP) = XXIN(ABS(NP1-NP))
       END DO
 
-      DO NP = 1,NPOUT   
+      DO NP = 1,NPOUT
           POUT(NP) = PPOUT(ABS(NO1-NP))
       END DO
 c
-c eliminate XIN levels with missing data. 
+c eliminate XIN levels with missing data.
 c .   This can happen with observational data.
 c
       NL = 0

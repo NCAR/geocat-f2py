@@ -24,7 +24,7 @@ c                                                        INPUT
 c                                                        OUTPUT
       double precision shape, scale, alpha, pzero
 c NCLEND
-c                                                        LOCAL 
+c                                                        LOCAL
       integer i, nact, nmsg
       double precision    sum, sumlog, av, pobs, pc
       double precision    beta, eta
@@ -67,7 +67,7 @@ c	compute sums and counts
          end if
       end do
 c                             pobs id the total # of non-missing obs
-      pobs = nact + pzero        
+      pobs = nact + pzero
       pc   = 100d0*pobs/n
       if (pc.lt.pcrit) then
           ier = 2
@@ -118,7 +118,7 @@ c ------------
           beta = 1.0d0/beta
       end if
 
-      shape = eta  
+      shape = eta
       scale = beta
 
       return

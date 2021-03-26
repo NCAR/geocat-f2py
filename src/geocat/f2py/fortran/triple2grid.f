@@ -11,7 +11,7 @@ c NCL:  grid = triple2grid(xi,yi,zi,gx,gy,option)
       DOUBLE PRECISION XI(KZ),YI(KZ),ZI(KZ),ZMSG
       DOUBLE PRECISION X(KZ),Y(KZ),Z(KZ)
 
-C C C WRAPIT can not handle semantics like:  0:MX2-1 
+C C C WRAPIT can not handle semantics like:  0:MX2-1
 C C C DOUBLE PRECISION GXBIG(0:MX2-1),GYBIG(0:NY2-1)
 C C C DOUBLE PRECISION GBIG(0:MX2-1,0:NY2-1)
       DOUBLE PRECISION GBIGX(MX2),GBIGY(NY2)
@@ -30,7 +30,7 @@ c c c real     t0, t1, t2, second
       ELSE
           DDCRIT = DISTMX
       END IF
-          
+
       debug = .false.
 c c c t0    = second()
 c                     strip out missing data (kpts)
@@ -69,7 +69,7 @@ c                    equally spaced in x ???
          IF (DD.LT.(GX(M+1)-GX(M))-DDEPS   .OR.
      +       DD.GT.(GX(M+1)-GX(M))+DDEPS ) THEN
              MFLAG = 0
-             GO TO 10 
+             GO TO 10
          END IF
       END DO
 
@@ -80,15 +80,15 @@ c                    equally spaced in y ???
          IF (DD.LT.(GY(N+1)-GY(N))-DDEPS   .OR.
      +       DD.GT.(GY(N+1)-GY(N))+DDEPS ) THEN
              NFLAG = 0
-             GO TO 20 
+             GO TO 20
          END IF
       END DO
    20 CONTINUE
 
 C  MH Note: 02/01/2017
 C
-C  There's a serious bug in TRIP2GRD3 that sometimes causes the return 
-C  values to be all missing or just flat out wrong. This bug is 
+C  There's a serious bug in TRIP2GRD3 that sometimes causes the return
+C  values to be all missing or just flat out wrong. This bug is
 C  elusive; it appears to change in behavior if you run this code
 C  in debug mode, or even on different systems (Mac versus Linux).
 C  Since TRIP2GRD2 seems to be working for now and is faster, we
@@ -155,7 +155,7 @@ c .   will be less than the number KZ due to over writing the same grid pt.
 c                          local
       INTEGER M,N,K,MM,NN,KSUM,KPTS
       DOUBLE PRECISION DOUT(MX,NY)
-      DOUBLE PRECISION DD,XX,YY,SLPY,SLPX,DX,DY,ATMP,YLAT,RE,RAD 
+      DOUBLE PRECISION DD,XX,YY,SLPY,SLPX,DX,DY,ATMP,YLAT,RE,RAD
 
 c c c real     t0, t1, t2, second
       logical  debug
@@ -164,7 +164,7 @@ c c c real     t0, t1, t2, second
       debug = .false.
 c c c t0    = second()
 
-      RE   = 6371.2200D0 
+      RE   = 6371.2200D0
       RAD  = 4.D0*ATAN(1.0D0)/180.D0
 
 c                     strip out missing data (kpts)
@@ -182,7 +182,7 @@ c                          initialize
         END DO
       END DO
 
-c                     EXACT MATCHES ONLY 
+c                     EXACT MATCHES ONLY
 c c c t1  = second()
       KSUM = 0
       DO K = 1,KPTS
@@ -216,10 +216,10 @@ c                     ASSIGN TO NEARBY GRID POINT
 c                     determine subscripts to nearest grid pt
          NN = -1
          IF (NFLAG.EQ.1) THEN
-             NN = INT(((Y(K)-GYOUT(1))/DY))+2  
+             NN = INT(((Y(K)-GYOUT(1))/DY))+2
          ELSE
              DO N=1,NY-1
-                IF (Y(K).GE.GYOUT(N) .AND. Y(K).LT.GYOUT(N+1) ) THEN   
+                IF (Y(K).GE.GYOUT(N) .AND. Y(K).LT.GYOUT(N+1) ) THEN
                     DY   = Y(K)-GYOUT(N)
                     SLPY = DY/(GYOUT(N+1)-GYOUT(N))
                     YY   = N + SLPY
@@ -234,7 +234,7 @@ c                     determine subscripts to nearest grid pt
              MM = INT(((X(K)-GXOUT(1))/DX))+2
          ELSE
              DO M=1,MX-1
-                IF (X(K).GE.GXOUT(M) .AND. X(K).LT.GXOUT(M+1) ) THEN   
+                IF (X(K).GE.GXOUT(M) .AND. X(K).LT.GXOUT(M+1) ) THEN
                     DX   = X(K)-GXOUT(M)
                     SLPX = DX/(GXOUT(M+1)-GXOUT(M))
                     XX   = M + SLPX
@@ -265,7 +265,7 @@ c                                     mm,nn =>  nearest grid pt
                  DOUT(MM,NN) = DD
              END IF
          END IF
-   
+
       END DO
 
 c     if (debug) then
@@ -286,7 +286,7 @@ C ------------
 c                          local
       INTEGER M,N,K,KSUM,KPTS
       DOUBLE PRECISION DOUT(MX,NY), DIST(KZ)
-     +                ,RE,RAD,RLAT,ATMP 
+     +                ,RE,RAD,RLAT,ATMP
 
 c c c real     t0, t1, t2, second
       logical  debug
@@ -303,7 +303,7 @@ c                          initialize
               GOUT(M,N) = ZMSG
           END DO
       END DO
-c                     EXACT MATCHES ONLY 
+c                     EXACT MATCHES ONLY
 c c c t1  = second()
       KSUM = 0
       DO K = 1,KPTS
@@ -337,7 +337,7 @@ c           meaning that no 'nearest neighbor' stuuf was used.
 
 c c c t1  = second()
 
-      RE   = 6371.2200D0 
+      RE   = 6371.2200D0
       RAD  = 4.D0*ATAN(1.0D0)/180.D0
 C                                        LOOP OVER EACH GRID POINT
       DO N = 1,NY
@@ -347,7 +347,7 @@ C                                        LOOP OVER EACH OBSERVATION
 C                                        DISTANCE TO CURRENT GRID PT
                 IF (METHOD.EQ.0) THEN
                     DO K = 1,KPTS
-                       DIST(K) = SQRT( (X(K)-GXOUT(M))**2 
+                       DIST(K) = SQRT( (X(K)-GXOUT(M))**2
      +                               + (Y(K)-GYOUT(N))**2)
                     END DO
                 ELSE
@@ -368,7 +368,7 @@ C
 c                              assign z(k) to nearest grid point
                 DO K = 1,KPTS
                    IF (Z(K).NE.ZMSG) THEN
-                       IF (DIST(K).LT.DOUT(M,N) .AND. 
+                       IF (DIST(K).LT.DOUT(M,N) .AND.
      +                     DIST(K) .LT.DDCRIT)   THEN
                            DOUT(M,N) = DIST(K)
                            GOUT(M,N) = Z(K)
@@ -414,7 +414,7 @@ cc            DOUT(M,N) = 1.D20
 cc            GOUT(M,N) = ZMSG
 cc        END DO
 cc    END DO
-c                     EXACT MATCHES ONLY 
+c                     EXACT MATCHES ONLY
 cc    t1  = second()
 cc    KSUM = 0
 cc    DO K = 1,KPTS

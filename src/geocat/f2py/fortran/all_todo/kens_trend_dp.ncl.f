@@ -84,7 +84,7 @@ C                                     ! LOCAL
            diff = xdata(k)-xdata(j)
 
 C                     ! close enough for a tie?
-           dave = (xdata(j)+xdata(k))/2.0d0  
+           dave = (xdata(j)+xdata(k))/2.0d0
            IF (diff.ne.0.0d0 .and. dave.ne.0.0d0) THEN
                if (abs(diff/dave) .lt. eps) diff = zero
            END IF
@@ -98,7 +98,7 @@ C                     ! counts
            ELSE IF (diff.lt.zero) THEN
                s = s-1
            ELSE
-               ntie      = ntie + 1 
+               ntie      = ntie + 1
                tieflg(k) = .true.
            END IF
         END DO
@@ -135,9 +135,8 @@ c c c          trend = slope(nc/2+1)
 c c c      END IF
 
 c c c      write(*,'(" n=",i3," s=",i5, " nc=",i6, "  nt=",i3
-c c c     *         ," var=",f8.1," vartie=",f8.1," trend=",f10.5)') 
+c c c     *         ," var=",f8.1," vartie=",f8.1," trend=",f10.5)')
 c c c     *         n, s, nc, nt, var, vartie, trend
-    
-      RETURN
-      END 
 
+      RETURN
+      END

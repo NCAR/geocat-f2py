@@ -8,7 +8,7 @@ ccccc double precision x(n), y(n),w(n),work(3*n+3*maxdeg+3),eps
       double precision x(n), y(n),w(n),work(lwork),eps,cmsg
 c                                                     ; OUTPUT
       integer ndeg, ierr
-      double precision r(n), coef(maxdeg1) 
+      double precision r(n), coef(maxdeg1)
 C NCLEND
 C                                                     ; LOCAL
       integer i
@@ -41,7 +41,7 @@ c                                                     ; temp work
       double precision xx(n), yy(n), ww(n)
 c                                                     ; OUTPUT
       integer ndeg, ierr
-      double precision r(n), coef(maxdeg1) 
+      double precision r(n), coef(maxdeg1)
 C NCLEND
 C                                                     ; LOCAL
       integer i, nn
@@ -58,7 +58,7 @@ c xx, yy, ww will hold non-missing values
              ww(nn) = w(i)
          end if
       end do
- 
+
       c0 = 0.0
       if (nn.gt.maxdeg) then
           call dpolft (nn, xx, yy, ww, maxdeg, ndeg, eps, r, ierr

@@ -25,7 +25,7 @@ c distmx any x/y observation .le. distmx will be used.
 c .      Set to some very large number [ 1.e20 ] if all grid points
 c .      are to be returned with some value.
 c .      Observations .gt. distmx will be ignored. If distmx is set
-c .        small than it is possible that some grid points will be 
+c .        small than it is possible that some grid points will be
 c .        filled with missing values.
 
 C NCL    zgrid = triple2grid2d (x,y,z, lon2d,lat2d, opt)

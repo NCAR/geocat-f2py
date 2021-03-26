@@ -1,7 +1,8 @@
 #''' setup.py is needed, but only to make namespaces happen,
-from setuptools import setup, find_packages
-
 from pathlib import Path
+
+from setuptools import find_packages, setup
+
 
 #''' moved into function, can now be used other places
 def version():
@@ -10,12 +11,14 @@ def version():
         if index > -1:
             return line[index + 15:].replace('\" %}', '').strip()
 
+
 datadir = Path(__file__).parent / 'src' / 'geocat' / 'f2py' / 'fortran'
 files = [str(p.relative_to(datadir)) for p in datadir.rglob('*.so')]
 
 setup(
     name='geocat.f2py',
     version=version(),
+    include_package_data=True,
     package_dir={
         '': 'src',
         'geocat': 'src/geocat',

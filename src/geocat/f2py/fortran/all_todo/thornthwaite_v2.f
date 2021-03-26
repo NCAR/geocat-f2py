@@ -10,7 +10,7 @@ C NCLEND
 C --------------------------------------------------------------------
 C Computation of evapotranspiration using the method of Thornthwaite
 C --------------------------------------------------------------------
-C                       This allows missing values 
+C                       This allows missing values
 C --------------------------------------------------------------------
 C Original C-code: http://sac.csic.es/spei/spei_index.html
 C --------------------------------------------------------------------
@@ -37,7 +37,7 @@ C  average solar declination angle for each month of the year
       nyrs = ntim/nmos
 
       do nt=1,ntim
-         etp(nt) = tmsg   
+         etp(nt) = tmsg
       end do
 
       ier  = 0
@@ -54,7 +54,7 @@ c .   to calculate a climatological annual temp. efficiency index (J)
          knt = 0
          tmo = 0.0d0
 c                               ! every 12-th value (eg: all Januaries)
-        do nt=nmo,ntim,nmos  
+        do nt=nmo,ntim,nmos
            if (t(nt).ne.tmsg) then
                tmo = tmo + t(nt)
                knt = knt + 1
@@ -70,7 +70,7 @@ c                               ! if J=0 ... nothing else matters
       if (J.eq.0.0d0) then
           do nt=1,ntim
              if (t(nt).ne.tmsg) then
-                 etp(nt) = 0.0d0   
+                 etp(nt) = 0.0d0
              end if
           end do
           return
@@ -86,7 +86,7 @@ C Compute K: monthly correction factor which is a function of latitude
 
        tanLat = tan(rad*lat)
        do nmo=1,nmos
-          tanLatMonth = tanLat*tanDelta(nmo) 
+          tanLatMonth = tanLat*tanDelta(nmo)
           if (tanLatMonth.gt.-1.0d0 .and. tanLatMonth.lt.1.0d0) then
               omega = acos(-tanLatMonth)
           elseif (tanLatMonth.le.-1.0d0) then
@@ -104,12 +104,12 @@ C Calculate evapotranspiration
           do nt=nmo,ntim,nmos
              if (t(nt).ne.tmsg) then
                  if (t(nt).gt.0.0d0) then
-                     etp(nt) = K(nmo)*16*((10*t(nt)/J))**c 
+                     etp(nt) = K(nmo)*16*((10*t(nt)/J))**c
                  else
                      etp(nt) = 0.0d0
                  end if
              end if
           end do
         end do
-        
+
       end

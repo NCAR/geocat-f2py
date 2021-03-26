@@ -8,8 +8,8 @@ C NCLFORTSTART
       double precision pdf(mbx,nby)
 C NCLEND
       integer m, n, mb, nb, kxy, unit, msgflg
- 
-c Initialize; Count valid values 
+
+c Initialize; Count valid values
 
       ier   = 0
       pdf   = 0.0
@@ -22,7 +22,7 @@ c Valid data check
           return
       end if
 
-c Very large arrays can result in slow execution times. 
+c Very large arrays can result in slow execution times.
 c .   To minimize unnecessary do loop checks, see if missing
 c .   values are present.
 
@@ -34,9 +34,9 @@ c binning
       if (msgflg.eq.1) then
           do nb=1,nby
             do mb=1,mbx
-               pdf(mb,nb) = count(x.ne.xmsg .and. y.ne.ymsg .and.    
+               pdf(mb,nb) = count(x.ne.xmsg .and. y.ne.ymsg .and.
      *                            x.ge.binxbnd(mb)  .and.
-     *                            x.lt.binxbnd(mb+1).and. 
+     *                            x.lt.binxbnd(mb+1).and.
      *                            y.ge.binybnd(nb)  .and.
      *                            y.lt.binybnd(nb+1))
             end do
@@ -45,7 +45,7 @@ c binning
           do nb=1,nby
             do mb=1,mbx
                pdf(mb,nb) = count(x.ge.binxbnd(mb)  .and.
-     *                            x.lt.binxbnd(mb+1).and. 
+     *                            x.lt.binxbnd(mb+1).and.
      *                            y.ge.binybnd(nb)  .and.
      *                            y.lt.binybnd(nb+1))
             end do

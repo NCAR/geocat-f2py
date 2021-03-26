@@ -27,7 +27,7 @@ C     PARAMETER (NLAT=108, LWORK=4*NLAT*(NLAT+1)+2)
       PARAMETER (RADTODEG=57.2957795)
 C
 C Generate gaussian lats and weights.
-C 
+C
       CALL GAQDNCL(NLAT,GLAT,GWGT,WORK,LWORK,IER)
 C
 C Convert to degrees and subtract 90.

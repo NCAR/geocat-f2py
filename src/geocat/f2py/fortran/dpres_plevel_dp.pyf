@@ -29,7 +29,7 @@ python module dpres_plevel ! in
             integer :: kflag
             integer :: ier
         end subroutine dpres1d
-    end interface 
+    end interface
 end python module dpres_plevel
 
 ! This file was auto-generated with f2py (version:2).

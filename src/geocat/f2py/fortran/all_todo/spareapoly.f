@@ -7,7 +7,7 @@ c input
 c output
       double precision  area
 C NCLEND
-c local 
+c local
       integer npts
 
 c Are beginning and end pts the same?
@@ -21,7 +21,7 @@ c If so, pass one less value. spareapoly wants no duplicate pts.
 
       return
       end
-      
+
 c --------------
       subroutine spareapoly(vlat,vlon,nv,rad,area)
       implicit none
@@ -34,13 +34,13 @@ c output
 C*************************************************************
 C Computing the Area of a Spherical Polygon of Arbitrary Shape
 C     Bevis and Cambareri (1987)
-C     Mathematical Geology, vol.19, Issue 4, pp 335-346 
+C     Mathematical Geology, vol.19, Issue 4, pp 335-346
 C*************************************************************
 c Computes the area of a spherical polygon with nv vertices and sides.
 
 c ARGUMENTS:
 c vlat,vlon ...  vectors containing the latitude and longitude
-c                of each vertex.  The ith.  vertex is located at 
+c                of each vertex.  The ith.  vertex is located at
 c                [vlat(i),vlon(i)].
 c nv        ...  the number of vertices and sides in the spherical
 c                polygon
@@ -55,7 +55,7 @@ c   area will be returned in the square of these units.
 c SIGN CONVENTION:
 c   Latitudes are positive to the north and negative to the south.
 c   Longitudes are positive to the east and negative to the west.
-c VERTEX ENUMERATION: 
+c VERTEX ENUMERATION:
 c   The vertices are numbered sequentially around the border of the
 c   spherical polygon.  Vertex 1 lies between vertex nv and vertex 2.
 c   The user must follow the convention whereby in moving around the
@@ -68,7 +68,7 @@ c
 c   Two adjacent vertices may never be exactly 180 degrees apart
 c   because they could be connected by infinitely many different
 c   great circle arcs, and thus the border of the spherical
-c   polygon would not be uniquely defined.  
+c   polygon would not be uniquely defined.
 
 
 c local
@@ -94,10 +94,10 @@ c local
              flon=vlon(1)
              blat=vlat(nv-1)
              blon=vlon(nv-1)
-         end if 
-      
+         end if
+
          call trnsfrmlon (vlat(iv),vlon(iv),flat,flon,fang)
-         call trnsfrmlon (vlat(iv),vlon(iv),blat,blon,bang) 
+         call trnsfrmlon (vlat(iv),vlon(iv),blat,blon,bang)
 
          fvb = bang-fang
          if (fvb.lt. 0.0d0) fvb = fvb+twopi
@@ -108,7 +108,7 @@ c local
 
       return
       end
-c --- 
+c ---
       subroutine trnsfrmlon(plat,plon,qlat,qlon,tranlon)
       implicit none
 c Finds the "longitude" of point Q in a geographic coordinate system
@@ -127,10 +127,10 @@ c local
 
       tt = sin((qlon-plon)*dtr)*cos(qlat*dtr)
 
-      bb = sin(qlat*dtr)*cos(plat*dtr)-cos(qlat*dtr)*sin(plat*dtr)   
+      bb = sin(qlat*dtr)*cos(plat*dtr)-cos(qlat*dtr)*sin(plat*dtr)
      &    *cos((qlon-plon)*dtr)
 
       tranlon = atan2(tt,bb)
 
       return
-      end 
+      end

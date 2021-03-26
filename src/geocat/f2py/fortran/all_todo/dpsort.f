@@ -117,20 +117,20 @@ C***FIRST EXECUTABLE STATEMENT  DPSORT
       NN = N
       IF (NN .LT. 1) THEN
          IER = 1
-C DJS    CALL XERMSG ('SLATEC', 'DPSORT', 
-C DJS1      'The number of values to be sorted, N, is not positive.', 
+C DJS    CALL XERMSG ('SLATEC', 'DPSORT',
+C DJS1      'The number of values to be sorted, N, is not positive.',
 C DJS2      IER, 1)
-         
-         RETURN 
+
+         RETURN
       ENDIF
 C
       KK = ABS(KFLAG)
       IF (KK.NE.1 .AND. KK.NE.2) THEN
          IER = 2
-C DJS    CALL XERMSG ('SLATEC', 'DPSORT', 
+C DJS    CALL XERMSG ('SLATEC', 'DPSORT',
 C DJS1      'The sort control parameter, KFLAG, is not 2, 1, -1, or -2.'
 C DJS2      , IER, 1)
-         RETURN 
+         RETURN
       ENDIF
 C
 C     Initialize permutation vector
@@ -141,7 +141,7 @@ C
 C
 C     Return if only one value is to be sorted
 C
-      IF (NN .EQ. 1) RETURN 
+      IF (NN .EQ. 1) RETURN
 C
 C     Alter array DX to get decreasing order if needed
 C
@@ -306,5 +306,5 @@ C
 C
       ENDIF
 C
-      RETURN 
-      END 
+      RETURN
+      END

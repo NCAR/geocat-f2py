@@ -1,7 +1,7 @@
 !    -*- f90 -*-
 ! Note: the context of this file is case sensitive.
 
-python module rcm2points ! in 
+python module rcm2points ! in
     interface  ! in :rcm2points
 	! signature : fo = drcm2points(yi, xi, fi, yo, xo, [xmsg, opt])
         subroutine drcm2points(ngrd,nyi,nxi,yi,xi,fi,nxyo,yo,xo,fo,xmsg,opt,ncrit,kval,ier) ! in :rcm2points:rcm2points.f
@@ -21,7 +21,7 @@ python module rcm2points ! in
             integer,		optional,					intent(hide)	:: kval
             integer,		optional,					intent(hide)	:: ier=0
         end subroutine drcm2points
-    end interface 
+    end interface
 end python module rcm2points
 
 ! This file was auto-generated with f2py (version:2).

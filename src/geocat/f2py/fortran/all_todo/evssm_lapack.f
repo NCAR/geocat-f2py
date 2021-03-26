@@ -9,7 +9,7 @@ C NCLFORTSTART
 C NCLEND
       integer          il  , iu  , mout, ldz, n, nn
      +                ,iwork(5*nvar), ifail(nvar)
-      double precision vl  , vu  , abstol, work(8*nvar) 
+      double precision vl  , vu  , abstol, work(8*nvar)
       character*1      jobz, rang, uplo
 
 c .   jobz    = "V"       ; compute eigen{values/vectors}
@@ -28,12 +28,12 @@ c .   mout    = 0         ; ouput number of eigenvalues
       il      = max(nvar-neval+1,1)
       iu      = nvar
 
-      mout    = -99       
+      mout    = -99
       ldz     = nvar
 
-      vl      = 1d20    
-      vu      = 1d20   
-      abstol  = 0.0d0     
+      vl      = 1d20
+      vu      = 1d20
+      abstol  = 0.0d0
 
       call dspevx(jobz, rang, uplo, nvar, cssm, vl, vu, il, iu
      +           ,abstol ,mout, weval, wevec, ldz, work, iwork
@@ -50,7 +50,7 @@ c .   largest eigenvalues/vectors are first.
           do n=1,neval
              weval(n) = work(neval+1-n)
           end do
-    
+
           do n=1,nvar
               do nn=1,neval
                  work(nn) = wevec(n,nn)

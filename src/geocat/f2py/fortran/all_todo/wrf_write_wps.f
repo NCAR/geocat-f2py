@@ -24,7 +24,7 @@ C NCLFORTSTART
       logical IS_WIND_EARTH_REL
       integer IFV
       real XFCST
-      real EARTH_RADIUS 
+      real EARTH_RADIUS
       real SLAB(NX,NY)
 
 C NCLEND
@@ -36,12 +36,12 @@ C Declarations INTERNAL
       character(len=25) UNITS
       character(len=46) DESC
       character(len=24) HDATE
-      character(len=32) MAP_SOURCE 
+      character(len=32) MAP_SOURCE
       character(len=8)  STARTLOC
-      character(len=80) OUT_FILE 
-      
-      integer IUNIT 
-      integer OUNIT 
+      character(len=80) OUT_FILE
+
+      integer IUNIT
+      integer OUNIT
       integer ierr
       logical exists
 
@@ -66,11 +66,11 @@ C Create the WPS IM file name and test it it is already in use
 
       inquire(file=OUT_FILE, exist=exists)
       if (exists) then
-        open(OUNIT, file=OUT_FILE, status="old", 
-     +       position="append", action="write", form='unformatted', 
+        open(OUNIT, file=OUT_FILE, status="old",
+     +       position="append", action="write", form='unformatted',
      +       convert='big_endian')
       else
-        open(OUNIT, file=OUT_FILE, status="new", action="write", 
+        open(OUNIT, file=OUT_FILE, status="new", action="write",
      +       form='unformatted', convert='big_endian')
       end if
 
@@ -80,43 +80,43 @@ C WRITE WPS IM identifier - we always use the newer versions so this is always 5
 
 
 C WRITE the second record, common to all projections:
-      write (OUNIT) HDATE, XFCST, MAP_SOURCE, FIELD, UNITS, DESC, XLVL, 
+      write (OUNIT) HDATE, XFCST, MAP_SOURCE, FIELD, UNITS, DESC, XLVL,
      +       NX, NY, IPROJ
 
 
 C WRITE the third record, which depends on the projection:
-      if (IPROJ == 0) then            
+      if (IPROJ == 0) then
 C This is the Cylindrical Equidistant (lat/lon) projection:
-        WRITE (OUNIT) STARTLOC, STARTLAT, STARTLON, DELTALAT, DELTALON, 
+        WRITE (OUNIT) STARTLOC, STARTLAT, STARTLON, DELTALAT, DELTALON,
      +       EARTH_RADIUS
 
-      elseif (IPROJ == 1) then        
+      elseif (IPROJ == 1) then
 C This is the Mercator projection:
-        WRITE (OUNIT) STARTLOC, STARTLAT, STARTLON, DX, DY, TRUELAT1, 
+        WRITE (OUNIT) STARTLOC, STARTLAT, STARTLON, DX, DY, TRUELAT1,
      +       EARTH_RADIUS
 
-      elseif (IPROJ == 3) then        
+      elseif (IPROJ == 3) then
 C This is the Lambert Conformal projection:
-         WRITE (OUNIT) STARTLOC, STARTLAT, STARTLON, DX, DY, XLONC, 
+         WRITE (OUNIT) STARTLOC, STARTLAT, STARTLON, DX, DY, XLONC,
      +       TRUELAT1, TRUELAT2, EARTH_RADIUS
 
-      elseif (IPROJ == 4) then        
-C Gaussian projection                         
-        WRITE (OUNIT) STARTLOC, STARTLAT, STARTLON, NLATS, DELTALON, 
+      elseif (IPROJ == 4) then
+C Gaussian projection
+        WRITE (OUNIT) STARTLOC, STARTLAT, STARTLON, NLATS, DELTALON,
      +       EARTH_RADIUS
-        
-      elseif (IPROJ == 5) then        
+
+      elseif (IPROJ == 5) then
 C This is the Polar Stereographic projection:
-        WRITE (OUNIT) STARTLOC, STARTLAT, STARTLON, DX, DY, XLONC, 
+        WRITE (OUNIT) STARTLOC, STARTLAT, STARTLON, DX, DY, XLONC,
      +       TRUELAT1, EARTH_RADIUS
 
       endif
-     
+
       WRITE (OUNIT) IS_WIND_EARTH_REL
 
       WRITE (OUNIT) slab
-      WRITE(*, '("DONE WRITING ", A, " (level=", f7.0, ") for time ", 
-     +       A, " to IM Format")' ) 
+      WRITE(*, '("DONE WRITING ", A, " (level=", f7.0, ") for time ",
+     +       A, " to IM Format")' )
      +      TRIM(FIELD), XLVL, TRIM(HDATE)
 
       close(ounit)

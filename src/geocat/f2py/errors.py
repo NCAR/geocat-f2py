@@ -5,7 +5,7 @@ class Error(Exception):
 
 class AttributeError(Error):
     """Exception raised when the arguments of GeoCAT-comp functions argument
-     has a mismatch of attributes with other arguments."""
+    has a mismatch of attributes with other arguments."""
     pass
 
 
@@ -23,11 +23,11 @@ class CoordinateError(Error):
 
 class DimensionError(Error):
     """Exception raised when the arguments of GeoCAT-comp functions argument
-     has a mismatch of the necessary dimensionality."""
+    has a mismatch of the necessary dimensionality."""
     pass
 
 
 class MetaError(Error):
     """Exception raised when the support for the retention of metadata is not
-     supported."""
+    supported."""
     pass

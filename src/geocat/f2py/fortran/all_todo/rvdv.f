@@ -12,7 +12,7 @@ c            iopt= cyclic
 c relative vorticity via centered finite difference approach (rv)
 c .  rv = dv/dx-du/dy+(u/a)tan(lat)   where "d" means partial derivitive
 c reference: Bluestein p113-114 [was not the original reference]
-c            Halt-Martin p314   [ nothing on rv] 
+c            Halt-Martin p314   [ nothing on rv]
 
 c assumptions:
 c .   (1) latitudes  monotonically increasing  [eg: glat(2) > glat(1)]
@@ -74,7 +74,7 @@ c                                 ! pole pts will not be used below
              END IF
          END IF
       END DO
-        
+
 c                                          ! initialize to msg
       DO NL = 1,NLAT
           DO ML = 1,MLON
@@ -125,7 +125,7 @@ c                                          ! rv in grid body
 
                   RV(ML,NL) = (V(MLP1,NL)-V(MLM1,NL))*DX2(NL) -
      +                        (U(ML,NL+1)-U(ML,NL-1))*DY2(NL) +
-     +                         U(ML,NL)*TLATRE(NL) 
+     +                         U(ML,NL)*TLATRE(NL)
 
               END IF
           END DO
@@ -192,9 +192,9 @@ c NCLFORTSTART
 
 c divergence via centered finite differences
 c . div = dv/dy+du/dx-(v/re)*tan(lat)  where "d" ==> partial derivitive
-c 
-c reference: Bluestein p113-114 
-c            Halt-Martin p314   
+c
+c reference: Bluestein p113-114
+c            Halt-Martin p314
 
 c NCL: dv = uv2dv_cfd (u,v,lat,lon,cyclic)
 c            xmsg = u@_FillValue
@@ -310,10 +310,10 @@ c                                          ! dv in grid body
 
                   DV(ML,NL) = (V(ML,NL+1)-V(ML,NL-1))*DY2(NL) +
      +                        (U(MLP1,NL)-U(MLM1,NL))*DX2(NL) -
-     +                         V(ML,NL)*TLATRE(NL) 
+     +                         V(ML,NL)*TLATRE(NL)
               END IF
           END DO
-c                                   ! ?bottom/top bound? 
+c                                   ! ?bottom/top bound?
           IF (JOPT.GE.2) THEN
 c                                   ! bottom bound (nl=1)
               IF (V(ML,2)  .NE.XMSG .AND. V(ML,1)  .NE.XMSG .AND.

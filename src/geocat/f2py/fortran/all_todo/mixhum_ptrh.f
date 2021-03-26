@@ -15,7 +15,7 @@ c computes qw (specific humidity or mixing ratio) from p, t and rh
 c definition of mixing ratio
 c if,
 c    es  - is the saturation mixing ratio
-c    ep  - is the ratio of the molecular weights of water vapor to 
+c    ep  - is the ratio of the molecular weights of water vapor to
 c          dry air
 c    p   - is the atmospheric pressure
 c    rh  - is the relative humidity (given as a percent)

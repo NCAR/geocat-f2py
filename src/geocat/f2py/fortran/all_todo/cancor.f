@@ -1,10 +1,10 @@
 C NCLFORTSTART
-      subroutine dcancorxy (nobs,mx,my,mxy,minxy,maxxy,lrdim,x,y      
+      subroutine dcancorxy (nobs,mx,my,mxy,minxy,maxxy,lrdim,x,y
      +                     ,ndf,canr,eval,wlam,chisq
      +                     ,coefxr,coefyl,rr,yx,rx,lrr,ier)
 c
 c NCL:   canr = cancor(x,y,opt)
-c .             ndf, chisq, coefyl [1d], coefxr [1d] 
+c .             ndf, chisq, coefyl [1d], coefxr [1d]
 c .             coefyl and coefxr converted to 2D before return
 c .             returned as attributes
 
@@ -47,14 +47,14 @@ c ier    - error code
 c local
 c
       integer              m, n, lrwork, icov
-      integer              ncend, ncstrt, nc,ncs 
+      integer              ncend, ncstrt, nc,ncs
       double precision     xmsg
       logical              debug
 
       ier  = 0
       xmsg = 1.d20
-c      lrr  = ((mxy+1)*mxy)/2 
-      lrwork  = mxy*mxy 
+c      lrr  = ((mxy+1)*mxy)/2
+      lrwork  = mxy*mxy
       debug   = .false.
 
 c      do m=1,minxy
@@ -73,7 +73,7 @@ c      do m=1,minxy
 
       if (ier.ne.0) return
 c
-c combine y and x  
+c combine y and x
 c
 
       do m=1,my
@@ -158,7 +158,7 @@ C           R     - WORK MATRIX (M X M)                                 CANO 360
 c
 c       remark-djs
 c       Using the recommended sizes resulted in bounds errors.
-c       lrdim is an (arbitrarily) large number [say, 2*mp*mq] 
+c       lrdim is an (arbitrarily) large number [say, 2*mp*mq]
 C                                                                       CANO 370
 C        REMARKS                                                        CANO 380
 C           THE NUMBER OF LEFT HAND VARIABLES (MP) SHOULD BE GREATER    CANO 390
@@ -185,7 +185,7 @@ C                                                                       CANO 560
      1                   ,COEFL,R,LRDIM,LRR,LRWORK)
       IMPLICIT NONE
       INTEGER          N, MP, MQ, NDF(MQ), LRDIM, LRR, LRWORK
-      DOUBLE PRECISION RR(LRR),COEFL(LRDIM),COEFR(LRDIM),R(LRWORK)  
+      DOUBLE PRECISION RR(LRR),COEFL(LRDIM),COEFR(LRDIM),R(LRWORK)
       DOUBLE PRECISION ROOTS(MQ),WLAM(MQ),CANR(MQ),CHISQ(MQ)
 C                                                                       CANO 610
 C        ...............................................................CANO 620
@@ -210,7 +210,7 @@ C                                                                       CANO 800
 C     PARTITION INTERCORRELATIONS AMONG LEFT HAND VARIABLES, BETWEEN    CANO 810
 C     LEFT AND RIGHT HAND VARIABLES, AND AMONG RIGHT HAND VARIABLES.    CANO 820
 C                                                                       CANO 830
-      INTEGER          M, N1, N2, N3, I, J, K, L, JJ 
+      INTEGER          M, N1, N2, N3, I, J, K, L, JJ
       DOUBLE PRECISION FN, FMP, FMQ, SUMX, DET
 
       M=MP+MQ                                                           CANO 840
@@ -391,7 +391,7 @@ C
       SUBROUTINE DMINVX(A,N,D,L,M)
       IMPLICIT  NONE
       INTEGER   N
-      DOUBLE PRECISION   A(*), L(*), M(*) 
+      DOUBLE PRECISION   A(*), L(*), M(*)
       DOUBLE PRECISION   BIGA, D, HOLD
 
       INTEGER   NK, I, J, K, IJ, IZ, KK, KI, JP, JK, JI, JQ, JR, IK, KJ
@@ -527,7 +527,7 @@ C           CANONICAL CORRELATION ANALYSIS.                             NROO 100
 C                                                                       NROO 110
 C        USAGE                                                          NROO 120
 C           CALL NROOT (M,A,B,XL,X)                                     NROO 130
-C           CALL DNROOTX (M,A,B,XL,X) 
+C           CALL DNROOTX (M,A,B,XL,X)
 C                                                                       NROO 140
 C        DESCRIPTION OF PARAMETERS                                      NROO 150
 C           M  - ORDER OF SQUARE MATRICES A, B, AND X.                  NROO 160
@@ -670,7 +670,7 @@ C        (1) HAVE BEEN CHANGED TO (*).
 C
 C     ..................................................................
 C
-C        SUBROUTINE  EIGEN 
+C        SUBROUTINE  EIGEN
 C                   DEIGENX   [djs]
 C
 C        PURPOSE
@@ -734,7 +734,7 @@ C        BE CHANGED TO 1.0D-12.
 C
 C        ...............................................................
       INTEGER I, J, IQ, IJ, IND, MQ, LQ, ILO, IMQ, ILR, IMR,
-     +        IA, L, M, LM, LL, MM, ILQ, IM, IL, JQ, K 
+     +        IA, L, M, LM, LL, MM, ILQ, IM, IL, JQ, K
       DOUBLE PRECISION RANG, ANORM, ANRMX, THR, X, Y,
      +                 SINX, SINX2, COSX, COSX2, SINCS
 C

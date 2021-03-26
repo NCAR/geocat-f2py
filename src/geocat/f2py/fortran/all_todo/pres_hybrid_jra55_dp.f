@@ -1,6 +1,6 @@
 C NCLFORTSTART
       SUBROUTINE DPHYBRIDJRA55(HYA,HYB,PSFC,MLON,NLAT,KLEV,PHY,PMSG
-     +                        ,KLEVI,PI)  
+     +                        ,KLEVI,PI)
 
 c NCL: phy = pres_hybrid_jra55 (psfc,hya,hyb)
 
@@ -32,7 +32,7 @@ C NCLEND
       INTEGER KL,NL,ML
 
 c pressure at interfaces levels
-     
+
       DO KL = 1,KLEVI
           DO NL = 1,NLAT
               DO ML = 1,MLON
@@ -57,9 +57,9 @@ c ---
           DO KL = 1,KLEV
              IF (PSFC(ML,NL).NE.PMSG) THEN
                  DP = PI(ML,NL,KL)-PI(ML,NL,KL+1)
-                 PHY(ML,NL,KL) = 
-     +               EXP((1/DP)*(PI(ML,NL,KL  )*LOG(PI(ML,NL,KL  )) 
-     +                          -PI(ML,NL,KL+1)*LOG(PI(ML,NL,KL+1)))-1)      
+                 PHY(ML,NL,KL) =
+     +               EXP((1/DP)*(PI(ML,NL,KL  )*LOG(PI(ML,NL,KL  ))
+     +                          -PI(ML,NL,KL+1)*LOG(PI(ML,NL,KL+1)))-1)
              ELSE
                  PHY(ML,NL,KL) = PMSG
              END IF
@@ -67,7 +67,7 @@ c ---
         END DO
       END DO
 
-c force 
+c force
 
       DO NL = 1,NLAT
         DO ML = 1,MLON

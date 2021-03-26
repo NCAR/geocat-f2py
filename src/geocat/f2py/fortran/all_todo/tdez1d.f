@@ -1,6 +1,6 @@
 C
 C $Id: tdez1d.f,v 1.2 2008-07-27 03:40:25 haley Exp $
-C                                                                      
+C
 C                Copyright (C)  2001
 C        University Corporation for Atmospheric Research
 C                All Rights Reserved
@@ -12,8 +12,8 @@ C
 C  This subroutine uses the NCAR Graphics functions in Tdpack
 C  to draw a series of markers along a curve.  TDEZ1D is meant to be
 C  a simplified interface to Tdpack for the purpose of quickly
-C  drawing a plot.  
-C  TDEZ1D sacrifices much of the flexibility and functionality of 
+C  drawing a plot.
+C  TDEZ1D sacrifices much of the flexibility and functionality of
 C  Tdpack in its attempt to be simple.
 C
 C  The data values plotted are:
@@ -40,15 +40,15 @@ C
 C  The eye position is calculated from the 3D coordinate
 C  (RMULT,THETA,PHI) as provided in the argument list:
 C
-C      RMULT  is a multiplier of the diagonal length (DL) of 
+C      RMULT  is a multiplier of the diagonal length (DL) of
 C             the smallest box containing the surface to be drawn.
 C      THETA  is an angle (in degrees) in the XY plane measured
 C             positive counter-clockwise from the X axis
-C      PHI    is an angle (in degrees) measured from the positive Z 
-C             axis toward the XY plane.  
+C      PHI    is an angle (in degrees) measured from the positive Z
+C             axis toward the XY plane.
 C
-C  Thus, the coordinate (RMULT*DL,THETA,PHI) is the spherical 
-C  coordinate for the eye position.  If RMULT = THETA = PHI = 0., 
+C  Thus, the coordinate (RMULT*DL,THETA,PHI) is the spherical
+C  coordinate for the eye position.  If RMULT = THETA = PHI = 0.,
 C  a default eye position ( 2.5,-55.,70.) is chosen.
 C
 C      IST    is a style index defining the colors used to shade the
@@ -64,17 +64,17 @@ C               7  -  gray shades underneath; magenta shades on top.
 C               8  -  gray shades underneath; yellow shades on top.
 C
 C             If IST is positive, then black is used for the background
-C             color and white for the foreground color; if IST is 
+C             color and white for the foreground color; if IST is
 C             the negative of any of the above values, then white
 C             is used for the background color and black for the
 C             foreground color.
-C  
+C
 C  When TDEZ1D is called, a color table is defined for all open
-C  workstations that implements IST as described above.  *This 
-C  color table will supersede any color table that has been 
+C  workstations that implements IST as described above.  *This
+C  color table will supersede any color table that has been
 C  previously defined.*  The color table that is defined is:
 C
-C      Color 
+C      Color
 C      index   Colors
 C    -------   ----------------------------------------------------
 C          0   black if IST is positive; white if IST is negative
@@ -112,7 +112,7 @@ C  Set the maximum number of triangles.
 C
       PARAMETER (MTRI=110000)
 C
-C  Specify the number of shades for each color, the starting 
+C  Specify the number of shades for each color, the starting
 C  color index for the color shades part of the color table,
 C  the color index of the first gray value, and the color index
 C  of the last gray value.
@@ -202,8 +202,8 @@ C   own particular style.
 C
       IRST = 4
 C
-C  Define TDPACK rendering styles 1 through 8.  The 
-C  indices 1-8 can then be used as final arguments in 
+C  Define TDPACK rendering styles 1 through 8.  The
+C  indices 1-8 can then be used as final arguments in
 C  calls to TDITRI, TDSTRI, and TDMTRI.
 C
       XSL = 0.05*XRNG

@@ -2,9 +2,9 @@ import numpy as np
 import xarray as xr
 from dask.array.core import map_blocks
 
-from .fortran import (drcm2rgrid, drgrid2rcm)
-from .errors import (ChunkError, CoordinateError)
-from .missing_values import (fort2py_msg, py2fort_msg)
+from .errors import ChunkError, CoordinateError
+from .fortran import drcm2rgrid, drgrid2rcm
+from .missing_values import fort2py_msg, py2fort_msg
 
 # Dask Wrappers _<funcname>()
 # These Wrapper are executed within dask processes, and should do anything that
@@ -51,8 +51,8 @@ def _rgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, msg_py, shape):
 
 
 def rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg=None, meta=False):
-    """
-    Interpolates data on a curvilinear grid (i.e. RCM, WRF, NARR) to a rectilinear grid.
+    """Interpolates data on a curvilinear grid (i.e. RCM, WRF, NARR) to a
+    rectilinear grid.
 
     Parameters
     ----------
@@ -149,7 +149,6 @@ def rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg=None, meta=False):
         newlon1D_rect=np.linspace(lon2D_curv.min(), lon2D_curv.max(), 100)
 
         ht_rect = geocat.comp.rcm2rgrid(lat2D_curv, lon2D_curv, ht_curv, newlat1D_rect, newlon1D_rect)
-
     """
     if (lon2d is None) | (lat2d is None):
         raise CoordinateError(
@@ -164,10 +163,10 @@ def rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg=None, meta=False):
 
         fi = xr.DataArray(
             fi.data,
-            # coords={
-            #     fi.dims[-1]: lon2d,
-            #     fi.dims[-2]: lat2d,
-            # },
+        # coords={
+        #     fi.dims[-1]: lon2d,
+        #     fi.dims[-2]: lat2d,
+        # },
             dims=fi.dims,
         ).chunk(fi_chunk)
 
@@ -226,9 +225,8 @@ def rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg=None, meta=False):
 
 
 def rgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, msg=None, meta=False):
-    """
-    Interpolates data on a rectilinear lat/lon grid to a curvilinear grid like
-    those used by the RCM, WRF and NARR models/datasets.
+    """Interpolates data on a rectilinear lat/lon grid to a curvilinear grid
+    like those used by the RCM, WRF and NARR models/datasets.
 
     Parameters
     ----------
@@ -313,7 +311,6 @@ def rgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, msg=None, meta=False):
         newlon2D_rect=ds_curv.gridlat2D_[:]
 
         ht_curv = geocat.comp.rgrid2rcm(lat1D_rect, lon1D_rect, ht_rect, newlat2D_curv, newlon2D_curv)
-
     """
 
     # ''' Start of boilerplate

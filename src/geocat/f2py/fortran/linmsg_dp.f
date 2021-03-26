@@ -17,9 +17,9 @@ c .   mflag     - note: if mflag.lt.0 then the missing values at the
 c .               beginning and end of the series will be set to the
 c .               value of the nearest non-msg value. if mflag.ge.0
 c .               then set these values to missing.
-c .   mptcrt    - if more than "mptcrt" consecutive values are 
+c .   mptcrt    - if more than "mptcrt" consecutive values are
 c .               encountered, the routine will not interpolate across
-c .               that segment. If mptcrt=npts [most common option], 
+c .               that segment. If mptcrt=npts [most common option],
 c .               then the routine will interpolate as many values as
 c .               it can.
 c .
@@ -47,7 +47,7 @@ C case were all values in X are missing.
 C
       DO 5 N=1,NPTS
          IF (X(N).NE.XMSG) GO TO 10
- 5    END DO   
+ 5    END DO
       RETURN
 
 c c c MPTCRT = NPTS   ! updated version

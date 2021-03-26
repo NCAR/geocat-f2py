@@ -35,7 +35,7 @@ c
       SUBROUTINE DTRM(A,N,D,INDX)
       IMPLICIT NONE
 C
-C Subroutine for evaluating the determinant of a matrix using 
+C Subroutine for evaluating the determinant of a matrix using
 C the partial-pivoting Gaussian elimination scheme.
 C
       INTEGER N
@@ -49,7 +49,7 @@ C
       D    = 1.0D0
       DO I = 1,N
          D = D*A(INDX(I),I)
-      END DO   
+      END DO
 C
       MSGN = 1
       DO I=1,N

@@ -1,7 +1,7 @@
 !    -*- f90 -*-
 ! Note: the context of this file is case sensitive.
 
-python module triple2grid ! in 
+python module triple2grid ! in
     interface  ! in :triple2grid
         ! signature: grid = triple2grid1(xi,yi,zi,gx,gy,[zmsg,domain,method,distmx])
         subroutine triple2grid1(kz,xi,yi,zi,zmsg,mx,ny,gx,gy,grid,domain,loop,method,distmx,mx2,ny2,x,y,z,gbigx,gbigy,gbigxy,ier) ! in :triple2grid:triple2grid.f
@@ -65,7 +65,7 @@ python module triple2grid ! in
             double precision :: ddcrit
             integer :: ier
         end subroutine trip2grd3
-    end interface 
+    end interface
 end python module triple2grid
 
 ! This file was auto-generated with f2py (version:2).

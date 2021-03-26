@@ -11,3 +11,5 @@ dependencies:
   - pytest-cov  # for tests
   - gfortran_osx-64
   - liblapack
+  - pip:
+      - pre-commit
