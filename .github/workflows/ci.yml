@@ -27,32 +27,33 @@ jobs:
         uses: styfle/cancel-workflow-action@0.8.0
         with:
           access_token: ${{ github.token }}
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v2
         with:
           token: ${{ github.token }}
-      - name: conda_setup
+      - name: Conda setup
         uses: conda-incubator/setup-miniconda@v2
         with:
           activate-environment: geocat_f2py_build
-          channel-priority: strict
-          mamba-version: '*'
           python-version: ${{ matrix.python-version }}
           channels: conda-forge, ncar
-          environment-file: build_envs/enviroment_$(uname).yml
-
+      - name: Conda install (Darwin)
+        if: matrix.os == 'macos-latest'
+        run: |
+          conda install numpy=1.19 xarray dask pytest gfortran_osx-64 liblapack
+      - name: Conda install (Linux)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          conda install numpy=1.19 xarray dask pytest gfortran_linux-64 liblapack
       - name: Install geocat-f2py
         run: |
           source build.sh
-
-      - name: Run Namespace Tests
+      - name: Run namespace tests
         run: |
           python -m pytest test
-
-      - name: Run Coverage Tests
+      - name: Run coverage tests
         run: |
           python -m pytest test -v --cov=./src/geocat/f2py --cov-report=xml
-
       - name: Upload code coverage to Codecov
         uses: codecov/codecov-action@v1
         with:
