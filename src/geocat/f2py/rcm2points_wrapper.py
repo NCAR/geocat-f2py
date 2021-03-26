@@ -7,7 +7,6 @@ from geocat.f2py.errors import (CoordinateError, ChunkError)
 from geocat.f2py.missing_values import (fort2py_msg, py2fort_msg)
 from .errors import (DimensionError)
 
-
 # Dask Wrappers _<funcname>()
 # These Wrapper are executed within dask processes, and should do anything that
 # can benefit from parallel excution.
@@ -105,7 +104,7 @@ def rcm2points(lat2d, lon2d, fi, lat1d, lon1d, opt=0, msg=None, meta=False):
             "ERROR rcm2points: The output lat/lon grids must be same size !")
 
     if lat2d.shape[0] < 2 or lon2d.shape[0] < 2 or lat2d.shape[
-        1] < 2 or lon2d.shape[1] < 2:
+            1] < 2 or lon2d.shape[1] < 2:
         raise DimensionError(
             "ERROR rcm2points: The input/output lat/lon grids must have at least 2 elements !"
         )
@@ -122,9 +121,9 @@ def rcm2points(lat2d, lon2d, fi, lat1d, lon1d, opt=0, msg=None, meta=False):
 
     # ''' Start of boilerplate
     if not isinstance(fi, xr.DataArray):
-        fi = xr.DataArray(fi, )
+        fi = xr.DataArray(fi,)
         fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
-                         ])
+                        ])
 
         fi = xr.DataArray(
             fi.data,
