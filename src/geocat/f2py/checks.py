@@ -125,7 +125,6 @@ def check(user_variable,
                 return_value = False
 
     if is_numpy is True:
-<<<<<<< HEAD
         if not isinstance(user_variable_1, np.ndarray):
             if exceptions: raise Exception(var_name + " is not a numpy.ndrray")
             else: return_value = False
@@ -133,7 +132,6 @@ def check(user_variable,
         if isinstance(user_variable_1, np.ndarray):
             if exceptions: raise Exception(var_name + " is an numpy.ndrray")
             else: return_value = False
-=======
         if not isinstance(user_variable_1, np.array):
             if exceptions:
                 raise Exception(var_name + " is not a numpy.Array")
@@ -145,8 +143,6 @@ def check(user_variable,
                 raise Exception(var_name + " is an numpy.Array")
             else:
                 return_value = False
->>>>>>> ea0a95dd862dd8aaa00108f51a3f4ba2e79ba0c4
-
     #
     # Xarray specific checks
     #
