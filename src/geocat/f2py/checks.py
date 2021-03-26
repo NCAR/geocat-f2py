@@ -66,6 +66,10 @@ def check(user_variable,
     is_numpy : :class:`bool`:
         Checks whether variable is of class numpy.ndarray
         Valid input is True or False
+
+    is_chunked : :class:`bool`:
+        Checks whether variable is chunked
+        Valid input is True or False
     '''
     return_value = True
 
