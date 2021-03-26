@@ -1,5 +1,8 @@
-![actions](https://github.com/NCAR/geocat-f2py/workflows/actions/badge.svg)
-[![Documentation Status](https://readthedocs.org/projects/geocat-f2py/badge/?version=latest)](https://geocat-f2py.readthedocs.io/en/latest/?badge=latest)
+| CI           | [![GitHub Workflow Status][github-ci-badge]][github-ci-link] [![GitHub Workflow Status][github-conda-build-badge]][github-conda-build-link] [![Code Coverage Status][codecov-badge]][codecov-link] |
+| :----------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| **Docs**     |                                                                    [![Documentation Status][rtd-badge]][rtd-link]                                                                    |
+| **Package**  |                                                         [![Conda][conda-badge]][conda-link] [![PyPI][pypi-badge]][pypi-link]                                                         |
+| **License**  |                                                                        [![License][license-badge]][repo-link]                                                                        |
 
 
 GeoCAT-comp is both the whole computational component of the [GeoCAT](https://geocat.ucar.edu/) 
@@ -55,3 +58,19 @@ GeoCAT-f2py provides a high-level [Xarray](http://xarray.pydata.org/en/stable/) 
 the gap between NumPy arrays and the compiled language data structures. These functions are 
 accessible under the `geocat.comp.f2py` namespace, but are minimally documented and are 
 intended primarily for internal use.
+
+
+[github-ci-badge]: https://img.shields.io/github/workflow/status/NCAR/geocat-f2py/CI?label=CI&logo=github&style=for-the-badge
+[github-conda-build-badge]: https://img.shields.io/github/workflow/status/NCAR/geocat-f2py/build_test?label=conda-builds&logo=github&style=for-the-badge
+[github-ci-link]: https://github.com/NCAR/geocat-f2py/actions?query=workflow%3ACI
+[github-conda-build-link]: https://github.com/NCAR/geocat-f2py/actions?query=workflow%3Abuild_test
+[codecov-badge]: https://img.shields.io/codecov/c/github/NCAR/geocat-f2py.svg?logo=codecov&style=for-the-badge
+[codecov-link]: https://codecov.io/gh/NCAR/geocat-f2py
+[rtd-badge]: https://img.shields.io/readthedocs/geocat-f2py/latest.svg?style=for-the-badge
+[rtd-link]: https://geocat-f2py.readthedocs.io/en/latest/?badge=latest
+[pypi-badge]: https://img.shields.io/pypi/v/geocat-f2py?logo=pypi&style=for-the-badge
+[pypi-link]: https://pypi.org/project/geocat-f2py
+[conda-badge]: https://img.shields.io/conda/vn/ncar/geocat-f2py?logo=anaconda&style=for-the-badge
+[conda-link]: https://anaconda.org/ncar/geocat-f2py
+[license-badge]: https://img.shields.io/github/license/NCAR/geocat-f2py?style=for-the-badge
+[repo-link]: https://github.com/NCAR/geocat-f2py

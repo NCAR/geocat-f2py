@@ -7,6 +7,7 @@ dependencies:
   - numpy=1.19
   - xarray
   - dask
-  - pytest
+  - pytest  # for tests
+  - pytest-cov  # for tests
   - gfortran_linux-64
   - liblapack
