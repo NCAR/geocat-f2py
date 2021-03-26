@@ -12,7 +12,8 @@ def check(user_variable,
           is_xarray=None,
           is_none=None,
           comparison=None,
-          unchunked_dims=None):
+          unchunked_dims=None,
+          exceptions=True):
     '''
     Function of data checks for use in wrapper functions.
 
@@ -58,7 +59,7 @@ def check(user_variable,
     '''
     if data_type is not None:
         if not isinstance(user_variable, data_type):
-            raise TypeError(var_name + " failed data_type check.")
+            if exceptions: raise TypeError(var_name + " failed data_type check.")
 
     if dimensions is not None:
         if not (user_variable.ndim == dimensions):
