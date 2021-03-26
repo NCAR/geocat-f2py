@@ -20,7 +20,6 @@ jobs:
           python -m pip install setuptools setuptools-scm wheel twine check-manifest
       - name: Build tarball and wheels
         run: |
-          source build.sh
           python setup.py sdist bdist_wheel
           python -m pip wheel . -w dist --no-deps
       - name: Test the artifacts
