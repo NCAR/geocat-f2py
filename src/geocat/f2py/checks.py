@@ -10,7 +10,6 @@ def check(user_variable,
           min_dimensions=None,
           dimensions=None,
           shape=None,
-          no_except=None,
           is_xarray=None,
           is_none=None,
           comparison=None,
@@ -58,6 +57,9 @@ def check(user_variable,
         Checks for unchunked dimensions in user_variable
         ex: check(user_variable, unchunked_dims=[3]) *must include brackets*
 
+    exceptions : :class:`bool`:
+        Allows user to turn off exceptions in the check functions
+        Valid inputs is True or False
     '''
     return_value = True
 
