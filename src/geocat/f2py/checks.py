@@ -2,6 +2,7 @@ import xarray as xr
 import numpy as np
 import dask as da
 
+
 def check(user_variable,
           var_name='variable',
           data_type=None,
@@ -111,6 +112,7 @@ def check(user_variable,
 
     return True
 
+
 n = 127
 
 xi = np.linspace(0, n, num=n // 2 + 1, dtype=np.float64)
@@ -120,6 +122,7 @@ xo = np.linspace(xi.min(), xi.max(), num=xi.shape[0] * 2 - 1)
 yo = np.linspace(yi.min(), yi.max(), num=yi.shape[0] * 2 - 1)
 
 xt = xi
+
 
 def dtype_2d(xi=None, yi=None):
     try:
@@ -136,7 +139,9 @@ def dtype_2d(xi=None, yi=None):
     except:
         raise Exception("Must be type xarray.DataArray or numpy.ndarray")
 
+
 dtype_2d(xi, yi)
+
 
 def dtype_1d(xo, yo):
     try:
@@ -155,6 +160,7 @@ def dtype_1d(xo, yo):
             pass
     except:
         raise Exception("Must be type xarray.DataArray or numpy.ndarray")
+
 
 dtype_1d(xi, str(yo))
 
