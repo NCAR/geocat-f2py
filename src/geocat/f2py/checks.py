@@ -13,6 +13,7 @@ def check(user_variable,
           is_xarray=None,
           is_none=None,
           is_numpy=None,
+          is_chunked=None,
           comparison=None,
           unchunked_dims=None,
           exceptions=True):
@@ -104,27 +105,38 @@ def check(user_variable,
             if exceptions: raise Exception(var_name + " failed comparison check")
             else: return_value = False
 
-    if is_numpy is True:
-        if not isinstance(user_variable_1, np.array):
-            if exceptions: raise Exception(var_name + " is not a numpy.Array")
-            else: return_value = False
-    if is_numpy is False:
-        if isinstance(user_variable_1, np.array):
-            if exceptions: raise Exception(var_name + " is an numpy.Array")
-            else: return_value = False
+    if is_numpy is not None:
+        if is_numpy is True:
+            if not isinstance(user_variable_1, np.array):
+                if exceptions: raise Exception(var_name + " is not a numpy.Array")
+                else: return_value = False
+        if is_numpy is False:
+            if isinstance(user_variable_1, np.array):
+                if exceptions: raise Exception(var_name + " is an numpy.Array")
+                else: return_value = False
 
     #
     # Xarray specific checks
     #
+    if is_xarray is not None:
+        if is_xarray is True:
+            if not isinstance(user_variable_1, xr.DataArray):
+                if exceptions: raise Exception(var_name + " is not a xarray.DataArray")
+                else: return_value = False
+        if is_xarray is False:
+            if isinstance(user_variable_1, xr.DataArray):
+                if exceptions: raise Exception(var_name + " is an xarray.DataArray")
+                else: return_value = False
 
-    if is_xarray is True:
-        if not isinstance(user_variable_1, xr.DataArray):
-            if exceptions: raise Exception(var_name + " is not a xarray.DataArray")
-            else: return_value = False
-    if is_xarray is False:
-        if isinstance(user_variable_1, xr.DataArray):
-            if exceptions: raise Exception(var_name + " is an xarray.DataArray")
-            else: return_value = False
+    if is_chunked is not None:
+        if is_chunked is True:
+            if var_name.chunks is None:
+                if exceptions: raise Exception(var_name + "is not chunked")
+                else: return_value = False
+        if is_chunked is False:
+            if var_name.chunks is not None:
+                if exceptions: raise Exception(var_name + "is chunked")
+                else: return_value = False
 
     if unchunked_dims is not None:
         for dim in unchunked_dims:
