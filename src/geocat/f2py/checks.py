@@ -66,52 +66,72 @@ def check(user_variable,
 
     if data_type is not None:
         if not isinstance(user_variable, data_type):
-            if exceptions: raise TypeError(var_name + " failed data_type check.")
-            else: return_value = False
+            if exceptions:
+                raise TypeError(var_name + " failed data_type check.")
+            else:
+                return_value = False
 
     if dimensions is not None:
         if not (user_variable.ndim == dimensions):
-            if exceptions: raise Exception(var_name + " failed dimensions check")
-            else: return_value = False
+            if exceptions:
+                raise Exception(var_name + " failed dimensions check")
+            else:
+                return_value = False
 
     if shape is not None:
         if not (user_variable.shape == shape):
-            if exceptions: raise Exception(var_name + " failed shape check")
-            else: return_value = False
+            if exceptions:
+                raise Exception(var_name + " failed shape check")
+            else:
+                return_value = False
 
     if is_none is not None:
         if is_none is True:
             if user_variable is not None:
-                if exceptions: raise Exception(var_name + " is not None")
-                else: return_value = False
+                if exceptions:
+                    raise Exception(var_name + " is not None")
+                else:
+                    return_value = False
         if is_none is False:
             if user_variable is None:
-                if exceptions: raise Exception(var_name + " is None")
-                else: return_value = False
+                if exceptions:
+                    raise Exception(var_name + " is None")
+                else:
+                    return_value = False
 
     if min_dimensions is not None:
         if not (user_variable.ndim >= min_dimensions):
-            if exceptions: raise Exception(var_name + " failed min_dimensions check")
-            else: return_value = False
+            if exceptions:
+                raise Exception(var_name + " failed min_dimensions check")
+            else:
+                return_value = False
 
     if max_dimensions is not None:
         if not (user_variable.ndim <= max_dimensions):
-            if exceptions: raise Exception(var_name + " failed max_dimensions check")
-            else: return_value = False
+            if exceptions:
+                raise Exception(var_name + " failed max_dimensions check")
+            else:
+                return_value = False
 
     if comparison is not None:
         if not (user_variable == comparison):
-            if exceptions: raise Exception(var_name + " failed comparison check")
-            else: return_value = False
+            if exceptions:
+                raise Exception(var_name + " failed comparison check")
+            else:
+                return_value = False
 
     if is_numpy is True:
         if not isinstance(user_variable_1, np.array):
-            if exceptions: raise Exception(var_name + " is not a numpy.Array")
-            else: return_value = False
+            if exceptions:
+                raise Exception(var_name + " is not a numpy.Array")
+            else:
+                return_value = False
     if is_numpy is False:
         if isinstance(user_variable_1, np.array):
-            if exceptions: raise Exception(var_name + " is an numpy.Array")
-            else: return_value = False
+            if exceptions:
+                raise Exception(var_name + " is an numpy.Array")
+            else:
+                return_value = False
 
     #
     # Xarray specific checks
@@ -119,19 +139,25 @@ def check(user_variable,
 
     if is_xarray is True:
         if not isinstance(user_variable_1, xr.DataArray):
-            if exceptions: raise Exception(var_name + " is not a xarray.DataArray")
-            else: return_value = False
+            if exceptions:
+                raise Exception(var_name + " is not a xarray.DataArray")
+            else:
+                return_value = False
     if is_xarray is False:
         if isinstance(user_variable_1, xr.DataArray):
-            if exceptions: raise Exception(var_name + " is an xarray.DataArray")
-            else: return_value = False
+            if exceptions:
+                raise Exception(var_name + " is an xarray.DataArray")
+            else:
+                return_value = False
 
     if unchunked_dims is not None:
         for dim in unchunked_dims:
             if len(user_variable.chunks[dim]) > 1:
-                if exceptions: raise Exception(var_name +
-                                " must not be chunked along dimension " +
-                                str(dim))
-                else: return_value = False
+                if exceptions:
+                    raise Exception(var_name +
+                                    " must not be chunked along dimension " +
+                                    str(dim))
+                else:
+                    return_value = False
 
     return return_value
