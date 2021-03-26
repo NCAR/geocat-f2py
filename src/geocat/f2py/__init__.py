@@ -6,4 +6,5 @@ from .missing_values import (py2fort_msg, fort2py_msg)
 from .moc_globe_atl_wrapper import (moc_globe_atl)
 from .rcm2points_wrapper import (rcm2points)
 from .rcm2rgrid_wrapper import (rcm2rgrid, rgrid2rcm)
-from .triple_to_grid_wrapper import (grid_to_triple, triple_to_grid, grid2triple, triple2grid)
+from .triple_to_grid_wrapper import (grid_to_triple, triple_to_grid,
+                                     grid2triple, triple2grid)

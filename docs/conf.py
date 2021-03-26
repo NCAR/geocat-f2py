@@ -13,7 +13,6 @@
 import os
 import sys
 
-
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
@@ -26,9 +25,12 @@ sys.path.insert(0, os.path.abspath('..'))
 # ones.
 
 extensions = [
-    'sphinx.ext.autodoc', 'sphinx.ext.napoleon', #'sphinx.ext.autosummary',
-    'sphinx.ext.intersphinx', 'sphinx.ext.mathjax',
-    'sphinx.ext.inheritance_diagram', 'autoapi.extension'
+    'sphinx.ext.autodoc',
+    'sphinx.ext.napoleon',  #'sphinx.ext.autosummary',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.mathjax',
+    'sphinx.ext.inheritance_diagram',
+    'autoapi.extension'
 ]
 
 autodoc_warningiserror = False
@@ -84,7 +86,6 @@ master_doc = 'index'
 # # If true, `todo` and `todoList` produce output, else they produce nothing.
 # todo_include_todos = False
 
-
 # -- Project information -----------------------------------------------------
 
 project = 'GeoCAT-f2py'
@@ -96,12 +97,14 @@ copyright = u'{}, University Corporation for Atmospheric Research'.format(
     current_year)
 author = u'GeoCAT'
 
+
 # The version info for the project being documented
 def read_version():
     for line in open('../meta.yaml').readlines():
         index = line.find('version')
         if index > -1:
             return line[index + 8:].replace('\'', '').strip()
+
 
 # The short X.Y version.
 version = read_version()
