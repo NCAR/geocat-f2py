@@ -41,7 +41,7 @@ def check(user_variable,
 
     shape : :class:`tuple`:
         Checks user_variable's shape
-        ex: shape=(3, 3, 3) or shape=(3,3,3)
+        ex: shape=(3, 3, 3)
 
     is_xarray : :class:`bool`:
         Checking that user_variable is of class xarray.DataArray.
@@ -62,6 +62,10 @@ def check(user_variable,
     exceptions : :class:`bool`:
         Allows user to turn off exceptions in the check functions
         Valid inputs is True or False
+
+    is_numpy : :class:`bool`:
+        Checks whether variable is of class numpy.ndarray
+        Valid input is True or False
     '''
     return_value = True
 
@@ -120,7 +124,6 @@ def check(user_variable,
                 raise Exception(var_name + " failed comparison check")
             else:
                 return_value = False
-
 
     if is_numpy is not None:
         if is_numpy is True:
