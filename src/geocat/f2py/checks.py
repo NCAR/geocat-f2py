@@ -29,7 +29,7 @@ def check(user_variable,
 
     max_dimensions : :class:`tuple`:
         Maximum number of dimensions needed from user_variable for function
-        ex: min_dimensions=(3) or min_dimensions=3
+        ex: max_dimensions=(3) or max_dimensions=3
 
     min_dimensions : :class:`tuple`:
         Minimum number of dimensions needed from user_variable for function
@@ -37,23 +37,23 @@ def check(user_variable,
 
     dimensions : :class:`tuple`:
         Number of dimensions needed from user_variable for function
-        ex: min_dimensions=(3) or min_dimensions=3
+        ex: dimensions=(3) or dimensions=3
 
     shape : :class:`tuple`:
         Checks user_variable's shape
         ex: shape=(3, 3, 3)
 
     is_xarray : :class:`bool`:
-        Checking that user_variable is of class xarray.DataArray.
+        Checking whether user_variable is of class xarray.DataArray.
         Valid inputs are True or False
 
-    is_none : :class:`NoneType`:
-        Checking that user_variable is of class NoneType.
-        Valid input is None
+    is_none : :class:`bool`:
+        Checking whether user_variable is of class NoneType.
+        Valid input is True or False
 
-    comparison : :class:`int`:
-        Checks that user_variable is the correct type
-        ex: check(user_variable, comparison=
+    comparison : :class:`n/a`:
+        Compares user variable against item passed in as comparison
+        Valid input is anything
 
     unchunked_dims : :class:`tuple`:
         Checks for unchunked dimensions in user_variable
@@ -61,7 +61,7 @@ def check(user_variable,
 
     exceptions : :class:`bool`:
         Allows user to turn off exceptions in the check functions
-        Valid inputs is True or False
+        Valid input is True or False
 
     is_numpy : :class:`bool`:
         Checks whether variable is of class numpy.ndarray
