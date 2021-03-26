@@ -1,6 +1,5 @@
 name: Upload geocat-f2py to PyPI
 on:
-  push:
   release:
     types:
       - published
