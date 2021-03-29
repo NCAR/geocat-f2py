@@ -3,7 +3,6 @@ repos:
     rev: v0.31.0
     hooks:
     - id: yapf
-#      args: ['--style=.style.yapf', '--in-place', '--recursive']
       args: ['--style=.style.yapf', '--in-place', '--recursive', '--style', 'google']
       exclude: src/geocat/f2py/fortran/
 
