@@ -1,9 +1,9 @@
 repos:
--   repo: https://github.com/pre-commit/mirrors-yapf    # To format the code to conform YAPF
-    rev: v0.30.0
+-   repo: https://github.com/google/yapf    # To format the code to conform YAPF
+    rev: v0.31.0
     hooks:
     - id: yapf
-      args: ['--style=.style.yapf', '--recursive', '--in-place']
+      args: ['--style=.style.yapf', '--in-place', '--recursive']
       exclude: src/geocat/f2py/fortran/
 
 -   repo: https://github.com/myint/docformatter    # To format the doc strings to conform PEP257
