@@ -17,11 +17,11 @@ c======== .so info=====================
 c SGI/dataproc: WRAPIT -L /usr/lib64 -l complib.sgimath_mp prneofTranspose.f
 c Sun/CGD: WRAPIT -L /opt/SUNWspro/lib -l sunmath -l fsu -l fui -lsunperf prneofTranspose.f
 c======================================
-
+     
 
 c AUTOMATIC FORTRAN ARRAYS TO HOLD DATA AND DATA STATS
       DOUBLE PRECISION XAVE(NCOL), XVAR(NCOL), XDVAR(NCOL)
-
+               
 
 C LOCAL VARIABLES
       DOUBLE PRECISION PCX, CON, XSD
@@ -30,7 +30,7 @@ C LOCAL VARIABLES
 
 c strip all grid points that have less that "PCRIT" valid values
 c .   create the "XDATA". This may have fewer columns/grid-pts
-c .   than the original "X" array if not all columns
+c .   than the original "X" array if not all columns 
 c .   had the minimun number of valid values.
 
       MCSTA = 0
@@ -50,7 +50,7 @@ c quick way of eliminating stations/grid-points
 c possible normalizing for jopt=1
 
           CON = 1.0D0
-          IF (JOPT.EQ.1 .AND. XAVE(NC).NE.XMSG
+          IF (JOPT.EQ.1 .AND. XAVE(NC).NE.XMSG 
      +                  .AND. XSD.GT.0.D0) CON = 1.D0/XSD
 
 c WORK WITH ANOMALIES: XDAVE=0.0 [or standardized anomalies]
@@ -76,7 +76,7 @@ c c c                 XDATA(NR,MCSTA) =  X(NR,NC)
 
       END DO
 
-c pass the selected data (XDATA) to the EOF driver
+c pass the selected data (XDATA) to the EOF driver 
 
       CALL XRVEOFT(XDATA,XDATAT,NROW,NCOL,NROBS,MCSTA,XMSG,
      +             NEVAL,EVAL,EVEC,PCVAR,TRACE,
@@ -91,7 +91,7 @@ c ---------------------------------------------------------
      +                   XDVAR,XAVE,JOPT,IER)
       IMPLICIT NONE
 
-C **** USES AUTOMATIC ARRAYS SO USE WITH g77 or f90
+C **** USES AUTOMATIC ARRAYS SO USE WITH g77 or f90 
 
 c operate on the *TRANSPOSE* OF XDATA: then use matrix stuff to
 c .   get the desired eof information.
@@ -115,14 +115,14 @@ c .       USES LAPACK/BLAS ROUTINES
 c nomenclature :
 c .   xdata     - matrix containing the data. it contains n observations
 c .               for each of m stations or grid pts.
-c .   nrow,ncol - exact row (observation) and column (station)
+c .   nrow,ncol - exact row (observation) and column (station) 
 c .               dimensions of xdata in the calling routine.
 c .   nrobs     - actual number of observations (nrobs <= nrow)
 c .   ncsta     - actual number of stations     (ncsta <= ncol)
 c .   xmsg      - missing code (if no obs are missing set to some
 c .               number which will not be encountered)
 c .   neval     - no. of eigenvalues and eigenvectors to be computed.
-c .               neval <= min(nrobs,ncsta).
+c .               neval <= min(nrobs,ncsta). 
 c .               If not, ncsta eigenvalues and eigenvectors
 c .               will be computed and ier = -2.
 c .   eval      - vector containing the eigenvalues in DESCENDING order.
@@ -187,11 +187,11 @@ c EXPLICITLY INITALIZE
               EVEC(NC,NE)  = XMSG
           END DO
 
-          DO NC = 1,NCSTA
+          DO NC = 1,NCSTA 
               WEVEC(NC,NE) = XMSG
-          END DO
+          END DO 
 
-          DO NR = 1,NROW
+          DO NR = 1,NROW 
               W2D(NR,NE)  = XMSG
               TEOFPC(NR,NE) = XMSG
           END DO
@@ -205,7 +205,7 @@ c create transposed data array
           END DO
       END DO
 
-c compute the covariance matrix using the transposed data
+c compute the covariance matrix using the transposed data 
 
       CALL DVCMSSM(XDATAT,NCSTA,NROW,NCSTA,NROW,XMSG,CSSM,LSSM,IER)
 
@@ -248,7 +248,7 @@ c calculate specified number of eigenvalues and eigenvectors.
 c .   make sure that  neval <= nrow (=nrobs)
 c
 c .   Remember the TEOFPC are the eofs of the *transposed* matrix.
-c .   This means they are the principal components of the original data.
+c .   This means they are the principal components of the original data. 
 
       MEVAL = MIN(NEVAL,NROW)
 
@@ -314,7 +314,7 @@ c calculate the SPATIAL eofs from the TEOFPC and XDATAT
 
               DO NR = 1,NROW
                   IF (XDATAT(NC,NR).NE.XMSG) THEN
-                      WEVEC(NC,N) = WEVEC(NC,N)
+                      WEVEC(NC,N) = WEVEC(NC,N) 
      +                            + TEOFPC(NR,N)*XDATAT(NC,NR)
                   END IF
               END DO
@@ -323,7 +323,7 @@ c calculate the SPATIAL eofs from the TEOFPC and XDATAT
       END DO
 
 c normalize spatial eofs to variance=1.0
-c normalize the time series [principal components]
+c normalize the time series [principal components] 
 
       DO N = 1,MEVAL
 

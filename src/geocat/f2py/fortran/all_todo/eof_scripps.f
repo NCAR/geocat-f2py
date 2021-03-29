@@ -7,7 +7,7 @@ c minimal argument list
         implicit none
 
 	integer	nx, nt, nmodes, icovcor
-	double precision d(nx,nt), eigenvalues(nmodes),
+	double precision d(nx,nt), eigenvalues(nmodes), 
      &		eigenvectors(nx,nmodes), variance(nmodes)
         double precision princomp(nt,nmodes), dmsg
 C NCLEND
@@ -18,7 +18,7 @@ c need  iminnxnt and imaxnxnt for automatic allocation
 
         iminnxnt = min(nx,nt)
         imaxnxnt = max(nx,nt)
-
+        
 	call deof22(d, nx, nt, nmodes, icovcor, dmsg,
      &		    eigenvalues, eigenvectors, variance,
      &		    iminnxnt, imaxnxnt, princomp )
@@ -32,17 +32,17 @@ c ----------------------------------------------------------------
         implicit none
 
         integer nx, nt, nmodes, icovcor, iminnxnt, imaxnxnt
-        double precision d(nx,nt), eigenvalues(nmodes),
+        double precision d(nx,nt), eigenvalues(nmodes),                                          
      &          eigenvectors(nx,nmodes), variance(nmodes)
         double precision princomp(nt,nmodes), dmsg
 
 c local and  automatic arrays
         double precision cumvariance(nmodes),
-     &          spacked(iminnxnt*(iminnxnt+1)/2), evals(iminnxnt),
-     &          evecs(iminnxnt,nmodes), rlawork(8*iminnxnt),
+     &          spacked(iminnxnt*(iminnxnt+1)/2), evals(iminnxnt),                                  
+     &          evecs(iminnxnt,nmodes), rlawork(8*iminnxnt),                                        
      &          tentpcs(imaxnxnt,nmodes)
-        double precision  sqrootweights(nx)
-        integer ilawork(5*iminnxnt), ifail(iminnxnt)
+        double precision  sqrootweights(nx)                                         
+        integer ilawork(5*iminnxnt), ifail(iminnxnt)    
         integer n
 
 c NCL expects the user will do weighting externally
@@ -53,7 +53,7 @@ c NCL expects the user will do weighting externally
 
         call deof( d, nx, nt, nmodes, icovcor, dmsg,
      &		eigenvalues, eigenvectors, princomp, variance, cumvariance,
-     &		iminnxnt, imaxnxnt, spacked, evals, evecs, rlawork,
+     &		iminnxnt, imaxnxnt, spacked, evals, evecs, rlawork, 
      &		ilawork, ifail, tentpcs, sqrootweights )
         return
         end
@@ -63,7 +63,7 @@ c ---                        Dennis Shea [Aug 2005]
 c ----------------------------------------------------------------
       subroutine deof( data, nx, nt, nmodes, icovcor, dmsg,
      &		eigenvalues, eigenvectors, princomp, variance, cumvariance,
-     &		iminnxnt, imaxnxnt, spacked, evals, evecs, rlawork,
+     &		iminnxnt, imaxnxnt, spacked, evals, evecs, rlawork, 
      &		ilawork, ifail, tentpcs, sqrootweights )
 
 c	------------------------------------------------------------------
@@ -72,7 +72,7 @@ c	for a given time-space data set.  (Note that although the routine
 c	is set up as if the data is exactly two dimensional (X,T), that
 c	you can compute the EOFs of 3-D (X,Y,T) fields simply by concat-
 c	enating the data along the X,Y axes into one big 2-D array and
-c	then computing the EOFs of that 2-D array).  The "typical"
+c	then computing the EOFs of that 2-D array).  The "typical" 
 c	normalization is applied, i.e., the magnitude of the eigenvectors
 c	is scaled to be equal to 1.
 c
@@ -80,8 +80,8 @@ c	David W. Pierce
 c	dpierce@ucsd.edu
 c	Scripps Institution of Oceanography
 c	Climate Research Division, 0224
-c	Jan 29, 1996
-c
+c	Jan 29, 1996	
+c	
 c	Inputs:
 c
 c		data(nx,nt): data to compute the EOFs of.  THIS MUST
@@ -91,7 +91,7 @@ c		nx, nt: number of space (nx) and time (nt) points in the
 c			input data array.
 c
 c		nmodes: number of modes (EOFs) to compute.
-c
+c		
 c		icovcor: if =0, then compute using covariance matrix;
 c			 if =1, then compute using correlation matrix.
 c			See, for example, discussion in Daniel S. Wilks
@@ -102,7 +102,7 @@ c		iminnxnt: the SMALLER of 'nx' and 'nt'.
 c
 c		imaxnxnt: the LARGER of 'nx' and 'nt'.
 c
-c		spacked(iminnxnt*(iminnxnt+1)/2): workspace.  This is used to
+c		spacked(iminnxnt*(iminnxnt+1)/2): workspace.  This is used to 
 c			store the packed covariance or correlation matrix.
 c
 c		evals(iminnxnt): workspace.  This is used to store the
@@ -123,7 +123,7 @@ c		ifail(iminnxnt): Integer LAPACK workspace.  This is used
 c			to indicate which eigenvectors didn't converge,
 c			if that happened.
 c
-c		tentpcs(imaxnxnt,nmodes): Real workspace.  This is
+c		tentpcs(imaxnxnt,nmodes): Real workspace.  This is 
 c			used to store the 'tentative' principal components.
 c
 c		sqrootweights(nx) : NOT USED IN NCL IMPLEMENTATION [set to 1.0]
@@ -144,37 +144,37 @@ c
 c		eigenvectors(nx,nmodes): the computed eigenvectors
 c			of the data, the most important returned first.
 c
-c		princomp(nt,nmodes): the principal components of
+c		princomp(nt,nmodes): the principal components of 
 c			the data.
 c
 c		variance(nmodes): the percent of variance explained
 c			by each mode.
 c
-c		cumvariance(nmodes): the cumulative percent of
+c		cumvariance(nmodes): the cumulative percent of 
 c			variance explained by each mode.  This is
 c			a bit redundant -- it's just the sum
 c			of "variance".
-c
+c			
 c	Method:
 c
 c	EOFs are simply the eigenvectors of the covariance (or correlation)
 c	matrix.  So form the proper matrix from the data and pass it to
 c	a LAPACK routine which calculates eigenvectors/eigenvalues.  Then
 c	calculate the principal components explicitly using the fact that
-c	the principal component for mode M at time T is just the projection
-c	of the data at time T onto eigenvector M.
+c	the principal component for mode M at time T is just the projection 
+c	of the data at time T onto eigenvector M.  
 c
-c	There is a slight complication for efficiency's sake.  That is,
+c	There is a slight complication for efficiency's sake.  That is, 
 c	we often have nx >> nt, i.e., there are many more spatial than
 c	temporal points.  The traditional correlation/covariance matrix
 c	is size (nx,nx), which can be huge.  Think, for example, of a 3-D
 c	field of size (100,100,120) which has been concatenated into a
 c	2-D field of size (10000,120).  The traditional covariance/correlation
-c	matrix in this case is size (10000,10000)!  That's way too big to
+c	matrix in this case is size (10000,10000)!  That's way too big to 
 c	easily work with.  So, following the discussion in Preisendorfer
 c	(1988, "Principal Component Analysis in Meteorology and Oceanography",
 c	p. 64) we work, in such cases, in the "dual" of the space.  All
-c	that means is that we logically switch X and T; the
+c	that means is that we logically switch X and T; the 
 c	covariance/correlation matrix for the example given above is then
 c	size (120,120), which is much easier and more efficient to work
 c	with.  If you do this kind of switch, the basic idea is that
@@ -191,17 +191,17 @@ c	------------------------------------------------------------------
 
 	integer	covariance, correlation
 	parameter( covariance=0, correlation=1 )  ! possible values of 'icovcor'
-
+	
 c	-----------------
 c	Passed parameters
 c	-----------------
 	integer	nx, nt, nmodes, icovcor, iminnxnt, imaxnxnt
         integer ifail(iminnxnt)
-	double precision data(nx,nt), eigenvalues(nmodes),
-     &		eigenvectors(nx,nmodes), princomp(nt,nmodes),
+	double precision data(nx,nt), eigenvalues(nmodes), 
+     &		eigenvectors(nx,nmodes), princomp(nt,nmodes), 
      &		variance(nmodes), cumvariance(nmodes),
-     &		spacked(iminnxnt*(iminnxnt+1)/2), evals(iminnxnt),
-     &		evecs(iminnxnt,nmodes), rlawork(8*iminnxnt),
+     &		spacked(iminnxnt*(iminnxnt+1)/2), evals(iminnxnt), 
+     &		evecs(iminnxnt,nmodes), rlawork(8*iminnxnt), 
      &		tentpcs(imaxnxnt,nmodes), sqrootweights(nx)
 	double precision dmsg, deps
 	integer ilawork(5*iminnxnt)
@@ -235,11 +235,11 @@ c	----------------------------------------------
              end if
           end do
         end do
-
+	
 c	---------------------------------------------------------
 c	Figure out whether we should do the 'regular' EOF or the
 c	one with switched X and T axes.  The correlation matrix
-c	for the regular method is size (nx,nx) and for the
+c	for the regular method is size (nx,nx) and for the 
 c	switched method it is size (nt,nt); choose based on which
 c	of these is smaller.
 c	---------------------------------------------------------
@@ -270,9 +270,9 @@ c	---------------------------------------------------------
 	endif
 
 c	-------------------------------------------------
-c	Form the covariance or correlation matrix, put it
+c	Form the covariance or correlation matrix, put it 
 c	into 's'.  Note that 's' is always symmetric --
-c	the correlation between X and Y is the same as
+c	the correlation between X and Y is the same as 
 c	between Y and X -- so use packed storage for 's'.
 c	The packed storage scheme we use is the same as
 c	LAPACK uses so we can pass 's' directly to the
@@ -285,7 +285,7 @@ c	------------------------------------------------------
 c	Now call the LAPACK solver to get the eigenvalues
 c	and eigenvectors.  The eigenvalues express the
 c	amount of variance explained by the various modes,
-c	so choose to return those 'nmodes' modes which
+c	so choose to return those 'nmodes' modes which 
 c	explain the most variance.
 c	Dims of arrays:
 c		evals  (n)	  ! The calculated eigenvalues
@@ -299,7 +299,7 @@ c	X and T axes.  However the eigen*values* are the same
 c	either way, according to Preisendorfer.
 c	*NOTE* that the LAPACK routine returns the eigenvalues
 c	(and corresponding eigenvectors) in ASCENDING order,
-c	but this routine returns them in DESCENDING order;
+c	but this routine returns them in DESCENDING order; 
 c	this will be switched in the final assembly phase,
 c	below.
 c	------------------------------------------------------
@@ -323,7 +323,7 @@ c	------------------------------------------------------
 
         if (DEBUG) then
 c c c       print *,'about to call dspevx, spacked=', spacked(1:10)
-c c c       print *,'about to call dspevx, spacked=',(spacked(i),i=1,10)
+c c c       print *,'about to call dspevx, spacked=',(spacked(i),i=1,10)   
             do i=1,10
                print *,"spacked: n=",n,"  ",spacked(i)
             end do
@@ -342,7 +342,7 @@ c	------------------------------
      &				-info, ' had illegal value'
 			stop 'eof'
 		else
-			print *, 'LAPACK error: ', info,
+			print *, 'LAPACK error: ', info, 
      &				'eigenvectors failed to converge!'
 			print *, 'Consult the LAPACK docs!'
 			stop 'eof'
@@ -375,37 +375,37 @@ c	    print *, 'Try reducing the number of requested'
 c	    print *, 'modes.'
 c  	    print *, 'Note2: missing values can'
 c	    print *, 'result in a covariance matrix that'
-c	    print *, 'is not positive definite.'
+c	    print *, 'is not positive definite.'  
 c	    stop 'eofunc'
           endif
 	end do
 
 c	------------------------------------------------
 c	Compute the tentative principal components; they
-c	are 'tentative' because they might be the PCs
+c	are 'tentative' because they might be the PCs 
 c	of the switched data.  Put them into 'tentpcs',
 c	which is of size (nt,nmodes) if we are doing
-c	regular EOFs and (nx,nmodes) if we are doing
+c	regular EOFs and (nx,nmodes) if we are doing 
 c	switched EOFs.  These PCs come out in order
 c	corresponding to the order of 'evecs', which is
 c	in ASCENDING order.
 c	------------------------------------------------
-	call deofpcs( data, nx, nt, nmodes, iminnxnt,
+	call deofpcs( data, nx, nt, nmodes, iminnxnt, 
      &		imaxnxnt, evecs, doswitched, tentpcs, dmsg )
 
 c	--------------------------------------------------
-c	Now we have all the pieces to assemble our final
+c	Now we have all the pieces to assemble our final 
 c	result.  How we actually assemble them depends on
 c	whether we are doing switched or unswitched EOFs
 c	(except for the eigenVALUES, which are the same
 c	either way).
 c	--------------------------------------------------
-	if( doswitched ) then
+	if( doswitched ) then 
 c		------------------------------------------
 c		In this case we must switch the principal
 c		components and the eigenvectors, applying
-c		the proper normalization.
-c		First get the unswitched eigenvectors,
+c		the proper normalization. 
+c		First get the unswitched eigenvectors, 
 c		which are the switched (tentative) principal
 c		components divided by the square root of the
 c		appropriate eigenvalue.  Recall that the
@@ -421,13 +421,13 @@ c		--------------------------------------------
                            fact        = 1.0d0/sqrt(evals(jascending))
                         end if
 			do i=1, nx
-				eigenvectors(i,jdescending) =
+				eigenvectors(i,jdescending) = 
      &			 	  	tentpcs(i,jascending)*fact
 			end do
 		end do
 
 c		-----------------------------------------------
-c		Next get unswitched principal components, which
+c		Next get unswitched principal components, which 
 c		are the switched eigenvectors multiplied by
 c		the appropriate eigenvalues.
 c		-----------------------------------------------
@@ -435,7 +435,7 @@ c		-----------------------------------------------
 			jdescending = nmodes - jascending + 1
 			fact        = sqrt(evals(jascending))
 			do i=1, nt
-				princomp(i,jdescending) =
+				princomp(i,jdescending) = 
      &					evecs(i,jascending)*fact
 			end do
 		end do
@@ -466,8 +466,8 @@ c		--------------------------------
 			end do
 		end do
 
-
-	endif
+			
+	endif 
 
 c	--------------------------------------------
 c	Do the second half of the areal weighting...
@@ -477,7 +477,7 @@ c	--------------------------------------------
 		if( sqrootweights(i) .eq. 0.0d0 ) then
 			eigenvectors(i,mode) = 0.0d0
 		else
-			eigenvectors(i,mode) =
+			eigenvectors(i,mode) = 
      &				eigenvectors(i,mode) / sqrootweights(i)
 		endif
 	end do
@@ -521,7 +521,7 @@ c	-------------------------------------------------
 c	Copy over just the requested number of
 c	eigenvalues, and calculate the cumulative percent
 c	variance explained.  Start by getting the total
-c	variance in the field, so we can normalize by
+c	variance in the field, so we can normalize by 
 c	that.
 c	-------------------------------------------------
 	call deoftotvar( data, nx, nt, totvar, doswitched,
@@ -536,7 +536,7 @@ c	-------------------------------------------------
 	do jascending=nmodes, 1, -1
 		jdescending = nmodes - jascending + 1
 		eigenvalues(jdescending) = evals(jascending)
-		variance(jdescending)    =
+		variance(jdescending)    = 
      &			eigenvalues(jdescending)/totvar*100.0d0
 		sum = sum + variance(jdescending)
 		cumvariance(jdescending) = sum
@@ -550,9 +550,9 @@ c --------------------------------------------------------
      &		correlation, spacked, doswitched, iminnxnt, dmsg )
 
 c	-------------------------------------------------
-c	Form the covariance or correlation matrix, put it
+c	Form the covariance or correlation matrix, put it 
 c	into 's'.  Note that 's' is always symmetric --
-c	the correlation between X and Y is the same as
+c	the correlation between X and Y is the same as 
 c	between Y and X -- so use packed storage for 's'.
 c	The packed storage scheme we use is the same as
 c	LAPACK uses so we can pass 's' directly to the
@@ -587,10 +587,10 @@ c			'spacked'.
 c
 c	Outputs:
 c
-c		spacked(iminnxnt*(iminnxnt+1)/2): the covariance
-c			or correlation array.  This is in packed
+c		spacked(iminnxnt*(iminnxnt+1)/2): the covariance 
+c			or correlation array.  This is in packed 
 c			form corresponding to LAPACK's lower
-c			triangular form.
+c			triangular form.  
 c
 c	David Pierce
 c	Scripps Institution of Oceanography
@@ -628,7 +628,7 @@ c c c           call exit(-1)
 			sum3 = 0.0d0
                         npts = 0
 			do k=1, nx
-                           if (data(k,i).ne.dmsg .and.
+                           if (data(k,i).ne.dmsg .and. 
      &                         data(k,j).ne.dmsg) then
 				sum  = sum  + data(k,i)*data(k,j)
 				sum2 = sum2 + data(k,i)*data(k,i)
@@ -671,7 +671,7 @@ c c c                       fact = 1.0d0/float(nt-1)
 		enddo
 		enddo
 	endif
-
+			
 	return
 	end
 
@@ -699,7 +699,7 @@ c		nmodes: # of modes to calculate.
 c
 c		iminnxnt: min(nx,nt)
 c
-c		evecs(iminnxnt,nmodes): the eigenvectors
+c		evecs(iminnxnt,nmodes): the eigenvectors 
 c			(which might be switched).
 c
 c		doswitched: if .TRUE., then we are doing
@@ -781,7 +781,7 @@ c
 c		nx, nt:	size of 'data'.
 c
 c		doswitched: if .TRUE., then we are working
-c			in switched (nx,nt) space, false
+c			in switched (nx,nt) space, false 
 c			otherwise.
 c
 c		icovcor: if (icovcor .eq. covariance), then
@@ -804,7 +804,7 @@ c	-------------------------------------------------
 
 	if( icovcor .eq. correlation ) then
 		if( doswitched ) then
-			totvar = nt
+			totvar = nt 
 		else
 			totvar = nx
 		endif
@@ -832,3 +832,4 @@ c	-------------------------------------------------
 
 	return
 	end
+

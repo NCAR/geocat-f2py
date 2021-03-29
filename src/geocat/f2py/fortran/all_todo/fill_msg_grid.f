@@ -34,7 +34,7 @@ c=======================================================================
 c Not sure of the original source. ? MOM ?
 c=======================================================================
 c     inputs:
-c     a       = array with missing areas to be filled.
+c     a       = array with missing areas to be filled. 
 c     il      = number of points along 1st dimension to be filled
 c     jl      = number of points along 2nd dimension to be filled
 c     maxscn  = maximum number of passes allowed in relaxation
@@ -47,7 +47,7 @@ c             = 1 : at each "y" use the average values for that "y"
 c                   think zonal averages
 c     outputs:
 c
-c     a       = array with interpolated values
+c     a       = array with interpolated values 
 c               non missing areas remain unchanged.
 c     resmax  = max residual
 c
@@ -64,7 +64,7 @@ c     sor     = scratch area
       double precision       p25, relc
       double precision       sor(il,jl), res, aavg
 c
-      p25 = 0.25d0
+      p25 = 0.25d0 
 
       do j=1,jl
          n    = 0
@@ -98,7 +98,7 @@ c
 c-----------------------------------------------------------------------
 c     iterate until errors are acceptable.
 c-----------------------------------------------------------------------
-c
+c     
       mscan = 0
 100   continue
         resmax = 0.0d0
@@ -111,16 +111,16 @@ c
            if (j.eq.jl) jp1 = jl-1
           do i=1,il
 c                                      only work on missing value locations
-             if (sor(i,j).ne.0.0) then
+             if (sor(i,j).ne.0.0) then 
    	         im1 = i-1
        	         ip1 = i+1
-c                                      cyclic in x
-    	         if (i.eq.1  .and. gtype.eq.1) im1 = il
+c                                      cyclic in x           
+    	         if (i.eq.1  .and. gtype.eq.1) im1 = il 
     	         if (i.eq.il .and. gtype.eq.1) ip1 = 1
-c                                      not cyclic in x
+c                                      not cyclic in x           
     	         if (i.eq.1  .and. gtype.eq.0) im1 = 2
-    	         if (i.eq.il .and. gtype.eq.0) ip1 = il-1
-
+    	         if (i.eq.il .and. gtype.eq.0) ip1 = il-1 
+    
                  res = p25*(a(im1,j)+a(ip1,j)+a(i,jm1)+a(i,jp1)) -a(i,j)
                  res     = res*sor(i,j)
                  a(i,j)  = a(i,j) + res

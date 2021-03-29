@@ -1,7 +1,7 @@
 C--------------------------------------------------------------
-C All the routines in this file were updated on 9 Feb 2015 to
-C reverse the dimensions of "clcntr"/"c" (from "k x n" to
-C "n x k") so that the calling C routine could have the
+C All the routines in this file were updated on 9 Feb 2015 to 
+C reverse the dimensions of "clcntr"/"c" (from "k x n" to 
+C "n x k") so that the calling C routine could have the 
 C dimensions be K x N.
 C--------------------------------------------------------------
 C NCLFORTSTART
@@ -32,7 +32,7 @@ c . iseed=2 'randomly' sample the dat array
          end if
         do nv=1,n
            clcntr(nv,kk) = dat(mm,nv)
-c c c      print *,"mm=", mm," kk=",kk,"  nv=",nv," clc=",clcntr(kk,nv)
+c c c      print *,"mm=", mm," kk=",kk,"  nv=",nv," clc=",clcntr(kk,nv) 
         end do
       end do
 
@@ -108,7 +108,7 @@ c    of each cluster.
 c
 c    Output, integer IFAULT, error indicator.
 c    0, no error was detected.
-c    1, at least one cluster is empty after the initial assignment.
+c    1, at least one cluster is empty after the initial assignment.  
 c       A better set of initial cluster centers is needed.
 c    2, the allowed maximum number off iterations was exceeded.
 c    3, K is less than or equal to 1, or greater than or equal to M.

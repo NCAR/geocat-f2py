@@ -2,7 +2,7 @@ C NCLFORTSTART
       subroutine dzhgtdrv(mlon,nlat,klvl
      +                   ,z,zsfc,zmsg,ztop,dz,iopt,ier)
       implicit none
-C                                                ! input
+C                                                ! input 
       integer          mlon,nlat,klvl,iopt,ier
       double precision z(mlon,nlat,klvl), zsfc(mlon,nlat), ztop, zmsg
 C                                                ! output
@@ -38,7 +38,7 @@ c select one grid pt for monoticity test
       end do
 
       call dzmono (klvl,zlvl,zmsg,mono,ier)
-      if (ier.ne.0) return
+      if (ier.ne.0) return 
 
       do nl=1,nlat
         do ml=1,mlon
@@ -77,7 +77,7 @@ c ==================
 C NCLFORTSTART
       subroutine dzheight(klvl,z,zsfc,zmsg,ztop,dzlvl,iopt,ier)
       implicit none
-C                                                ! input
+C                                                ! input 
       integer          klvl,iopt,ier
       double precision z(klvl), zsfc, ztop, zmsg
 C                                                ! output
@@ -88,7 +88,7 @@ c     dzres = dz_height(z, zsfc, ztop, iopt)
 c
 c The returned 'dz' are equivalent to having used  beta factors.
 c must be monotonically increasing
-
+ 
 C                                                ! local
       integer          kl, kll
       double precision zlvl(klvl), zbot, zspan, zeps
@@ -116,11 +116,11 @@ c monotonically increasing?
 
 c initialize to nominal dzlvl
 
-      dzlvl(1)    = (z(1)+z(2))*0.5d0 - zsfc
-      do kl=2,klvl-1
-         dzlvl(kl)= (z(kl+1) - z(kl-1))*0.5d0
+      dzlvl(1)    = (z(1)+z(2))*0.5d0 - zsfc 
+      do kl=2,klvl-1 
+         dzlvl(kl)= (z(kl+1) - z(kl-1))*0.5d0 
       end do
-      dzlvl(klvl) = ztop -(z(klvl)+z(klvl-1))*0.5d0
+      dzlvl(klvl) = ztop -(z(klvl)+z(klvl-1))*0.5d0 
 
 c if zsfc<z(1) and ztop>z(klvl) ... this is it
 
@@ -128,8 +128,8 @@ c if zsfc<z(1) and ztop>z(klvl) ... this is it
 
 c levels outside the range should be set to 0.0
 
-      do kl=1,klvl
-         if (z(kl).lt.zsfc .or. z(kl).gt.ztop) dzlvl(kl) = 0.0d0
+      do kl=1,klvl 
+         if (z(kl).lt.zsfc .or. z(kl).gt.ztop) dzlvl(kl) = 0.0d0 
       end do
 
 c modify the default dz
@@ -174,13 +174,13 @@ c c c     print *,"ier=",ier,"  zspan=",zspan, "   dzsum=",dzsum
 c --------
       subroutine dzmono(klvl,z,zmsg,mono,ier)
       implicit none
-C                                                ! input
+C                                                ! input 
       integer          klvl, ier
       double precision z(klvl), zmsg
 C                                                ! output
       integer  mono
-C                                                ! local
-      integer  kl
+C                                                ! local 
+      integer  kl 
 
       ier = 0
       do kl=2,klvl
@@ -199,5 +199,5 @@ C                                                ! local
          end if
       end do
 
-      return
+      return 
       end

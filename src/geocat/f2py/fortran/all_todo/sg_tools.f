@@ -43,7 +43,7 @@ C
 C  Check that the input polygon is closed.
 C
       IF (QLAT(NPTS).NE.QLAT(1) .OR. QLON(NPTS).NE.QLON(1)) THEN
-        WRITE(6,500)
+        WRITE(6,500) 
   500   FORMAT('GCINOUT: The input spherical polygon must be closed.')
 
         GCINOUT = -1
@@ -64,7 +64,7 @@ C
 C
 C  Return if inside (may still be on boundary).
 C
-C
+C       
       GCINOUT = ICAPDP(P,WORK,NPTS)
       IF (GCINOUT .EQ. 0) THEN
         RETURN
@@ -79,7 +79,7 @@ C
           RETURN
         ENDIF
    20 CONTINUE
-C
+C     
 C  Default return flags outside.
 C
       GCINOUT = 1
@@ -109,10 +109,10 @@ C
       RETURN
       END
       INTEGER FUNCTION GCONARC(PLAT,PLON,LAT1,LON1,LAT2,LON2,TOL)
-C
+C 
 C  Determines whether (PLAT,PLON) lies on the arc of the
-C  great circle formed by (LAT1,LON1) and (LAT2,LON2) within
-C  a tolerance of TOL.  The arc is taken to be the shorter of
+C  great circle formed by (LAT1,LON1) and (LAT2,LON2) within 
+C  a tolerance of TOL.  The arc is taken to be the shorter of 
 C  the two possible arcs between (LAT1,LON1) and (LAT2,LON2).
 C  Return 1 if on arc, 0 otherwise.
 C
@@ -120,7 +120,7 @@ C
       DOUBLE PRECISION ADIST,BDIST,CDIST,GCPNT2GC,GCDIST
       ADIST = GCPNT2GC(LAT1,LON1,LAT2,LON2,PLAT,PLON)
       IF (ABS(ADIST) .LE. TOL) THEN
-        BDIST = ABS(GCDIST(PLAT,PLON,LAT1,LON1)) +
+        BDIST = ABS(GCDIST(PLAT,PLON,LAT1,LON1)) + 
      +          ABS(GCDIST(PLAT,PLON,LAT2,LON2))
         CDIST = ABS(GCDIST(LAT1,LON1,LAT2,LON2))
         IF (ABS(BDIST - CDIST) .LE. TOL) THEN
@@ -131,7 +131,7 @@ C
       ELSE
         GCONARC = 0
       ENDIF
-      RETURN
+      RETURN 
       END
       DOUBLE PRECISION FUNCTION GCCONVERT(ANGLE,TYPE)
 C
@@ -142,10 +142,10 @@ C  TYPE -- A string indicating the units you want to convert
 C          to. Legal values are:
 C
 C          "radians"
-C          "meters"
+C          "meters" 
 C          "kilometers"
-C          "feet"
-C          "miles"
+C          "feet"     
+C          "miles"   
 C
       DOUBLE PRECISION ANGLE
       CHARACTER*(*) TYPE
@@ -177,10 +177,10 @@ C
       SUBROUTINE GCINTERP(LAT1, LON1, LAT2, LON2, NPTS, OLAT, OLON)
 C
 C  Interpolates NPTS points along a great circle from (LAT1,LON1) to
-C  (LAT2,LON2) and returns them in the OLAT and OLON arrays.  The
+C  (LAT2,LON2) and returns them in the OLAT and OLON arrays.  The 
 C  beginning and ending points are included in the result, so, for
-C  example, if NPTS=2, then only the end points are returned.
-C
+C  example, if NPTS=2, then only the end points are returned.  
+C 
       DOUBLE PRECISION LAT1, LON1, LAT2, LON2, OLAT(NPTS), OLON(NPTS)
       DOUBLE PRECISION NLAT1, NLON1, NLAT2, NLON2, NORMANG
       DOUBLE PRECISION D2R,R2D
@@ -190,7 +190,7 @@ C
       NLON1 = R2D*NORMANG(D2R*LON1)
       NLAT2 = R2D*NORMANG(D2R*LAT2)
       NLON2 = R2D*NORMANG(D2R*LON2)
-C
+C     
       OLAT(1)    = NLAT1
       OLON(1)    = NLON1
       OLAT(NPTS) = NLAT2
@@ -205,7 +205,7 @@ C
      +                                  LAT3, LON3, LAT4, LON4,
      +                                  IER)
 C
-C  Finds the area of a convex quadrilateral patch on a sphere whose
+C  Finds the area of a convex quadrilateral patch on a sphere whose 
 C  vertices are given in degrees as lat/lon pairs.
 C
       DOUBLE PRECISION GCTAREA
@@ -222,9 +222,9 @@ C
         GCQAREA = 1.D30
         IER = 1
       END IF
-C
+C     
       RETURN
-      END
+      END      
       DOUBLE PRECISION FUNCTION GCTAREA(LAT1, LON1, LAT2, LON2,
      +                                  LAT3, LON3, IER)
 C
@@ -248,14 +248,14 @@ C
         GCTAREA = ALPHA+BETA+GAMMA - PI
         IER = 0
       ELSE
-        WRITE(6,500)
-  500   FORMAT('GCTAREA: The three input points must be distinct.')
+        WRITE(6,500) 
+  500   FORMAT('GCTAREA: The three input points must be distinct.')   
         GCTAREA = 1.D30
         IER = 1
       ENDIF
 C
       RETURN
-      END
+      END      
       DOUBLE PRECISION FUNCTION GCPNT2GC(LAT1, LON1, LAT2, LON2,
      +                                    LAT3, LON3)
 C
@@ -282,13 +282,13 @@ C
       CT(4) = SIN(D2R*LON3)
 C
       GCPNT2GC = XDPGCDP (AT,BT,CT)
-C
+C 
       RETURN
-      END
+      END 
       DOUBLE PRECISION FUNCTION XDPGCDP (AQDP,BQDP,CQDP)
 C
 C (XDPGCDP = Distance of Point from Great Circle, Double Precision)
-C
+C 
 C Author: David Kennison
 C
         DOUBLE PRECISION AQDP(4),BQDP(4),CQDP(4)
@@ -340,7 +340,7 @@ C
 C Rotate C about the X axis by the angle ALPH required to put B on the
 C equator.
 C
-C The following code returns the distance from A to C (in the degenerate
+C The following code returns the distance from A to C (in the degenerate 
 C case when A and B are the same point as well).
 C
         IF (YCB3.NE.0.D0 .OR. ZCB3.NE.0.D0) THEN
@@ -405,12 +405,12 @@ C
       X = DSIN(RLAT)*DCOS(RLON)
       Y = DSIN(RLAT)*DSIN(RLON)
       Z = DCOS(RLAT)
-C
+C      
       RETURN
       END
       DOUBLE PRECISION FUNCTION NORMANG(ANGLE)
 C
-C  Adjusts the input ANGLE (in radians) by adding or subtracting
+C  Adjusts the input ANGLE (in radians) by adding or subtracting 
 C  enough multiples of 2*PI so that the result lies in the range
 C  [-PI,PI)
 C
@@ -419,7 +419,7 @@ C
 C
       PI = 2.D0*DASIN(1.D0)
 C
-      RVAL = ANGLE
+      RVAL = ANGLE 
       DO 10 I=1,50
         IF (RVAL .LT. -PI) THEN
           RVAL = RVAL+2.D0*PI
@@ -466,24 +466,24 @@ C
       PTS2(3,3) = 0.D0
 C
       GCAANGLE = ANGPLANES (PTS1, PTS2)
-C
+C          
       RETURN
       END
       DOUBLE PRECISION FUNCTION GCDANGLE(LAT1, LON1, LAT2, LON2,
      +                                    LAT3, LON3)
 C
-C  Find the directed angle in degrees between two great circles that
-C  intersect in a given point.  Given three points on the globe
-C  A = (LAT1,LON1), B = (LAT2,LON2), and C = (LAT3,LON3) this function
+C  Find the directed angle in degrees between two great circles that 
+C  intersect in a given point.  Given three points on the globe 
+C  A = (LAT1,LON1), B = (LAT2,LON2), and C = (LAT3,LON3) this function 
 C  finds the angle between the great circles that contain the arcs
-C  AB and AC.  The returned angle is positive if C is in the hemisphere
+C  AB and AC.  The returned angle is positive if C is in the hemisphere 
 C  to the "left" of the great circle through A and B, negative otherwise.
-C
+C  
       DOUBLE PRECISION D2R,XABGCDP,LAT1,LON1,LAT2,LON2,LAT3,LON3
       PARAMETER (D2R=0.017453292519943D0)
 C
       DOUBLE PRECISION PT1(4),PT2(4),PT3(4)
-C
+C        
       PT1(1) = DCOS(D2R*LAT1)
       PT1(2) = DSIN(D2R*LAT1)
       PT1(3) = DCOS(D2R*LON1)
@@ -500,13 +500,13 @@ C
       PT3(4) = DSIN(D2R*LON3)
 C
       GCDANGLE = XABGCDP(PT1,PT2,PT3)
-C
+C          
       RETURN
       END
       DOUBLE PRECISION FUNCTION ANGPLANES (PTS1, PTS2)
 C
 C  Finds the angle between two planes, one plane determined
-C  by the three points in three space by PTS1 and the second
+C  by the three points in three space by PTS1 and the second 
 C  by the three points in in PTS2.
 C
       DOUBLE PRECISION PTS1(3,3), PTS2(3,3), CF1(4), CF2(4)
@@ -567,11 +567,11 @@ C
       COEF(1) =  (Y1*(Z2-Z3) - Z1*(Y2-Y3) + (Y2*Z3 - Z2*Y3))
       COEF(2) = -(X1*(Z2-Z3) - Z1*(X2-X3) + (X2*Z3 - Z2*X3))
       COEF(3) =  (X1*(Y2-Y3) - Y1*(X2-X3) + (X2*Y3 - Y2*X3))
-      COEF(4) =  X1*(Y2*Z3 - Z2*Y3) - Y1*(X2*Z3 - Z2*X3) +
-     +             Z1*(X2*Y3 - X3*Y2)
+      COEF(4) =  X1*(Y2*Z3 - Z2*Y3) - Y1*(X2*Z3 - Z2*X3) + 
+     +             Z1*(X2*Y3 - X3*Y2)       
 C
       RETURN
-      END
+      END 
       DOUBLE PRECISION FUNCTION XABGCDP (AQDP,BQDP,CQDP)
 C
 C (XABGCDP = Angle Between Great Circles, Double Precision)
@@ -779,7 +779,7 @@ C
       END
       INTEGER FUNCTION GCCWISE(RLAT,RLON,NPTS)
 C
-C  Given NPTS pairs of (RLAT,RLON) values, this function
+C  Given NPTS pairs of (RLAT,RLON) values, this function 
 C  returns 1 if they are entered in counterclockwise order
 C  and 0 if in clockwise order.
 C
@@ -789,7 +789,7 @@ C
 C  Check that the input polygon is closed.
 C
       IF (RLAT(NPTS).NE.RLAT(1) .OR. RLON(NPTS).NE.RLON(1)) THEN
-        WRITE(6,500)
+        WRITE(6,500) 
   500   FORMAT('GCINOUT: The input spherical polygon must be closed.')
         GCCWISE = -1
         RETURN
@@ -799,9 +799,9 @@ C
       Y = 0.D0
       AREA = 0.D0
 C
-C  Project the points onto a plane touching the globe at
-C  (RLAT(1),RLON(1)) and use the algebraic sign of
-C  the area computation formula.  Since (RLAT(1),RLON(1)) is
+C  Project the points onto a plane touching the globe at 
+C  (RLAT(1),RLON(1)) and use the algebraic sign of 
+C  the area computation formula.  Since (RLAT(1),RLON(1)) is 
 C  projected onto Cartesian coordinate (0,0), the initial X and
 C  Y values are 0., as specified above.
 C

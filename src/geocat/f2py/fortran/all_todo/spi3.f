@@ -12,7 +12,7 @@ c                                 OUTPUT
         double precision spi3(ntim)
 C NCLEND
 c
-c NCL:   spi3 = dim_spi3_n(p,nrun,opt,dims)   ; same as 'dim_spi_n'
+c NCL:   spi3 = dim_spi3_n(p,nrun,opt,dims)   ; same as 'dim_spi_n' 
 c
 c                                 LOCAL
         integer  num(12),numpos(12), nt
@@ -30,8 +30,8 @@ c                                 LOCAL
         end if
 
 C This is being passed in by C calling routine
-C       maxyrs = ntim/12
-
+C       maxyrs = ntim/12     
+       
         call  spipe3(nrun,pp,par1,par2,par3,pzero,spi3,probne
      1              ,pcpacc,xmom1,xmom2,xmom3,pmsg,num,numpos
      2              ,maxyrs,index,y,x,temparr)
@@ -46,9 +46,9 @@ C .        change 'subroutine sort' to 'subroutine sortncdc'
         SUBROUTINE SPIPE3(nrun,pp,par1,par2,par3,pzero,spi,probne,
      1  pcpacc,xmom1,xmom2,xmom3,amssng,num,numpos,maxyrs,index,y,
      2  x,temparr)
-c
+c    
 c       INPUT:  pp                one dimensional array of input data
-c                                 where input is monthly precip data
+c                                 where input is monthly precip data 
 c                                 beginning with a January value
 c               nrun              length of moving totals
 c               amssng            value for missing data
@@ -86,16 +86,16 @@ c
 c
 c       save par1,par2,par3 to 8 decimal places if you want to use
 c       them later for any additional calculations...not keeping
-c       enough decimal places leads to errors in probabilities!
+c       enough decimal places leads to errors in probabilities!     
 c
 c
 c       the first nrun-1 index values will be missing
 c
-        do 10 j=1,nrun-1
+        do 10 j=1,nrun-1   
           index(j)=amssng
           probne(j)=amssng
           pcpacc(j)=amssng
- 10     continue
+ 10     continue 
 c
 c       sum nrun precip values; store them in appropriate index location
 C
@@ -115,7 +115,7 @@ c
             endif
  20       continue
  30     continue
-
+       
 c
 c       to maintain seasonality, do everything by month
 c
@@ -146,7 +146,7 @@ c          non-zero, non-missing precipitation
 c
                    np=np+1
                    temparr(np)=index(j)
-                 else
+                 else 
 c
 c          n-count for all non-missing, zero data
 c
@@ -155,10 +155,10 @@ c
                endif
  40          continue
         elseif (nrun.gt.12) then
-          j=nrun+i
+          j=nrun+i 
 c
 c         step the sequence of data by the length of nrun to get
-c         independent samples
+c         independent samples 
 c
           if (nrun.gt.12.and.nrun.le.24) nstep=24
           if (nrun.gt.24.and.nrun.le.36) nstep=36
@@ -177,7 +177,7 @@ c
                if(index(j).gt.0) then
                  np=np+1
                  temparr(np)=index(j)
-               else
+               else 
                  nz=nz+1
                endif
                j=j+nstep
@@ -198,18 +198,18 @@ c
 c       order the data
 c
         call sortncdc(temparr,x,np,maxyrs)
-c
+c   
 c       fit l-moments for non-zero precip; if 2nd moment=0, routine
 c       fails and all 3 moments set to zero (condition indicates all
 c       data values are equal).  also, if not enough non-zero data
 c       (less than 3), routine fails and all moments set to zero.
 c
-cR c c  call samlmr(x,np,xmom,3,-0.00D0,ODO,ifail)
-        call samlmr(x,np,xmom,3, 0.00D0,0d0,ifail)
+cR c c  call samlmr(x,np,xmom,3,-0.00D0,ODO,ifail) 
+        call samlmr(x,np,xmom,3, 0.00D0,0d0,ifail) 
         xmom1(im)=xmom(1)
         xmom2(im)=xmom(2)
         xmom3(im)=xmom(3)
-c
+c       
 c       compute parameters of Pearson type III (3-parameter gamma); the
 c       three parameters are the mean, s.d., skewness of the NON-ZERO data.
 c       The mean for all the data is (1-pzero)*par1 or (1-pzero)*xmom1
@@ -225,7 +225,7 @@ c
         par3(im)=para(3)
  50     continue
 c
-c       compute the probability (cdfpe3), take into account the
+c       compute the probability (cdfpe3), take into account the 
 c       mixed distribution if pzero not equal to zero, truncate
 c       the probability from .001 to .999, transform the probability to
 c       spi (quastn). ifail=1 indicates invalid parameter 2 (negative).

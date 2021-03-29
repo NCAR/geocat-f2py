@@ -16,12 +16,12 @@ c     (2) return a selected subset of values
 c                                               ! LOCAL
       integer monit, nxn, n
       double precision para(3), vcov(6)         ! see subroutine
-      double precision euler, pi, six, zero     ! local variables
+      double precision euler, pi, six, zero     ! local variables  
       double precision x1, x2, x3, xvar, xstd, xavg
 
 c c c double precision xx(nx)                   ! f90 auto array
 c c c double precision,allocatable::xx(:)       ! allocate in calling routine
-
+      
       pi    = 3.141592653589793d0
       euler = 0.577215664901532d0        ! Euler–Mascheroni constant
       six   = 6.0d0
@@ -43,11 +43,11 @@ c c c if (nxn.eq.0) then
           end do
           ierr  = -999                          ! all msg
       else
-          x1  = zero
-          x2  = zero
+          x1  = zero 
+          x2  = zero 
           do n=1,nxn
              x1 = x1 + xx(n)
-             x2 = x2 + xx(n)*xx(n)
+             x2 = x2 + xx(n)*xx(n) 
           end do
           x3    = x1*x1/nxn
           xvar  = (x2-x3)/(nxn-1)
@@ -76,7 +76,7 @@ C-----------------------------------------------------------------
 c Algorithm AS 215
 c Maximum-Likelihood Estimation of the Parameters of the Generalized Extreme-Value Distribution
 c J. R. M. Hosking
-c Journal of the Royal Statistical Society. Series C (Applied Statistics)
+c Journal of the Royal Statistical Society. Series C (Applied Statistics) 
 c Vol. 34, No. 3 (1985), pp. 301-310
 c Stable URL: http://www.jstor.org/stable/2347483
 C-----------------------------------------------------------------
@@ -95,7 +95,7 @@ c  PARA Double precision array (3) input: initial estimates of the parameters, i
 c
 C OUTPUT
 C VCOV(6) double precision array (6): on successful exit (IFAULT= 0)
-C         the lower triangle of the estimated variance-covariance matrix, H-1,
+C         the lower triangle of the estimated variance-covariance matrix, H-1, 
 C         of the maximum-likelihood estimates, stored row by row.
 C MONIT  Integer input: flag for monitoring of iterations (see below)
 C IFAULT Integer output: failure indicator (see below)
@@ -461,3 +461,5 @@ C
  6010 FORMAT(1X, I4, I5, 3F10.4, 1X, A, F11.3, 1PD12.2)
  6020 FORMAT(1H0)
       END
+
+

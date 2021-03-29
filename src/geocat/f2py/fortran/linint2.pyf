@@ -126,7 +126,7 @@ python module linint2 ! in
             double precision :: y0
             double precision :: xmsg
         end subroutine estfow
-    end interface
+    end interface 
 end python module linint2
 
 ! This file was auto-generated with f2py (version:2).

@@ -123,8 +123,8 @@ C
       DO 240 L = 1, N
 	 J = 0
 C     .......... LOOK FOR SMALL SUB-DIAGONAL ELEMENT ..........
-C
-  105    NM1 = N-1
+C   
+  105    NM1 = N-1     
          IF(L .GT. NM1) GO TO 111
          DO 110 MDO = L, NM1
             M = MDO
@@ -237,3 +237,5 @@ C     R = (AMIN1(DABS(A),DABS(B))/P)**2
    20 DPYTHANCL = P
       RETURN
       END
+
+

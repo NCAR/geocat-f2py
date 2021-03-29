@@ -7,13 +7,13 @@ C NCLFORTSTART
 C NCLEND
 C
 C      write(*,*) nx,ny,no,fill_value
-C
+C     
       do i = 1,nx
          do n = 1, no
             field_ret(i,1,n) = fill_value
             field_ret(i,ny,n) = fill_value
          end do
-      end do
+      end do   
 C
       if (icyclic .eq. 1) then
          ibeg = 1
@@ -33,7 +33,7 @@ C
           do i = ibeg, iend
               im1 = i-1
               ip1 = i+1
-              if ( i .eq. 1    ) then
+              if ( i .eq. 1    ) then  
                   im1 = nx
               end if
               if ( i .eq. nx ) then
@@ -72,19 +72,19 @@ C
                     cc = cc + cs
                     cs = 0.
                  end if
-C
+C              
                  do n = 1, no
-                    field_ret(i,j,n) =  cc * field(i ,j,n)
-     &                   + ce * field(ip1,j,  n)
-     &                   + cw * field(im1,j,  n)
-     &                   + cn * field(i,  j+1,n)
+                    field_ret(i,j,n) =  cc * field(i ,j,n) 
+     &                   + ce * field(ip1,j,  n) 
+     &                   + cw * field(im1,j,  n) 
+     &                   + cn * field(i,  j+1,n) 
      &                   + cs * field(i,  j-1,n)
                  end do
               end if
            end do
-        end do
+        end do          
 C
-      return
+      return 
       end
 C
 C NCLFORTSTART
@@ -109,17 +109,17 @@ C
 
             else
 
-               field_ret(i,j) = ht(i,j)
+               field_ret(i,j) = ht(i,j) 
 
                target_density = field(i,j,1) + offset
                do  k=1, k_max-1
 
-                  if ((target_density .gt. field(i,j,k))
+                  if ((target_density .gt. field(i,j,k)) 
      &                 .and.
      &                 (target_density .le. field(i,j,k+1))) then
-C
-                     field_ret(i,j) = depth(k)
-     &                    + (target_density - field(i,j,k))
+C     
+                     field_ret(i,j) = depth(k) 
+     &                    + (target_density - field(i,j,k)) 
      &                    * ((depth(k+1) - depth(k))
      &                    / (field(i,j,k+1) - field(i,j,k)))
 

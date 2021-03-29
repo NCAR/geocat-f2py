@@ -29,7 +29,7 @@ c
       end do
 
       f0   = (fca+fcb)*0.5d0
-      fc   = abs(fca-f0)
+      fc   = abs(fca-f0) 
       fnyq = 1.0d0/(2.0d0*dt)
 
 c.......error check on frequencies
@@ -50,7 +50,7 @@ ccccc     write(6,*)'high corner frequency [fcb=(f0+fc)] >= nyquist'
 
       return
       end
-
+       
 c****************************
 c Butterworth Filter
 c****************************
@@ -60,8 +60,8 @@ c****************************
       double precision xr(n),yr(n),er(n),dt,ermx,f0,fc
 c
 c.......subroutine bfilter
-c     Electronic Supplement to Development of a Time-Domain, Variable-Period
-c     Surface Wave Magnitude Procedure for Application at Regional and
+c     Electronic Supplement to Development of a Time-Domain, Variable-Period 
+c     Surface Wave Magnitude Procedure for Application at Regional and 
 c     Teleseismic Distances, Part I: Theory; David R. Russell
 c     Bulletin of the Seismological Society of America
 c
@@ -74,15 +74,15 @@ c       bandpass filter of order (m), which is optimized for narrow band
 c       applications.  The method produces a complex time series output,
 c       of which the real portion is used to calculate the filtered time
 c       series, and the modulus is used to calculate the envelope function.
-c       Stability of the method is achieved by reducing the bandpass
+c       Stability of the method is achieved by reducing the bandpass 
 c       filter calculations to simple cascaded first order filters,
 c       which are forward and reverse filtered for zero phase.  The method
-c       also does a linear shift of a butterworth lowpass filter
+c       also does a linear shift of a butterworth lowpass filter 
 c       to an equivalent bandpass, without going through a standard
 c       non-linear translation (Kanasewich, E.R., 1975) to bandpass. An option
 c       is included to remove the signal mean initially to compensate for
 c       large DC offsets
-c
+c         
 c	INPUT:
 c
 c	m:      Order of Butterworth filter
@@ -104,7 +104,7 @@ c       LOCAL:
 
 c       mmax = highest possible order of butterworth filter
 c
-c local
+c local 
       integer mmax,j,k
       double complex z1(n),z2(n)
 
@@ -161,7 +161,7 @@ c
       enddo
 c
 c.......calculate (m) cascaded first order complex filters
-c
+c 
       do j=1,m
         do k=1,n
           z2(k)=z1(k)

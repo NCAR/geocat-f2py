@@ -1,7 +1,7 @@
 !    -*- f90 -*-
 ! Note: the context of this file is case sensitive.
 
-python module rcm2rgrid ! in
+python module rcm2rgrid ! in 
     interface  ! in :rcm2rgrid
         ! signature : fo = drcm2rgrid(yi,xi,fi,yo,xo,xmsg,[ncrit,opt])
         subroutine drcm2rgrid(ngrd,nyi,nxi,yi,xi,fi,nyo,yo,nxo,xo,fo,xmsg,ncrit,opt,ier) ! in :rcm2rgrid:rcm2rgrid.f
@@ -47,7 +47,7 @@ python module rcm2rgrid ! in
             integer,            intent(in)  :: iu
             double precision,   intent(out) :: dgcdist
         end function dgcdist
-    end interface
+    end interface 
 end python module rcm2rgrid
 
 ! This file was auto-generated with f2py (version:2).

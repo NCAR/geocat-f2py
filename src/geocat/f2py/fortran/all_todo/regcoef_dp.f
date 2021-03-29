@@ -140,10 +140,12 @@ c XVAR = 0.0
           WRITE (*,FMT='('' rcoef ='',f12.9)') RCOEF
           WRITE (*,FMT='('' rnull ='',f12.9)') RNULL
           WRITE (*,FMT='('' vb    ='',f15.9)') VB
-          WRITE (*,FMT='('' rstd(=sqrtvb)='',f15.9)') RSTD
+          WRITE (*,FMT='('' rstd(=sqrtvb)='',f15.9)') RSTD   
           WRITE (*,FMT='('' tval  ='',f15.9)') TVAL
           WRITE (*,FMT='('' yint  ='',f15.9)') YINT
       END IF
 
       RETURN
       END
+
+

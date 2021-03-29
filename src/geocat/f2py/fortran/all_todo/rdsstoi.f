@@ -9,7 +9,7 @@ c     format and spatial resolution as the weekly fields.
 
       integer nyrstrt, nyrlast          ! input  (used to select data)
       integer mlon, nlat                ! input  (used to error check)
-      real    sst(360,180)              ! output
+      real    sst(360,180)              ! output                    
       integer info(9)                   ! output (date info + error)
                                         !         info(9) has error info
 
@@ -27,11 +27,11 @@ c    MONTHLY    (yr/mn/1)              (yr/mn/day)          days/mn     ??
 c    CLIM.      (99/mn/1)              (99/mn/day)          days/mn      0
 c           --------------------------------------------------------------
 c           Note: numeric constants denote fixed place-holder values
-c
+c   
 c
 c  Following the header are integer SST values in degrees C time 100, with
 c  format (20I4).
-c  These data are read into integer array ISST, converted to degree C, and
+c  These data are read into integer array ISST, converted to degree C, and 
 c  placed into real array SST.
 c
 c  The geo-location of the SST array elements are:
@@ -40,7 +40,7 @@ c    SST(1,2)     = 179.5W, 88.5S
 c    SST(2,1)     = 178.5W, 89.5S
 c    SST(360,180) = 179.5E, 89.5N
 c
-c  NOTES:
+c  NOTES: 
 c     1) all values less than or equal to -1.78 C are ice
 c     2) a land/sea mask should be used to mask out OI SST analyzed values
 c        not located in the ocean, e.g. program ls.f and data file ls.dat
@@ -97,17 +97,17 @@ c     *        ,'sst (110.5w,10.5s) =',f6.2)
       info(7) = ndays
       info(8) = index
       info(9) = 0           ! use for error code
-      return
+      return                                                    
 
   200 continue
-c     write (*,'('' RDSSTOI: EOF encountered'')')
+c     write (*,'('' RDSSTOI: EOF encountered'')') 
 
       igrd    = 0
       info(9) = 999         ! eof
       close (10)
 
       return
-      end
+      end       
 c ---------------------------------------------------------------
       subroutine wrsstoi (sstg,ilon,jlat,nmos,nyrs
      +                   ,nyrstrt,nyrlast,twave,ier)
@@ -121,18 +121,18 @@ c write the gaussian sst grids via fortran binary write
       ier  = 0
       nyr1 = nyrstrt-1900
       nyr2 = nyrlast-1900
-
+      
       dir  = '/fs/cgd/data0/shea/ncldata_output/$'
       ldir = index (dir,'$')-1
-      write (fil,'(''sstoi_'',i2,i2,''_T'',i2,''$'')') nyr1,nyr2,twave
+      write (fil,'(''sstoi_'',i2,i2,''_T'',i2,''$'')') nyr1,nyr2,twave  
       lfil = index (fil,'$')-1
-
+ 
       open  (unit=10,file=dir(1:ldir) // fil(1:lfil)
      +              ,access='sequential',form='unformatted', iostat=ios)
       if (ios.ne.0) then
           write (*,'(''FORTRAN: wrsstoi: open: ios='',i4)') ios
           ier = 1
-          return
+          return 
       endif
 
       do nyr=1,nyrs
@@ -146,3 +146,4 @@ c write the gaussian sst grids via fortran binary write
 
       return
       end
+         

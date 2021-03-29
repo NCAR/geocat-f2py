@@ -1,4 +1,4 @@
-c -----------------------------------------------------------
+c ----------------------------------------------------------- 
 C NCLFORTSTART
       SUBROUTINE DRCM2POINTS(NGRD,NYI,NXI,YI,XI,FI,NXYO,YO,XO,FO
      +                      ,XMSG,OPT,NCRIT,KVAL,IER)
@@ -32,7 +32,7 @@ c                              local
       INTEGER NG,NX,NY,NXY,NEXACT,IX,IY,M,N,NW,NER,K
       DOUBLE PRECISION FW(2,2),W(2,2),SUMF,SUMW,CHKLAT(NYI),CHKLON(NXI)
       DOUBLE PRECISION DGCDIST, WX, WY
-      DOUBLE PRECISION REARTH, DLAT, PI, RAD, DKM, DIST
+      DOUBLE PRECISION REARTH, DLAT, PI, RAD, DKM, DIST 
 c                              error checking
       IER = 0
       IF (NXI.LE.1 .OR. NYI.LE.1 .OR. NXYO.LE.0) THEN
@@ -119,7 +119,7 @@ c                              main loop [interpolation]
 
                    DO NG = 1,NGRD
                       IF (FO(NXY,NG).EQ.XMSG) THEN
-
+                          
                           FW(1,1) = FI(IX,IY,NG)
                           FW(2,1) = FI(IX+K,IY,NG)
                           FW(1,2) = FI(IX,IY+K,NG)
@@ -154,7 +154,7 @@ c                                             nw >=3 arbitrary
 C Are all the output points filled in? Check the 1st grid
 C If so, return
 
-      DO NG = 1,NGRD
+      DO NG = 1,NGRD   
         DO NXY = 1,NXYO
            IF (FO(NXY,NG).EQ.XMSG) GO TO 30
         END DO
@@ -167,20 +167,20 @@ C DLAT is expressed in terms of degrees of latitude.
 C DKM  is DLAT in KILOMETERS
 
    30 REARTH= 6371D0
-      DLAT  = 5
+      DLAT  = 5  
       PI    = 4D0*ATAN(1.0D0)
       RAD   = PI/180D0
       DKM   = DLAT*(2D0*PI*REARTH)/360D0
 
-C LOOP OVER EACH GRID ... INEFFICIENT
+C LOOP OVER EACH GRID ... INEFFICIENT 
 C THE RUB IS THAT SOME LEVELS COULD HAVE XMSG.
 
-      DO NG = 1,NGRD
+      DO NG = 1,NGRD   
 
         DO NXY = 1,NXYO
            IF(FO(NXY,NG).EQ.XMSG) THEN
 
-C FIND ALL GRID POINTS WITHIN 'DKM' KILOMETERS OF PT
+C FIND ALL GRID POINTS WITHIN 'DKM' KILOMETERS OF PT 
 
               NW   = 0
               SUMF = 0.0D0
@@ -189,8 +189,8 @@ C FIND ALL GRID POINTS WITHIN 'DKM' KILOMETERS OF PT
               DO IY = 1,NYI
                 DO IX = 1,NXI
                    IF ((YI(IX,IY).GE.YO(NXY)-DLAT)  .AND.
-     +                 (YI(IX,IY).LE.YO(NXY)+DLAT)) THEN
-                        DIST = DGCDIST(YO(NXY),XO(NXY)
+     +                 (YI(IX,IY).LE.YO(NXY)+DLAT)) THEN      
+                        DIST = DGCDIST(YO(NXY),XO(NXY) 
      +                                ,YI(IX,IY),XI(IX,IY),2)
                         IF (DIST.LE.DKM .AND. DIST.GT.0.0D0 .AND.
      +                      FI(IX,IY,NG).NE.XMSG) THEN

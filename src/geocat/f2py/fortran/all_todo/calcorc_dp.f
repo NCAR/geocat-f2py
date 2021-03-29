@@ -68,7 +68,7 @@ c .   calculate the mean and variance of column nc in the data array
       IMPLICIT NONE
 
 c this routine will calculate the cross covariance between
-c .   series x and series y
+c .   series x and series y 
 c this routine was originally meant to be in the inner portion
 c .   of a loop
 
@@ -117,7 +117,7 @@ c calculate the mean and var of y
           RETURN
       END IF
 
-c calculate the cross covariance
+c calculate the cross covariance 
 c .   calculate the mean and variance of column nc in the data array
 
       RN = 0.D0

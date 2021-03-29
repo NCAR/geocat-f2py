@@ -41,10 +41,10 @@ C Scale the input eigenvector matrix
       END DO
 
       IF (KFLAG.EQ.0) THEN
-          CALL ZVORS(NV,NF,V,A,B,C,ND)
+          CALL ZVORS(NV,NF,V,A,B,C,ND) 
       ELSE
-          CALL VORSMSG(NV,NF,V,A,B,C,ND,VMSG)
-      END IF
+          CALL VORSMSG(NV,NF,V,A,B,C,ND,VMSG) 
+      END IF  
 
       DO N=1,NF
         ROTVAR(N) = 0.0D0
@@ -54,19 +54,19 @@ C Scale the input eigenvector matrix
            END IF
         END DO
       END DO
-
+      
 C % variance explained
 
       IF (IOPT.NE.0) THEN
           DO N=1,NF
             ROTPCV(N) = (ROTVAR(N)/TVAR)*100D0
           END DO
-      ELSE
+      ELSE 
           DO N=1,NF
             ROTPCV(N) = 100.D0/ND
           END DO
       END IF
-
+      
       IF (IOPT.LE.0) RETURN
 
 C unscale [denormalize]
@@ -122,7 +122,7 @@ c    is rotated to maximize the column-variance criterion
 c    in turn until a complete pass through all combinations
 c    does not result in any rotations of more than "reps" radians.
 c The percentages of trace are recomputed for each factor vector
-c    and returned in vector "a" (actually, the first "nfac"
+c    and returned in vector "a" (actually, the first "nfac" 
 c    elements of "a").
 c The percentages of trace are computed for each row of the
 c    rotated matrix and returned in vector "b". When  computed
@@ -156,30 +156,30 @@ C normalize the rows of v
               V(I,J) = V(I,J)/B(I)
           END DO
       END DO
-
-
-
+      
+      
+      
       X1 = 0
       X3 = 0
-
+      
       DO J = 1, NF
          X2 = 0
          DO I = 1, ND
             X1 = X1 + V(I,J)**4
             X2 = X2 + V(I,J)**2
-         END DO
+         END DO         
          X3 = X3 + X2**2
       END DO
-
+      
       VC = X1 - X3 / ND
-
+      
 
    10 CONTINUE
-
+      
       DO WHILE(.true.)
-
+      
       VCL = VC
-
+      
       DO M = 1,NF
           DO N = M,NF
               IF (M.NE.N) THEN
@@ -216,26 +216,26 @@ c rotate the axis
               END IF
           END DO
       END DO
-
+     
       X1 = 0
       X3 = 0
-
+      
       DO J = 1, NF
          X2 = 0
          DO I = 1, ND
             X1 = X1 + V(I,J)**4
             X2 = X2 + V(I,J)**2
-         END DO
+         END DO         
          X3 = X3 + X2**2
       END DO
-
-      VC = X1 - X3 / ND
-
-
-      IF(ABS(VC-VCL) .lt. 1E-5) EXIT
-
+      
+      VC = X1 - X3 / ND      
+      
+      
+      IF(ABS(VC-VCL) .lt. 1E-5) EXIT      
+      
       END DO
-
+      
 c denormailize rows of v
       DO J = 1,NF
           DO I = 1,NV

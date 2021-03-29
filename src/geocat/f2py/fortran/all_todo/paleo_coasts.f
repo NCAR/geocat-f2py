@@ -53,7 +53,7 @@ C   were originally hard-coded to only allow 128 characters. The C
 C   wrapper that calls this function now allocates the space for
 C   these two strings and sets them, so this code doesn't need to
 C   do that any more.
-C
+C   
 C   MSKVAL is the value that, when used in the array MASK, represents
 C   land.
 C

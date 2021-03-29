@@ -1,5 +1,5 @@
-C NCLFORTSTART
-      SUBROUTINE BINDATAAVG(NZ,ZLON,ZLAT,Z,ZMSG,MLON,NLAT,GLON,GLAT
+C NCLFORTSTART 
+      SUBROUTINE BINDATAAVG(NZ,ZLON,ZLAT,Z,ZMSG,MLON,NLAT,GLON,GLAT 
      +                     ,GBINKNT,IOPT,IER)
       IMPLICIT NONE
 c                                             ; INPUT
@@ -27,7 +27,7 @@ c                            ; monotonically {in/de}creasing
       ELSEIF (DLAT.LT.0.0D0) THEN
           IFLAG = -1
       ELSE
-          IER = 1            ! 0 difference: FATAL
+          IER = 1            ! 0 difference: FATAL            
       END IF
       DLAT = ABS(DLAT)
       DLO  = DLAT-DEPS
@@ -35,7 +35,7 @@ c                            ; monotonically {in/de}creasing
 
 c                            check for equal lat spacing
       DO NL = 1,NLAT - 1
-          IF (ABS(GLAT(NL+1)-GLAT(NL)).LT.DLO .OR.
+          IF (ABS(GLAT(NL+1)-GLAT(NL)).LT.DLO .OR. 
      +        ABS(GLAT(NL+1)-GLAT(NL)).GT.DHI) THEN
               IER = IER + 10
               GO TO 10
@@ -52,7 +52,7 @@ c                            check for equal lon spacing
       END IF
 
       DO ML = 1,MLON - 1
-          IF (ABS(GLON(ML+1)-GLON(ML)).LT.DLO .OR.
+          IF (ABS(GLON(ML+1)-GLON(ML)).LT.DLO .OR. 
      +        ABS(GLON(ML+1)-GLON(ML)).GT.DHI) THEN
               IER = IER + 100
               GO TO 20

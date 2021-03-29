@@ -9,7 +9,7 @@ C NCLEND
 c                                      local
       INTEGER I
       DOUBLE PRECISION FN , SUMX , SUMY , SUMX2 , SUMX3 , SUMX4
-     +               , SUMXY , SUMX2Y , XS , D , YAVE
+     +               , SUMXY , SUMX2Y , XS , D , YAVE 
 
       IER = 0
 
@@ -45,7 +45,7 @@ c                                 remove mean
              Y(I)   = Y(I) - YAVE
          END IF
       END DO
-c
+c     
 C QUADRATIC DETRENDING
 C
       FN    = 0.0D0
@@ -95,13 +95,13 @@ C IOPT=1 means True in NCL
       IF (IOPT.EQ.1) RETURN
 
 C Add the mean back in
-C C C IF (IOPT.NE.0) THEN
+C C C IF (IOPT.NE.0) THEN 
           DO I = 1,NPTS
              IF (Y(I).NE.YMSG) THEN
                  Y(I)   = Y(I) + YAVE
              END IF
           END DO
 C C C END IF
-c
+c     
       RETURN
       END

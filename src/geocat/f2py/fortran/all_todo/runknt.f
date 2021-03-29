@@ -4,10 +4,10 @@ C
 C knt = dim_numrun_n( x, optknt, n)
 C                                                      INPUT
       integer  nx, ntim, optknt, optend
-      integer  xin(nx,ntim)
+      integer  xin(nx,ntim) 
 C                                                      OUTPUT
-      integer  xknt(nx,ntim)
-C                                                      LOCAL
+      integer  xknt(nx,ntim) 
+C                                                      LOCAL 
       integer  n, j, t, knt, yin(0:nx+1)
 
       if (optknt.eq.0) then
@@ -37,7 +37,7 @@ c count unique sequences: pad ending with 0 to force a count
             do n=1,nx
                xknt(n,t) = 0
               do j=1,nx-n+1
-                 if (yin(j-1).eq.0          .and.
+                 if (yin(j-1).eq.0          .and. 
      +               all(yin(j:j+n-1).eq.1) .and.
      +               yin(j+n).eq.0        ) then
                      xknt(n,t) = xknt(n,t)+1
@@ -57,10 +57,10 @@ C
 C knt = dim_numrun_n( x, optknt, n)
 C                                                      INPUT
       integer  nx, optknt, optend
-      integer  xin(nx)
+      integer  xin(nx) 
 C                                                      OUTPUT
-      integer  xknt(nx)
-C                                                      LOCAL
+      integer  xknt(nx) 
+C                                                      LOCAL 
       integer  n, j, knt, yin(0:nx+1)
 
       if (optknt.eq.0) then
@@ -85,7 +85,7 @@ c count unique sequences: pad ending with 0 to force a count
           do n=1,nx
              xknt(n) = 0
             do j=1,nx-n+1
-               if (yin(j-1).eq.0          .and.
+               if (yin(j-1).eq.0          .and. 
      +             all(yin(j:j+n-1).eq.1) .and.
      +             yin(j+n).eq.0        ) then
                    xknt(n) = xknt(n)+1

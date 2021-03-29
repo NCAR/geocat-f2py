@@ -9,7 +9,7 @@ C
       DIMENSION DATI(NPTS,NLEVI),DATO(NPTS,NLEVO),
      +          HBCOFA(NLEVIP1),HBCOFB(NLEVIP1),PLEVI(NLEVIP1),
      +          PLEVO(NLEVO),PSFC(NPTS)
-C NCLEND
+C NCLEND   
 C
 C****     THIS ROUTINE INTERPLOATES CCM2/3 HYBRID COORDINATE DATA
 C****     TO PRESSURE COORDINATES USING PRESSURE SURFACES AS THE
@@ -117,7 +117,7 @@ c ==========================================================
                do k=1,nlevo
                   dato(j,k) = spvl
                end do
-               go to 60
+               go to 60  
            end if
 c ===========================================================
 

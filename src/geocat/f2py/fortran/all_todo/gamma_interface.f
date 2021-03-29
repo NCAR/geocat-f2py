@@ -8,7 +8,7 @@ c                              OUTPUT
       double precision xout(nx)
 C NCLEND
 C NCL: gma = gamma( x )
-c WRAPIT -L $NCARG_ROOT/lib -l nfpfort gamma_interface.f
+c WRAPIT -L $NCARG_ROOT/lib -l nfpfort gamma_interface.f 
 c                              LOCAL
       integer n
       double precision dgammaslatec
@@ -28,4 +28,4 @@ c                              LOCAL
       endif
 
       return
-      end
+      end 

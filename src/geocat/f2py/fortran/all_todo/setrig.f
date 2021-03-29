@@ -4,7 +4,7 @@ c based on an email from "Shian-Jiann Lin" lin@dao.gsfc.nasa.gov
 c His code was "dumbed down" to f77 for the gnu77 compiler.
 c***********************************************************************
 C NCLFORTSTART
-C NCL:  lw = linrood_latwt(nlat)
+C NCL:  lw = linrood_latwt(nlat) 
       subroutine   linrood(lat,weight,nlat)
       implicit     none
 c                             INPUT
@@ -21,18 +21,18 @@ c                             Calculate latitudes
          lat(nl) = lat(nl-1) + dlat
       end do
       lat(nlat)  = 90.d0
-c                             Calculate weights
+c                             Calculate weights 
       call linroodwt (weight,nlat)
 
       return
       end
 c ------------------------------------------------------
 C NCLFORTSTART
-C NCL:  lw = linroodwt(nlat)
+C NCL:  lw = linroodwt(nlat) 
       subroutine linroodwt (weight,nlat)
       implicit none
       integer nlat
-      double precision weight(nlat)
+      double precision weight(nlat)  
 C NCLEND
 c                                LOCAL [AUTOMATIC ARRAYS]
       real             dp, dl
@@ -61,7 +61,7 @@ c                               OUTPUT
 c                               LOCAL
       real    dl, dp
       integer j, jm1
-      double precision pi, ph5
+      double precision pi, ph5   
 
       jm1 = jm - 1
       pi  = 4.0d0 * atan(1.d0)

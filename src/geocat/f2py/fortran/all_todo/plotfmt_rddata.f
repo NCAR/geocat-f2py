@@ -9,6 +9,6 @@
       read(unit=funit,err=1001,end=1001) slab
 
       istatus = 0
-
+    
  1001 return
       end

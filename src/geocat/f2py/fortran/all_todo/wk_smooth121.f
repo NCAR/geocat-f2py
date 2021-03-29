@@ -19,7 +19,7 @@ c weightings (Note that this conserves the total sum).
 c The routine also skips-over missing data (spv)
 c There are 'nn' pieces of useful information, which may be less
 c than or equal to 'vn'.
-
+  
       integer i
 
       i = 0

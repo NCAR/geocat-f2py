@@ -1,6 +1,6 @@
 C NCLFORTSTART
-      subroutine omcalcccm(u     ,v    ,d
-     +                     ,dpsl ,dpsm  ,pmid ,pdel
+      subroutine omcalcccm(u     ,v    ,d    
+     +                     ,dpsl ,dpsm  ,pmid ,pdel  
      +                     ,psfc ,hybd  ,hybm ,nprlev
      +                     ,omega,ilon  ,jlat ,klev )
       implicit none

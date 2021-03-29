@@ -419,7 +419,7 @@ c .                    calculate the quantities and return them
 c .   mxlag    - max lag to be estimated  [0 <= mxlag <= npts ]
 c .   acv      - sample autocovariances  [vector of length .ge.
 c .                                      (mxlag+1) ]
-c .   acr      - sample autocorrelations [vector of length .ge.
+c .   acr      - sample autocorrelations [vector of length .ge. 
 c .                                       (mxlag+1) ]
 
 c .              acv(0) = xvar (lag 0  )  : acr(0)   = 1.00 ( lag 0  )
@@ -1163,7 +1163,7 @@ c     xmsg     - missing data code (if none set to some no. not
 c                encountered)
 c     corc     - correlation coef. vector
 c                corc(1) contain correlation coef between y and x(nrt,1)
-c                corc(2) contain correlation coef between y and
+c                corc(2) contain correlation coef between y and 
 c                    x(nrt,2) etc.
 c     ier      - error code (if ier=-1 then corc contains missing entry)
 

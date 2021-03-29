@@ -3,12 +3,12 @@ C NCLFORTSTART
         implicit none
 c                                      INPUT
         integer ier, npts
-        double precision t(npts)
-        double precision td(npts)
-        double precision p(npts)
+        double precision t(npts) 
+        double precision td(npts) 
+        double precision p(npts) 
         double precision tmsg, tdmsg, pmsg
 c                                      OUTPUT
-        double precision twb(npts)
+        double precision twb(npts) 
 c NCLEND
 c                                      LOCAL
         integer n
@@ -22,7 +22,7 @@ c            diagram and computing selected meteorological quantities."
 c            atmospheric sciences laboratory
 c            u.s. army electronics command
 c            white sands missile range, new mexico 88002 : 33 pages
-c       baker, schlatter  17-may-1982
+c       baker, schlatter  17-may-1982   
 
 c PROFS: Program for Regional Observing and Forecasting Services (NOAA)
 
@@ -42,10 +42,10 @@ c---
         double precision function twbprofs(t,td,p)
         implicit none
 c                                      INPUT
-        double precision t
-        double precision td
-        double precision p
-c                                      LOCAL
+        double precision t 
+        double precision td 
+        double precision p 
+c                                      LOCAL 
         integer i
         double precision aw, ao, pi, x, ti, aos, eps
 
@@ -65,7 +65,7 @@ c   determine the mixing ratio line thru td and p.
 c
 c   determine the dry adiabat thru t and p.
 
-        ao = oxprofs(t,p)
+        ao = oxprofs(t,p)     
 
 c   iterate to locate pressure pi at the intersection of the two
 c   curves .  pi has been set to p for the initial guess.
@@ -74,7 +74,7 @@ c   curves .  pi has been set to p for the initial guess.
         pi  = p
         do i= 1,10
            x= 0.02d0*(tmrprofs(aw,pi)-tdaprofs(ao,pi))
-           if (abs(x).lt.eps) exit
+           if (abs(x).lt.eps) exit    
            pi= pi*(2**(x))
         end do
 
@@ -103,7 +103,7 @@ c ---------------------------------------------------------------------
 c                                      INPUT
         double precision t, p
 c                                      LOCAL
-        double precision  tk
+        double precision  tk 
 
 c   this function returns potential temperature (celsius) given
 c   temperature t (celsius) and pressure p (mb) by solving the poisson
@@ -174,14 +174,14 @@ c   this function returns the temperature tsa (celsius) on a saturation
 c   adiabat at pressure p (millibars). os is the equivalent potential
 c   temperature of the parcel (celsius). sign(a,b) replaces the
 c   algebraic sign of a with that of b.
-c   b is an empirical constant approximately equal to 0.001 of the
+c   b is an empirical constant approximately equal to 0.001 of the 
 c   latent heat of vaporization for water divided by the specific heat
 c   at constant pressure for dry air.
 c                                      LOCAL
         integer i
-        double precision a, b, d, tq, tqk, x, eps
+        double precision a, b, d, tq, tqk, x, eps 
         data b/2.6518986d0/
-
+       
         external wxprofs
         double precision wxprofs
 
@@ -219,12 +219,12 @@ c                                      INPUT
         double precision o, p
 c                                      LOCAL
         double precision ok, tdak
-
+ 
 c   this function returns the temperature tda (celsius) on a dry adiabat
 c   at pressure p (millibars). the dry adiabat is given by
 c   potential temperature o (celsius). the computation is based on
 c   poisson's equation.
-
+ 
         ok       = o+273.15d0
         tdak     = ok*((p*0.001d0)**0.286)
         tdaprofs = tdak-273.15d0
@@ -261,26 +261,27 @@ c   pressure for dry air.
         return
         end
 c ---------------------------------------------------------------------
-
+ 
         double precision function tmrprofs(w,p)
         implicit none
 c                                      INPUT
         double precision w, p
 c                                      LOCAL
         double precision c1, c2, c3, c4, c5, c6, x, tmrk
-
+ 
 c   this function returns the temperature (celsius) on a mixing
 c   ratio line w (g/kg) at pressure p (mb). the formula is given in
 c   table 1 on page 7 of stipanuk (1973).
 c
 c   initialize constants
-
+ 
         data c1/.0498646455/,c2/2.4082965/,c3/7.07475/
         data c4/38.9114/,c5/.0915/,c6/1.2035/
-
+ 
         x    = log10(w*p/(622d0+w))
         tmrk = 10.**(c1*x+c2)-c3+c4*((10.**(c5*x)-c6)**2.)
         tmrprofs = tmrk-273.15d0
 
         return
         end
+

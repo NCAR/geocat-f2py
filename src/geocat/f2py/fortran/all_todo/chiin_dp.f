@@ -7657,12 +7657,12 @@ C     TO GET-FUNCTION-VALUE
 
   310 CONTINUE
 C DJS GO TO I99999
-      IF (I99999 .EQ.  10) GO TO 10
-      IF (I99999 .EQ.  20) GO TO 20
-      IF (I99999 .EQ.  90) GO TO 90
-      IF (I99999 .EQ. 130) GO TO 130
-      IF (I99999 .EQ. 200) GO TO 200
-      IF (I99999 .EQ. 270) GO TO 270
+      IF (I99999 .EQ.  10) GO TO 10 
+      IF (I99999 .EQ.  20) GO TO 20 
+      IF (I99999 .EQ.  90) GO TO 90 
+      IF (I99999 .EQ. 130) GO TO 130 
+      IF (I99999 .EQ. 200) GO TO 200 
+      IF (I99999 .EQ. 270) GO TO 270 
 
       END
 C*PT*WARNING* Already double-precision
@@ -8682,9 +8682,9 @@ C     TO GET-FUNCTION-VALUE
 
   280 CONTINUE
 C DJS GO TO I99999
-      IF (I99999 .EQ.  10) GO TO 10
-      IF (I99999 .EQ.  20) GO TO 20
-      IF (I99999 .EQ. 200) GO TO 200
+      IF (I99999 .EQ.  10) GO TO 10 
+      IF (I99999 .EQ.  20) GO TO 20 
+      IF (I99999 .EQ. 200) GO TO 200 
 
       END
 C*PT*WARNING* Already double-precision

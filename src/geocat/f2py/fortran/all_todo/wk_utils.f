@@ -11,7 +11,7 @@ c weightings (Note that this conserves the total sum).
 c The routine also skips-over missing data (spv)
 c There are 'nn' pieces of useful information, which may be less
 c than or equal to 'vn'.
-
+  
       integer i
 
       i = 0
@@ -132,7 +132,7 @@ c m5  =  mean of (X2*X2)
         m3  =  m3+(dble(i)*X2(i))/dble(nv)
         m4  =  m4+(dble(i)*dble(i))/dble(nv)
         m5  =  m5+(X2(i)*X2(i))/dble(nv)
-       end do
+       end do   
 
        r = (m3-m1*m2)/(sqrt(m4-m1**2)*sqrt(m5-m2**2))
        b = (m3-m1*m2)/(m4-m1**2)
@@ -146,13 +146,13 @@ c      print*,'Trend line has a = ',a,' b = ',b
        if (vmi.gt.1) then
            do i = 1,vmi-1
               X2(i)  =  0.0d0
-           end do
+           end do   
        end if
        if (vmi+nv.le.nx) then
            do i = vmi+nv,nx
               X2(i) =  0.0d0
-           end do
+           end do 
        end if
 
        return
-       end
+       end              

@@ -60,7 +60,7 @@ c c c     print *,"weibfit: not enough values: n=",n
           ier = 1
           return
       end if
-
+    
       ALPHA = (1.0 - LEVEL) / 2.0D0
       R = 0
       S = 0
@@ -188,7 +188,7 @@ C          = A*D-B*C     = Var(B)*VAR(T)-Cov(B,T)**2
 C                           IB     iT     COV**2
 
       CON  = (IB *IT) - COV**2
-      VARB = IT / CON
+      VARB = IT / CON            
       VART = IB / CON
       COVBT= COV / CON
 C                                    AVOID ANY NAMING CONFLICT
@@ -260,7 +260,7 @@ C* W. J. & GENTLE, J. E. (1980), pp. 95.            *
 C****************************************************
       SUBROUTINE QNORMALQ(ALPHA,NORM,ERROR)
 C C C SUBROUTINE NORMAL(ALPHA,NORM,ERROR)
-      implicit none
+      implicit none 
       INTEGER ERROR
       DOUBLE PRECISION ALPHA,NORM,LIM,P0,P1,P2,P3,P4
       DOUBLE PRECISION Q0,Q1,Q2,Q3,Q4,Y
@@ -293,3 +293,4 @@ C C C SUBROUTINE NORMAL(ALPHA,NORM,ERROR)
       IF (ALPHA .GT. 0.5) NORM = -NORM
 10    RETURN
       END
+

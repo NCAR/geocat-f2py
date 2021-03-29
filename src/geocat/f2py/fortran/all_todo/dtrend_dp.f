@@ -36,7 +36,7 @@ C .                          RETURN
 C .               IOPT = 0 : REMOVE THE MEAN ONLY
 C .               IOPT = 1 : REMOVE THE MEAN AND USE LINEAR LST SQRS TO
 C .                          DETREND
-C .               IOPT = 2 : REMOVE THE MEAN AND USE QUADRATIC
+C .               IOPT = 2 : REMOVE THE MEAN AND USE QUADRATIC 
 C .                          LST SQRS TO DETRD
 C .
 C .   OUTPUT
@@ -189,7 +189,7 @@ c .   npts     - length of vectors x and y
 c .   x/ymsg   - missing code: if no msg values set to some number
 c .                            which will not be encountered.
 c .              ymsg will be used to fill missing values
-c .   iopt     - =1: (True)  Return YDT with the mean removed
+c .   iopt     - =1: (True)  Return YDT with the mean removed        
 c .              =0: (Flase) do not remove the mean
 c .   ydt      - detrended series
 c .              this could be "y" if original series not needed
@@ -237,8 +237,8 @@ c                               calculate mean of X and Y
       YBAR = YSUM/XYN
 C      print *,"                            "
 C      print *," -------------------------- "
-C      print *,"XBAR=",XBAR,"  YBAR=",YBAR
-c                               remove the X and Y means
+C      print *,"XBAR=",XBAR,"  YBAR=",YBAR 
+c                               remove the X and Y means 
 c                               This shifts the data: minimize
 c                               roundoff for big X and/or Y numbers
       DO N = 1,NPTS
@@ -249,7 +249,7 @@ C             print *,"N=",N,"  XDT(N)="+XDT(N),"  YDT(N)="+YDT(N)
 C     *                     ,"  Y(N)="+Y(N)
          END IF
       END DO
-c                               stats for shifted series
+c                               stats for shifted series 
       XTOT  = 0.0D0
       YTOT  = 0.0D0
       X2SUM = 0.0D0
@@ -270,12 +270,12 @@ c                               XAVE/YAVE should be 0.0
       XVAR  = X2SUM - XTOT*XTOT/XYN
       YVAR  = Y2SUM - YTOT*YTOT/XYN
       XYVAR = XYSUM - XTOT*YTOT/XYN
-
+ 
 c                               slope and y-intercept: shifted series
       SLOPE = XYVAR/XVAR
       YDTINT= YAVE - SLOPE*XAVE
-C      print *,"SLOPE=",SLOPE,"  YDTINT=",YDTINT, "  XAVE=",XAVE
-C     *                      ,"  YAVE=",YAVE
+C      print *,"SLOPE=",SLOPE,"  YDTINT=",YDTINT, "  XAVE=",XAVE 
+C     *                      ,"  YAVE=",YAVE 
 
 c                               detrend the (mean removed) series
       DO N = 1,NPTS
@@ -285,7 +285,7 @@ c                               detrend the (mean removed) series
               YDT(N) = YMSG
           END IF
       END DO
-
+ 
 c                               return mean ?
       YINT = YBAR - SLOPE*XBAR
       IF (IOPT.EQ.0) THEN

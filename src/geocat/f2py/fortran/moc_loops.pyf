@@ -21,7 +21,7 @@ python module moc_loops ! in
             double precision, dimension(nyaux,kdep,2),                          intent(out)  :: tmp2(nyaux,kdep,2)
             double precision, dimension(nyaux,kdep,2),                          intent(out)  :: tmp3(nyaux,kdep,2)
         end subroutine mocloops
-    end interface
+    end interface 
 end python module moc_loops
 
 ! This file was auto-generated with f2py (version:2).

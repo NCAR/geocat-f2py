@@ -37,7 +37,7 @@ C NCLFORTSTART
       implicit   none
 c                             INPUT  [xGLAT are [+90 to -90]
       integer    npts
-      double precision     xGLAT(npts)
+      double precision     xGLAT(npts) 
 c                             OUTPUT [1D array: double]
       double precision     weight(npts)
 C NCLEND
@@ -357,13 +357,13 @@ c**********************************************************************
       end
 
 c***********************************************************************
-c Compute the matrix giving the first derivative to the Cardinal
+c Compute the matrix giving the first derivative to the Cardinal 
 c Legendre functions. To compute the first derivative just form the
-c matrix product [dcpdxv]{u}={u_ksi}. Reapply previous formula for
+c matrix product [dcpdxv]{u}={u_ksi}. Reapply previous formula for 
 c higher order derivative.
 
 c npts:number of collocation points 1<=i<=npts
-c dcpdxv(i,j): derivative of pressure cardinal function i evaluated at
+c dcpdxv(i,j): derivative of pressure cardinal function i evaluated at 
 c 		velocity node j
 c***********************************************************************
 
@@ -371,7 +371,7 @@ c***********************************************************************
       implicit     none
 
       integer      npts,nptp,N,i,j
-      double precision
+      double precision  
      *             Legendre,fact,f1,f2,func0,func1,func2,dis,
      *             xvg(npts),xpg(nptp),legep(nptp),dcpdxv(nptp,npts)
 

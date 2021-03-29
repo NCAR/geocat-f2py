@@ -11,7 +11,7 @@ c                                                      input and output
       DOUBLE PRECISION  A(N,N)
 c                                                      output
 c                                                      (:,:,real/imag,
-c                                                           left/right)
+c                                                           left/right)     
       DOUBLE PRECISION  WR(N), WI(N), EVLR(N,N,2,2)
 c
 c     These are work arrays originally created by Fortran routine.
@@ -35,12 +35,12 @@ C just for consistency with LAPACK description   (make large)
       LDA     = N
       LDVR    = N
       LDVL    = N
-      INFO    = 0
+      INFO    = 0   
 C These are passed in above.
 C     LWORK   = N*(N+6)
 C     LIWORK  = 2*N-1
 
-      CALL DGEEVX( BALANC, JOBVL, JOBVR, SENSE, N, A, LDA, WR, WI,
+      CALL DGEEVX( BALANC, JOBVL, JOBVR, SENSE, N, A, LDA, WR, WI,  
      &             VL, LDVL, VR, LDVR, ILO, IHI, SCALEM, ABNRM,
      &             RCONDE, RCONDV, WORK, LWORK, IWORK, INFO )
 
@@ -48,20 +48,20 @@ c
 c This is the array returned to NCL | the WR & WI as attributes.
 c
       k = 0
-      do j=1,N
+      do j=1,N 
          k = k+1
          if (wi(j).eq.0.0d0) then     !   not a complex conjugate
              do i=1,N
-                EVLR(i,k,1,1) = VL(i,j)
-                EVLR(i,k,2,1) = 0.0d0
+                EVLR(i,k,1,1) = VL(i,j) 
+                EVLR(i,k,2,1) = 0.0d0   
                 EVLR(i,k,1,2) = VR(i,j)
-                EVLR(i,k,2,2) = 0.0d0
+                EVLR(i,k,2,2) = 0.0d0  
              end do
          else if (WR(J).eq.WR(J+1) .and. WI(J).eq.-(WI(J+1))) then  ! conjugate
               kp1 = k+1
               do i=1,N
                  EVLR(i,k  ,1,1) =   VL(i,j)
-                 EVLR(i,k  ,2,1) =   VL(i,j+1)
+                 EVLR(i,k  ,2,1) =   VL(i,j+1) 
                  EVLR(i,k  ,1,2) =   VR(i,j)
                  EVLR(i,k  ,2,2) =   VR(i,j+1)
 
@@ -76,3 +76,5 @@ c
 
       return
       end
+
+

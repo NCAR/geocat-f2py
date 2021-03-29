@@ -188,7 +188,7 @@ c
       c2   = -0.5d0/sigma**2
 
 c                   delx = fspan(-1, 1, nwt)
-      delx = 2.d0/(nwt-1)
+      delx = 2.d0/(nwt-1)   
 
 c c c if (itype.eq.0) then
           x    = -(1.d0+delx)

@@ -83,7 +83,7 @@ c c c k = opt
           NCRT = MIN(4,NCRIT)
       END IF
 c                              initialize to xmsg
-      DO NG=1,NGRD
+      DO NG=1,NGRD      
          DO NY = 1,NYO
             DO NX = 1,NXO
                FO(NX,NY,NG) = XMSG
@@ -103,7 +103,7 @@ c                              people want bit-for-bit match
      +                XO(NX).LE.(XI(IX,IY)+EPS) .AND.
      +                YO(NY).GE.(YI(IX,IY)-EPS) .AND.
      +                YO(NY).LE.(YI(IX,IY)+EPS) ) THEN
-
+                    
                     DO NG=1,NGRD
                        FO(NX,NY,NG) = FI(IX,IY,NG)
                        NEXACT = NEXACT + 1
@@ -112,7 +112,7 @@ c                              people want bit-for-bit match
                  END IF
               END DO
            END DO
-
+           
  10        CONTINUE
         END DO
       END DO
@@ -173,7 +173,7 @@ c                                             nw =1 nearest neighbor
        END DO
       END DO
 
-C Since the RCM grid is curvilinear the above algorithm may not work
+C Since the RCM grid is curvilinear the above algorithm may not work 
 C .   for all of the locations on regular grid. Fill via linear interp.
 
       MKNT   =  0
@@ -362,15 +362,15 @@ c                                             nw  =1 nearest neighbor
                        END IF
                    END IF
                  END IF
-               END DO
+               END DO   
                GO TO 20
              END IF
-            END DO
-          END DO
+            END DO   
+          END DO    
 
    20         CONTINUE
-        END DO
-      END DO
+        END DO  
+      END DO   
 
       RETURN
       END

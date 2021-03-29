@@ -10,7 +10,7 @@ c                                                      INPUT
 c                                                      OUTPUT
       double precision cxy(m,m)
 C NCLEND
-c                                                      LOCAL
+c                                                      LOCAL 
       integer i, j, k
       double precision sumxx, sumyy, sumxy, sumx, sumy, nxy, xvar, yvar
 
@@ -35,23 +35,23 @@ c                                                      LOCAL
                 sumx  = sumx  + x(k,i)
                 sumy  = sumy  + y(k-lag,j)
                 sumxy = sumxy + x(k,i)*y(k-lag,j)
-                sumxx = sumxx + x(k,i)*x(k,i)
+                sumxx = sumxx + x(k,i)*x(k,i)     
                 sumyy = sumyy + y(k-lag,j)*y(k-lag,j)
             end if
           end do
           if (nxy.gt.1d0 .and. nxy.ge.ncrit) then
               cxy(i,j) = (sumxy-(sumx*sumy)/nxy)/(nxy-1d0)
 
-              if (iopt.eq.1 .and.
+              if (iopt.eq.1 .and. 
      &            sumxx.gt.0.0d0 .and. sumyy.gt.0.0d0) then
                   xvar =  (sumxx-((sumx*sumx)/(nxy)) )/(nxy-1.)
                   yvar =  (sumyy-((sumy*sumy)/(nxy)) )/(nxy-1.)
-                  cxy(i,j) = cxy(i,j)/(sqrt(xvar)*sqrt(yvar))
+                  cxy(i,j) = cxy(i,j)/(sqrt(xvar)*sqrt(yvar)) 
               end if
 
           end if
         end do
-      end do
+      end do      
 
       return
       end
