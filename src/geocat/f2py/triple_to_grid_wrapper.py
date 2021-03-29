@@ -362,10 +362,10 @@ def triple_to_grid(data,
         data = xr.DataArray(
             data.data,
             # coords={
-            #     data.dims[-1]: x_in,  # Comment
+            #     data.dims[-1]: x_in,
             #     data.dims[-2]: y_in,
             # },
-            dims=data.dims,
+            dims=data.dims,  # Comment
         ).chunk(data_chunk)
     else:
         # If an unchunked Xarray input is given, chunk it just with its dims
