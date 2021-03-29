@@ -163,10 +163,10 @@ def rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg=None, meta=False):
 
         fi = xr.DataArray(
             fi.data,
-        # coords={
-        #     fi.dims[-1]: lon2d,
-        #     fi.dims[-2]: lat2d,
-        # },
+            # coords={
+            #     fi.dims[-1]: lon2d,
+            #     fi.dims[-2]: lat2d,
+            # },
             dims=fi.dims,
         ).chunk(fi_chunk)
 

@@ -19,16 +19,16 @@ pressure_levels = np.array([
     1000., 950., 900., 850., 800., 750., 700., 650., 600., 550., 500., 450.,
     400., 350., 300., 250., 200., 175., 150., 125., 100., 80., 70., 60., 50.,
     40., 30., 25., 20., 10.
-])    # units hPa
+])  # units hPa
 # convert hPa to Pa
 pressure_levels = pressure_levels * 100.0
 
 pressure_levels_asfloat32 = pressure_levels.astype(np.float32)
 
 # Surface pressure (scalar and 2D, as well as 2D with np.nan and -99 missing values)
-pressure_surface_scalar = 101800.0    # Units of Pa
+pressure_surface_scalar = 101800.0  # Units of Pa
 pressure_surface_2d = np.array([1018.0, 1016.0, 1014.0,
-                                1012.0]).reshape(2, 2)    # Units of Pa
+                                1012.0]).reshape(2, 2)  # Units of Pa
 pressure_surface_2d = pressure_surface_2d * 100
 
 pressure_surface_2d_asfloat32 = pressure_surface_2d.astype(np.float32)

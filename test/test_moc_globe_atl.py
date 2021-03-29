@@ -13,10 +13,10 @@ else:
     from geocat.f2py import moc_globe_atl
 
 # Dimensions
-nyaux = 3    # nyaux = lat_aux_grid->shape[0]
-kdep = 4    # kdep  = a_wvel/a_bolus/a_submeso->shape[0]
-nlat = 5    # nlat  = a_wvel/a_bolus/a_submeso->shape[1] AND tlat->shape[0] AND rmlak->shape[1]
-mlon = 6    # mlon  = a_wvel/a_bolus/a_submeso->shape[2] AND tlat->shape[1] AND rmlak->shape[2]
+nyaux = 3  # nyaux = lat_aux_grid->shape[0]
+kdep = 4  # kdep  = a_wvel/a_bolus/a_submeso->shape[0]
+nlat = 5  # nlat  = a_wvel/a_bolus/a_submeso->shape[1] AND tlat->shape[0] AND rmlak->shape[1]
+mlon = 6  # mlon  = a_wvel/a_bolus/a_submeso->shape[2] AND tlat->shape[1] AND rmlak->shape[2]
 
 kdepnyaux2 = 2 * kdep * nyaux
 nlatmlon = nlat * mlon

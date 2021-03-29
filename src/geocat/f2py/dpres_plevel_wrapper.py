@@ -165,7 +165,7 @@ def _sanity_check(pressure_levels, pressure_surface, pressure_top):
         )
 
     if np.size(pressure_surface
-              ) == 1:    # if it is a scalar, then construct an xarray.dataarray
+              ) == 1:  # if it is a scalar, then construct an xarray.dataarray
         pressure_surface = np.asarray(pressure_surface)
         pressure_surface = np.ndarray([1],
                                       buffer=pressure_surface,
