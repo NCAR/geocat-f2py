@@ -362,7 +362,7 @@ def triple_to_grid(data,
         data = xr.DataArray(
             data.data,
             # coords={
-            #     data.dims[-1]: x_in,    # Comment
+            #     data.dims[-1]: x_in,  # Comment
             #     data.dims[-2]: y_in,
             # },
             dims=data.dims,
