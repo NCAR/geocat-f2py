@@ -79,34 +79,20 @@ def rcm2points(lat2d, lon2d, fi, lat1d, lon1d, opt=0, msg=None, meta=False):
     Returns
     -------
 
-<<<<<<< HEAD
         :class:`numpy.ndarray`: The interpolated grid. A multi-dimensional array
         of the same size as fi except that the rightmost dimension sizes have been
         replaced by the number of coordinate pairs (lat1dPoints, lon1dPoints).
         Double if fi is double, otherwise float.
-=======
-    	:class:`numpy.ndarray`: The interpolated grid. A multi-dimensional array
-    	of the same size as fi except that the rightmost dimension sizes have been
-    	replaced by the number of coordinate pairs (lat1dPoints, lon1dPoints).
-    	Double if fi is double, otherwise float.
->>>>>>> 09ab9753fcf8a6f478ce210b770c3643bea0d84e
 
     Description
     -----------
 
-<<<<<<< HEAD
-        Interpolates data on a curvilinear grid, such as those used by the RCM (Regional Climate Model),
-        WRF (Weather Research and Forecasting) and NARR (North American Regional Reanalysis)
-        models/datasets to an unstructured grid. All of these have latitudes that are oriented south-to-north.
-        A inverse distance squared algorithm is used to perform the interpolation.
-        Missing values are allowed and no extrapolation is performed.
-=======
-    	Interpolates data on a curvilinear grid, such as those used by the RCM (Regional Climate Model),
-    	WRF (Weather Research and Forecasting) and NARR (North American Regional Reanalysis)
-    	models/datasets to an unstructured grid. All of these have latitudes that are oriented south-to-north.
-    	A inverse distance squared algorithm is used to perform the interpolation.
-    	Missing values are allowed and no extrapolation is performed.
->>>>>>> 09ab9753fcf8a6f478ce210b770c3643bea0d84e
+        Interpolates data on a curvilinear grid, such as those used by the RCM
+        (Regional Climate Model), WRF (Weather Research and Forecasting) and NARR
+        (North American Regional Reanalysis) models/datasets to an unstructured grid.
+        All of these have latitudes that are oriented south-to-north. An inverse
+        distance squared algorithm is used to perform the interpolation. Missing
+        values are allowed and no extrapolation is performed.
     """
 
     if (lon2d is None) | (lat2d is None):
