@@ -12,3 +12,7 @@ build/
 # Sphinx documentation
 docs/_build/
 docs/autoapi/
+
+# Code coverage
+.coverage*
+coverage.xml

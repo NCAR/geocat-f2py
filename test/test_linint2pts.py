@@ -1,9 +1,16 @@
+import sys
+import unittest as ut
+from abc import ABCMeta
+
 import numpy as np
 import xarray as xr
-import geocat.f2py
 
-from abc import ABCMeta
-import unittest as ut
+# Import from directory structure if coverage test, or from installed
+# packages otherwise
+if "--cov" in str(sys.argv):
+    from src.geocat.f2py import ChunkError, CoordinateError, linint2pts
+else:
+    from geocat.f2py import ChunkError, CoordinateError, linint2pts
 
 
 class BaseTestClass(metaclass=ABCMeta):
@@ -82,12 +89,12 @@ class BaseTestClass(metaclass=ABCMeta):
 class Test_linint2pts_numpy(ut.TestCase, BaseTestClass):
 
     def test_linint2pts_fi_np(self):
-        fo = geocat.f2py.linint2pts(self._fi_np,
-                                    self._xo,
-                                    self._yo,
-                                    0,
-                                    xi=self._xi,
-                                    yi=self._yi)
+        fo = linint2pts(self._fi_np,
+                        self._xo,
+                        self._yo,
+                        0,
+                        xi=self._xi,
+                        yi=self._yi)
 
         self.assertEqual((self._shape0, self._shape1), fo.shape[:-1])
 
@@ -111,24 +118,16 @@ class Test_linint2pts_numpy(ut.TestCase, BaseTestClass):
         np.testing.assert_almost_equal(self._ncl_truth, fo_vals, decimal=5)
 
     def test_linint2pts_fi_np_no_xi_yi(self):
-        with self.assertRaises(geocat.f2py.CoordinateError):
-            fo = geocat.f2py.linint2pts(self._fi_np, self._xo, self._yo, 0)
+        with self.assertRaises(CoordinateError):
+            fo = linint2pts(self._fi_np, self._xo, self._yo, 0)
 
     def test_linint2pts_fi_np_no_yi(self):
-        with self.assertRaises(geocat.f2py.CoordinateError):
-            fo = geocat.f2py.linint2pts(self._fi_np,
-                                        self._xo,
-                                        self._yo,
-                                        0,
-                                        xi=self._xi)
+        with self.assertRaises(CoordinateError):
+            fo = linint2pts(self._fi_np, self._xo, self._yo, 0, xi=self._xi)
 
     def test_linint2pts_fi_np_no_xi(self):
-        with self.assertRaises(geocat.f2py.CoordinateError):
-            fo = geocat.f2py.linint2pts(self._fi_np,
-                                        self._xo,
-                                        self._yo,
-                                        0,
-                                        yi=self._yi)
+        with self.assertRaises(CoordinateError):
+            fo = linint2pts(self._fi_np, self._xo, self._yo, 0, yi=self._yi)
 
 
 class Test_linint2pts_non_monotonic(ut.TestCase, BaseTestClass):
@@ -143,17 +142,17 @@ class Test_linint2pts_non_monotonic(ut.TestCase, BaseTestClass):
 
         import warnings
         with self.assertWarns(Warning):
-            geocat.f2py.linint2pts(fi, self._xo, self._yo, 0).compute()
+            linint2pts(fi, self._xo, self._yo, 0).compute()
 
     def test_linint2pts_non_monotonic_np(self):
         import warnings
         with self.assertWarns(Warning):
-            geocat.f2py.linint2pts(self._fi_np[:, :, ::-1, :],
-                                   self._xo,
-                                   self._yo,
-                                   0,
-                                   xi=self._xi,
-                                   yi=self._yi_reverse)
+            linint2pts(self._fi_np[:, :, ::-1, :],
+                       self._xo,
+                       self._yo,
+                       0,
+                       xi=self._xi,
+                       yi=self._yi_reverse)
 
 
 class Test_linint2pts_float64(ut.TestCase, BaseTestClass):
@@ -166,7 +165,7 @@ class Test_linint2pts_float64(ut.TestCase, BaseTestClass):
                               'lon': self._xi
                           }).chunk(self._chunks)
 
-        fo = geocat.f2py.linint2pts(fi, self._xo, self._yo, 0)
+        fo = linint2pts(fi, self._xo, self._yo, 0)
 
         self.assertEqual((self._shape0, self._shape1), fo.shape[:-1])
 
@@ -190,11 +189,7 @@ class Test_linint2pts_float64(ut.TestCase, BaseTestClass):
                                       'lon': self._xi
                                   }).chunk(self._chunks)
 
-        fo = geocat.f2py.linint2pts(fi_msg_nan,
-                                    self._xo,
-                                    self._yo,
-                                    0,
-                                    msg_py=np.nan)
+        fo = linint2pts(fi_msg_nan, self._xo, self._yo, 0, msg_py=np.nan)
 
         self.assertEqual((self._shape0, self._shape1), fo.shape[:-1])
 
@@ -220,11 +215,11 @@ class Test_linint2pts_float64(ut.TestCase, BaseTestClass):
                                      'lon': self._xi
                                  }).chunk(self._chunks)
 
-        fo = geocat.f2py.linint2pts(fi_msg_99,
-                                    self._xo,
-                                    self._yo,
-                                    0,
-                                    msg_py=self._fi_np_msg_99[0, 0, 0, 0])
+        fo = linint2pts(fi_msg_99,
+                        self._xo,
+                        self._yo,
+                        0,
+                        msg_py=self._fi_np_msg_99[0, 0, 0, 0])
 
         self.assertEqual((self._shape0, self._shape1), fo.shape[:-1])
 
@@ -262,7 +257,7 @@ class Test_linint2pts_dask(ut.TestCase, BaseTestClass):
                               'lat': self._yi,
                               'lon': self._xi
                           }).chunk(custom_chunks)
-        fo = geocat.f2py.linint2pts(fi, self._xo, self._yo, 0)
+        fo = linint2pts(fi, self._xo, self._yo, 0)
 
         newshape = (self._shape0 * self._shape1 * self._no,)
 
@@ -282,5 +277,5 @@ class Test_linint2pts_dask(ut.TestCase, BaseTestClass):
                               'lat': self._yi,
                               'lon': self._xi
                           }).chunk(wrong_chunks)
-        with self.assertRaises(geocat.f2py.ChunkError):
-            fo = geocat.f2py.linint2pts(fi, self._xo, self._yo, 0)
+        with self.assertRaises(ChunkError):
+            fo = linint2pts(fi, self._xo, self._yo, 0)

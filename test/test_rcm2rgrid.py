@@ -1,11 +1,17 @@
-import numpy as np
-import numpy.testing as nt
-import xarray as xr
-import geocat.f2py
-
 import sys
 import time
 import unittest as ut
+
+import numpy as np
+import numpy.testing as nt
+import xarray as xr
+
+# Import from directory structure if coverage test, or from installed
+# packages otherwise
+if "--cov" in str(sys.argv):
+    from src.geocat.f2py import rcm2rgrid
+else:
+    from geocat.f2py import rcm2rgrid
 
 # nominal input
 fi_nom = np.asarray([
@@ -58,50 +64,44 @@ fo_msg_expected = np.array([
 
 # run tests
 class Test_rcm2rgrid(ut.TestCase):
-    """
-    Test_rcm2rgrid_float64
-    This unit test covers the nominal, nan, and msg cases of 64 bit float input for rcm2rgrid
-    """
+    """Test_rcm2rgrid_float64 This unit test covers the nominal, nan, and msg
+    cases of 64 bit float input for rcm2rgrid."""
 
     def test_rcm2rgrid_float64_nom(self):
         nt.assert_array_almost_equal(
             fo_nom_expected,
-            geocat.f2py.rcm2rgrid(lat2d, lon2d, fi_nom.astype(np.float64), lat,
-                                  lon))
+            rcm2rgrid(lat2d, lon2d, fi_nom.astype(np.float64), lat, lon))
 
     def test_rcm2rgrid_float64_nan(self):
         nt.assert_array_almost_equal(
             fo_nan_expected,
-            geocat.f2py.rcm2rgrid(lat2d, lon2d, fi_nan.astype(np.float64), lat,
-                                  lon))
+            rcm2rgrid(lat2d, lon2d, fi_nan.astype(np.float64), lat, lon))
 
     def test_rcm2rgrid_float64_msg(self):
-        fo = geocat.f2py.rcm2rgrid(lat2d,
-                                   lon2d,
-                                   fi_msg.astype(np.float64),
-                                   lat,
-                                   lon,
-                                   msg=msg64)
+        fo = rcm2rgrid(lat2d,
+                       lon2d,
+                       fi_msg.astype(np.float64),
+                       lat,
+                       lon,
+                       msg=msg64)
         nt.assert_array_almost_equal(fo_msg_expected, fo)
 
     def test_rcm2rgrid_float32_nom(self):
         nt.assert_array_almost_equal(
             fo_nom_expected,
-            geocat.f2py.rcm2rgrid(lat2d, lon2d, fi_nom.astype(np.float32), lat,
-                                  lon))
+            rcm2rgrid(lat2d, lon2d, fi_nom.astype(np.float32), lat, lon))
 
     def test_rcm2rgrid_float32_nan(self):
         nt.assert_array_almost_equal(
             fo_nan_expected,
-            geocat.f2py.rcm2rgrid(lat2d, lon2d, fi_nan.astype(np.float32), lat,
-                                  lon))
+            rcm2rgrid(lat2d, lon2d, fi_nan.astype(np.float32), lat, lon))
 
     def test_rcm2rgrid_float32_msg(self):
         nt.assert_array_almost_equal(
             fo_msg_expected,
-            geocat.f2py.rcm2rgrid(lat2d,
-                                  lon2d,
-                                  fi_msg.astype(np.float32),
-                                  lat,
-                                  lon,
-                                  msg=msg32))
+            rcm2rgrid(lat2d,
+                      lon2d,
+                      fi_msg.astype(np.float32),
+                      lat,
+                      lon,
+                      msg=msg32))

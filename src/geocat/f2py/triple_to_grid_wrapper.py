@@ -1,13 +1,13 @@
+import warnings
+
 import numpy as np
 import xarray as xr
-import warnings
 from dask.array.core import map_blocks
 
+from .errors import ChunkError, CoordinateError, DimensionError
 from .fortran import grid2triple as grid2triple_fort
-from .fortran import (triple2grid1)
-
-from .errors import (ChunkError, CoordinateError, DimensionError)
-from .missing_values import (fort2py_msg, py2fort_msg)
+from .fortran import triple2grid1
+from .missing_values import fort2py_msg, py2fort_msg
 
 # Dask Wrappers or Internal Wrappers _<funcname>()
 # These Wrapper are executed within dask processes, and should do anything that
@@ -89,9 +89,9 @@ def _triple_to_grid_2d(x_in, y_in, data, x_out, y_out, msg_py):
 
 
 def grid_to_triple(data, x_in=None, y_in=None, msg_py=None):
-    """
-    Converts a two-dimensional grid with one-dimensional coordinate variables
-    to an array where each grid value is associated with its coordinates.
+    """Converts a two-dimensional grid with one-dimensional coordinate
+    variables to an array where each grid value is associated with its
+    coordinates.
 
     Parameters
     ----------
@@ -152,7 +152,7 @@ def grid_to_triple(data, x_in=None, y_in=None, msg_py=None):
             y_in = ds.gridlon_236[:]
 
             output = geocat.comp.grid_to_triple(data, x_in, y_in)
-        """
+    """
 
     # TODO: Will need to be revisited after sanity_check work is finished
 
@@ -218,8 +218,8 @@ def triple_to_grid(data,
                    distmx=None,
                    missing_value=np.nan,
                    meta=False):
-    """
-    Places unstructured (randomly-spaced) data onto the nearest locations of a rectilinear grid.
+    """Places unstructured (randomly-spaced) data onto the nearest locations of
+    a rectilinear grid.
 
     Parameters
     ----------
@@ -337,12 +337,12 @@ def triple_to_grid(data,
 
 
         # [OUTPUT] Grid on destination points grid (or read the 1D lat and lon from
-        #	       an other .nc file.
+        #              an other .nc file.
         newlat1D_points=np.linspace(lat2D_curv.min(), lat2D_curv.max(), 100)
         newlon1D_points=np.linspace(lon2D_curv.min(), lon2D_curv.max(), 100)
 
         output = geocat.comp.triple_to_grid(data, x_out, y_out, x_in, y_in)
-        """
+    """
 
     # TODO: May need to be revisited after sanity_check work is finished
 
@@ -365,7 +365,7 @@ def triple_to_grid(data,
             #     data.dims[-1]: x_in,
             #     data.dims[-2]: y_in,
             # },
-            dims=data.dims,
+            dims=data.dims,  # Comment
         ).chunk(data_chunk)
     else:
         # If an unchunked Xarray input is given, chunk it just with its dims

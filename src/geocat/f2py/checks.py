@@ -1,6 +1,6 @@
-import xarray as xr
-import numpy as np
 import dask as da
+import numpy as np
+import xarray as xr
 
 
 def check(user_variable,
@@ -17,8 +17,7 @@ def check(user_variable,
           comparison=None,
           unchunked_dims=None,
           exceptions=True):
-    '''
-    Function of data checks for use in wrapper functions.
+    """Function of data checks for use in wrapper functions.
 
     user_variable : :class:`xarray.DataArray` or :class:`numpy.ndarray`:
         Variable of interest
@@ -70,7 +69,7 @@ def check(user_variable,
     is_chunked : :class:`bool`:
         Checks whether variable is chunked
         Valid input is True or False
-    '''
+    """
     return_value = True
 
     if data_type is not None:

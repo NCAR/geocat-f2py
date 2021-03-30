@@ -1,9 +1,16 @@
+import sys
 import unittest as ut
-import numpy as np
-import xarray as xr
-import numpy.testing as nt
 
-import geocat.f2py
+import numpy as np
+import numpy.testing as nt
+import xarray as xr
+
+# Import from directory structure if coverage test, or from installed
+# packages otherwise
+if "--cov" in str(sys.argv):
+    from src.geocat.f2py import moc_globe_atl
+else:
+    from geocat.f2py import moc_globe_atl
 
 # Dimensions
 nyaux = 3  # nyaux = lat_aux_grid->shape[0]
@@ -65,70 +72,64 @@ class Test_Moc_Globe_Atl(ut.TestCase):
 
     def test_moc_globe_atl_float64(self):
 
-        out_arr = geocat.f2py.moc_globe_atl(lat_aux_grid,
-                                            tmp_a.astype(np.float64),
-                                            tmp_a.astype(np.float64),
-                                            tmp_a.astype(np.float64), t_lat,
-                                            rmlak)
+        out_arr = moc_globe_atl(lat_aux_grid, tmp_a.astype(np.float64),
+                                tmp_a.astype(np.float64),
+                                tmp_a.astype(np.float64), t_lat, rmlak)
 
         nt.assert_array_almost_equal(ncl_truth, out_arr)
         nt.assert_equal((3, 2, kdep, nyaux), out_arr.shape)
 
     def test_moc_globe_atl_float64_xr(self):
 
-        out_arr = geocat.f2py.moc_globe_atl(
-            xr.DataArray(lat_aux_grid), xr.DataArray(tmp_a.astype(np.float64)),
-            xr.DataArray(tmp_a.astype(np.float64)),
-            xr.DataArray(tmp_a.astype(np.float64)), xr.DataArray(t_lat),
-            xr.DataArray(rmlak))
+        out_arr = moc_globe_atl(xr.DataArray(lat_aux_grid),
+                                xr.DataArray(tmp_a.astype(np.float64)),
+                                xr.DataArray(tmp_a.astype(np.float64)),
+                                xr.DataArray(tmp_a.astype(np.float64)),
+                                xr.DataArray(t_lat), xr.DataArray(rmlak))
 
         nt.assert_array_almost_equal(ncl_truth, out_arr)
         nt.assert_equal((3, 2, kdep, nyaux), out_arr.shape)
 
     def test_moc_globe_atl_float32(self):
 
-        out_arr = geocat.f2py.moc_globe_atl(lat_aux_grid,
-                                            tmp_a.astype(np.float32),
-                                            tmp_a.astype(np.float32),
-                                            tmp_a.astype(np.float32), t_lat,
-                                            rmlak)
+        out_arr = moc_globe_atl(lat_aux_grid, tmp_a.astype(np.float32),
+                                tmp_a.astype(np.float32),
+                                tmp_a.astype(np.float32), t_lat, rmlak)
 
         nt.assert_array_almost_equal(ncl_truth, out_arr)
         nt.assert_equal((3, 2, kdep, nyaux), out_arr.shape)
 
     def test_moc_globe_atl_int64(self):
 
-        out_arr = geocat.f2py.moc_globe_atl(lat_aux_grid,
-                                            tmp_a.astype(np.int64),
-                                            tmp_a.astype(np.int64),
-                                            tmp_a.astype(np.int64), t_lat,
-                                            rmlak)
+        out_arr = moc_globe_atl(lat_aux_grid, tmp_a.astype(np.int64),
+                                tmp_a.astype(np.int64), tmp_a.astype(np.int64),
+                                t_lat, rmlak)
 
         nt.assert_array_almost_equal(ncl_truth, out_arr)
         nt.assert_equal((3, 2, kdep, nyaux), out_arr.shape)
 
     def test_moc_globe_atl_msg_99(self):
 
-        out_arr = geocat.f2py.moc_globe_atl(lat_aux_grid,
-                                            tmp_a_msg,
-                                            tmp_a_msg,
-                                            tmp_a_msg,
-                                            t_lat,
-                                            rmlak,
-                                            msg=-99)
+        out_arr = moc_globe_atl(lat_aux_grid,
+                                tmp_a_msg,
+                                tmp_a_msg,
+                                tmp_a_msg,
+                                t_lat,
+                                rmlak,
+                                msg=-99)
 
         nt.assert_array_almost_equal(ncl_truth_msg, out_arr)
         nt.assert_equal((3, 2, kdep, nyaux), out_arr.shape)
 
     def test_moc_globe_atl_msg_nan(self):
 
-        out_arr = geocat.f2py.moc_globe_atl(lat_aux_grid,
-                                            tmp_a_nan,
-                                            tmp_a_nan,
-                                            tmp_a_nan,
-                                            t_lat,
-                                            rmlak,
-                                            msg=np.nan)
+        out_arr = moc_globe_atl(lat_aux_grid,
+                                tmp_a_nan,
+                                tmp_a_nan,
+                                tmp_a_nan,
+                                t_lat,
+                                rmlak,
+                                msg=np.nan)
 
         nt.assert_array_almost_equal(ncl_truth_msg, out_arr)
         nt.assert_equal((3, 2, kdep, nyaux), out_arr.shape)

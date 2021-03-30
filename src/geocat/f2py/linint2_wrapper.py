@@ -1,10 +1,12 @@
+import warnings
+
 import numpy as np
 import xarray as xr
-import warnings
 from dask.array.core import map_blocks
-from .errors import (ChunkError, CoordinateError)
-from .fortran import (dlinint1, dlinint2, dlinint2pts)
-from .missing_values import (fort2py_msg, py2fort_msg)
+
+from .errors import ChunkError, CoordinateError
+from .fortran import dlinint1, dlinint2, dlinint2pts
+from .missing_values import fort2py_msg, py2fort_msg
 
 # Dask Wrappers _<funcname>()
 # These Wrapper are executed within dask processes, and should do anything that
@@ -166,8 +168,7 @@ def linint1(fi, xo, xi=None, icycx=0, msg_py=None):
 
 
 def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, msg_py=None):
-    """
-    Interpolates a regular grid to a rectilinear one using bi-linear
+    """Interpolates a regular grid to a rectilinear one using bi-linear
     interpolation.
     linint2 uses bilinear interpolation to interpolate from one
     rectilinear grid to another. The input grid may be cyclic in the x
@@ -372,8 +373,9 @@ def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, msg_py=None):
 
 
 def linint2pts(fi, xo, yo, icycx=False, msg_py=None, xi=None, yi=None):
-    """
-    Interpolates from a rectilinear grid to an unstructured grid or locations using bilinear interpolation.
+    """Interpolates from a rectilinear grid to an unstructured grid or
+    locations using bilinear interpolation.
+
     Parameters
     ----------
     fi : :class:`xarray.DataArray` or :class:`numpy.ndarray`:
