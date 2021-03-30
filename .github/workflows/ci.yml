@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ "ubuntu-latest", "macos-latest"]
+        os: [ "ubuntu-latest", "macos-latest", "windows-latest"]
         python-version: [ "3.6", "3.7", "3.8", "3.9" ]
 
     steps:
@@ -45,6 +45,10 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           conda install numpy=1.19 xarray dask pytest pytest-cov gfortran_linux-64 liblapack
+      - name: Conda install (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          conda install numpy=1.19 xarray dask pytest pytest-cov m2w64-gcc-libgfortran liblapack
       - name: Install geocat-f2py
         run: |
           source build.sh
