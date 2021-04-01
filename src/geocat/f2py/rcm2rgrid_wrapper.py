@@ -174,6 +174,9 @@ def rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg=None, meta=False):
     # lat2d = fi.coords[fi.dims[-2]]
 
     # ensure rightmost dimensions of input are not chunked
+    if fi.chunks == None:
+        fi.chunk()
+
     if list(fi.chunks)[-2:] != [(lat2d.shape[0],), (lat2d.shape[1],)]:
         # [(lon2d.shape[0]), (lon2d.shape[1])] would also be used
         raise ChunkError(
@@ -337,6 +340,9 @@ def rgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, msg=None, meta=False):
     lat1d = fi.coords[fi.dims[-2]]
 
     # ensure rightmost dimensions of input are not chunked
+    if fi.chunks == None:
+        fi.chunk()
+
     if list(fi.chunks)[-2:] != [lat1d.shape, lon1d.shape]:
         raise Exception("fi must be unchunked along the last two dimensions")
 
