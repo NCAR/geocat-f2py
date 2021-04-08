@@ -3,6 +3,7 @@
 | **Docs**     |                                                                    [![Documentation Status][rtd-badge]][rtd-link]                                                                    |
 | **Package**  |                                                         [![Conda][conda-badge]][conda-link] [![PyPI][pypi-badge]][pypi-link]                                                         |
 | **License**  |                                                                        [![License][license-badge]][repo-link]                                                                        |
+| **Citing**  |                                                                              [![DOI][doi-badge]][doi-link]                                                                            |
 
 
 GeoCAT-comp is both the whole computational component of the [GeoCAT](https://geocat.ucar.edu/)
@@ -59,6 +60,31 @@ the gap between NumPy arrays and the compiled language data structures. These fu
 accessible under the `geocat.comp.f2py` namespace, but are minimally documented and are
 intended primarily for internal use.
 
+# Citing GeoCAT-f2py
+
+NOTE: If you used GeoCAT-f2py through GeoCAT-comp, it is recommended that you cite GeoCAT-comp. Please
+refer to [GeoCAT-comp README](https://github.com/NCAR/geocat-comp#readme) for that purpose or
+[GeoCAT Citation page](https://geocat.ucar.edu/pages/citation.html) for general information about
+citing GeoCAT software packages.
+
+Hiwever, if you used GeoCAT-f2py as a standalomne software tool, cite GeoCAT-f2py using the following
+text:
+
+<> Visualization & Analysis Systems Technologies. (Year).
+Geoscience Community Analysis Toolkit (GeoCAT-f2py version \<version\>) [Software].
+Boulder, CO: UCAR/NCAR - Computational and Informational System Lab. doi:10.5065/A8PP-4358.
+
+Update the GeoCAT-f2py version and year as appropriate. For example:
+
+<> Visualization & Analysis Systems Technologies. (2021).
+Geoscience Community Analysis Toolkit (GeoCAT-f2py version 2021.04.0) [Software].
+Boulder, CO: UCAR/NCAR - Computational and Informational System Lab. doi:10.5065/A8PP-4358.
+
+For further information, please refer to [GeoCAT homepage](https://geocat.ucar.edu/pages/citation.html)
+
+
+
+
 
 [github-ci-badge]: https://img.shields.io/github/workflow/status/NCAR/geocat-f2py/CI?label=CI&logo=github&style=for-the-badge
 [github-conda-build-badge]: https://img.shields.io/github/workflow/status/NCAR/geocat-f2py/build_test?label=conda-builds&logo=github&style=for-the-badge
@@ -73,4 +99,6 @@ intended primarily for internal use.
 [conda-badge]: https://img.shields.io/conda/vn/ncar/geocat-f2py?logo=anaconda&style=for-the-badge
 [conda-link]: https://anaconda.org/ncar/geocat-f2py
 [license-badge]: https://img.shields.io/github/license/NCAR/geocat-f2py?style=for-the-badge
+[doi-badge]: https://img.shields.io/badge/DOI-10.5065/a8pp-4358
+[doi-link]: https://doi.org/10.5065/a8pp-4358
 [repo-link]: https://github.com/NCAR/geocat-f2py
