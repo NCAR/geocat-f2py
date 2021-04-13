@@ -32,6 +32,7 @@ themselves with GeoCAT-f2py.
    ./installation
    ./api
    ./examples
+   ./citation
    ./support
 
 
