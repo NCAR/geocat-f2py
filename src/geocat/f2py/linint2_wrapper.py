@@ -98,9 +98,7 @@ def _linint2pts(xi, yi, fi, xo, yo, icycx, msg_py, shape):
 
 def linint1(fi, xo, xi=None, icycx=0, msg_py=None):
     # ''' signature : fo = dlinint1(xi,fi,xo,[icycx,xmsg,iopt])
-
-    """
-    Interpolates from one series to another using piecewise linear
+    """Interpolates from one series to another using piecewise linear
     interpolation across the rightmost dimension.
 
     linint1 uses piecewise linear interpolation to interpolate from
@@ -150,12 +148,12 @@ def linint1(fi, xo, xi=None, icycx=0, msg_py=None):
         An array that specifies the X coordinates of the fi array.
         Most frequently, this array is one-dimensional.  It must be
         strictly monotonically increasing or decreasing, but can be
-        unequally spaced. 
+        unequally spaced.
         If xi is multi-dimensional, then its
         dimensions must be the same as fi's dimensions. If it is
         one-dimensional, its length must be the same as the rightmost
         (fastest varying) dimension of fi.
-        
+
         Note:
             If fi is of type :class:`xarray.DataArray` and xi is
             left unspecified, then the rightmost coordinate
@@ -489,7 +487,6 @@ def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, msg_py=None):
 
 
 def linint2pts(fi, xo, yo, icycx=False, msg_py=None, xi=None, yi=None):
-
     """Interpolates from a rectilinear grid to an unstructured grid or
     locations using bilinear interpolation.
 
@@ -589,7 +586,7 @@ def linint2pts(fi, xo, yo, icycx=False, msg_py=None, xi=None, yi=None):
     """
 
     # ''' Start of boilerplate
-    # If a Numpy input is given, convert it to Xarray and chunk it just 
+    # If a Numpy input is given, convert it to Xarray and chunk it just
     # with its dims
     if not isinstance(fi, xr.DataArray):
         if (xi is None) | (yi is None):
