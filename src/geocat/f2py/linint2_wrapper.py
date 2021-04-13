@@ -379,7 +379,9 @@ def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, msg_py=None):
     Returns
     -------
     fo : :class:`xarray.DataArray`:
-        The interpolated grid. The returned value will have the same
+        The interpolated grid. If the *meta*
+        parameter is True, then the result will include named dimensions
+        matching the input array. The returned value will have the same
         dimensions as fi, except for the rightmost two dimensions which
         will have the same dimension sizes as the lengths of yo and xo.
         The return type will be double if fi is double, and float
