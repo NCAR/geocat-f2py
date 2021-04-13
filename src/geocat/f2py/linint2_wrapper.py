@@ -99,6 +99,118 @@ def _linint2pts(xi, yi, fi, xo, yo, icycx, msg_py, shape):
 def linint1(fi, xo, xi=None, icycx=0, msg_py=None):
     # ''' signature : fo = dlinint1(xi,fi,xo,[icycx,xmsg,iopt])
 
+    """
+    Interpolates from one series to another using piecewise linear
+    interpolation across the rightmost dimension.
+
+    linint1 uses piecewise linear interpolation to interpolate from
+    one series to another.  The series may be cyclic in the X
+    direction.
+
+    If missing values are present, then linint1 will perform the
+    piecewise linear interpolation at all points possible, but
+    will return missing values at coordinates which could not
+    be used.
+
+    If any of the output coordinates xo are outside those of the
+    input coordinates xi, the fo values at those coordinates will
+    be set to missing (i.e. no extrapolation is performed).
+
+
+    Parameters
+    ----------
+
+    fi : :class:`xarray.DataArray` or :class:`numpy.ndarray`:
+        An array of one or more dimensions. If xi is passed in as an
+        argument, then the size of the rightmost dimension of fi
+        must match the rightmost dimension of xi.
+
+        If missing values are present, then linint1 will perform the
+        piecewise linear interpolation at all points possible, but
+        will return missing values at coordinates which could not be
+        used.
+
+        Note:
+            This variable must be
+            supplied as a :class:`xarray.DataArray` in order to copy
+            the dimension names to the output. Otherwise, default
+            names will be used.
+
+    xo : :class:`xarray.DataArray` or :class:`numpy.ndarray`:
+        A one-dimensional array that specifies the X coordinates of
+        the return array. It must be strictly monotonically
+        increasing or decreasing, but may be unequally spaced.
+
+        If the output coordinates (xo) are outside those of the
+        input coordinates (xi), then the fo values at those
+        coordinates will be set to missing (i.e. no extrapolation is
+        performed).
+
+    xi (:class:`numpy.ndarray`):
+        An array that specifies the X coordinates of the fi array.
+        Most frequently, this array is one-dimensional.  It must be
+        strictly monotonically increasing or decreasing, but can be
+        unequally spaced. 
+        If xi is multi-dimensional, then its
+        dimensions must be the same as fi's dimensions. If it is
+        one-dimensional, its length must be the same as the rightmost
+        (fastest varying) dimension of fi.
+        
+        Note:
+            If fi is of type :class:`xarray.DataArray` and xi is
+            left unspecified, then the rightmost coordinate
+            dimension of fi will be used. If fi is not of type
+            :class:`xarray.DataArray`, then xi becomes a mandatory
+            parameter. This parameter must be specified as a keyword
+            argument.
+
+    icycx : :obj:`bool`:
+        An option to indicate whether the rightmost dimension of fi
+        is cyclic. This should be set to True only if you have
+        global data, but your longitude values don't quite wrap all
+        the way around the globe. For example, if your longitude
+        values go from, say, -179.75 to 179.75, or 0.5 to 359.5,
+        then you would set this to True.
+
+    msg_py : :obj:`numpy.number`:
+        A numpy scalar value that represent a missing value in fi.
+        This argument allows a user to use a missing value scheme
+        other than NaN or masked arrays, similar to what NCL allows.
+
+    Returns
+    -------
+    fo : :class:`xarray.DataArray`:
+        The interpolated series. The returned value will have the same
+        dimensions as fi, except for the rightmost dimension which
+        will have the same dimension size as the length of xo.
+        The return type will be double if fi is double, and float
+        otherwise.
+
+    Examples
+    --------
+
+    Example 1: Using linint1 with :class:`xarray.DataArray` input
+    .. code-block:: python
+        import numpy as np
+        import xarray as xr
+        import geocat.comp
+        fi_np = np.random.rand(80)  # random 80-element array
+        # xi does not have to be equally spaced, but it is
+        # in this example
+        xi = np.arange(80)
+        # create target coordinate array, in this case use the same
+        # min/max values as xi, but with different spacing
+        xo = np.linspace(xi.min(), xi.max(), 100)
+        # create :class:`xarray.DataArray` and chunk it using the
+        # full shape of the original array.
+        # note that xi is attached as a coordinate array
+        fi = xr.DataArray(fi_np,
+                          dims=['x'],
+                          coords={'x': xi}
+                         ).chunk(fi_np.shape)
+        fo = geocat.comp.linint1(fi, xo, icycx=0)
+    """
+
     # ''' Start of boilerplate
     if not isinstance(fi, xr.DataArray):
         if (xi is None):
@@ -269,9 +381,7 @@ def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, msg_py=None):
     Returns
     -------
     fo : :class:`xarray.DataArray`:
-        The interpolated grid. If the *meta*
-        parameter is True, then the result will include named dimensions
-        matching the input array. The returned value will have the same
+        The interpolated grid. The returned value will have the same
         dimensions as fi, except for the rightmost two dimensions which
         will have the same dimension sizes as the lengths of yo and xo.
         The return type will be double if fi is double, and float
@@ -379,6 +489,7 @@ def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, msg_py=None):
 
 
 def linint2pts(fi, xo, yo, icycx=False, msg_py=None, xi=None, yi=None):
+
     """Interpolates from a rectilinear grid to an unstructured grid or
     locations using bilinear interpolation.
 
@@ -446,9 +557,11 @@ def linint2pts(fi, xo, yo, icycx=False, msg_py=None, xi=None, yi=None):
         also different in the dimensioning of the return array.
         This function could be used if the user wanted to interpolate gridded
         data to, say, the location of rawinsonde sites or buoy/xbt locations.
+
         Warning: if `xi` contains longitudes, then the `xo` values must be in the
         same range. In addition, if the `xi` values span 0 to 360, then the `xo`
         values must also be specified in this range (i.e. -180 to 180 will not work).
+
     Examples
     --------
     Example 1: Using linint2pts with :class:`xarray.DataArray` input
@@ -476,7 +589,8 @@ def linint2pts(fi, xo, yo, icycx=False, msg_py=None, xi=None, yi=None):
     """
 
     # ''' Start of boilerplate
-    # If a Numpy input is given, convert it to Xarray and chunk it just with its dims
+    # If a Numpy input is given, convert it to Xarray and chunk it just 
+    # with its dims
     if not isinstance(fi, xr.DataArray):
         if (xi is None) | (yi is None):
             raise CoordinateError(
