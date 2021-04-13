@@ -99,6 +99,6 @@ For further information, please refer to [GeoCAT homepage](https://geocat.ucar.e
 [conda-badge]: https://img.shields.io/conda/vn/ncar/geocat-f2py?logo=anaconda&style=for-the-badge
 [conda-link]: https://anaconda.org/ncar/geocat-f2py
 [license-badge]: https://img.shields.io/github/license/NCAR/geocat-f2py?style=for-the-badge
-[doi-badge]: https://img.shields.io/badge/DOI-10.5065/a8pp-4358
+[doi-badge]: https://img.shields.io/badge/DOI-10.5065%2Fa8pp--4358-brightgreen?style=for-the-badge
 [doi-link]: https://doi.org/10.5065/a8pp-4358
 [repo-link]: https://github.com/NCAR/geocat-f2py
