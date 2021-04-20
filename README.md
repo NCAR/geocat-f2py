@@ -67,7 +67,7 @@ refer to [GeoCAT-comp README](https://github.com/NCAR/geocat-comp#readme) for th
 [GeoCAT Citation page](https://geocat.ucar.edu/pages/citation.html) for general information about
 citing GeoCAT software packages.
 
-Hiwever, if you used GeoCAT-f2py as a standalomne software tool, cite GeoCAT-f2py using the following
+However, if you used GeoCAT-f2py as a standalone software tool, cite GeoCAT-f2py using the following
 text:
 
 <> Visualization & Analysis Systems Technologies. (Year).

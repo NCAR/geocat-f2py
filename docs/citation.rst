@@ -4,7 +4,14 @@ Citation
 How to cite GeoCAT-f2py
 -----------------------
 
-Cite GeoCAT-f2py using the following text:
+NOTE: If you used GeoCAT-f2py through GeoCAT-comp, it is recommended that you cite GeoCAT-comp.
+Please refer to
+`GeoCAT-comp Citation <https://geocat-comp.readthedocs.io/en/latest/citation.html>`_
+for that purpose or
+`GeoCAT Citation page <https://geocat.ucar.edu/pages/citation.html>`_ for general
+information about citing GeoCAT software packages.
+
+However, if you used GeoCAT-f2py as a standalone software tool, cite GeoCAT-f2py using the following text:
 
 **Visualization & Analysis Systems Technologies. (Year).
 Geoscience Community Analysis Toolkit (GeoCAT-f2py version \<version\>) [Software].
