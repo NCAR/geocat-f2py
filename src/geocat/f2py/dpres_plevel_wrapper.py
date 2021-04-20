@@ -1,7 +1,9 @@
+import warnings
+
 import numpy as np
 import xarray as xr
 
-from .errors import AttributeError, DimensionError, MetaError
+from .errors import AttributeError, DimensionError
 from .fortran import dpresplvl
 from .missing_values import fort2py_msg, py2fort_msg
 
@@ -111,13 +113,13 @@ def dpres_plevel(pressure_levels,
         dp = dp.reshape(dp.shape[0] * dp.shape[1], dp.shape[2], dp.shape[3])
 
     if meta:
-        raise MetaError(
-            "ERROR dpres_plevel: Retention of metadata (other than Xarray.Dataarray.attrs) is not yet supported !"
-        )
-
         # TODO: Retaining possible metadata might be revised in the future
-    else:
-        dp = xr.DataArray(dp, attrs=pressure_surface.attrs)
+        warnings.warn(
+            "dpres_plevel: Retention of metadata (other than Xarray.Dataarray.attrs)"
+            "is not yet supported, so it will be ignred in the output! ",
+            Warning)
+
+    dp = xr.DataArray(dp, attrs=pressure_surface.attrs)
 
     return dp
 
@@ -196,8 +198,10 @@ def _sanity_check(pressure_levels, pressure_surface, pressure_top):
 
     if isinstance(pressure_top, np.ndarray) or isinstance(
             pressure_top, xr.DataArray):
-        raise DimensionError(
-            "ERROR dpres_plevel: The 'pressure_top' value must be a scalar !")
+        if pressure_top.size > 1:
+            raise DimensionError(
+                "ERROR dpres_plevel: The 'pressure_top' value must be a scalar !"
+            )
 
     pressure_level_min = np.min(pressure_levels.values)
     if pressure_top is None:

@@ -9,9 +9,9 @@ import xarray as xr
 # Import from directory structure if coverage test, or from installed
 # packages otherwise
 if "--cov" in str(sys.argv):
-    from src.geocat.f2py import dpres_plevel
+    from src.geocat.f2py import DimensionError, dpres_plevel
 else:
-    from geocat.f2py import dpres_plevel
+    from geocat.f2py import DimensionError, dpres_plevel
 
 # Expected Output
 # Pressure levels (Pa)
@@ -128,6 +128,33 @@ class Test_dpres_plevel_float64_psfc_2d(ut.TestCase):
                                  pressure_surface_2d_msg,
                                  msg_py=-99.0)
         nt.assert_array_equal(expected_dp_psfc_2d_msg_99, result_dp.values)
+
+    def test_dpres_plevel_float64_meta_warning(self):
+
+        with nt.assert_warns(Warning):
+            result_dp = dpres_plevel(pressure_levels,
+                                     pressure_surface_2d_nan,
+                                     meta=True)
+
+        nt.assert_array_equal(expected_dp_psfc_2d_msg_nan, result_dp.values)
+
+    def test_pressure_levels_dim_error(self):
+
+        with nt.assert_raises(DimensionError):
+            result_dp = dpres_plevel(pressure_levels.reshape(2, 15),
+                                     pressure_surface_2d_nan)
+
+    def test_pressure_surface_dim_error(self):
+
+        with nt.assert_raises(DimensionError):
+            result_dp = dpres_plevel(pressure_levels,
+                                     pressure_surface_2d.reshape(2, 2, 1, 1))
+
+    def test_pressure_top_not_scalar_error(self):
+
+        with nt.assert_raises(DimensionError):
+            result_dp = dpres_plevel(pressure_levels,
+                                     pressure_surface_2d.reshape(2, 2, 1, 1))
 
 
 class Test_dpres_plevel_float32_psfc_scalar(ut.TestCase):

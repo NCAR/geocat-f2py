@@ -11,7 +11,8 @@ for that purpose or
 `GeoCAT Citation page <https://geocat.ucar.edu/pages/citation.html>`_ for general
 information about citing GeoCAT software packages.
 
-However, if you used GeoCAT-f2py as a standalone software tool, cite GeoCAT-f2py using the following text:
+However, if you used GeoCAT-f2py as a standalone software tool, cite GeoCAT-f2py using the
+following text:
 
 **Visualization & Analysis Systems Technologies. (Year).
 Geoscience Community Analysis Toolkit (GeoCAT-f2py version \<version\>) [Software].
