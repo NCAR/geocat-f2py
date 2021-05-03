@@ -1,4 +1,4 @@
-{% set version = "2021.04.0" %}
+{% set version = "2021.05.0" %}
 
 package:
   name: 'geocat-f2py'
@@ -19,13 +19,13 @@ requirements:
     - python
     - pip
     - setuptools
-    - numpy=1.19
+    - numpy=
     - {{ compiler('fortran') }}
   run:
     - python
     - xarray
     - dask
-    - numpy=1.19
+    - numpy
     - {{ compiler('fortran') }}
 
 test:
