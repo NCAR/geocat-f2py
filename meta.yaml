@@ -19,13 +19,13 @@ requirements:
     - python
     - pip
     - setuptools
-    - numpy=
+    - numpy>=1.20.2
     - {{ compiler('fortran') }}
   run:
     - python
     - xarray
     - dask
-    - numpy
+    - numpy>=1.20.2
     - {{ compiler('fortran') }}
 
 test:
