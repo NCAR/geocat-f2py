@@ -7,7 +7,7 @@ dependencies:
   - dask
   - gfortran_linux-64
   - liblapack
-  - numpy=1.19
+  - numpy>=1.20.2
   - pip
   - pytest  # for tests
   - pytest-cov  # for tests
