@@ -6,7 +6,6 @@ dependencies:
   - python
   - dask
   - gfortran_linux-64
-  - liblapack
   - numpy>=1.20.2
   - pip
   - pytest  # for tests
