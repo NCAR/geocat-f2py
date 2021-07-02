@@ -27,9 +27,9 @@ setup(name='geocat.f2py',
       maintainer_email='geocat@ucar.edu',
       python_requires='>=3.6',
       install_requires=requirements,
-      description="""GeoCAT-f2py wraps, in Python, the compiled language
+      description='''GeoCAT-f2py wraps, in Python, the compiled language
     implementations of some of the computational functions found under the
-    GeoCAT-comp umbrella.""",
+    GeoCAT-comp umbrella.''',
       long_description=long_description,
       long_description_content_type='text/markdown',
       classifiers=[
