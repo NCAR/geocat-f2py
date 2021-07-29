@@ -55,7 +55,7 @@ installed.
 
 ### Required dependencies for building GeoCAT-f2py
 
-- Python 3.6+
+- Python 3.7+
 - numpy
 - [xarray](http://xarray.pydata.org/en/stable/)
 - [dask](https://dask.org/)
