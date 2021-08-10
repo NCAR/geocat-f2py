@@ -3,7 +3,7 @@ import numpy as np
 #all missing values are represented by all 1's in their dtype, int8 would be bin_11111111 or dec_-128
 
 msg_dtype = {
-    np.str: np.str(''),
+    np.str_: np.str_(''),
     np.int8: np.int8(np.iinfo(np.int8).min),
     np.int16: np.int16(np.iinfo(np.int16).min),
     np.int32: np.int32(np.iinfo(np.int32).min),
