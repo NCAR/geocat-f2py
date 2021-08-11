@@ -40,11 +40,11 @@ jobs:
       - name: Conda install (Darwin)
         if: matrix.os == 'macos-latest'
         run: |
-          conda install numpy=1.19 xarray dask pytest pytest-cov gfortran_osx-64 liblapack
+          conda env create --file build_envs/environment_Darwin.yml
       - name: Conda install (Linux)
         if: matrix.os == 'ubuntu-latest'
         run: |
-          conda install numpy=1.19 xarray dask pytest pytest-cov gfortran_linux-64 liblapack
+          conda env create --file build_envs/environment_Linux.yml
       - name: Install geocat-f2py
         run: |
           source build.sh
