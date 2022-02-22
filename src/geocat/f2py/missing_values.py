@@ -3,7 +3,7 @@ import numpy as np
 #all missing values are represented by all 1's in their dtype, int8 would be bin_11111111 or dec_-128
 
 msg_dtype = {
-    np.str: np.str(''),
+    str: str(''),
     np.int8: np.int8(np.iinfo(np.int8).min),
     np.int16: np.int16(np.iinfo(np.int16).min),
     np.int32: np.int32(np.iinfo(np.int32).min),
@@ -22,7 +22,7 @@ supported_dtypes = msg_dtype.keys()
 float_dtypes = [np.float32, np.float64, np.float128]
 int_dtypes = [np.int8, np.int16, np.int32, np.int64]
 uint_dtypes = [np.uint8, np.uint16, np.uint32, np.uint64]
-string_dtypes = [np.str]
+string_dtypes = [str]
 
 
 # python to fortran
