@@ -1,4 +1,5 @@
 import numpy as np
+import typing
 import xarray as xr
 from dask.array.core import map_blocks
 
@@ -227,31 +228,40 @@ def rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg=None, meta=False):
     return fo
 
 
-def rgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, msg=None, meta=False):
+def rgrid2rcm(lat1d: typing.Union[xr.DataArray, np.ndarray],
+              lon1d: typing.Union[xr.DataArray, np.ndarray],
+              fi: typing.Union[xr.DataArray, np.ndarray],
+              lat2d: typing.Union[xr.DataArray, np.ndarray],
+              lon2d: typing.Union[xr.DataArray, np.ndarray],
+              msg: np.number = None,
+              meta: bool = False) -> typing.Union[xr.DataArray, np.ndarray]:
     """Interpolates data on a rectilinear lat/lon grid to a curvilinear grid
     like those used by the RCM, WRF and NARR models/datasets.
+
+    dset : :class:`xarray.Dataset`, :class:`xarray.DataArray`
+        The data on which to operate
 
     Parameters
     ----------
 
-    lat1d : :class:`numpy.ndarray`:
+    lat1d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
         A one-dimensional array that specifies the latitude coordinates of
         the regular grid. Must be monotonically increasing.
 
-    lon1d : :class:`numpy.ndarray`:
+    lon1d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
         A one-dimensional array that specifies the longitude coordinates of
         the regular grid. Must be monotonically increasing.
 
-    fi : :class:`numpy.ndarray`:
+    fi : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
         A multi-dimensional array to be interpolated. The rightmost two
         dimensions (latitude, longitude) are the dimensions to be interpolated.
 
-    lat2d : :class:`numpy.ndarray`:
+    lat2d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
         A two-dimensional array that specifies the latitude locations
         of fi. Because this array is two-dimensional it is not an associated
         coordinate variable of `fi`.
 
-    lon2d : :class:`numpy.ndarray`:
+    lon2d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
         A two-dimensional array that specifies the longitude locations
         of fi. Because this array is two-dimensional it is not an associated
         coordinate variable of `fi`.
@@ -270,10 +280,11 @@ def rgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, msg=None, meta=False):
     Returns
     -------
 
-    fo : :class:`numpy.ndarray`: The interpolated grid. A multi-dimensional array of the
-    same size as `fi` except that the rightmost dimension sizes have been replaced
-    by the sizes of `lat2d` and `lon2d` respectively. Double if `fi` is double,
-    otherwise float.
+    fo : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+        The interpolated grid. A multi-dimensional array of the same size as
+        `fi` except that the rightmost dimension sizes have been replaced
+        by the sizes of `lat2d` and `lon2d` respectively. Double if `fi`
+        is double, otherwise float.
 
     Description
     -----------
@@ -320,7 +331,7 @@ def rgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, msg=None, meta=False):
     if not isinstance(fi, xr.DataArray):
         if (lon1d is None) | (lat1d is None):
             raise CoordinateError(
-                "rgrid2rcm: Arguments lon1d and lat1d must be provided explicitly unless fi is an xarray.DataArray."
+                "rgrid2rcm: Arguments `lon1d` and `lat1d` must be provided explicitly unless `fi` is an xarray.DataArray."
             )
 
         fi = xr.DataArray(fi,)
