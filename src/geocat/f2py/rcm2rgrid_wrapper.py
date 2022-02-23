@@ -328,20 +328,24 @@ def rgrid2rcm(lat1d: typing.Union[xr.DataArray, np.ndarray],
     """
 
     # ''' Start of boilerplate
+    is_input_xr = True
+
+    # If the input is numpy.ndarray, convert it to xarray.DataArray
     if not isinstance(fi, xr.DataArray):
         if (lon1d is None) | (lat1d is None):
             raise CoordinateError(
                 "rgrid2rcm: Arguments `lon1d` and `lat1d` must be provided explicitly unless `fi` is an xarray.DataArray."
             )
 
-        fi = xr.DataArray(fi,)
+        is_input_xr = False
 
+        fi = xr.DataArray(fi)
         fi = fi.assign_coords({fi.dims[-1]: lon1d, fi.dims[-2]: lat1d})
 
     lon1d = fi.coords[fi.dims[-1]]
     lat1d = fi.coords[fi.dims[-2]]
 
-    # Convert 2d arrays to xarray for map_blocks call below if they are numpy
+    # Convert 2d arrays to Xarray for map_blocks call below if they are numpy
     lat2d = xr.DataArray(lat2d)
     lon2d = xr.DataArray(lon2d)
 
@@ -350,19 +354,11 @@ def rgrid2rcm(lat1d: typing.Union[xr.DataArray, np.ndarray],
             raise Exception(
                 "fi must be unchunked along the last two dimensions")
 
-    fo = map_blocks(
-        _rgrid2rcm,
-        lat1d,
-        lon1d,
-        fi.data,
-        lat2d.data,
-        lon2d.data,
-        msg,
-        dtype=fi.dtype,
-        drop_axis=[fi.ndim - 2, fi.ndim - 1],
-        new_axis=[fi.ndim - 2, fi.ndim - 1],
-    )
+    # Inner wrapper call
+    fo = _rgrid2rcm(lat1d, lon1d, fi.data, lat2d.data, lon2d.data, msg)
 
-    fo = xr.DataArray(fo.compute(), attrs=fi.attrs, dims=fi.dims)
+    # If input was xarray.DataArray, convert output to xarray.DataArray as well
+    if is_input_xr:
+        fo = xr.DataArray(fo, attrs=fi.attrs, dims=fi.dims)
 
     return fo
