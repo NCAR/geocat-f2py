@@ -29,7 +29,7 @@ def _rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg_py, shape):
     return fo
 
 
-def _rgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, msg_py, shape):
+def _rgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, msg_py):
 
     fi = np.transpose(fi, axes=(2, 1, 0))
     lat2d = np.transpose(lat2d, axes=(1, 0))
@@ -258,7 +258,7 @@ def rgrid2rcm(lat1d: typing.Union[xr.DataArray, np.ndarray],
 
     lat2d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
         A two-dimensional array that specifies the latitude locations
-        of fi. Because this array is two-dimensional it is not an associated
+        of fi. Because this array is two-imensional it is not an associated
         coordinate variable of `fi`.
 
     lon2d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
@@ -335,17 +335,8 @@ def rgrid2rcm(lat1d: typing.Union[xr.DataArray, np.ndarray],
             )
 
         fi = xr.DataArray(fi,)
-        fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
-                        ])
 
-        fi = xr.DataArray(
-            fi.data,
-            coords={
-                fi.dims[-1]: lon1d,
-                fi.dims[-2]: lat1d,
-            },
-            dims=fi.dims,
-        ).chunk(fi_chunk)
+        fi = fi.assign_coords({fi.dims[-1]: lon1d, fi.dims[-2]: lat1d})
 
     lon1d = fi.coords[fi.dims[-1]]
     lat1d = fi.coords[fi.dims[-2]]
@@ -354,35 +345,10 @@ def rgrid2rcm(lat1d: typing.Union[xr.DataArray, np.ndarray],
     lat2d = xr.DataArray(lat2d)
     lon2d = xr.DataArray(lon2d)
 
-    # If an unchunked Xarray input is given, chunk it just with its dims
-    if fi.chunks is None:
-        fi = fi.chunk()
-
-    if list(fi.chunks)[-2:] != [lat1d.shape, lon1d.shape]:
-        raise Exception("fi must be unchunked along the last two dimensions")
-
-    # fi data structure elements and autochunking
-    fi_chunks = list(fi.dims)
-    fi_chunks[:-2] = [
-        (k, 1) for (k, v) in zip(list(fi.dims)[:-2],
-                                 list(fi.chunks)[:-2])
-    ]
-    fi_chunks[-2:] = [
-        (k, v[0]) for (k, v) in zip(list(fi.dims)[-2:],
-                                    list(fi.chunks)[-2:])
-    ]
-    fi_chunks = dict(fi_chunks)
-    fi = fi.chunk(fi_chunks)
-
-    # fo datastructure elements
-    fo_chunks = list(fi.chunks)
-    fo_chunks[-2:] = [(lat2d.shape[0],), (lat2d.shape[1],)]
-    fo_chunks = tuple(fo_chunks)
-    fo_shape = tuple(a[0] for a in list(fo_chunks))
-    fo_coords = {k: v for (k, v) in fi.coords.items()}
-    # fo_coords[fi.dims[-1]] = lon2d
-    # fo_coords[fi.dims[-2]] = lat2d
-    # ''' end of boilerplate
+    if fi.chunks is not None:
+        if list(fi.chunks)[-2:] != [lat1d.shape, lon1d.shape]:
+            raise Exception(
+                "fi must be unchunked along the last two dimensions")
 
     fo = map_blocks(
         _rgrid2rcm,
@@ -392,12 +358,11 @@ def rgrid2rcm(lat1d: typing.Union[xr.DataArray, np.ndarray],
         lat2d.data,
         lon2d.data,
         msg,
-        fo_shape,
-        chunks=fo_chunks,
         dtype=fi.dtype,
         drop_axis=[fi.ndim - 2, fi.ndim - 1],
         new_axis=[fi.ndim - 2, fi.ndim - 1],
     )
 
     fo = xr.DataArray(fo.compute(), attrs=fi.attrs, dims=fi.dims)
+
     return fo
