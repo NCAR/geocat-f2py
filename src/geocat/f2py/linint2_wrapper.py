@@ -231,8 +231,8 @@ def linint1(fi, xo, xi=None, icycx=0, msg_py=None):
     xi = fi.coords[fi.dims[-1]]
 
     # ensure rightmost dimensions of input are not chunked
-    if fi.chunks == None:
-        fi.chunk()
+    if fi.chunks is None:
+        fi = fi.chunk()
 
     if list(fi.chunks)[-1:] != [xi.shape]:
         raise Exception("fi must be unchunked along the last dimension")
@@ -436,8 +436,8 @@ def linint2(fi, xo, yo, xi=None, yi=None, icycx=0, msg_py=None):
     yi = fi.coords[fi.dims[-2]]
 
     # ensure rightmost dimensions of input are not chunked
-    if fi.chunks == None:
-        fi.chunk()
+    if fi.chunks is None:
+        fi = fi.chunk()
 
     if list(fi.chunks)[-2:] != [yi.shape, xi.shape]:
         raise ChunkError(
@@ -622,8 +622,8 @@ def linint2pts(fi, xo, yo, icycx=False, msg_py=None, xi=None, yi=None):
     yi = fi.coords[fi.dims[-2]]
 
     # Ensure the rightmost dimension of input is not chunked
-    if fi.chunks == None:
-        fi.chunk()
+    if fi.chunks is None:
+        fi = fi.chunk()
 
     if list(fi.chunks)[-2:] != [yi.shape, xi.shape]:
         raise ChunkError(

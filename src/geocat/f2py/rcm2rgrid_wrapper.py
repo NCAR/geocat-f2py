@@ -174,8 +174,8 @@ def rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg=None, meta=False):
     # lat2d = fi.coords[fi.dims[-2]]
 
     # ensure rightmost dimensions of input are not chunked
-    if fi.chunks == None:
-        fi.chunk()
+    if fi.chunks is None:
+        fi = fi.chunk()
 
     if list(fi.chunks)[-2:] != [(lat2d.shape[0],), (lat2d.shape[1],)]:
         # [(lon2d.shape[0]), (lon2d.shape[1])] would also be used
@@ -339,9 +339,13 @@ def rgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, msg=None, meta=False):
     lon1d = fi.coords[fi.dims[-1]]
     lat1d = fi.coords[fi.dims[-2]]
 
-    # ensure rightmost dimensions of input are not chunked
-    if fi.chunks == None:
-        fi.chunk()
+    # Convert 2d arrays to xarray for map_blocks call below if they are numpy
+    lat2d = xr.DataArray(lat2d)
+    lon2d = xr.DataArray(lon2d)
+
+    # If an unchunked Xarray input is given, chunk it just with its dims
+    if fi.chunks is None:
+        fi = fi.chunk()
 
     if list(fi.chunks)[-2:] != [lat1d.shape, lon1d.shape]:
         raise Exception("fi must be unchunked along the last two dimensions")
@@ -374,8 +378,8 @@ def rgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, msg=None, meta=False):
         lat1d,
         lon1d,
         fi.data,
-        lat2d,
-        lon2d,
+        lat2d.data,
+        lon2d.data,
         msg,
         fo_shape,
         chunks=fo_chunks,
@@ -383,8 +387,6 @@ def rgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, msg=None, meta=False):
         drop_axis=[fi.ndim - 2, fi.ndim - 1],
         new_axis=[fi.ndim - 2, fi.ndim - 1],
     )
-    fo = xr.DataArray(fo.compute(),
-                      attrs=fi.attrs,
-                      dims=fi.dims,
-                      coords=fo_coords)
+
+    fo = xr.DataArray(fo.compute(), attrs=fi.attrs, dims=fi.dims)
     return fo
