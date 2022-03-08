@@ -8,7 +8,6 @@ import numpy as np
 msg_dtype = {
     np.complex64: np.complex64(np.finfo(np.complex64).max),
     np.complex128: np.complex128(np.finfo(np.complex128).max),
-    np.complex192: np.complex192(np.finfo(np.complex192).max),
     np.complex256: np.complex256(np.finfo(np.complex256).max),
     np.float16: np.float16(np.finfo(np.float16).max),
     np.float32: np.float32(np.finfo(np.float32).max),
@@ -26,7 +25,7 @@ msg_dtype = {
 }
 
 # lists of classes of dtypes
-complex_dtypes = [np.complex64, np.complex128, np.complex192, np.complex256]
+complex_dtypes = [np.complex64, np.complex128, np.complex256]
 float_dtypes = [np.float16, np.float32, np.float64, np.float128]
 int_dtypes = [np.int8, np.int16, np.int32, np.int64]
 uint_dtypes = [np.uint8, np.uint16, np.uint32, np.uint64]
@@ -66,7 +65,7 @@ def py2fort_msg(ndarray, msg_py=None, msg_fort=None):
 
 
 #todo: Should we force output missing value to (1) always be np.nan or (2) whatever it was given in input
-#      Current code here implements (2) while most GeoCAT-ncomp functions implemented (1) (e.g. linint2)
+#      GeoCAT-f2py implements (2) while most GeoCAT-ncomp functions implemented (1) (e.g. linint2)
 def fort2py_msg(ndarray, msg_fort=None, msg_py=None):
     msg_indices = None
     ndtype = ndarray.dtype.type
