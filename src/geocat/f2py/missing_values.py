@@ -6,39 +6,39 @@ import numpy as np
 # floats and complex types use max per IEEE-754
 
 msg_dtype = {
-    str: str(''),
-    np.int8: np.int8(np.iinfo(np.int8).max),
-    np.int16: np.int16(np.iinfo(np.int16).max),
-    np.int32: np.int32(np.iinfo(np.int32).max),
-    np.int64: np.int64(np.iinfo(np.int64).max),
-    np.float16: np.float16(np.finfo(np.float16).max),
-    np.float32: np.float32(np.finfo(np.float32).max),
-    np.float64: np.float64(np.finfo(np.float64).max),
-    np.float128: np.float128(np.finfo(np.float128).max),
     np.complex64: np.complex64(np.finfo(np.complex64).max),
     np.complex128: np.complex128(np.finfo(np.complex128).max),
     np.complex192: np.complex192(np.finfo(np.complex192).max),
     np.complex256: np.complex256(np.finfo(np.complex256).max),
+    np.float16: np.float16(np.finfo(np.float16).max),
+    np.float32: np.float32(np.finfo(np.float32).max),
+    np.float64: np.float64(np.finfo(np.float64).max),
+    np.float128: np.float128(np.finfo(np.float128).max),
+    np.int8: np.int8(np.iinfo(np.int8).max),
+    np.int16: np.int16(np.iinfo(np.int16).max),
+    np.int32: np.int32(np.iinfo(np.int32).max),
+    np.int64: np.int64(np.iinfo(np.int64).max),
     np.uint8: np.uint8(np.iinfo(np.uint8).max),
     np.uint16: np.uint16(np.iinfo(np.uint16).max),
     np.uint32: np.uint32(np.iinfo(np.uint32).max),
     np.uint64: np.uint64(np.iinfo(np.uint64).max),
+    str: str(''),
 }
 
 # lists of classes of dtypes
-supported_dtypes = msg_dtype.keys()
-float_dtypes = [np.float16, np.float32, np.float64, np.float128]
 complex_dtypes = [np.complex64, np.complex128, np.complex192, np.complex256]
+float_dtypes = [np.float16, np.float32, np.float64, np.float128]
 int_dtypes = [np.int8, np.int16, np.int32, np.int64]
 uint_dtypes = [np.uint8, np.uint16, np.uint32, np.uint64]
 string_dtypes = [str]
+supported_dtypes = msg_dtype.keys()
 
 
 # python to fortran
 def py2fort_msg(ndarray, msg_py=None, msg_fort=None):
     msg_indices = None
-
     ndtype = ndarray.dtype.type
+
     if ndtype not in supported_dtypes:
         raise Exception("The ndarray.dtype.type of " + np.dtype(ndtype).name +
                         " is not a supported type")
@@ -69,9 +69,9 @@ def py2fort_msg(ndarray, msg_py=None, msg_fort=None):
 #      Current code here implements (2) while most GeoCAT-ncomp functions implemented (1) (e.g. linint2)
 def fort2py_msg(ndarray, msg_fort=None, msg_py=None):
     msg_indices = None
-
     ndtype = ndarray.dtype.type
-    if ndtype not in msg_dtype.keys():
+
+    if ndtype not in supported_dtypes:
         raise Exception("The ndarray.dtype.type of " + np.dtype(ndtype).name +
                         " is not a supported type")
 
