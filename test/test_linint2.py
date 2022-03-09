@@ -66,7 +66,7 @@ class Test_linint2_float64(ut.TestCase):
         np.testing.assert_array_equal(fi.values, fo[..., ::2, ::2].values)
 
     def test_linint2_masked(self):
-        fi_mask = np.zeros(fi_np.shape, dtype=np.bool)
+        fi_mask = np.zeros(fi_np.shape, dtype=bool)
         fi_mask[:, :, 0, 0] = True
         fi_ma = np.ma.MaskedArray(fi_np, mask=fi_mask)
         fi = xr.DataArray(fi_ma,
@@ -115,7 +115,7 @@ class Test_linint2_float32(ut.TestCase):
         np.testing.assert_array_equal(fi.values, fo[..., ::2, ::2].values)
 
     def test_linint2_masked_float32(self):
-        fi_mask = np.zeros(fi_np.shape, dtype=np.bool)
+        fi_mask = np.zeros(fi_np.shape, dtype=bool)
         fi_mask[:, :, 0, 0] = True
         fi_ma = np.ma.MaskedArray((fi_np * 100).astype(np.float32),
                                   mask=fi_mask)
@@ -153,7 +153,7 @@ class Test_linint2_int32(ut.TestCase):
         np.testing.assert_array_equal(fi.values, fo[..., ::2, ::2].values)
 
     def test_linint2_masked_int32(self):
-        fi_mask = np.zeros(fi_np.shape, dtype=np.bool)
+        fi_mask = np.zeros(fi_np.shape, dtype=bool)
         fi_mask[:, :, 0, 0] = True
         fi_ma = np.ma.MaskedArray((fi_np * 100).astype(np.int32), mask=fi_mask)
         fi = xr.DataArray(fi_ma,
@@ -191,7 +191,7 @@ class Test_linint2_int64(ut.TestCase):
         np.testing.assert_array_equal(fi.values, fo[..., ::2, ::2].values)
 
     def test_linint2_masked_int64(self):
-        fi_mask = np.zeros(fi_np.shape, dtype=np.bool)
+        fi_mask = np.zeros(fi_np.shape, dtype=bool)
         fi_mask[:, :, 0, 0] = True
         fi_ma = np.ma.MaskedArray((fi_np * 100).astype(np.int64), mask=fi_mask)
         fi = xr.DataArray(fi_ma,
