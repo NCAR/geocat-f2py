@@ -12,20 +12,20 @@ source:
 
 build:
   number: 0
-  skip: True # [py<35]
+  skip: True # [py<37]
 
 requirements:
   host:
     - python
     - pip
     - setuptools
-    - numpy>=1.20.2
+    - numpy>=1.22
     - {{ compiler('fortran') }}
   run:
     - python
     - xarray
     - dask
-    - numpy>=1.20.2
+    - numpy>=1.22
     - {{ compiler('fortran') }}
 
 test:
