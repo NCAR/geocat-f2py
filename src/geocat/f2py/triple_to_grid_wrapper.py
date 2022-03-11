@@ -218,38 +218,34 @@ def triple_to_grid(data,
     Parameters
     ----------
 
-    data : :class:`xarray.DataArray`: or :class:`numpy.ndarray`:
+    data : :class:`xarray.DataArray`:, :class:`numpy.ndarray`:
         A multi-dimensional array, whose rightmost dimension is the same
         length as `x_in` and `y_in`, containing the values associated with
         the "x" and "y" coordinates. Missing values may be present but
         will be ignored.
 
-    x_in : :class:`xarray.DataArray`: or :class:`numpy.ndarray`:
-        One-dimensional arrays of the same length containing the coordinates
-        associated with the data values. For geophysical variables, "x"
-        correspond to longitude.
+    x_in : :class:`xarray.DataArray`:, :class:`numpy.ndarray`:
+        A one-dimensional array that specifies the x-coordinate
+        associated with the input (`data`).
 
-    y_in : :class:`xarray.DataArray`: or :class:`numpy.ndarray`:
-        One-dimensional arrays of the same length containing the coordinates
-        associated with the data values. For geophysical variables, "y"
-        correspond to latitude.
+    y_in : :class:`xarray.DataArray`:, :class:`numpy.ndarray`:
+        A one-dimensional array that specifies the y-coordinate
+        associated with the input (`data`).
 
-    x_out : :class:`xarray.DataArray`: or :class:`numpy.ndarray`:
-        A one-dimensional array of length M containing the "x" coordinates
-        associated with the returned two-grid. For geophysical variables,
-        these are longitudes. The coordinates' values must be
-        monotonically increasing.
+    x_out : :class:`xarray.DataArray`:, :class:`numpy.ndarray`:
+        A one-dimensional array of length M containing the x-coordinates
+        associated with the returned two-dimensional grid. The coordinate
+        values must be monotonically increasing.
 
     y_out : :class:`xarray.DataArray`: or :class:`numpy.ndarray`:
-        A one-dimensional array of length N containing the "y" coordinates
-        associated with the returned grid. For geophysical ~variables,
-        these are latitudes. The coordinates' values must be
-        monotonically increasing.
+        A one-dimensional array of length N containing the y-coordinates
+        associated with the returned two-dimensional grid. The coordinate
+        values must be monotonically increasing.
 
     Optional Parameters
     -------------------
 
-    method :
+    method :obj:`int`:
         An integer value that can be 0 or 1. The default value is 1.
         A value of 1 means to use the great circle distance formula
         for distance calculations.
@@ -259,7 +255,7 @@ def triple_to_grid(data,
         high resolution grid) and the number of observations
         relatively small.
 
-    domain :
+    domain :obj:`float`:
         A float value that should be set to a value >= 0. The
         default value is 1.0. If present, the larger this factor,
         the wider the spatial domain allowed to influence grid boundary
@@ -267,7 +263,7 @@ def triple_to_grid(data,
         then values located outside the grid domain specified by
         `x_out` and `y_out` arguments will not be used.
 
-    distmx :
+    distmx :obj:`float`:
         Setting `distmx` allows the user to specify a search
         radius (km) beyond which observations are not considered
         for nearest neighbor. Only applicable when `method` = 1.
@@ -290,11 +286,10 @@ def triple_to_grid(data,
     Returns
     -------
 
-    grid : :class:`xarray.DataArray`:
-        The returned array will be K x N x M, where K
-        represents the leftmost dimensions of `data`, N represent the size of `y_out`,
-        and M represent the size of `x_out` coordinate vectors. It will be of type
-        double if any of the input is double, and float otherwise.
+    grid : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+        The returned array will be K x N x M, where K represents the leftmost
+        dimensions of `data`, N represent the size of `y_out`,
+        and M represent the size of `x_out` coordinate vectors.
 
     Description
     -----------
@@ -338,12 +333,10 @@ def triple_to_grid(data,
         output = geocat.comp.triple_to_grid(data, x_out, y_out, x_in, y_in)
     """
 
-    # TODO: May need to be revisited after sanity_check work is finished
-
     if (x_in is None) | (y_in is None):
         raise CoordinateError(
-            "ERROR triple_to_grid: Arguments x_in and y_in must always be explicitly provided"
-        )
+            "triple_to_grid: Arguments `x_in` and `y_in` must always be "
+            "explicitly provided!")
 
     # ''' Start of boilerplate
     # If a Numpy input is given, convert it to Xarray and chunk it just with its dims
