@@ -12,7 +12,7 @@ from .missing_values import fort2py_msg, py2fort_msg
 # can benefit from parallel excution.
 
 
-def _rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg_py, shape):
+def _rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg_py):
 
     fi = np.transpose(fi, axes=(2, 1, 0))
     lat2d = np.transpose(lat2d, axes=(1, 0))
@@ -157,75 +157,35 @@ def rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg=None, meta=False):
             "rcm2rgrid: lon2d and lat2d should always be provided!")
 
     # ''' Start of boilerplate
+    is_input_xr = True
+
+    # If the input is numpy.ndarray, convert it to xarray.DataArray
     if not isinstance(fi, xr.DataArray):
 
+        is_input_xr = False
+
         fi = xr.DataArray(fi,)
-        fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
-                        ])
 
-        fi = xr.DataArray(
-            fi.data,
-            # coords={
-            #     fi.dims[-1]: lon2d,
-            #     fi.dims[-2]: lat2d,
-            # },
-            dims=fi.dims,
-        ).chunk(fi_chunk)
-
-    # lon2d = fi.coords[fi.dims[-1]]
-    # lat2d = fi.coords[fi.dims[-2]]
-
-    # ensure rightmost dimensions of input are not chunked
-    if fi.chunks is None:
-        fi = fi.chunk()
-
-    if list(fi.chunks)[-2:] != [(lat2d.shape[0],), (lat2d.shape[1],)]:
-        # [(lon2d.shape[0]), (lon2d.shape[1])] would also be used
-        raise ChunkError(
-            "rcm2rgrid: fi must be unchunked along the rightmost two dimensions"
-        )
-
-    # fi data structure elements and autochunking
-    fi_chunks = list(fi.dims)
-    fi_chunks[:-2] = [
-        (k, 1) for (k, v) in zip(list(fi.dims)[:-2],
-                                 list(fi.chunks)[:-2])
-    ]
-    fi_chunks[-2:] = [
-        (k, v[0]) for (k, v) in zip(list(fi.dims)[-2:],
-                                    list(fi.chunks)[-2:])
-    ]
-    fi_chunks = dict(fi_chunks)
-    fi = fi.chunk(fi_chunks)
-
-    # fo datastructure elements
-    fo_chunks = list(fi.chunks)
-    fo_chunks[-2:] = (lat1d.shape, lon1d.shape)
-    fo_chunks = tuple(fo_chunks)
-    fo_shape = tuple(a[0] for a in list(fo_chunks))
-    fo_coords = {k: v for (k, v) in fi.coords.items()}
-    fo_coords[fi.dims[-1]] = lon1d
-    fo_coords[fi.dims[-2]] = lat1d
+    # Ensure last two dimensions of `fi` are not chunked
+    if fi.chunks is not None:
+        if list(fi.chunks)[-2:] != [(lat2d.shape[0],), (lat2d.shape[1],)]:
+            raise ChunkError(
+                "rcm2rgrid: `fi` must be unchunked along the rightmost two dimensions!"
+            )
     # ''' end of boilerplate
 
-    fo = map_blocks(
-        _rcm2rgrid,
-        lat2d,
-        lon2d,
-        fi.data,
-        lat1d,
-        lon1d,
-        msg,
-        fo_shape,
-        chunks=fo_chunks,
-        dtype=fi.dtype,
-        drop_axis=[fi.ndim - 2, fi.ndim - 1],
-        new_axis=[fi.ndim - 2, fi.ndim - 1],
-    )
-    fo = xr.DataArray(fo.compute(),
-                      attrs=fi.attrs,
-                      dims=fi.dims,
-                      coords=fo_coords)
+    # Inner Fortran wrapper call
+    fo = _rcm2rgrid(lat2d, lon2d, fi.data, lat1d, lon1d, msg)
+
+    # If input was xarray.DataArray, convert output to xarray.DataArray as well
+    if is_input_xr:
+        # Determine the output coordinates
+        fo_coords = {k: v for (k, v) in fi.coords.items()}
+        fo_coords[fi.dims[-1]] = lon1d
+        fo_coords[fi.dims[-2]] = lat1d
+
+        fo = xr.DataArray(fo, attrs=fi.attrs, dims=fi.dims, coords=fo_coords)
+
     return fo
 
 
