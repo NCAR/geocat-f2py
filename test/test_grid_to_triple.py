@@ -60,6 +60,20 @@ class Test_grid_to_triple_float64(ut.TestCase):
 
         np.testing.assert_array_equal(out_expected, out.values)
 
+    def test_grid_to_triple_float64_xr_chunked(self):
+        data_xr = xr.DataArray(
+            data,
+            coords={
+                'lat': y,
+                'lon': x,
+            },
+            dims=['lat', 'lon'],
+        ).chunk()
+
+        out = grid_to_triple(data_xr, x, y)
+
+        np.testing.assert_array_equal(out_expected, out.values)
+
     def test_grid_to_triple_float64_nan(self):
         out = grid_to_triple(data_nan, x, y)
 

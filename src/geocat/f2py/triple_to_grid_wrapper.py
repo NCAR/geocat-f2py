@@ -100,14 +100,14 @@ def grid_to_triple(data, x_in=None, y_in=None, msg_py=None):
         Two-dimensional input array of size ny x mx containing the data values.
         Missing values may be present in `data`, but they are ignored.
 
-    x_in : :class:`xarray.DataArray` or :class:`numpy.ndarray`:
+    x_in : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
         A one-dimensional array that specifies the the right dimension coordinates of
         the input (`data`).
 
         Note: It should only be explicitly provided when the input (`fi`) is
         `numpy.ndarray`; otherwise, it should come from `fi.coords`.
 
-    y_in : :class:`xarray.DataArray` or :class:`numpy.ndarray`:
+    y_in : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
         A one-dimensional array that specifies the the left dimension coordinates of
         the input (`data`).
 
