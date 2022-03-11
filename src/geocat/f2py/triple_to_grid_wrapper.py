@@ -447,13 +447,13 @@ def triple_to_grid(data,
     grid = grid.reshape(grid_shape)
 
     if meta:
-        # grid = xr.DataArray(grid.compute(), attrs=data.attrs, dims=data.dims, coords=grid_coords)
+        # grid = xr.DataArray(grid, attrs=data.attrs, dims=data.dims, coords=grid_coords)
         import warnings
         warnings.warn(
             "WARNING triple_to_grid: Retention of metadata is not yet supported; "
             "it will thus be ignored in the output!")
     # else:
-    #     grid = xr.DataArray(grid.compute(), coords=grid_coords)
+    #     grid = xr.DataArray(grid, coords=grid_coords)
 
     # If input was xarray.DataArray, convert output to xarray.DataArray as well
     if is_input_xr:
