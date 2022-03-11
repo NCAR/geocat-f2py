@@ -238,9 +238,6 @@ def rgrid2rcm(lat1d: typing.Union[xr.DataArray, np.ndarray],
     """Interpolates data on a rectilinear lat/lon grid to a curvilinear grid
     like those used by the RCM, WRF and NARR models/datasets.
 
-    dset : :class:`xarray.Dataset`, :class:`xarray.DataArray`
-        The data on which to operate
-
     Parameters
     ----------
 
