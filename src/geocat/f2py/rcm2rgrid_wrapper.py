@@ -10,6 +10,7 @@ from .missing_values import fort2py_msg, py2fort_msg
 # Dask Wrappers _<funcname>()
 # These Wrapper are executed within dask processes, and should do anything that
 # can benefit from parallel excution.
+supported_types = typing.Union[xr.DataArray, np.ndarray]
 
 
 def _rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg_py):
@@ -51,7 +52,15 @@ def _rgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, msg_py):
 # used for any tasks which would not benefit from parallel execution.
 
 
-def rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg=None, meta=False):
+def rcm2rgrid(
+    lat2d: supported_types,
+    lon2d: supported_types,
+    fi: supported_types,
+    lat1d: supported_types,
+    lon1d: supported_types,
+    msg: np.number = None,
+    meta: bool = False,
+) -> supported_types:
     """Interpolates data on a curvilinear grid (i.e. RCM, WRF, NARR) to a
     rectilinear grid.
 
@@ -189,13 +198,15 @@ def rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg=None, meta=False):
     return fo
 
 
-def rgrid2rcm(lat1d: typing.Union[xr.DataArray, np.ndarray],
-              lon1d: typing.Union[xr.DataArray, np.ndarray],
-              fi: typing.Union[xr.DataArray, np.ndarray],
-              lat2d: typing.Union[xr.DataArray, np.ndarray],
-              lon2d: typing.Union[xr.DataArray, np.ndarray],
-              msg: np.number = None,
-              meta: bool = False) -> typing.Union[xr.DataArray, np.ndarray]:
+def rgrid2rcm(
+    lat1d: supported_types,
+    lon1d: supported_types,
+    fi: supported_types,
+    lat2d: supported_types,
+    lon2d: supported_types,
+    msg: np.number = None,
+    meta: bool = False,
+) -> supported_types:
     """Interpolates data on a rectilinear lat/lon grid to a curvilinear grid
     like those used by the RCM, WRF and NARR models/datasets.
 
