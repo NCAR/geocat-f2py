@@ -245,26 +245,32 @@ def rgrid2rcm(lat1d: typing.Union[xr.DataArray, np.ndarray],
         A one-dimensional array that specifies the latitude coordinates of
         the regular grid. Must be monotonically increasing.
 
+        Note: It should only be explicitly provided when the input (`fi`) is
+        `numpy.ndarray`; otherwise, it should come from `fi.coords`.
+
     lon1d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
         A one-dimensional array that specifies the longitude coordinates of
         the regular grid. Must be monotonically increasing.
+
+        Note: It should only be explicitly provided when the input (`fi`) is
+        `numpy.ndarray`; otherwise, it should come from `fi.coords`.
 
     fi : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
         A multi-dimensional array to be interpolated. The rightmost two
         dimensions (latitude, longitude) are the dimensions to be interpolated.
 
     lat2d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
-        A two-dimensional array that specifies the latitude locations
-        of fi. Because this array is two-imensional it is not an associated
-        coordinate variable of `fi`.
+        A two-dimensional array that specifies the latitude locations of the
+        input (`fi`). Because this array is two-dimensional it is not an
+        associated coordinate variable of `fi`.
 
     lon2d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
-        A two-dimensional array that specifies the longitude locations
-        of fi. Because this array is two-dimensional it is not an associated
-        coordinate variable of `fi`.
+        A two-dimensional array that specifies the longitude locations of the
+        input (`fi`). Because this array is two-dimensional it is not an
+        associated coordinate variable of `fi`.
 
     msg :obj:`numpy.number`:
-        A numpy scalar value that represent a missing value in fi.
+        A numpy scalar value that represents a missing value in `fi`.
         This argument allows a user to use a missing value scheme
         other than NaN or masked arrays, similar to what NCL allows.
 
@@ -280,8 +286,7 @@ def rgrid2rcm(lat1d: typing.Union[xr.DataArray, np.ndarray],
     fo : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
         The interpolated grid. A multi-dimensional array of the same size as
         `fi` except that the rightmost dimension sizes have been replaced
-        by the sizes of `lat2d` and `lon2d` respectively. Double if `fi`
-        is double, otherwise float.
+        by the sizes of `lat2d` (or `lon2d`).
 
     Description
     -----------
@@ -331,14 +336,16 @@ def rgrid2rcm(lat1d: typing.Union[xr.DataArray, np.ndarray],
     if not isinstance(fi, xr.DataArray):
         if (lon1d is None) | (lat1d is None):
             raise CoordinateError(
-                "rgrid2rcm: Arguments `lon1d` and `lat1d` must be provided explicitly unless `fi` is an xarray.DataArray."
-            )
+                "rgrid2rcm: Arguments `lon1d` and `lat1d` must be provided "
+                "explicitly unless `fi` is an xarray.DataArray.")
 
         is_input_xr = False
 
         fi = xr.DataArray(fi)
         fi = fi.assign_coords({fi.dims[-1]: lon1d, fi.dims[-2]: lat1d})
 
+    # lon1d and lat1d should be coming from xarray input coords or assigned
+    # as coords while xarray being initiated from numpy input above
     lon1d = fi.coords[fi.dims[-1]]
     lat1d = fi.coords[fi.dims[-2]]
 
@@ -351,8 +358,9 @@ def rgrid2rcm(lat1d: typing.Union[xr.DataArray, np.ndarray],
         if list(fi.chunks)[-2:] != [lat1d.shape, lon1d.shape]:
             raise Exception(
                 "fi must be unchunked along the last two dimensions")
+    # ''' end of boilerplate
 
-    # Inner wrapper call
+    # Inner Fortran wrapper call
     fo = _rgrid2rcm(lat1d, lon1d, fi.data, lat2d.data, lon2d.data, msg)
 
     # If input was xarray.DataArray, convert output to xarray.DataArray as well
