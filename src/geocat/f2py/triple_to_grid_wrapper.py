@@ -339,87 +339,76 @@ def triple_to_grid(data,
             "explicitly provided!")
 
     # ''' Start of boilerplate
-    # If a Numpy input is given, convert it to Xarray and chunk it just with its dims
+    is_input_xr = True
+
+    # If the input is numpy.ndarray, convert it to xarray.DataArray
     if not isinstance(data, xr.DataArray):
+
+        is_input_xr = False
+
         data = xr.DataArray(data)
-        data_chunk = dict([
-            (k, v) for (k, v) in zip(list(data.dims), list(data.shape))
-        ])
 
-        data = xr.DataArray(
-            data.data,
-            # coords={
-            #     data.dims[-1]: x_in,
-            #     data.dims[-2]: y_in,
-            # },
-            dims=data.dims,  # Comment
-        ).chunk(data_chunk)
-    else:
-        # If an unchunked Xarray input is given, chunk it just with its dims
-        if (data.chunks is None):
-            data_chunk = dict([
-                (k, v) for (k, v) in zip(list(data.dims), list(data.shape))
-            ])
-            data = data.chunk(data_chunk)
-
-        # Ensure the rightmost dimension of input is not chunked
-        elif list(data.chunks)[-1:] != [x_in.shape]:
-            raise ChunkError(
-                "ERROR triple_to_grid: Data must be unchunked along the rightmost two dimensions"
-            )
-
-    # x_in = data.coords[data.dims[-1]]
-    # y_in = data.coords[data.dims[-2]]
-
-    # Basic sanity checks
+    # Basic validity checks
     if x_in.shape[0] != y_in.shape[0] or x_in.shape[0] != data.shape[data.ndim -
                                                                      1]:
         raise DimensionError(
-            "ERROR triple_to_grid: The length of `x_in` and `y_in` must be the same "
-            "as the rightmost dimension of `data` !")
+            "triple_to_grid: The length of `x_in` and `y_in` must be the same "
+            "as the rightmost dimension of `data`!")
     if x_in.ndim > 1 or y_in.ndim > 1:
         raise DimensionError(
-            "ERROR triple_to_grid: `x_in` and `y_in` arguments must be one-dimensional arrays !\n"
+            "triple_to_grid: `x_in` and `y_in` arguments must be one-dimensional arrays!\n"
         )
     if x_out.ndim > 1 or y_out.ndim > 1:
         raise DimensionError(
-            "ERROR triple_to_grid: `x_out` and `y_out` arguments must be one-dimensional array !\n"
+            "triple_to_grid: `x_out` and `y_out` arguments must be one-dimensional array!\n"
         )
 
     if not isinstance(method, int):
         raise TypeError(
-            'ERROR triple_to_grid: `method` arg must be an integer. Set it to either 1 or 0.'
+            'triple_to_grid: `method` arg must be an integer! Set it to either 1 or 0.'
         )
 
     if (method != 0) and (method != 1):
-        raise TypeError(
-            'ERROR triple_to_grid: `method` arg accepts either 0 or 1.')
+        raise TypeError('triple_to_grid: `method` arg accepts either 0 or 1!')
 
     # `distmx` is only applicable when `method`==1
     if method:
         if np.asarray(distmx).size != 1:
             raise ValueError(
-                "ERROR triple_to_grid: Provide a scalar value for `distmx` !")
+                "triple_to_grid: Provide a scalar value for `distmx`!")
     else:
         if distmx is not None:
             raise ValueError(
-                "ERROR triple_to_grid: `distmx` is only applicable when `method`==1 !"
-            )
+                "triple_to_grid: `distmx` is only applicable when `method`==1!")
 
     if np.asarray(domain).size != 1:
-        raise ValueError(
-            "ERROR triple_to_grid: Provide a scalar value for `domain` !")
+        raise ValueError("triple_to_grid: Provide a scalar value for `domain`!")
 
-    # `data` data structure elements and autochunking
+    # If input data is chunked
+    if data.chunks is not None:
+
+        # Ensure the rightmost dimension of `data` is not chunked
+        if list(data.chunks)[-1:] != [x_in.shape]:
+            raise ChunkError(
+                "triple_to_grid: Data must be unchunked along the rightmost dimension!"
+            )
+
+    # NOTE: Auto-chunking, regardless of what chunk sizes were given by the user, seems
+    # to be explicitly needed in this function because:
+    # The Fortran routine for this function is implemented assuming it would be looped
+    # across the leftmost dimensions of the input (`data`), i.e. on one-dimensional
+    # chunks of size that is equal to the rightmost dimension of `data`, which is the
+    # same as length of `x_in` or `y_in`.
+
+    # Generate chunks of {'dim_0': 1, 'dim_1': 1, ..., 'dim_n': x_in.shape}
     data_chunks = list(data.dims)
     data_chunks[:-1] = [
         (k, 1) for (k, v) in zip(list(data.dims)[:-1],
-                                 list(data.chunks)[:-1])
+                                 list(data.shape)[:-1])
     ]
     data_chunks[-1:] = [
-        (k, v[0])
-        for (k, v) in zip(list(data.dims)[-1:],
-                          list(data.chunks)[-1:])
+        (k, v) for (k, v) in zip(list(data.dims)[-1:],
+                                 list(data.shape)[-1:])
     ]
     data_chunks = dict(data_chunks)
     data = data.chunk(data_chunks)
@@ -434,6 +423,7 @@ def triple_to_grid(data,
     grid_coords[data.dims[-2]] = y_out
     # ''' end of boilerplate
 
+    # Inner Fortran wrapper call
     grid = map_blocks(
         _triple_to_grid,
         data.data,
@@ -465,7 +455,9 @@ def triple_to_grid(data,
     # else:
     #     grid = xr.DataArray(grid.compute(), coords=grid_coords)
 
-    grid = xr.DataArray(grid.compute())
+    # If input was xarray.DataArray, convert output to xarray.DataArray as well
+    if is_input_xr:
+        grid = xr.DataArray(grid)
 
     return grid
 
