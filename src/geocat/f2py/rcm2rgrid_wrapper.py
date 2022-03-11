@@ -346,6 +346,7 @@ def rgrid2rcm(lat1d: typing.Union[xr.DataArray, np.ndarray],
     lat2d = xr.DataArray(lat2d)
     lon2d = xr.DataArray(lon2d)
 
+    # Ensure last two dimensions of `fi` are not chunked
     if fi.chunks is not None:
         if list(fi.chunks)[-2:] != [lat1d.shape, lon1d.shape]:
             raise Exception(
