@@ -44,7 +44,7 @@ class Test_grid_to_triple_float64(ut.TestCase):
     def test_grid_to_triple_float64(self):
         out = grid_to_triple(data, x, y)
 
-        np.testing.assert_array_equal(out_expected, out.values)
+        np.testing.assert_array_equal(out_expected, out)
 
     def test_grid_to_triple_float64_xr(self):
         data_xr = xr.DataArray(
@@ -60,27 +60,20 @@ class Test_grid_to_triple_float64(ut.TestCase):
 
         np.testing.assert_array_equal(out_expected, out.values)
 
-    def test_grid_to_triple_float64_xr_x_y(self):
-        data_xr = xr.DataArray(data)
-
-        out = grid_to_triple(data_xr, x, y)
-
-        np.testing.assert_array_equal(out_expected, out.values)
-
     def test_grid_to_triple_float64_nan(self):
         out = grid_to_triple(data_nan, x, y)
 
-        np.testing.assert_array_equal(out_expected_msg, out.values)
+        np.testing.assert_array_equal(out_expected_msg, out)
 
     def test_grid_to_triple_float64_nan_2(self):
         out = grid_to_triple(data_nan, x, y, msg_py=np.nan)
 
-        np.testing.assert_array_equal(out_expected_msg, out.values)
+        np.testing.assert_array_equal(out_expected_msg, out)
 
     def test_grid_to_triple_float64_msg(self):
         out = grid_to_triple(data_msg, x, y, msg_py=-99)
 
-        np.testing.assert_array_equal(out_expected_msg, out.values)
+        np.testing.assert_array_equal(out_expected_msg, out)
 
 
 class Test_grid_to_triple_float32(ut.TestCase):

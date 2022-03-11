@@ -96,25 +96,23 @@ def grid_to_triple(data, x_in=None, y_in=None, msg_py=None):
     Parameters
     ----------
 
-    data : :class:`xarray.DataArray` or :class:`numpy.ndarray`:
-        Two-dimensional array of size ny x mx containing the data values.
+    data : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+        Two-dimensional input array of size ny x mx containing the data values.
         Missing values may be present in `data`, but they are ignored.
 
     x_in : :class:`xarray.DataArray` or :class:`numpy.ndarray`:
-        Coordinates associated with the right dimension of the variable `data`.
-        If `data` is of type :class:`xarray.DataArray` and `x_in` is unspecified,
-        then it comes as the associated coordinate of `data` (if `x_in` is explicitly
-        given, then it will be used for calculations). If `data` is of type
-        :class:`numpy.ndarray`, then it must be explicitly given as input and it
-        must have the same dimension (call it `mx`) as the right dimension of `data`.
+        A one-dimensional array that specifies the the right dimension coordinates of
+        the input (`data`).
+
+        Note: It should only be explicitly provided when the input (`fi`) is
+        `numpy.ndarray`; otherwise, it should come from `fi.coords`.
 
     y_in : :class:`xarray.DataArray` or :class:`numpy.ndarray`:
-        Coordinates associated with the left dimension of the variable `data`.
-        If `data` is of type :class:`xarray.DataArray` and `y_in` is unspecified,
-        then it comes as the associated coordinate of `data` (if `y_in` is explicitly
-        given, then it will be used for calculations). If `data` is of type
-        :class:`numpy.ndarray`, then it must be explicitly given as input and it
-        must have the same dimension (call it `ny`) as the left dimension of `data`.
+        A one-dimensional array that specifies the the left dimension coordinates of
+        the input (`data`).
+
+        Note: It should only be explicitly provided when the input (`fi`) is
+        `numpy.ndarray`; otherwise, it should come from `fi.coords`.
 
     msg_py : :obj:`numpy.number`:
         A numpy scalar value that represent a missing value in `data`.
@@ -124,13 +122,11 @@ def grid_to_triple(data, x_in=None, y_in=None, msg_py=None):
     Returns
     -------
 
-    out : :class:`xarray.DataArray`:
+    out : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
         The maximum size of the returned array will be 3 x ld, where ld <= ny x mx.
         If no missing values are encountered in `data`, then ld = ny x mx. If missing
         values are encountered in `data`, they are not returned and hence ld will be
         equal to ny x mx minus the number of missing values found in `data`.
-        The return array will be double if any of the input arrays are double, and float
-        otherwise.
 
     Examples
     --------
@@ -154,56 +150,54 @@ def grid_to_triple(data, x_in=None, y_in=None, msg_py=None):
             output = geocat.comp.grid_to_triple(data, x_in, y_in)
     """
 
-    # TODO: Will need to be revisited after sanity_check work is finished
-
     # ''' Start of boilerplate
+    is_input_xr = True
+
+    # If the input is numpy.ndarray, convert it to xarray.DataArray
     if not isinstance(data, xr.DataArray):
         if (x_in is None) | (y_in is None):
             raise CoordinateError(
-                "ERROR grid_to_triple: Argument `x_in` and `y_in` must be provided explicitly "
-                "unless `data` is an xarray.DataArray.")
+                "grid_to_triple: Argument `x_in` and `y_in` must be provided "
+                "explicitly unless `data` is an xarray.DataArray.")
+
+        is_input_xr = False
 
         data = xr.DataArray(data)
+        data = data.assign_coords({data.dims[-1]: x_in, data.dims[-2]: y_in})
 
-        data = xr.DataArray(
-            data.data,
-            coords={
-                data.dims[-1]: x_in,
-                data.dims[-2]: y_in,
-            },
-            dims=data.dims,
-        )
+    # x_in and y_in should be coming from xarray input coords or assigned
+    # as coords while xarray being initiated from numpy input above
+    x_in = data.coords[data.dims[-1]]
+    y_in = data.coords[data.dims[-2]]
 
-    if (x_in is None):
-        x_in = data.coords[data.dims[-1]]
-    if (y_in is None):
-        y_in = data.coords[data.dims[-2]]
-
-    # Basic sanity checks
+    # Basic validity checks
     if data.ndim != 2:
         raise DimensionError(
-            "ERROR grid_to_triple: `z` must have two dimensions !\n")
+            "grid_to_triple: `data` must have two dimensions !\n")
 
     if x_in.ndim != 1:
         raise DimensionError(
-            "ERROR grid_to_triple: `x_in` must have one dimension !\n")
+            "grid_to_triple: `x_in` must have one dimension !\n")
     elif x_in.shape[0] != data.shape[1]:
         raise DimensionError(
-            "ERROR grid_to_triple: `x_in` must have the same size (call it `mx`) as the "
-            "right dimension of z. !\n")
+            "grid_to_triple: `x_in` must have the same size (call it `mx`) as the "
+            "right dimension of `data`. !\n")
 
     if y_in.ndim != 1:
         raise DimensionError(
-            "ERROR grid_to_triple: `y_in` must have one dimension !\n")
+            "grid_to_triple: `y_in` must have one dimension !\n")
     elif y_in.shape[0] != data.shape[0]:
         raise DimensionError(
-            "ERROR grid_to_triple: `y_in` must have the same size (call it `ny`) as the left dimension of z. !\n"
-        )
+            "grid_to_triple: `y_in` must have the same size (call it `ny`) as the "
+            "left dimension of `data`. !\n")
     # ''' end of boilerplate
 
+    # Inner Fortran wrapper call
     out = _grid_to_triple(x_in.data, y_in.data, data.data, msg_py)
 
-    out = xr.DataArray(out, attrs=data.attrs)
+    # If input was xarray.DataArray, convert output to xarray.DataArray as well
+    if is_input_xr:
+        out = xr.DataArray(out, attrs=data.attrs)
 
     return out
 
