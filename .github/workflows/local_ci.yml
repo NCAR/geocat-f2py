@@ -1,4 +1,4 @@
-name: ACT_CI
+name: local_runner
 
 on:
   push:
