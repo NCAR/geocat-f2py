@@ -97,12 +97,19 @@ class Test_triple_to_grid_float64(ut.TestCase):
     def test_triple_to_grid_float64(self):
         out = triple_to_grid(data, x_in, y_in, x_out, y_out)
 
-        np.testing.assert_array_equal(out_expected, out.values)
+        np.testing.assert_array_equal(out_expected, out)
 
     def test_triple_to_grid_float64_xr(self):
         out = triple_to_grid(xr.DataArray(data), xr.DataArray(x_in),
                              xr.DataArray(y_in), xr.DataArray(x_out),
                              xr.DataArray(y_out))
+
+        np.testing.assert_array_equal(out_expected, out.values)
+
+    def test_triple_to_grid_float64_xr_chunked(self):
+        out = triple_to_grid(
+            xr.DataArray(data).chunk(), xr.DataArray(x_in), xr.DataArray(y_in),
+            xr.DataArray(x_out), xr.DataArray(y_out))
 
         np.testing.assert_array_equal(out_expected, out.values)
 
@@ -123,7 +130,7 @@ class Test_triple_to_grid_float64(ut.TestCase):
     def test_triple_to_grid_float64_distmx(self):
         out = triple_to_grid(data, x_in, y_in, x_out, y_out, distmx=distmx)
 
-        np.testing.assert_array_equal(out_expected_distmx, out.values)
+        np.testing.assert_array_equal(out_expected_distmx, out)
 
     def test_triple_to_grid_float64_msg_nan(self):
         out = triple_to_grid(data_msg_nan,
@@ -133,7 +140,7 @@ class Test_triple_to_grid_float64(ut.TestCase):
                              y_out,
                              missing_value=np.nan)
 
-        np.testing.assert_array_equal(out_expected_msg_nan, out.values)
+        np.testing.assert_array_equal(out_expected_msg_nan, out)
 
     def test_triple_to_grid_float64_msg_99(self):
         out = triple_to_grid(data_msg_99,
@@ -143,7 +150,7 @@ class Test_triple_to_grid_float64(ut.TestCase):
                              y_out,
                              missing_value=-99)
 
-        np.testing.assert_array_equal(out_expected_msg_99, out.values)
+        np.testing.assert_array_equal(out_expected_msg_99, out)
 
     def test_triple_to_grid_float64_distmx_msg_nan(self):
         out = triple_to_grid(data_msg_nan,
@@ -154,7 +161,7 @@ class Test_triple_to_grid_float64(ut.TestCase):
                              missing_value=np.nan,
                              distmx=distmx)
 
-        np.testing.assert_array_equal(out_expected_distmx_msg_nan, out.values)
+        np.testing.assert_array_equal(out_expected_distmx_msg_nan, out)
 
     def test_triple_to_grid_float64_distmx_msg_99(self):
         out = triple_to_grid(data_msg_99,
@@ -165,7 +172,7 @@ class Test_triple_to_grid_float64(ut.TestCase):
                              missing_value=-99,
                              distmx=distmx)
 
-        np.testing.assert_array_equal(out_expected_distmx_msg_99, out.values)
+        np.testing.assert_array_equal(out_expected_distmx_msg_99, out)
 
 
 class Test_triple_to_grid_float32(ut.TestCase):
@@ -174,8 +181,7 @@ class Test_triple_to_grid_float32(ut.TestCase):
         out = triple_to_grid(data.astype(np.float32), x_in.astype(np.float32),
                              y_in.astype(np.float32), x_out.astype(np.float32),
                              y_out.astype(np.float32))
-        np.testing.assert_array_equal(out_expected.astype(np.float32),
-                                      out.values)
+        np.testing.assert_array_equal(out_expected.astype(np.float32), out)
 
     # TODO: Revisit this because it failed arbitrarily in MacOS environment but never in Ubuntu
     # def test_triple_to_grid_float32_method_0(self):
@@ -198,7 +204,7 @@ class Test_triple_to_grid_float32(ut.TestCase):
                              y_out.astype(np.float32),
                              distmx=distmx)
         np.testing.assert_array_equal(out_expected_distmx.astype(np.float32),
-                                      out.values)
+                                      out)
 
     def test_triple_to_grid_float32_msg_nan(self):
         out = triple_to_grid(data_msg_nan.astype(np.float32),
@@ -208,7 +214,7 @@ class Test_triple_to_grid_float32(ut.TestCase):
                              y_out.astype(np.float32),
                              missing_value=np.nan)
         np.testing.assert_array_equal(out_expected_msg_nan.astype(np.float32),
-                                      out.values)
+                                      out)
 
     def test_triple_to_grid_float32_msg_99(self):
         out = triple_to_grid(data_msg_99.astype(np.float32),
@@ -217,7 +223,7 @@ class Test_triple_to_grid_float32(ut.TestCase):
                              x_out.astype(np.float32),
                              y_out.astype(np.float32),
                              missing_value=-99)
-        np.testing.assert_array_almost_equal(out_expected_msg_99, out.values)
+        np.testing.assert_array_almost_equal(out_expected_msg_99, out)
 
     def test_triple_to_grid_float32_distmx_msg_nan(self):
         out = triple_to_grid(data_msg_nan.astype(np.float32),
@@ -229,7 +235,7 @@ class Test_triple_to_grid_float32(ut.TestCase):
                              distmx=distmx)
         np.testing.assert_array_equal(
             out_expected_distmx_msg_nan.astype(np.float32),
-            out.values.astype(np.float32))
+            out.astype(np.float32))
 
     def test_triple_to_grid_float32_distmx_msg_99(self):
         out = triple_to_grid(data_msg_99.astype(np.float32),
@@ -240,8 +246,4 @@ class Test_triple_to_grid_float32(ut.TestCase):
                              missing_value=-99,
                              distmx=distmx)
         np.testing.assert_array_equal(
-            out_expected_distmx_msg_99.astype(np.float32), out.values)
-
-
-# a = Test_triple_to_grid_float64()
-# a.test_triple_to_grid_float64_method_0()
+            out_expected_distmx_msg_99.astype(np.float32), out)
