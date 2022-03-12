@@ -12,6 +12,7 @@ from .missing_values import fort2py_msg, py2fort_msg
 # Dask Wrappers or Internal Wrappers _<funcname>()
 # These Wrapper are executed within dask processes, and should do anything that
 # can benefit from parallel excution.
+supported_types = typing.Union[xr.DataArray, np.ndarray]
 
 
 def _grid_to_triple(x, y, z, msg_py):
@@ -88,7 +89,12 @@ def _triple_to_grid_2d(x_in, y_in, data, x_out, y_out, msg_py):
 # used for any tasks which would not benefit from parallel execution.
 
 
-def grid_to_triple(data, x_in=None, y_in=None, msg_py=None):
+def grid_to_triple(
+    data: supported_types,
+    x_in: supported_types = None,
+    y_in: supported_types = None,
+    msg_py: supported_types = None,
+) -> supported_types:
     """Converts a two-dimensional grid with one-dimensional coordinate
     variables to an array where each grid value is associated with its
     coordinates.
