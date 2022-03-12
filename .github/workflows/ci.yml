@@ -31,6 +31,7 @@ jobs:
           activate-environment: geocat_f2py_build
           python-version: ${{ matrix.python-version }}
           channels: conda-forge, ncar
+          channel-priority: strict
       - name: Conda install (Darwin)
         if: matrix.os == 'macos-latest'
         run: |
