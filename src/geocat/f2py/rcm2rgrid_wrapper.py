@@ -1,5 +1,5 @@
-import numpy as np
 import typing
+import numpy as np
 import xarray as xr
 from dask.array.core import map_blocks
 
