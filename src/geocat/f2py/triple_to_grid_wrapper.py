@@ -472,13 +472,15 @@ def triple_to_grid(
 
 # TODO: Revisit for implementing this function after deprecating geocat.ncomp
 def triple_to_grid_2d(x_in, y_in, data, x_out, y_out, msg_py):
-    # ''' signature:  grid = triple2grid2d(x,y,data,x_out,y_out,msg_py)
-    pass
+    warnings.warn(
+        "triple_to_grid_2d function name and signature will be deprecated soon "
+        "in a future version. Use `grid_to_triple` instead!",
+        PendingDeprecationWarning)
+
+    return triple_to_grid(data, x_in, y_in, x_out, y_out, missing_value=msg_py)
 
 
 # Transparent wrappers for geocat.ncomp backwards compatibility
-
-
 def grid2triple(x_in, y_in, data, msg_py):
     warnings.warn(
         "grid2triple function name and signature will be deprecated soon "
@@ -488,6 +490,7 @@ def grid2triple(x_in, y_in, data, msg_py):
     return grid_to_triple(data, x_in, y_in, msg_py)
 
 
+# Transparent wrappers for geocat.ncomp backwards compatibility
 def triple2grid(x_in, y_in, data, x_out, y_out, **kwargs):
     warnings.warn(
         "triple2grid function name and signature will be deprecated soon "
