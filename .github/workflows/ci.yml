@@ -1,15 +1,9 @@
 name: CI
 on:
-  push:
   pull_request:
-  workflow_dispatch:
-  # schedule:
-  #    - cron: '0 0 * * *' # Daily “At 00:00”
 
 jobs:
   test:
-    # if: |
-    #   github.repository == 'NCAR/geocat-f2py'
     name: Python (${{ matrix.python-version }}, ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     defaults:
@@ -20,7 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ "ubuntu-latest", "macos-latest"]
-        python-version: [ "3.7", "3.8", "3.9", "3.10" ]
+        python-version: [ "3.8", "3.9", "3.10" ]
 
     steps:
       - name: Cancel previous runs
@@ -37,6 +31,7 @@ jobs:
           activate-environment: geocat_f2py_build
           python-version: ${{ matrix.python-version }}
           channels: conda-forge, ncar
+          channel-priority: strict
       - name: Conda install (Darwin)
         if: matrix.os == 'macos-latest'
         run: |

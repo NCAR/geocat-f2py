@@ -6,10 +6,9 @@ dependencies:
   - python
   - dask
   - gfortran_linux-64
-  - numpy>=1.20.2
+  - numpy>=1.22
   - pip
-  - pytest  # for tests
-  - pytest-cov  # for tests
+  - pytest
+  - pytest-cov
   - xarray
-  - pip:
-      - pre-commit
+  - pre-commit

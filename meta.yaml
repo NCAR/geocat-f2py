@@ -1,4 +1,4 @@
-{% set version = "2022.03.0" %}
+{% set version = "2022.03.1" %}
 
 package:
   name: 'geocat-f2py'
@@ -12,7 +12,7 @@ source:
 
 build:
   number: 0
-  skip: True # [py<37]
+  skip: True # [py<38]
 
 requirements:
   host:
