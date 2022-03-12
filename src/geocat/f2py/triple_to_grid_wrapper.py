@@ -208,16 +208,18 @@ def grid_to_triple(
     return out
 
 
-def triple_to_grid(data,
-                   x_in,
-                   y_in,
-                   x_out,
-                   y_out,
-                   method=1,
-                   domain=float(1.0),
-                   distmx=None,
-                   missing_value=np.nan,
-                   meta=False):
+def triple_to_grid(
+    data: supported_types,
+    x_in: supported_types,
+    y_in: supported_types,
+    x_out: supported_types,
+    y_out: supported_types,
+    method: int = 1,
+    domain: float = 1.0,
+    distmx: float = None,
+    missing_value: np.number = None,
+    meta: bool = False,
+) -> supported_types:
     """Places unstructured (randomly-spaced) data onto the nearest locations of
     a rectilinear grid.
 
