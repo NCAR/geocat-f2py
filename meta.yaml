@@ -1,29 +1,32 @@
+{% set name = "geocat-f2py" %}
 {% set version = "2022.03.1" %}
 
 package:
-  name: 'geocat-f2py'
+  name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  # git_rev: march     # For building from main branch for debugging purposes
-  git_tag: v{{ version }}   # For building from a specific tag
-  git_url: https://github.com/NCAR/geocat-f2py.git
-  # url: https://github.com/NCAR/geocat-f2py/archive/v{{ version }}.tar.gz   # For building from a specific tag's tarball
+  # git_rev: main # For building from main branch for debugging purposes
+#   git_tag: v{{ version }}   # For building from a specific tag
+#   git_url: https://github.com/NCAR/geocat-f2py.git
+  url: http://github.com/NCAR/geocat-f2py/archive/v{{ version }}.tar.gz # For building from a specific tag's tarball
+  sha256: 8ee37f26084d2a2454dfd9ba476138f3d05ac9511e1d11e19ad04862e70a7fed
 
 build:
+  noarch: python
   number: 0
-  skip: True # [py<37]
 
 requirements:
   host:
-    - python
-    - numpy>=1.20.2
+    - pip
+    - python >=3.7
+    - numpy >=1.20.2
     - {{ compiler('fortran') }}
   run:
-    - python
+    - python >=3.7
+    - numpy >=1.20.2
     - xarray
     - dask
-    - numpy>=1.20.2
     - {{ compiler('fortran') }}
 
 test:
@@ -38,3 +41,11 @@ test:
 
 about:
   home: https://github.com/NCAR/geocat-f2py
+  summary: GeoCAT-f2py wraps, in Python, the compiled language implementations of some of the computational functions found under the GeoCAT-comp umbrella.
+  dev_url: https://github.com/NCAR/geocat-f2py
+  license: Apache-2.0
+  license_file: LICENSE
+
+extra:
+  recipe-maintainers:
+    - pilotchute
