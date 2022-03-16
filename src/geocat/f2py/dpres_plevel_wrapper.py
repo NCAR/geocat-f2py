@@ -1,3 +1,5 @@
+import typing
+
 import numpy as np
 import xarray as xr
 
@@ -5,27 +7,29 @@ from .errors import AttributeError, DimensionError, MetaError
 from .fortran import dpresplvl
 from .missing_values import fort2py_msg, py2fort_msg
 
+supported_types = typing.Union[xr.DataArray, np.ndarray]
+
 # Outer Wrapper <funcname>()
 # This wrapper is excecuted in the __main__ python process, and should be
 # used for any tasks which would not benefit from parallel execution.
 
 
-def dpres_plevel(pressure_levels,
-                 pressure_surface,
-                 pressure_top=None,
-                 msg_py=None,
-                 meta=False):
+def dpres_plevel(pressure_levels: supported_types,
+                 pressure_surface: typing.Union[np.number, supported_types],
+                 pressure_top: np.number = None,
+                 msg_py: np.number = None,
+                 meta: bool = False) -> supported_types:
     """Calculates the pressure layer thicknesses of a constant pressure level
     coordinate system.
 
     Parameters
     ----------
 
-    pressure_levels : :class:`xarray.DataArray` or :class:`numpy.ndarray`:
+    pressure_levels : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
         A one dimensional array containing the constant pressure levels. May be
         in ascending or descending order. Must have the same units as `pressure_surface`.
 
-    pressure_surface : :obj:`numpy.number` or :class:`xarray.DataArray` or :class:`numpy.ndarray`:
+    pressure_surface : :obj:`numpy.number`, :class:`xarray.DataArray`, :class:`numpy.ndarray`:
         A scalar or an array of up to three dimensions containing the surface
         pressure data in Pa or hPa (mb). The rightmost dimensions must be latitude
         and longitude. Must have the same units as `pressure_levels`.
@@ -48,7 +52,7 @@ def dpres_plevel(pressure_levels,
     Returns
     -------
 
-    dp : :class:`xarray.DataArray`:
+    dp : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
         If pressure_surface is a scalar, the return variable will be a
         one-dimensional array the same size as `pressure_levels`; if `pressure_surface`
         is two-dimensional [e.g. (lat,lon)] or three-dimensional [e.g. (time,lat,lon)],
@@ -97,11 +101,11 @@ def dpres_plevel(pressure_levels,
     """
 
     # Apply basic sanity checks on the input data
-    pressure_levels, pressure_surface, pressure_top = _sanity_check(
+    pressure_levels, pressure_surface, pressure_top, is_input_xr = _validity_check(
         pressure_levels, pressure_surface, pressure_top)
 
     # Inner wrapper call
-    dp = _dpres_plevel(pressure_levels.values, pressure_surface.values,
+    dp = _dpres_plevel(pressure_levels.data, pressure_surface.data,
                        pressure_top, msg_py)
 
     # Reshape output based on the dimensionality of pressure_surface
@@ -110,14 +114,16 @@ def dpres_plevel(pressure_levels,
     elif pressure_surface.ndim == 2:
         dp = dp.reshape(dp.shape[0] * dp.shape[1], dp.shape[2], dp.shape[3])
 
-    if meta:
-        raise MetaError(
-            "ERROR dpres_plevel: Retention of metadata (other than Xarray.Dataarray.attrs) is not yet supported !"
-        )
+    # If input was xarray.DataArray, convert output to xarray.DataArray as well
+    if is_input_xr:
+        if meta:
+            raise MetaError(
+                "dpres_plevel: Retention of metadata (other than Xarray.Dataarray.attrs) is not yet supported !"
+            )
 
-        # TODO: Retaining possible metadata might be revised in the future
-    else:
-        dp = xr.DataArray(dp, attrs=pressure_surface.attrs)
+            # TODO: Retaining possible metadata might be revised in the future
+        else:
+            dp = xr.DataArray(dp, attrs=pressure_surface.attrs)
 
     return dp
 
@@ -153,9 +159,14 @@ def _dpres_plevel(plev, psfc, ptop, msg_py):
 
 
 # TODO: WIll revisit this after merging sanity check module to repo.
-def _sanity_check(pressure_levels, pressure_surface, pressure_top):
-    # ''' Basic sanity checks
+def _validity_check(pressure_levels, pressure_surface, pressure_top):
+    # ''' Basic validity checks
+    is_input_xr = True
+
     if not isinstance(pressure_levels, xr.DataArray):
+
+        is_input_xr = False
+
         pressure_levels = xr.DataArray(pressure_levels)
 
     if pressure_levels.ndim != 1:
@@ -175,7 +186,7 @@ def _sanity_check(pressure_levels, pressure_surface, pressure_top):
 
     if pressure_surface.ndim > 3:
         raise DimensionError(
-            "ERROR dpres_plevel: 'pressure_surface' must be a scalar, or 2 or 3 dimensional "
+            "dpres_plevel: `pressure_surface` must be a scalar, or 2 or 3 dimensional "
             "array with right most dimensions lat x lon !")
 
     # pressure_levels and pressure_surface must have the same units, if they have any.
@@ -183,20 +194,18 @@ def _sanity_check(pressure_levels, pressure_surface, pressure_top):
     ) and "units" in pressure_surface.attrs.keys():
         if pressure_levels.attrs["units"] != pressure_surface.attrs["units"]:
             raise AttributeError(
-                "ERROR dpres_plevel: Units of 'pressure_levels' and 'pressure_surface' needs to match !"
+                "dpres_plevel: Units of `pressure_levels` and `pressure_surface` needs to match !"
             )
     elif "units" in pressure_levels.attrs.keys(
     ) or "units" in pressure_surface.attrs.keys():
         raise AttributeError(
-            "ERROR dpres_plevel: Either of 'pressure_levels' and 'pressure_surface' "
-            "has "
-            "units"
-            " attribute but the other does not !")
+            "dpres_plevel: Either of `pressure_levels` and `pressure_surface` "
+            "has units attribute but the other does not !")
 
     if isinstance(pressure_top, np.ndarray) or isinstance(
             pressure_top, xr.DataArray):
         raise DimensionError(
-            "ERROR dpres_plevel: The 'pressure_top' value must be a scalar !")
+            "dpres_plevel: The `pressure_top` value must be a scalar !")
 
     pressure_level_min = np.min(pressure_levels.values)
     if pressure_top is None:
@@ -204,7 +213,7 @@ def _sanity_check(pressure_levels, pressure_surface, pressure_top):
     else:
         if pressure_top > pressure_level_min:
             raise ValueError(
-                "ERROR dpres_plevel: The 'pressure_top' value must be <= min(pressure_levels) !"
+                "dpres_plevel: The `pressure_top` value must be <= min(pressure_levels) !"
             )
 
-    return pressure_levels, pressure_surface, pressure_top
+    return pressure_levels, pressure_surface, pressure_top, is_input_xr
