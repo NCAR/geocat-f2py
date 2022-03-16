@@ -1,12 +1,10 @@
+from dask.array.core import map_blocks
 import numpy as np
 import xarray as xr
-from dask.array.core import map_blocks
 
-from geocat.f2py.errors import ChunkError, CoordinateError
-from geocat.f2py.fortran import drcm2points
-from geocat.f2py.missing_values import fort2py_msg, py2fort_msg
-
-from .errors import DimensionError
+from .errors import ChunkError, CoordinateError, DimensionError
+from .fortran import drcm2points
+from .missing_values import fort2py_msg, py2fort_msg
 
 # Fortran Wrapper _<funcname>()
 # This wrapper is executed within dask processes (if any), and could/should

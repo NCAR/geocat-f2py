@@ -1,8 +1,8 @@
 import warnings
 
+from dask.array.core import map_blocks
 import numpy as np
 import xarray as xr
-from dask.array.core import map_blocks
 
 from .errors import ChunkError, CoordinateError
 from .fortran import dlinint1, dlinint2, dlinint2pts

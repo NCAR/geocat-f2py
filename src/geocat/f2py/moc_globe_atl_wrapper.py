@@ -1,8 +1,6 @@
 import numpy as np
 import xarray as xr
-from dask.array.core import map_blocks
 
-from .errors import ChunkError, CoordinateError
 from .fortran import mocloops
 from .missing_values import fort2py_msg, py2fort_msg
 

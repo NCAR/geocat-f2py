@@ -1,9 +1,9 @@
 import typing
 import warnings
 
+from dask.array.core import map_blocks
 import numpy as np
 import xarray as xr
-from dask.array.core import map_blocks
 
 from .errors import ChunkError, CoordinateError, DimensionError
 from .fortran import grid2triple as grid2triple_fort
