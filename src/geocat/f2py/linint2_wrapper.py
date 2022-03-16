@@ -8,9 +8,9 @@ from .errors import ChunkError, CoordinateError
 from .fortran import dlinint1, dlinint2, dlinint2pts
 from .missing_values import fort2py_msg, py2fort_msg
 
-# Dask Wrappers _<funcname>()
-# These Wrapper are executed within dask processes, and should do anything that
-# can benefit from parallel excution.
+# Fortran Wrappers _<funcname>()
+# These wrappers are executed within dask processes (if any), and could/should
+# do anything that can benefit from parallel execution.
 
 
 def _linint1(xi, fi, xo, icycx, msg_py, shape):

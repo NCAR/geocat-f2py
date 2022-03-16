@@ -1,16 +1,17 @@
 import typing
+
 import numpy as np
 import xarray as xr
-from dask.array.core import map_blocks
 
 from .errors import ChunkError, CoordinateError
 from .fortran import drcm2rgrid, drgrid2rcm
 from .missing_values import fort2py_msg, py2fort_msg
 
-# Dask Wrappers _<funcname>()
-# These Wrapper are executed within dask processes, and should do anything that
-# can benefit from parallel excution.
 supported_types = typing.Union[xr.DataArray, np.ndarray]
+
+# Fortran Wrappers _<funcname>()
+# These wrappers are executed within dask processes (if any), and could/should
+# do anything that can benefit from parallel execution.
 
 
 def _rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg_py):
@@ -48,7 +49,7 @@ def _rgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, msg_py):
 
 
 # Outer Wrappers <funcname>()
-# These Wrappers are excecuted in the __main__ python process, and should be
+# These wrappers are executed in the __main__ python process, and should be
 # used for any tasks which would not benefit from parallel execution.
 
 

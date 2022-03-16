@@ -1,5 +1,6 @@
 import typing
 import warnings
+
 import numpy as np
 import xarray as xr
 from dask.array.core import map_blocks
@@ -9,10 +10,11 @@ from .fortran import grid2triple as grid2triple_fort
 from .fortran import triple2grid1
 from .missing_values import fort2py_msg, py2fort_msg
 
-# Dask Wrappers or Internal Wrappers _<funcname>()
-# These Wrapper are executed within dask processes, and should do anything that
-# can benefit from parallel excution.
 supported_types = typing.Union[xr.DataArray, np.ndarray]
+
+# Fortran Wrappers _<funcname>()
+# These wrappers are executed within dask processes (if any), and could/should
+# do anything that can benefit from parallel execution.
 
 
 def _grid_to_triple(x, y, z, msg_py):

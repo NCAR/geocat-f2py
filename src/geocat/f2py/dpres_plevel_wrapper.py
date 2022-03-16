@@ -5,8 +5,8 @@ from .errors import AttributeError, DimensionError, MetaError
 from .fortran import dpresplvl
 from .missing_values import fort2py_msg, py2fort_msg
 
-# Single Wrapper <funcname>()
-# These Wrappers are excecuted in the __main__ python process, and should be
+# Outer Wrapper <funcname>()
+# This wrapper is excecuted in the __main__ python process, and should be
 # used for any tasks which would not benefit from parallel execution.
 
 
@@ -122,10 +122,9 @@ def dpres_plevel(pressure_levels,
     return dp
 
 
-# Inner Wrapper _<funcname>()
-# This wrapper basically calls the Fortran function. It also handles
-# transpose of the input and output data as well as missing value
-# representations before and after the Fortran function call.
+# Fortran Wrapper _<funcname>()
+# This wrapper is executed within dask processes (if any), and could/should
+# do anything that can benefit from parallel execution.
 
 
 def _dpres_plevel(plev, psfc, ptop, msg_py):

@@ -6,9 +6,9 @@ from .errors import ChunkError, CoordinateError
 from .fortran import mocloops
 from .missing_values import fort2py_msg, py2fort_msg
 
-# Dask Wrappers _<funcname>()
-# These Wrapper are executed within dask processes, and should do anything that
-# can benefit from parallel excution.
+# Fortran Wrapper _<funcname>()
+# This wrapper is executed within dask processes (if any), and could/should
+# do anything that can benefit from parallel execution.
 
 
 def _moc_loops(lat_aux_grid, a_wvel, a_bolus, a_submeso, t_lat, rmlak, msg_py):
@@ -48,8 +48,8 @@ def _moc_loops(lat_aux_grid, a_wvel, a_bolus, a_submeso, t_lat, rmlak, msg_py):
     return tmp_out
 
 
-# Outer Wrappers <funcname>()
-# These Wrappers are excecuted in the __main__ python process, and should be
+# Outer Wrapper <funcname>()
+# This wrapper is excecuted in the __main__ python process, and should be
 # used for any tasks which would not benefit from parallel execution.
 
 

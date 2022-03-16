@@ -8,9 +8,9 @@ from geocat.f2py.missing_values import fort2py_msg, py2fort_msg
 
 from .errors import DimensionError
 
-# Dask Wrappers _<funcname>()
-# These Wrapper are executed within dask processes, and should do anything that
-# can benefit from parallel excution.
+# Fortran Wrapper _<funcname>()
+# This wrapper is executed within dask processes (if any), and could/should
+# do anything that can benefit from parallel execution.
 
 
 def _rcm2points(lat2d, lon2d, fi, lat1d, lon1d, msg_py, opt, shape):
@@ -30,8 +30,8 @@ def _rcm2points(lat2d, lon2d, fi, lat1d, lon1d, msg_py, opt, shape):
     return fo
 
 
-# Outer Wrappers <funcname>()
-# These Wrappers are excecuted in the __main__ python process, and should be
+# Outer Wrapper <funcname>()
+# This wrapper is excecuted in the __main__ python process, and should be
 # used for any tasks which would not benefit from parallel execution.
 
 
