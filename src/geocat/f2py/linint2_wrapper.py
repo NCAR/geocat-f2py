@@ -1,3 +1,4 @@
+import typing
 import warnings
 
 from dask.array.core import map_blocks
@@ -7,6 +8,8 @@ import xarray as xr
 from .errors import ChunkError, CoordinateError
 from .fortran import dlinint1, dlinint2, dlinint2pts
 from .missing_values import fort2py_msg, py2fort_msg
+
+supported_types = typing.Union[xr.DataArray, np.ndarray]
 
 # Fortran Wrappers _<funcname>()
 # These wrappers are executed within dask processes (if any), and could/should
@@ -96,37 +99,31 @@ def _linint2pts(xi, yi, fi, xo, yo, icycx, msg_py, shape):
 # used for any tasks which would not benefit from parallel execution.
 
 
-def linint1(fi, xo, xi=None, icycx=0, msg_py=None):
+def linint1(fi: supported_types,
+            xo: supported_types,
+            xi: supported_types = None,
+            icycx: np.number = 0,
+            msg_py: np.number = None) -> supported_types:
     # ''' signature : fo = dlinint1(xi,fi,xo,[icycx,xmsg,iopt])
     """Interpolates from one series to another using piecewise linear
-    interpolation across the rightmost dimension.
+    interpolation across the rightmost dimension. The series may be cyclic in
+    the X direction.
 
-    linint1 uses piecewise linear interpolation to interpolate from
-    one series to another.  The series may be cyclic in the X
-    direction.
+    If missing values are present, then linint1 will perform the piecewise linear interpolation at
+    all points possible, but will return missing values at coordinates which could not be used.
 
-    If missing values are present, then linint1 will perform the
-    piecewise linear interpolation at all points possible, but
-    will return missing values at coordinates which could not
-    be used.
-
-    If any of the output coordinates xo are outside those of the
-    input coordinates xi, the fo values at those coordinates will
-    be set to missing (i.e. no extrapolation is performed).
-
+    If any of the output coordinates `xo` are outside those of the input coordinates `xi`, the
+    `fo` values at those coordinates will be set to missing (i.e. no extrapolation is performed).
 
     Parameters
     ----------
 
-    fi : :class:`xarray.DataArray` or :class:`numpy.ndarray`:
-        An array of one or more dimensions. If xi is passed in as an
-        argument, then the size of the rightmost dimension of fi
-        must match the rightmost dimension of xi.
+    fi : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+        An array of one or more dimensions. If `xi` is passed in as an argument, then the size of
+        the rightmost dimension of `fi` must match the rightmost dimension of `xi`.
 
-        If missing values are present, then linint1 will perform the
-        piecewise linear interpolation at all points possible, but
-        will return missing values at coordinates which could not be
-        used.
+        If missing values are present, then `linint1` will perform the piecewise linear interpolation
+        at all points possible, but will return missing values at coordinates which could not be used.
 
         Note:
             This variable must be
@@ -134,7 +131,7 @@ def linint1(fi, xo, xi=None, icycx=0, msg_py=None):
             the dimension names to the output. Otherwise, default
             names will be used.
 
-    xo : :class:`xarray.DataArray` or :class:`numpy.ndarray`:
+    xo : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
         A one-dimensional array that specifies the X coordinates of
         the return array. It must be strictly monotonically
         increasing or decreasing, but may be unequally spaced.
@@ -144,15 +141,15 @@ def linint1(fi, xo, xi=None, icycx=0, msg_py=None):
         coordinates will be set to missing (i.e. no extrapolation is
         performed).
 
-    xi (:class:`numpy.ndarray`):
+    xi : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
         An array that specifies the X coordinates of the fi array.
         Most frequently, this array is one-dimensional.  It must be
         strictly monotonically increasing or decreasing, but can be
         unequally spaced.
-        If xi is multi-dimensional, then its
-        dimensions must be the same as fi's dimensions. If it is
-        one-dimensional, its length must be the same as the rightmost
-        (fastest varying) dimension of fi.
+        If xi is multi-dimensional, then itsimensions must be the
+        same as fi's dimensions. If it isone-dimensional, its length
+        must be the same as the rightmost (fastest varying) dimension
+        of fi.
 
         Note:
             If fi is of type :class:`xarray.DataArray` and xi is
@@ -177,7 +174,7 @@ def linint1(fi, xo, xi=None, icycx=0, msg_py=None):
 
     Returns
     -------
-    fo : :class:`xarray.DataArray`:
+    fo : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
         The interpolated series. The returned value will have the same
         dimensions as fi, except for the rightmost dimension which
         will have the same dimension size as the length of xo.
