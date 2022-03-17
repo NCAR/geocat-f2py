@@ -288,11 +288,11 @@ def linint2(fi: supported_types,
             xi: supported_types = None,
             yi: supported_types = None,
             icycx: bool = 0,
-            msg_py: np.number = None):
+            msg_py: np.number = None) -> supported_types:
     """Interpolates a regular grid to a rectilinear one using bi-linear
-    interpolation. The input grid may be cyclic in the x direction. The
-    interpolation is first performed in the x direction, and then in the y
-    direction.
+    interpolation. The input grid may be cyclic in the x-direction. The
+    interpolation is first performed in the x-direction, and then in the
+    y-direction.
 
     Parameters
     ----------
