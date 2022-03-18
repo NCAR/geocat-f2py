@@ -168,3 +168,18 @@ class Test_rcm2points(ut.TestCase):
                        lon,
                        opt=2,
                        msg=msg32))
+
+
+class Test_rcm2points_xr(ut.TestCase):
+    """Test_rcm2points This unit test covers the nominal, nan, and msg cases of
+    64 and 32 bit float input for rcm2point for xarray.DataArray inputs."""
+
+    def test_rcm2points_float64_nom_opt0(self):
+        nt.assert_array_almost_equal(
+            xr.DataArray(fo_nom_opt0_expected),
+            rcm2points(lat2d,
+                       lon2d,
+                       xr.DataArray(fi_nom.astype(np.float64)),
+                       lat,
+                       lon,
+                       opt=0))
