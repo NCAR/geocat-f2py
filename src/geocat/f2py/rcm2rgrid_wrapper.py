@@ -176,6 +176,12 @@ def rcm2rgrid(
 
         fi = xr.DataArray(fi,)
 
+    # Convert 2d arrays to Xarray for inner wrapper call below if they are numpy
+    lon2d = xr.DataArray(lon2d)
+    lat2d = xr.DataArray(lat2d)
+    lon1d = xr.DataArray(lon1d)
+    lat1d = xr.DataArray(lat1d)
+
     # Ensure last two dimensions of `fi` are not chunked
     if fi.chunks is not None:
         if list(fi.chunks)[-2:] != [(lat2d.shape[0],), (lat2d.shape[1],)]:
@@ -185,7 +191,8 @@ def rcm2rgrid(
     # ''' end of boilerplate
 
     # Inner Fortran wrapper call
-    fo = _rcm2rgrid(lat2d, lon2d, fi.data, lat1d, lon1d, msg)
+    fo = _rcm2rgrid(lat2d.data, lon2d.data, fi.data, lat1d.data, lon1d.data,
+                    msg)
 
     # If input was xarray.DataArray, convert output to xarray.DataArray as well
     if is_input_xr:
@@ -336,7 +343,8 @@ def rgrid2rcm(
     # ''' end of boilerplate
 
     # Inner Fortran wrapper call
-    fo = _rgrid2rcm(lat1d, lon1d, fi.data, lat2d.data, lon2d.data, msg)
+    fo = _rgrid2rcm(lat1d.data, lon1d.data, fi.data, lat2d.data, lon2d.data,
+                    msg)
 
     # If input was xarray.DataArray, convert output to xarray.DataArray as well
     if is_input_xr:
