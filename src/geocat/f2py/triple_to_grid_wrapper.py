@@ -468,6 +468,9 @@ def triple_to_grid(
     # If input was xarray.DataArray, convert output to xarray.DataArray as well
     if is_input_xr:
         grid = xr.DataArray(grid)
+    # Else if input was numpy.ndarray, convert Dask output to numpy.ndarray with `.compute()
+    else:
+        grid = grid.compute()
 
     return grid
 
