@@ -394,7 +394,7 @@ def triple_to_grid(
     if np.asarray(domain).size != 1:
         raise ValueError("triple_to_grid: Provide a scalar value for `domain`!")
 
-    # If input data is chunked
+    # If input data is already chunked
     if data.chunks is not None:
 
         # Ensure the rightmost dimension of `data` is not chunked
@@ -423,7 +423,7 @@ def triple_to_grid(
     data_chunks = dict(data_chunks)
     data = data.chunk(data_chunks)
 
-    # grid datastructure elements
+    # grid data structure elements
     grid_chunks = list(data.chunks)
     grid_chunks[-1] = (y_out.shape[0] * x_out.shape[0],)
     grid_chunks = tuple(grid_chunks)

@@ -330,7 +330,8 @@ def rgrid2rcm(
     if fi.chunks is not None:
         if list(fi.chunks)[-2:] != [lat1d.shape, lon1d.shape]:
             raise Exception(
-                "fi must be unchunked along the last two dimensions")
+                "rgrid2rcm: `fi` must be unchunked along the last two dimensions"
+            )
     # ''' end of boilerplate
 
     # Inner Fortran wrapper call

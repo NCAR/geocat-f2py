@@ -407,50 +407,53 @@ def linint2(fi: supported_types,
     """
 
     # ''' Start of boilerplate
+    is_input_xr = True
+
+    # If the input is numpy.ndarray, convert it to xarray.DataArray
     if not isinstance(fi, xr.DataArray):
         if (xi is None) | (yi is None):
             raise CoordinateError(
                 "linint2: Arguments xi and yi must be provided explicitly unless fi is an xarray.DataArray."
             )
 
-        fi = xr.DataArray(fi,)
-        fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
-                        ])
+        is_input_xr = False
 
-        fi = xr.DataArray(
-            fi.data,
-            coords={
-                fi.dims[-1]: xi,
-                fi.dims[-2]: yi,
-            },
-            dims=fi.dims,
-        ).chunk(fi_chunk)
+        fi = xr.DataArray(fi)
+        fi = fi.assign_coords({fi.dims[-1]: xi, fi.dims[-2]: yi})
 
+    # `xi` and `yi` should be coming from xarray input coords or assigned
+    # as coords while xarray being initiated from numpy input above
     xi = fi.coords[fi.dims[-1]]
     yi = fi.coords[fi.dims[-2]]
 
-    # ensure rightmost dimensions of input are not chunked
-    if fi.chunks is None:
-        fi = fi.chunk()
+    # If input data is already chunked
+    if fi.chunks is not None:
+        # Ensure the rightmost dimensions of input are not chunked
+        if list(fi.chunks)[-2:] != [yi.shape, xi.shape]:
+            raise ChunkError(
+                "linint2: `fi` must be unchunked along the rightmost two dimensions"
+            )
 
-    if list(fi.chunks)[-2:] != [yi.shape, xi.shape]:
-        raise ChunkError(
-            "linint2: fi must be unchunked along the rightmost two dimensions")
+    # NOTE: Auto-chunking, regardless of what chunk sizes were given by the user, seems
+    # to be explicitly needed in this function because:
+    # The Fortran routine for this function is implemented assuming it would be looped
+    # across the leftmost dimensions of the input (`fi`), i.e. on one-dimensional
+    # chunks of size that is equal to the rightmost dimension of `fi`.
 
-    # fi data structure elements and autochunking
+    # Generate chunks of {'dim_0': 1, 'dim_1': 1, ..., 'dim_n-1': yi.shape, 'dim_n': xi.shape}
     fi_chunks = list(fi.dims)
     fi_chunks[:-2] = [
         (k, 1) for (k, v) in zip(list(fi.dims)[:-2],
-                                 list(fi.chunks)[:-2])
+                                 list(fi.shape)[:-2])
     ]
     fi_chunks[-2:] = [
-        (k, v[0]) for (k, v) in zip(list(fi.dims)[-2:],
-                                    list(fi.chunks)[-2:])
+        (k, v) for (k, v) in zip(list(fi.dims)[-2:],
+                                 list(fi.shape)[-2:])
     ]
     fi_chunks = dict(fi_chunks)
     fi = fi.chunk(fi_chunks)
 
-    # fo datastructure elements
+    # fo data structure elements
     fo_chunks = list(fi.chunks)
     fo_chunks[-2:] = (yo.shape, xo.shape)
     fo_chunks = tuple(fo_chunks)
@@ -460,6 +463,7 @@ def linint2(fi: supported_types,
     fo_coords[fi.dims[-2]] = yo
     # ''' end of boilerplate
 
+    # Inner Fortran wrapper call
     fo = map_blocks(
         _linint2,
         yi,
@@ -475,10 +479,11 @@ def linint2(fi: supported_types,
         drop_axis=[fi.ndim - 2, fi.ndim - 1],
         new_axis=[fi.ndim - 2, fi.ndim - 1],
     )
-    fo = xr.DataArray(fo.compute(),
-                      attrs=fi.attrs,
-                      dims=fi.dims,
-                      coords=fo_coords)
+
+    # If input was xarray.DataArray, convert output to xarray.DataArray as well
+    if is_input_xr:
+        fo = xr.DataArray(fo, attrs=fi.attrs, dims=fi.dims, coords=fo_coords)
+
     return fo
 
 
