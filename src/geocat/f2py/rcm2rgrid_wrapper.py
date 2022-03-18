@@ -322,7 +322,7 @@ def rgrid2rcm(
     lon1d = fi.coords[fi.dims[-1]]
     lat1d = fi.coords[fi.dims[-2]]
 
-    # Convert 2d arrays to Xarray for map_blocks call below if they are numpy
+    # Convert 2d arrays to Xarray for inner wrapper call below if they are numpy
     lat2d = xr.DataArray(lat2d)
     lon2d = xr.DataArray(lon2d)
 
