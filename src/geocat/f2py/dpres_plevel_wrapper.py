@@ -158,7 +158,9 @@ def _dpres_plevel(plev, psfc, ptop, msg_py):
     return dp
 
 
-# TODO: WIll revisit this after merging sanity check module to repo.
+# Helper function that checks the validity of the input
+
+
 def _validity_check(pressure_levels, pressure_surface, pressure_top):
     # ''' Basic validity checks
     is_input_xr = True
