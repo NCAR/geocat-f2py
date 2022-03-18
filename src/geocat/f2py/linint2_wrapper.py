@@ -487,81 +487,86 @@ def linint2(fi: supported_types,
     return fo
 
 
-def linint2pts(fi, xo, yo, icycx=False, msg_py=None, xi=None, yi=None):
+def linint2pts(fi: supported_types,
+               xo: supported_types,
+               yo: supported_types,
+               icycx: bool = False,
+               msg_py: np.number = None,
+               xi: supported_types = None,
+               yi: supported_types = None) -> supported_types:
     """Interpolates from a rectilinear grid to an unstructured grid or
     locations using bilinear interpolation.
 
     Parameters
     ----------
-    fi : :class:`xarray.DataArray` or :class:`numpy.ndarray`:
-        An array of two or more dimensions. The two rightmost
-        dimensions (nyi x nxi) are the dimensions to be used in
-        the interpolation. If user-defined missing values are
-        present (other than NaNs), the value of `msg_py` must be
-        set appropriately.
-    xo : :class:`xarray.DataArray` or :class:`numpy.ndarray`:
-        A one-dimensional array that specifies the X (longitude)
-        coordinates of the unstructured grid.
-    yo : :class:`xarray.DataArray` or :class:`numpy.ndarray`:
-        A one-dimensional array that specifies the Y (latitude)
-        coordinates of the unstructured grid. It must be the same
-        length as `xo`.
+
+    fi : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+        An array of two or more dimensions. The two rightmost dimensions (nyi x nxi) are the
+        dimensions to be used in the interpolation. If user-defined missing values are present
+        (other than NaNs), the value of `msg_py` must be set appropriately.
+
+    xo : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+        A one-dimensional array that specifies the X-coordinates of the unstructured grid.
+
+    yo : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+        A one-dimensional array that specifies the Y-coordinates of the unstructured grid. It
+        must be the same length as `xo`.
+
     icycx : :obj:`bool`:
-        An option to indicate whether the rightmost dimension of fi
-        is cyclic. Default valus is 0. This should be set to True
-        only if you have global data, but your longitude values
-        don't quite wrap all the way around the globe. For example,
-        if your longitude values go from, say, -179.75 to 179.75,
-        or 0.5 to 359.5, then you would set this to True.
+        An option to indicate whether the rightmost dimension of `fi` is cyclic. Default valus
+        is 0. This should be set to True only if you have global data, but your longitude values
+        don't quite wrap all the way around the globe. For example, if your longitude values go
+        from, say, -179.75 to 179.75, or 0.5 to 359.5, then you would set this to True.
+
     msg_py : :obj:`numpy.number`:
-        A numpy scalar value that represent a missing value in fi.
-        This argument allows a user to use a missing value scheme
-        other than NaN or masked arrays, similar to what NCL allows.
-    xi : :class:`xarray.DataArray` or :class:`numpy.ndarray`:
-        A strictly monotonically increasing array that specifies
-        the X [longitude] coordinates of the `fi` array. `xi` might
-        be defined as the coordinates of `fi` when `fi` is of type
-        `xarray.DataArray`; in this case `xi` may not be explicitly
-        given as a function argument.
-    yi : :class:`xarray.DataArray` or :class:`numpy.ndarray`:
-        A strictly monotonically increasing array that specifies
-        the Y [latitude] coordinates of the `fi` array. ``yi` might
-        be defined as the coordinates of `fi` when `fi` is of type
-        `xarray.DataArray`; in this case `yi` may not be explicitly
-        given as a function argument.
+        A numpy scalar value that represent a missing value in `fi`. This argument allows a user
+        to use a missing value scheme other than NaN or masked arrays, similar to what NCL allows.
+
+    xi : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+        A strictly monotonically increasing array that specifies the X-coordinates of the `fi`
+        array. `xi` might be defined as the coordinates of `fi` when `fi` is of type
+        `xarray.DataArray`; in this case `xi` may not be explicitly given as a function argument.
+
+    yi : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+        A strictly monotonically increasing array that specifies the Y [latitude] coordinates of
+        the `fi` array. ``yi` might be defined as the coordinates of `fi` when `fi` is of type
+        `xarray.DataArray`; in this case `yi` may not be explicitly given as a function argument.
+
     Returns
     -------
-    fo: :class:`numpy.ndarray`:
-        The returned value will have the same dimensions as `fi`,
-        except for the rightmost dimension which will have the same
-        dimension size as the length of `yo` and `xo`. The return
-        type will be double if `fi` is double, and float otherwise.
+
+    fo : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+        The returned value will have the same dimensions as `fi`, except for the rightmost dimension
+        which will have the same dimension size as the length of `yo` and `xo`.
+
     Description
     -----------
-        The `linint2pts` function uses bilinear interpolation to interpolate
-        from a rectilinear grid to an unstructured grid.
-        If missing values are present, then `linint2pts` will perform the
-        piecewise linear interpolation at all points possible, but will return
-        missing values at coordinates which could not be used. If one or more
-        of the four closest grid points to a particular (xo, yo) coordinate
-        pair are missing, then the return value for this coordinate pair will
-        be missing.
-        If the user inadvertently specifies output coordinates (xo, yo) that
-        are outside those of the input coordinates (xi, yi), the output value
-        at this coordinate pair will be set to missing as no extrapolation
-        is performed.
-        `linint2pts` is different from `linint2` in that `xo` and `yo` are
-        coordinate pairs, and need not be monotonically increasing. It is
-        also different in the dimensioning of the return array.
-        This function could be used if the user wanted to interpolate gridded
-        data to, say, the location of rawinsonde sites or buoy/xbt locations.
 
-        Warning: if `xi` contains longitudes, then the `xo` values must be in the
-        same range. In addition, if the `xi` values span 0 to 360, then the `xo`
-        values must also be specified in this range (i.e. -180 to 180 will not work).
+        The `linint2pts` function uses bilinear interpolation to interpolate from a rectilinear grid
+        to an unstructured grid.
+
+        If missing values are present, then `linint2pts` will perform the piecewise linear interpolation
+        at all points possible, but will return missing values at coordinates which could not be used.
+
+        If one or more of the four closest grid points to a particular (xo, yo) coordinate pair are
+        missing, then the return value for this coordinate pair will be missing.
+
+        If the user inadvertently specifies output coordinates (xo, yo) that are outside those of the
+        input coordinates (xi, yi), the output value at this coordinate pair will be set to missing as
+        no extrapolation is performed.
+
+        `linint2pts` is different from `linint2` in that `xo` and `yo` are coordinate pairs, and need
+        not be monotonically increasing. It is also different in the dimensioning of the return array.
+        This function could be used if the user wanted to interpolate gridded data to, say, the location
+        of rawinsonde sites or buoy/xbt locations.
+
+        Warning: if `xi` contains longitudes, then the `xo` values must be in the same range. In addition,
+        if the `xi` values span 0 to 360, then the `xo` values must also be specified in this range
+        (i.e. -180 to 180 will not work).
 
     Examples
     --------
+
     Example 1: Using linint2pts with :class:`xarray.DataArray` input
         .. code-block:: python
         import numpy as np
