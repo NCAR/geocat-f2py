@@ -219,40 +219,39 @@ def linint1(fi: supported_types,
         is_input_xr = False
 
         fi = xr.DataArray(fi)
-        fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
-                        ])
+        fi = fi.assign_coords({fi.dims[-1]: xi})
 
-        fi = xr.DataArray(
-            fi.data,
-            coords={
-                fi.dims[-1]: xi,
-            },
-            dims=fi.dims,
-        ).chunk(fi_chunk)
-
+    # xi should be coming as xarray input's associated coords or assigned
+    # as coords while xarray being initiated from numpy input above
     xi = fi.coords[fi.dims[-1]]
 
-    # ensure rightmost dimensions of input are not chunked
-    if fi.chunks is None:
-        fi = fi.chunk()
+    # If input data is already chunked
+    if fi.chunks is not None:
+        # Ensure rightmost dimension of input is not chunked
+        if list(fi.chunks)[-1:] != [xi.shape]:
+            raise Exception(
+                "linint1: fi must be unchunked along the last dimension")
 
-    if list(fi.chunks)[-1:] != [xi.shape]:
-        raise Exception("fi must be unchunked along the last dimension")
+    # NOTE: Auto-chunking, regardless of what chunk sizes were given by the user, seems
+    # to be explicitly needed in this function because:
+    # The Fortran routine for this function is implemented assuming it would be looped
+    # across the leftmost dimensions of the input (`fi`), i.e. on one-dimensional
+    # chunks of size that is equal to the rightmost dimension of `fi`.
 
-    # fi data structure elements and autochunking
+    # Generate chunks of {'dim_0': 1, 'dim_1': 1, ..., 'dim_n': xi.shape}
     fi_chunks = list(fi.dims)
     fi_chunks[:-1] = [
         (k, 1) for (k, v) in zip(list(fi.dims)[:-1],
-                                 list(fi.chunks)[:-1])
+                                 list(fi.shape)[:-1])
     ]
     fi_chunks[-1:] = [
-        (k, v[0]) for (k, v) in zip(list(fi.dims)[-1:],
-                                    list(fi.chunks)[-1:])
+        (k, v) for (k, v) in zip(list(fi.dims)[-1:],
+                                 list(fi.shape)[-1:])
     ]
     fi_chunks = dict(fi_chunks)
     fi = fi.chunk(fi_chunks)
 
-    # fo datastructure elements
+    # fo data structure elements
     fo_chunks = list(fi.chunks)
     fo_chunks[-1:] = (xo.shape,)
     fo_chunks = tuple(fo_chunks)
@@ -261,6 +260,7 @@ def linint1(fi: supported_types,
     fo_coords[fi.dims[-1]] = xo
     # ''' end of boilerplate
 
+    # Inner Fortran wrapper call
     fo = map_blocks(
         _linint1,
         xi,
@@ -275,10 +275,10 @@ def linint1(fi: supported_types,
         new_axis=[fi.ndim - 1],
     )
 
-    fo = xr.DataArray(fo.compute(),
-                      attrs=fi.attrs,
-                      dims=fi.dims,
-                      coords=fo_coords)
+    # If input was xarray.DataArray, convert output to xarray.DataArray as well
+    if is_input_xr:
+        fo = xr.DataArray(fo, attrs=fi.attrs, dims=fi.dims, coords=fo_coords)
+
     return fo
 
 
@@ -326,7 +326,7 @@ def linint2(fi: supported_types,
         If the output coordinates (yo) are outside those of the input coordinates (yi), then the `fo`
         values at those coordinates will be set to missing (i.e. no extrapolation is performed).
 
-    xi : :class:`numpy.ndarray`:
+    xi : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
         An array that specifies the X-coordinates of the `fi` array. Most frequently, this is a
         1D strictly monotonically increasing array that may be unequally spaced. In some cases, `xi`
         can be a multi-dimensional array (see next paragraph). The rightmost dimension (call it
@@ -343,7 +343,7 @@ def linint2(fi: supported_types,
             :class:`xarray.DataArray`, then `xi` becomes a mandatory parameter. This parameter
             must be specified as a keyword argument.
 
-    yi :class:`numpy.ndarray`:
+    yi : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
         An array that specifies the Y-coordinates of the `fi` array. Most frequently, this is a
         1D strictly monotonically increasing array that may be unequally spaced. In some cases,
         `yi` can be a multi-dimensional array (see next paragraph). The rightmost dimension (call

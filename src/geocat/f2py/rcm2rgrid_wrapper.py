@@ -326,8 +326,9 @@ def rgrid2rcm(
     lat2d = xr.DataArray(lat2d)
     lon2d = xr.DataArray(lon2d)
 
-    # Ensure last two dimensions of `fi` are not chunked
+    # If input data is already chunked
     if fi.chunks is not None:
+        # Ensure last two dimensions of `fi` are not chunked
         if list(fi.chunks)[-2:] != [lat1d.shape, lon1d.shape]:
             raise Exception(
                 "rgrid2rcm: `fi` must be unchunked along the last two dimensions"
