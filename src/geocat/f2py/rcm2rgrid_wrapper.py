@@ -176,7 +176,7 @@ def rcm2rgrid(
 
         is_input_xr = False
 
-        fi = xr.DataArray(fi,)
+        fi = xr.DataArray(fi)
 
     # Convert 2d arrays to Xarray for inner wrapper call below if they are numpy
     lon2d = xr.DataArray(lon2d)
