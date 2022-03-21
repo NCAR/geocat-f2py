@@ -198,8 +198,8 @@ def rcm2rgrid(
     if is_input_xr:
         # Determine the output coordinates
         fo_coords = {k: v for (k, v) in fi.coords.items()}
-        fo_coords[fi.dims[-1]] = lon1d
-        fo_coords[fi.dims[-2]] = lat1d
+        fo_coords[fi.dims[-1]] = lon1d.data
+        fo_coords[fi.dims[-2]] = lat1d.data
 
         fo = xr.DataArray(fo, attrs=fi.attrs, dims=fi.dims, coords=fo_coords)
 
