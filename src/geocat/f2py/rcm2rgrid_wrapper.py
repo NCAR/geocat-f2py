@@ -53,6 +53,8 @@ def _rgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, msg_py):
 # used for any tasks which would not benefit from parallel execution.
 
 
+# TODO: Even though this function is advertised to work on multi-dimensional arrays,
+# it is currently only applicable to 3D-arrays due to the implementation of `_rcm2rgrid`
 def rcm2rgrid(
     lat2d: supported_types,
     lon2d: supported_types,
@@ -206,6 +208,12 @@ def rcm2rgrid(
     return fo
 
 
+# TODO: Even though this function is advertised to work on multi-dimensional arrays,
+#  it is currently only applicable to 3D-arrays due to the implementation of `_rcm2rgrid`
+
+
+# TODO: This function requires the input to have the coordinates in the rightmost two dimensions,
+#  but xarray.DataArrray inputs with coordinates anywhere could/should actually be fine
 def rgrid2rcm(
     lat1d: supported_types,
     lon1d: supported_types,

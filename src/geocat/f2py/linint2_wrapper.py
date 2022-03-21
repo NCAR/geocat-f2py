@@ -286,6 +286,8 @@ def linint1(fi: supported_types,
     return fo
 
 
+# TODO: This function requires the input to have the coordinates in the rightmost two dimensions,
+#  but xarray.DataArrray inputs with coordinates anywhere could/should actually be fine
 def linint2(fi: supported_types,
             xo: supported_types,
             yo: supported_types,
@@ -494,6 +496,8 @@ def linint2(fi: supported_types,
     return fo
 
 
+# TODO: This function requires the input to have the coordinates in the rightmost two dimensions,
+#  but xarray.DataArrray inputs with coordinates anywhere could/should actually be fine
 def linint2pts(fi: supported_types,
                xo: supported_types,
                yo: supported_types,

@@ -91,6 +91,8 @@ def _triple_to_grid_2d(x_in, y_in, data, x_out, y_out, msg_py):
 # used for any tasks which would not benefit from parallel execution.
 
 
+# TODO: This function requires the input to have the coordinates in a particular order,
+#  but xarray.DataArrray inputs with coordinates anywhere could/should actually be fine
 def grid_to_triple(
     data: supported_types,
     x_in: supported_types = None,
@@ -210,6 +212,8 @@ def grid_to_triple(
     return out
 
 
+# TODO: This function requires the input to have the coordinates in the rightmost two dimensions,
+#  but xarray.DataArrray inputs with coordinates anywhere could/should actually be fine
 def triple_to_grid(
     data: supported_types,
     x_in: supported_types,

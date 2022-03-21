@@ -69,7 +69,12 @@ def _validity_check(lat2d, lon2d, fi, lat1d, lon1d):
 # This wrapper is excecuted in the __main__ python process, and should be
 # used for any tasks which would not benefit from parallel execution.
 
+# TODO: Even though this function is advertised to work on multi-dimensional arrays,
+#  it is currently only applicable to 3D-arrays due to the implementation of `_rcm2points`
 
+
+# TODO: This function requires the input to have the coordinates in the rightmost two dimensions,
+#  but xarray.DataArrray inputs with coordinates anywhere could/should actually be fine
 def rcm2points(lat2d: supported_types,
                lon2d: supported_types,
                fi: supported_types,
