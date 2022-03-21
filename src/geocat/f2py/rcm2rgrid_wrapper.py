@@ -1,16 +1,17 @@
 import typing
+
 import numpy as np
 import xarray as xr
-from dask.array.core import map_blocks
 
 from .errors import ChunkError, CoordinateError
 from .fortran import drcm2rgrid, drgrid2rcm
 from .missing_values import fort2py_msg, py2fort_msg
 
-# Dask Wrappers _<funcname>()
-# These Wrapper are executed within dask processes, and should do anything that
-# can benefit from parallel excution.
 supported_types = typing.Union[xr.DataArray, np.ndarray]
+
+# Fortran Wrappers _<funcname>()
+# These wrappers are executed within dask processes (if any), and could/should
+# do anything that can benefit from parallel execution.
 
 
 def _rcm2rgrid(lat2d, lon2d, fi, lat1d, lon1d, msg_py):
@@ -48,10 +49,12 @@ def _rgrid2rcm(lat1d, lon1d, fi, lat2d, lon2d, msg_py):
 
 
 # Outer Wrappers <funcname>()
-# These Wrappers are excecuted in the __main__ python process, and should be
+# These wrappers are executed in the __main__ python process, and should be
 # used for any tasks which would not benefit from parallel execution.
 
 
+# TODO: Even though this function is advertised to work on multi-dimensional arrays,
+# it is currently only applicable to 3D-arrays due to the implementation of `_rcm2rgrid`
 def rcm2rgrid(
     lat2d: supported_types,
     lon2d: supported_types,
@@ -173,7 +176,13 @@ def rcm2rgrid(
 
         is_input_xr = False
 
-        fi = xr.DataArray(fi,)
+        fi = xr.DataArray(fi)
+
+    # Convert 2d arrays to Xarray for inner wrapper call below if they are numpy
+    lon2d = xr.DataArray(lon2d)
+    lat2d = xr.DataArray(lat2d)
+    lon1d = xr.DataArray(lon1d)
+    lat1d = xr.DataArray(lat1d)
 
     # Ensure last two dimensions of `fi` are not chunked
     if fi.chunks is not None:
@@ -184,20 +193,27 @@ def rcm2rgrid(
     # ''' end of boilerplate
 
     # Inner Fortran wrapper call
-    fo = _rcm2rgrid(lat2d, lon2d, fi.data, lat1d, lon1d, msg)
+    fo = _rcm2rgrid(lat2d.data, lon2d.data, fi.data, lat1d.data, lon1d.data,
+                    msg)
 
     # If input was xarray.DataArray, convert output to xarray.DataArray as well
     if is_input_xr:
         # Determine the output coordinates
         fo_coords = {k: v for (k, v) in fi.coords.items()}
-        fo_coords[fi.dims[-1]] = lon1d
-        fo_coords[fi.dims[-2]] = lat1d
+        fo_coords[fi.dims[-1]] = lon1d.data
+        fo_coords[fi.dims[-2]] = lat1d.data
 
         fo = xr.DataArray(fo, attrs=fi.attrs, dims=fi.dims, coords=fo_coords)
 
     return fo
 
 
+# TODO: Even though this function is advertised to work on multi-dimensional arrays,
+#  it is currently only applicable to 3D-arrays due to the implementation of `_rcm2rgrid`
+
+
+# TODO: This function requires the input to have the coordinates in the rightmost two dimensions,
+#  but xarray.DataArrray inputs with coordinates anywhere could/should actually be fine
 def rgrid2rcm(
     lat1d: supported_types,
     lon1d: supported_types,
@@ -321,19 +337,22 @@ def rgrid2rcm(
     lon1d = fi.coords[fi.dims[-1]]
     lat1d = fi.coords[fi.dims[-2]]
 
-    # Convert 2d arrays to Xarray for map_blocks call below if they are numpy
+    # Convert 2d arrays to Xarray for inner wrapper call below if they are numpy
     lat2d = xr.DataArray(lat2d)
     lon2d = xr.DataArray(lon2d)
 
-    # Ensure last two dimensions of `fi` are not chunked
+    # If input data is already chunked
     if fi.chunks is not None:
+        # Ensure last two dimensions of `fi` are not chunked
         if list(fi.chunks)[-2:] != [lat1d.shape, lon1d.shape]:
             raise Exception(
-                "fi must be unchunked along the last two dimensions")
+                "rgrid2rcm: `fi` must be unchunked along the last two dimensions"
+            )
     # ''' end of boilerplate
 
     # Inner Fortran wrapper call
-    fo = _rgrid2rcm(lat1d, lon1d, fi.data, lat2d.data, lon2d.data, msg)
+    fo = _rgrid2rcm(lat1d.data, lon1d.data, fi.data, lat2d.data, lon2d.data,
+                    msg)
 
     # If input was xarray.DataArray, convert output to xarray.DataArray as well
     if is_input_xr:

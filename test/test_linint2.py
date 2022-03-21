@@ -240,7 +240,7 @@ class Test_linint2_numpy(ut.TestCase):
 
     def test_linint2_fi_np(self):
         fo = linint2(fi_np, xo, yo, xi=xi, yi=yi)
-        np.testing.assert_array_equal(fi_np, fo[..., ::2, ::2].values)
+        np.testing.assert_array_equal(fi_np, fo[..., ::2, ::2])
 
     def test_linint2_fi_np_no_xi_yi(self):
         with self.assertRaises(CoordinateError):
@@ -301,5 +301,4 @@ class Test_linint2_non_contiguous(ut.TestCase):
                      yo,
                      xi=xi,
                      yi=yi_reverse[::-1])
-        np.testing.assert_array_equal(fi[:, :, ::-1, :].values,
-                                      fo[..., ::2, ::2].values)
+        np.testing.assert_array_equal(fi[:, :, ::-1, :], fo[..., ::2, ::2])

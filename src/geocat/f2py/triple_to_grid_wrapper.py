@@ -1,18 +1,20 @@
 import typing
 import warnings
+
+from dask.array.core import map_blocks
 import numpy as np
 import xarray as xr
-from dask.array.core import map_blocks
 
 from .errors import ChunkError, CoordinateError, DimensionError
 from .fortran import grid2triple as grid2triple_fort
 from .fortran import triple2grid1
 from .missing_values import fort2py_msg, py2fort_msg
 
-# Dask Wrappers or Internal Wrappers _<funcname>()
-# These Wrapper are executed within dask processes, and should do anything that
-# can benefit from parallel excution.
 supported_types = typing.Union[xr.DataArray, np.ndarray]
+
+# Fortran Wrappers _<funcname>()
+# These wrappers are executed within dask processes (if any), and could/should
+# do anything that can benefit from parallel execution.
 
 
 def _grid_to_triple(x, y, z, msg_py):
@@ -89,6 +91,8 @@ def _triple_to_grid_2d(x_in, y_in, data, x_out, y_out, msg_py):
 # used for any tasks which would not benefit from parallel execution.
 
 
+# TODO: This function requires the input to have the coordinates in a particular order,
+#  but xarray.DataArrray inputs with coordinates anywhere could/should actually be fine
 def grid_to_triple(
     data: supported_types,
     x_in: supported_types = None,
@@ -208,6 +212,8 @@ def grid_to_triple(
     return out
 
 
+# TODO: This function requires the input to have the coordinates in the rightmost two dimensions,
+#  but xarray.DataArrray inputs with coordinates anywhere could/should actually be fine
 def triple_to_grid(
     data: supported_types,
     x_in: supported_types,
@@ -392,7 +398,7 @@ def triple_to_grid(
     if np.asarray(domain).size != 1:
         raise ValueError("triple_to_grid: Provide a scalar value for `domain`!")
 
-    # If input data is chunked
+    # If input data is already chunked
     if data.chunks is not None:
 
         # Ensure the rightmost dimension of `data` is not chunked
@@ -421,7 +427,7 @@ def triple_to_grid(
     data_chunks = dict(data_chunks)
     data = data.chunk(data_chunks)
 
-    # grid datastructure elements
+    # grid data structure elements
     grid_chunks = list(data.chunks)
     grid_chunks[-1] = (y_out.shape[0] * x_out.shape[0],)
     grid_chunks = tuple(grid_chunks)
@@ -466,18 +472,17 @@ def triple_to_grid(
     # If input was xarray.DataArray, convert output to xarray.DataArray as well
     if is_input_xr:
         grid = xr.DataArray(grid)
+    # Else if input was numpy.ndarray, convert Dask output to numpy.ndarray with `.compute()
+    else:
+        grid = grid.compute()
 
     return grid
 
 
 # TODO: Revisit for implementing this function after deprecating geocat.ncomp
 def triple_to_grid_2d(x_in, y_in, data, x_out, y_out, msg_py):
-    warnings.warn(
-        "triple_to_grid_2d function name and signature will be deprecated soon "
-        "in a future version. Use `grid_to_triple` instead!",
-        PendingDeprecationWarning)
 
-    return triple_to_grid(data, x_in, y_in, x_out, y_out, missing_value=msg_py)
+    warnings.warn("triple_to_grid_2d function not yet implemented!!! ")
 
 
 # Transparent wrappers for geocat.ncomp backwards compatibility

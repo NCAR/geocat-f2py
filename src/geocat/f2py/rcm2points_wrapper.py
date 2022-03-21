@@ -1,19 +1,21 @@
+import typing
+
+from dask.array.core import map_blocks
 import numpy as np
 import xarray as xr
-from dask.array.core import map_blocks
 
-from geocat.f2py.errors import ChunkError, CoordinateError
-from geocat.f2py.fortran import drcm2points
-from geocat.f2py.missing_values import fort2py_msg, py2fort_msg
+from .errors import ChunkError, CoordinateError, DimensionError
+from .fortran import drcm2points
+from .missing_values import fort2py_msg, py2fort_msg
 
-from .errors import DimensionError
+supported_types = typing.Union[xr.DataArray, np.ndarray]
 
-# Dask Wrappers _<funcname>()
-# These Wrapper are executed within dask processes, and should do anything that
-# can benefit from parallel excution.
+# Fortran Wrapper _<funcname>()
+# This wrapper is executed within dask processes (if any), and could/should
+# do anything that can benefit from parallel execution.
 
 
-def _rcm2points(lat2d, lon2d, fi, lat1d, lon1d, msg_py, opt, shape):
+def _rcm2points(lat2d, lon2d, fi, lat1d, lon1d, msg_py, opt):
     fi = np.transpose(fi, axes=(2, 1, 0))
     lat2d = np.transpose(lat2d, axes=(1, 0))
     lon2d = np.transpose(lon2d, axes=(1, 0))
@@ -22,7 +24,7 @@ def _rcm2points(lat2d, lon2d, fi, lat1d, lon1d, msg_py, opt, shape):
 
     fo = drcm2points(lat2d, lon2d, fi, lat1d, lon1d, xmsg=msg_fort, opt=opt)
     fo = np.asarray(fo)
-    fo = fo.reshape(shape)
+    fo = np.transpose(fo, axes=(1, 0))
 
     fort2py_msg(fi, msg_fort=msg_fort, msg_py=msg_py)
     fort2py_msg(fo, msg_fort=msg_fort, msg_py=msg_py)
@@ -30,59 +32,102 @@ def _rcm2points(lat2d, lon2d, fi, lat1d, lon1d, msg_py, opt, shape):
     return fo
 
 
-# Outer Wrappers <funcname>()
-# These Wrappers are excecuted in the __main__ python process, and should be
+# Helper function that checks the validity of the input
+
+
+def _validity_check(lat2d, lon2d, fi, lat1d, lon1d):
+    if (lon2d is None) | (lat2d is None):
+        raise CoordinateError(
+            "rcm2points: lon2d and lat2d should always be provided")
+
+    if lat2d.shape[0] != lon2d.shape[0] or lat2d.shape[1] != lon2d.shape[1]:
+        raise DimensionError(
+            "rcm2points: The input lat/lon grids must be the same size !")
+
+    if lat1d.shape[0] != lon1d.shape[0]:
+        raise DimensionError(
+            "rcm2points: The output lat/lon grids must be same size !")
+
+    if lat2d.shape[0] < 2 or lon2d.shape[0] < 2 or lat2d.shape[
+            1] < 2 or lon2d.shape[1] < 2:
+        raise DimensionError(
+            "rcm2points: The input/output lat/lon grids must have at least 2 elements !"
+        )
+
+    if fi.ndim < 2:
+        raise DimensionError(
+            "rcm2points: fi must be at least two dimensions !\n")
+
+    if fi.shape[fi.ndim - 2] != lat2d.shape[0] or fi.shape[fi.ndim -
+                                                           1] != lon2d.shape[1]:
+        raise DimensionError(
+            "rcm2points: The rightmost dimensions of fi must be (nlat2d x nlon2d),"
+            "where nlat2d and nlon2d are the size of the lat2d/lon2d arrays !")
+
+
+# Outer Wrapper <funcname>()
+# This wrapper is excecuted in the __main__ python process, and should be
 # used for any tasks which would not benefit from parallel execution.
 
+# TODO: Even though this function is advertised to work on multi-dimensional arrays,
+#  it is currently only applicable to 3D-arrays due to the implementation of `_rcm2points`
 
-def rcm2points(lat2d, lon2d, fi, lat1d, lon1d, opt=0, msg=None, meta=False):
+
+# TODO: This function requires the input to have the coordinates in the rightmost two dimensions,
+#  but xarray.DataArrray inputs with coordinates anywhere could/should actually be fine
+def rcm2points(lat2d: supported_types,
+               lon2d: supported_types,
+               fi: supported_types,
+               lat1d: supported_types,
+               lon1d: supported_types,
+               opt: np.number = 0,
+               msg: np.number = None,
+               meta: bool = False) -> supported_types:
     """Interpolates data on a curvilinear grid (i.e. RCM, WRF, NARR) to an
     unstructured grid.
 
     Paraemeters
     -----------
-    lat2d : :class:`numpy.ndarray`:
-        A two-dimensional array that specifies the latitudes locations
-        of fi. The latitude order must be south-to-north.
+    lat2d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+        A two-dimensional array that specifies the latitudes locations of `fi`. The latitude
+        order must be south-to-north. Because this array is two-dimensional it is not an
+        associated coordinate variable of `fi`, so it should always be explicitly provided.
 
-    lon2d : :class:`numpy.ndarray`:
-        A two-dimensional array that specifies the longitude locations
-        of fi. The latitude order must be west-to-east.
+    lon2d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+        A two-dimensional array that specifies the longitude locations of `fi`. The longitude
+        order must be west-to-east. Because this array is two-dimensional it is not an
+        associated coordinate variable of `fi`, so it should always be explicitly provided.
 
-    fi : :class:`numpy.ndarray`:
-        A multi-dimensional array to be interpolated. The rightmost two
-        dimensions (latitude, longitude) are the dimensions to be interpolated.
+    fi : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+        A multi-dimensional array to be interpolated. The rightmost two dimensions (latitude,
+        longitude) are the dimensions to be interpolated.
 
-    lat1d : :class:`numpy.ndarray`:
-        A one-dimensional array that specifies the latitude coordinates of
-        the output locations.
+    lat1d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+        A one-dimensional array that specifies the latitude coordinates of the output locations.
 
-    lon1d : :class:`numpy.ndarray`:
-        A one-dimensional array that specifies the longitude coordinates of
-        the output locations.
+    lon1d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+        A one-dimensional array that specifies the longitude coordinates of the output locations.
 
     opt : :obj:`numpy.number`:
         opt=0 or 1 means use an inverse distance weight interpolation.
         opt=2 means use a bilinear interpolation.
 
     msg : :obj:`numpy.number`:
-        A numpy scalar value that represent a missing value in fi.
-        This argument allows a user to use a missing value scheme
-        other than NaN or masked arrays, similar to what NCL allows.
+        A numpy scalar value that represent a missing value in `fi`. This argument allows a user to
+        use a missing value scheme other than NaN or masked arrays, similar to what NCL allows.
 
     meta : :obj:`bool`:
-        If set to True and the input array is an Xarray, the metadata
-        from the input array will be copied to the output array;
-        default is False.
+        If set to True and the input array is an Xarray, the metadata from the input array will be
+        copied to the output array; default is False.
         Warning: This option is not currently supported.
 
     Returns
     -------
 
-        :class:`numpy.ndarray`: The interpolated grid. A multi-dimensional array
-        of the same size as fi except that the rightmost dimension sizes have been
-        replaced by the number of coordinate pairs (lat1dPoints, lon1dPoints).
-        Double if fi is double, otherwise float.
+        fo : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+            The interpolated grid. A multi-dimensional array of the same size as `fi` except that the
+            rightmost dimension sizes have been replaced by the number of coordinate pairs (lat1d,
+            lon1d).
 
     Description
     -----------
@@ -95,91 +140,39 @@ def rcm2points(lat2d, lon2d, fi, lat1d, lon1d, opt=0, msg=None, meta=False):
         values are allowed and no extrapolation is performed.
     """
 
-    if (lon2d is None) | (lat2d is None):
-        raise CoordinateError(
-            "rcm2points: lon2d and lat2d should always be provided")
-
-    # Basic sanity checks
-    if lat2d.shape[0] != lon2d.shape[0] or lat2d.shape[1] != lon2d.shape[1]:
-        raise DimensionError(
-            "ERROR rcm2points: The input lat/lon grids must be the same size !")
-
-    if lat1d.shape[0] != lon1d.shape[0]:
-        raise DimensionError(
-            "ERROR rcm2points: The output lat/lon grids must be same size !")
-
-    if lat2d.shape[0] < 2 or lon2d.shape[0] < 2 or lat2d.shape[
-            1] < 2 or lon2d.shape[1] < 2:
-        raise DimensionError(
-            "ERROR rcm2points: The input/output lat/lon grids must have at least 2 elements !"
-        )
-
-    if fi.ndim < 2:
-        raise DimensionError(
-            "ERROR rcm2points: fi must be at least two dimensions !\n")
-
-    if fi.shape[fi.ndim - 2] != lat2d.shape[0] or fi.shape[fi.ndim -
-                                                           1] != lon2d.shape[1]:
-        raise DimensionError(
-            "ERROR rcm2points: The rightmost dimensions of fi must be (nlat2d x nlon2d),"
-            "where nlat2d and nlon2d are the size of the lat2d/lon2d arrays !")
+    # Basic validity checks
+    _validity_check(lat2d, lon2d, fi, lat1d, lon1d)
 
     # ''' Start of boilerplate
+    is_input_xr = True
+
+    # If the input is numpy.ndarray, convert it to xarray.DataArray
     if not isinstance(fi, xr.DataArray):
-        fi = xr.DataArray(fi,)
-        fi_chunk = dict([(k, v) for (k, v) in zip(list(fi.dims), list(fi.shape))
-                        ])
+        is_input_xr = False
 
-        fi = xr.DataArray(
-            fi.data,
-            dims=fi.dims,
-        ).chunk(fi_chunk)
+        fi = xr.DataArray(fi)
 
-    # ensure rightmost dimensions of input are not chunked
-    if fi.chunks is None:
-        fi = fi.chunk()
+    # Convert 2d arrays to Xarray for inner wrapper call below if they are numpy
+    lon2d = xr.DataArray(lon2d)
+    lat2d = xr.DataArray(lat2d)
+    lon1d = xr.DataArray(lon1d)
+    lat1d = xr.DataArray(lat1d)
 
-    if list(fi.chunks)[-2:] != [(lat2d.shape[0],), (lat2d.shape[1],)]:
-        # [(lon2d.shape[0]), (lon2d.shape[1])] could also be used
-        raise ChunkError(
-            "rcm2points: fi must be unchunked along the rightmost two dimensions"
-        )
-
-    # fi data structure elements and autochunking
-    fi_chunks = list(fi.dims)
-    fi_chunks[:-2] = [
-        (k, 1) for (k, v) in zip(list(fi.dims)[:-2],
-                                 list(fi.chunks)[:-2])
-    ]
-    fi_chunks[-2:] = [
-        (k, v[0]) for (k, v) in zip(list(fi.dims)[-2:],
-                                    list(fi.chunks)[-2:])
-    ]
-    fi_chunks = dict(fi_chunks)
-    fi = fi.chunk(fi_chunks)
-
-    # fo datastructure elements
-    fo_chunks = list(fi.chunks)
-    fo_chunks[-2:] = (lon1d.shape,)
-    fo_chunks = tuple(fo_chunks)
-    fo_shape = tuple(a[0] for a in list(fo_chunks))
+    # If input data is already chunked
+    if fi.chunks is not None:
+        # Ensure last two dimensions of `fi` are not chunked
+        if list(fi.chunks)[-2:] != [(lat2d.shape[0],), (lat2d.shape[1],)]:
+            # [(lon2d.shape[0]), (lon2d.shape[1])] could also be used
+            raise ChunkError(
+                "rcm2points: fi must be unchunked along the rightmost two dimensions"
+            )
     # ''' end of boilerplate
 
-    fo = map_blocks(
-        _rcm2points,
-        lat2d,
-        lon2d,
-        fi.data,
-        lat1d,
-        lon1d,
-        msg,
-        opt,
-        fo_shape,
-        chunks=fo_chunks,
-        dtype=fi.dtype,
-        drop_axis=[fi.ndim - 2, fi.ndim - 1],
-        new_axis=[fi.ndim - 2],
-    )
+    fo = _rcm2points(lat2d.data, lon2d.data, fi.data, lat1d.data, lon1d.data,
+                     msg, opt)
 
-    fo = xr.DataArray(fo.compute(), attrs=fi.attrs)
+    # If input was xarray.DataArray, convert output to xarray.DataArray as well
+    if is_input_xr:
+        fo = xr.DataArray(fo, attrs=fi.attrs)
+
     return fo
