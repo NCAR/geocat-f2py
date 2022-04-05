@@ -209,6 +209,7 @@ def linint1(fi: supported_types,
 
     # ''' Start of boilerplate
     is_input_xr = True
+    is_input_dask = False
 
     # If the input is numpy.ndarray, convert it to xarray.DataArray
     if not isinstance(fi, xr.DataArray):
@@ -228,6 +229,8 @@ def linint1(fi: supported_types,
 
     # If input data is already chunked
     if fi.chunks is not None:
+        is_input_dask = True
+
         # Ensure rightmost dimension of input is not chunked
         if list(fi.chunks)[-1:] != [xi.shape]:
             raise Exception(
@@ -278,7 +281,17 @@ def linint1(fi: supported_types,
 
     # If input was xarray.DataArray, convert output to xarray.DataArray as well
     if is_input_xr:
-        fo = xr.DataArray(fo, attrs=fi.attrs, dims=fi.dims, coords=fo_coords)
+        if is_input_dask:
+            fo = xr.DataArray(fo,
+                              attrs=fi.attrs,
+                              dims=fi.dims,
+                              coords=fo_coords)
+        else:
+            fo = xr.DataArray(fo,
+                              attrs=fi.attrs,
+                              dims=fi.dims,
+                              coords=fo_coords).compute()
+
     # Else if input was numpy.ndarray, convert Dask output to numpy.ndarray with `.compute()
     else:
         fo = fo.compute()
@@ -414,6 +427,7 @@ def linint2(fi: supported_types,
 
     # ''' Start of boilerplate
     is_input_xr = True
+    is_input_dask = False
 
     # If the input is numpy.ndarray, convert it to xarray.DataArray
     if not isinstance(fi, xr.DataArray):
@@ -434,6 +448,8 @@ def linint2(fi: supported_types,
 
     # If input data is already chunked
     if fi.chunks is not None:
+        is_input_dask = True
+
         # Ensure the rightmost dimensions of input are not chunked
         if list(fi.chunks)[-2:] != [yi.shape, xi.shape]:
             raise ChunkError(
@@ -488,7 +504,16 @@ def linint2(fi: supported_types,
 
     # If input was xarray.DataArray, convert output to xarray.DataArray as well
     if is_input_xr:
-        fo = xr.DataArray(fo, attrs=fi.attrs, dims=fi.dims, coords=fo_coords)
+        if is_input_dask:
+            fo = xr.DataArray(fo,
+                              attrs=fi.attrs,
+                              dims=fi.dims,
+                              coords=fo_coords)
+        else:
+            fo = xr.DataArray(fo,
+                              attrs=fi.attrs,
+                              dims=fi.dims,
+                              coords=fo_coords).compute()
     # Else if input was numpy.ndarray, convert Dask output to numpy.ndarray with `.compute()
     else:
         fo = fo.compute()
@@ -604,7 +629,7 @@ def linint2pts(fi: supported_types,
 
     # ''' Start of boilerplate
     is_input_xr = True
-    is_already_chunked = False
+    is_input_dask = False
 
     # If the input is numpy.ndarray, convert it to xarray.DataArray
     if not isinstance(fi, xr.DataArray):
@@ -630,7 +655,7 @@ def linint2pts(fi: supported_types,
 
     # If input data is already chunked
     if fi.chunks is not None:
-        is_already_chunked = True
+        is_input_dask = True
 
         # Ensure the rightmost dimensions of `data` are not chunked
         if list(fi.chunks)[-2:] != [yi.shape, xi.shape]:
@@ -690,7 +715,10 @@ def linint2pts(fi: supported_types,
 
     # If input was xarray.DataArray, convert output to xarray.DataArray as well
     if is_input_xr:
-        fo = xr.DataArray(fo, attrs=fi.attrs)
+        if is_input_dask:
+            fo = xr.DataArray(fo, attrs=fi.attrs)
+        else:
+            fo = xr.DataArray(fo, attrs=fi.attrs).compute()
     # Else if input was numpy.ndarray, convert Dask output to numpy.ndarray with `.compute()
     else:
         fo = fo.compute()

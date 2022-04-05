@@ -354,10 +354,10 @@ def triple_to_grid(
 
     # ''' Start of boilerplate
     is_input_xr = True
+    is_input_dask = False
 
     # If the input is numpy.ndarray, convert it to xarray.DataArray
     if not isinstance(data, xr.DataArray):
-
         is_input_xr = False
 
         data = xr.DataArray(data)
@@ -400,6 +400,7 @@ def triple_to_grid(
 
     # If input data is already chunked
     if data.chunks is not None:
+        is_input_dask = True
 
         # Ensure the rightmost dimension of `data` is not chunked
         if list(data.chunks)[-1:] != [x_in.shape]:
@@ -471,7 +472,10 @@ def triple_to_grid(
 
     # If input was xarray.DataArray, convert output to xarray.DataArray as well
     if is_input_xr:
-        grid = xr.DataArray(grid)
+        if is_input_dask:
+            grid = xr.DataArray(grid)
+        else:
+            grid = xr.DataArray(grid).compute()
     # Else if input was numpy.ndarray, convert Dask output to numpy.ndarray with `.compute()
     else:
         grid = grid.compute()
