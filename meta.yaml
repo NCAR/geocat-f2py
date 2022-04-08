@@ -7,9 +7,9 @@ package:
 
 source:
   # url: http://github.com/NCAR/{{ name }}/archive/v{{ version }}.tar.gz # For building from a specific tag's tarball
-  # sha256: 5213495766a4f443edb32170a8fc3fce317e82436910bc75df6e5b2cd24fa01e
-  # git_tag: v{{ version }}   # For building from a specific tag
-  git_rev: april # For building from main branch for debugging purposes
+  # sha256:
+  git_tag: v{{ version }}   # For building from a specific tag
+  # git_rev: april # For building from main branch for debugging purposes
   git_url: https://github.com/NCAR/{{ name }}.git
 
 build:
