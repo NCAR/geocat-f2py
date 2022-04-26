@@ -102,7 +102,7 @@ class Test_linint2pts_numpy(ut.TestCase, BaseTestClass):
 
         newshape = (self._shape0 * self._shape1 * self._no,)
 
-        fo_vals = fo.values.reshape(newshape).tolist()
+        fo_vals = fo.reshape(newshape)
 
         print(
             self._fi_np.reshape(
@@ -164,6 +164,29 @@ class Test_linint2pts_float64(ut.TestCase, BaseTestClass):
                               'lat': self._yi,
                               'lon': self._xi
                           }).chunk(self._chunks)
+
+        fo = linint2pts(fi, self._xo, self._yo, 0)
+
+        self.assertEqual((self._shape0, self._shape1), fo.shape[:-1])
+
+        self.assertEqual(np.float64, fo.dtype)
+
+        newshape = (self._shape0 * self._shape1 * self._no,)
+
+        fo_vals = fo.values.reshape(newshape).tolist()
+
+        # Use numpy.testing.assert_almost_equal() instead of ut.TestCase.assertAlmostEqual() because the former can
+        # handle NaNs but the latter cannot.
+        # Compare the function-generated fo array to NCL ground-truth up to 5 decimal points
+        np.testing.assert_almost_equal(self._ncl_truth, fo_vals, decimal=5)
+
+    def test_linint2pts_unchunked(self):
+        fi = xr.DataArray(self._fi_np,
+                          dims=['time', 'level', 'lat', 'lon'],
+                          coords={
+                              'lat': self._yi,
+                              'lon': self._xi
+                          })
 
         fo = linint2pts(fi, self._xo, self._yo, 0)
 

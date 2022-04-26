@@ -72,6 +72,17 @@ class Test_rcm2rgrid(ut.TestCase):
             fo_nom_expected,
             rcm2rgrid(lat2d, lon2d, fi_nom.astype(np.float64), lat, lon))
 
+    def test_rcm2rgrid_float64_nom_xr(self):
+        nt.assert_array_almost_equal(
+            fo_nom_expected,
+            rcm2rgrid(lat2d, lon2d, xr.DataArray(fi_nom), lat, lon))
+
+    def test_rcm2rgrid_float64_nom_xr_chunked(self):
+        nt.assert_array_almost_equal(
+            fo_nom_expected,
+            rcm2rgrid(lat2d, lon2d,
+                      xr.DataArray(fi_nom).chunk(), lat, lon))
+
     def test_rcm2rgrid_float64_nan(self):
         nt.assert_array_almost_equal(
             fo_nan_expected,

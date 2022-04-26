@@ -59,13 +59,13 @@ installed.
 Required dependencies for building GeoCAT-f2py
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-- Python 3.7+
-- `numpy <https://numpy.org/doc/stable/>`_
-- `xarray <http://xarray.pydata.org/en/stable/>`_
-- `dask <https://dask.org/>`_
-- `pytest <https://docs.pytest.org/en/stable/>`_
-- `gfortran <https://gcc.gnu.org/wiki/GFortran>`_
-- `LAPACK <http://www.netlib.org/lapack/>`_
+    - Python 3.7+
+    - `numpy <https://numpy.org/doc/stable/>`_
+    - `xarray <http://xarray.pydata.org/en/stable/>`_
+    - `dask <https://dask.org/>`_
+    - `pytest <https://docs.pytest.org/en/stable/>`_
+    - `gfortran <https://gcc.gnu.org/wiki/GFortran>`_
+    - `LAPACK <http://www.netlib.org/lapack/>`_
 
 How to create a Conda environment for building GeoCAT-f2py
 ----------------------------------------------------------

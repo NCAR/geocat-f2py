@@ -1,14 +1,16 @@
+import typing
+
 import numpy as np
 import xarray as xr
-from dask.array.core import map_blocks
 
-from .errors import ChunkError, CoordinateError
 from .fortran import mocloops
 from .missing_values import fort2py_msg, py2fort_msg
 
-# Dask Wrappers _<funcname>()
-# These Wrapper are executed within dask processes, and should do anything that
-# can benefit from parallel excution.
+supported_types = typing.Union[xr.DataArray, np.ndarray]
+
+# Fortran Wrapper _<funcname>()
+# This wrapper is executed within dask processes (if any), and could/should
+# do anything that can benefit from parallel execution.
 
 
 def _moc_loops(lat_aux_grid, a_wvel, a_bolus, a_submeso, t_lat, rmlak, msg_py):
@@ -48,40 +50,40 @@ def _moc_loops(lat_aux_grid, a_wvel, a_bolus, a_submeso, t_lat, rmlak, msg_py):
     return tmp_out
 
 
-# Outer Wrappers <funcname>()
-# These Wrappers are excecuted in the __main__ python process, and should be
+# Outer Wrapper <funcname>()
+# This wrapper is excecuted in the __main__ python process, and should be
 # used for any tasks which would not benefit from parallel execution.
 
 
-def moc_globe_atl(lat_aux_grid,
-                  a_wvel,
-                  a_bolus,
-                  a_submeso,
-                  t_lat,
-                  rmlak,
-                  msg=None,
-                  meta=False):
+def moc_globe_atl(lat_aux_grid: supported_types,
+                  a_wvel: supported_types,
+                  a_bolus: supported_types,
+                  a_submeso: supported_types,
+                  t_lat: supported_types,
+                  rmlak: supported_types,
+                  msg: np.number = None,
+                  meta: bool = False) -> supported_types:
     """Facilitates calculating the meridional overturning circulation for the
     globe and Atlantic.
 
     Args:
 
-    lat_aux_grid : :class:`xarray.DataArray` or :class:`numpy.ndarray`:
+    lat_aux_grid : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
         Latitude grid for transport diagnostics.
 
-    a_wvel : :class:`xarray.DataArray` or :class:`numpy.ndarray`:
+    a_wvel : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
         Area weighted Eulerian-mean vertical velocity [TAREA*WVEL].
 
-    a_bolus : :class:`xarray.DataArray` or :class:`numpy.ndarray`:
+    a_bolus : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
         Area weighted Eddy-induced (bolus) vertical velocity [TAREA*WISOP].
 
-    a_submeso : :class:`xarray.DataArray` or :class:`numpy.ndarray`:
+    a_submeso : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
         Area weighted submeso vertical velocity [TAREA*WSUBM].
 
-    tlat : :class:`xarray.DataArray` or :class:`numpy.ndarray`:
+    tlat : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
         Array of t-grid latitudes.
 
-    rmlak : :class:`xarray.DataArray` or :class:`numpy.ndarray`:
+    rmlak : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
         Basin index number: [0]=Globe, [1]=Atlantic
 
     msg : :obj:`numpy.number`:
@@ -98,7 +100,7 @@ def moc_globe_atl(lat_aux_grid,
     Returns
     -------
 
-    fo : :class:`xarray.DataArray`:
+    fo : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
         A multi-dimensional array of size
         [moc_comp] x [n_transport_reg] x [kdepth] x [nyaux] where:
 
@@ -106,10 +108,6 @@ def moc_globe_atl(lat_aux_grid,
         - n_transport_reg refers to the Globe and Atlantic
         - kdepth is the the number of vertical levels of the work arrays
         - nyaux is the size of the lat_aux_grid
-
-        The type of the output data will be double only if a_wvel or a_bolus or
-        a_submesa is of type double. Otherwise, the return type will be float.
-
 
     Examples
     --------
@@ -142,25 +140,24 @@ def moc_globe_atl(lat_aux_grid,
     """
 
     # ''' Start of boilerplate
+    is_input_xr = True
+
     if not isinstance(lat_aux_grid, xr.DataArray):
+        is_input_xr = False
         lat_aux_grid = xr.DataArray(lat_aux_grid)
 
-    if not isinstance(a_wvel, xr.DataArray):
-        a_wvel = xr.DataArray(a_wvel)
+    # Convert other arguments to Xarray for inner wrapper call below if they are numpy
+    a_wvel = xr.DataArray(a_wvel)
+    a_bolus = xr.DataArray(a_bolus)
+    a_submeso = xr.DataArray(a_submeso)
+    t_lat = xr.DataArray(t_lat)
+    rmlak = xr.DataArray(rmlak)
 
-    if not isinstance(a_bolus, xr.DataArray):
-        a_bolus = xr.DataArray(a_bolus)
+    fo = _moc_loops(lat_aux_grid.data, a_wvel.data, a_bolus.data,
+                    a_submeso.data, t_lat.data, rmlak.data, msg)
 
-    if not isinstance(a_submeso, xr.DataArray):
-        a_submeso = xr.DataArray(a_submeso)
-
-    if not isinstance(t_lat, xr.DataArray):
-        t_lat = xr.DataArray(t_lat)
-
-    if not isinstance(rmlak, xr.DataArray):
-        rmlak = xr.DataArray(rmlak)
-
-    fo = _moc_loops(lat_aux_grid.values, a_wvel.values, a_bolus.values,
-                    a_submeso.values, t_lat.values, rmlak.values, msg)
+    # If input was xarray.DataArray, convert output to xarray.DataArray as well
+    if is_input_xr:
+        fo = xr.DataArray(fo)
 
     return fo

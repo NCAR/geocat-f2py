@@ -1,34 +1,33 @@
 name: CI
+
 on:
-  push:
   pull_request:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 0 * * *' # Daily “At 00:00”
   workflow_dispatch:
-  # schedule:
-  #    - cron: '0 0 * * *' # Daily “At 00:00”
 
 jobs:
   test:
-    # if: |
-    #   github.repository == 'NCAR/geocat-f2py'
     name: Python (${{ matrix.python-version }}, ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     defaults:
       run:
         shell: bash -l {0}
-
     strategy:
       fail-fast: false
       matrix:
         os: [ "ubuntu-latest", "macos-latest"]
-        python-version: [ "3.6", "3.7", "3.8", "3.9" ]
-
+        python-version: [ "3.8", "3.9", "3.10" ]
     steps:
       - name: Cancel previous runs
-        uses: styfle/cancel-workflow-action@0.9.0
+        uses: styfle/cancel-workflow-action@0.9.1
         with:
           access_token: ${{ github.token }}
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           token: ${{ github.token }}
       - name: Conda setup
@@ -37,14 +36,15 @@ jobs:
           activate-environment: geocat_f2py_build
           python-version: ${{ matrix.python-version }}
           channels: conda-forge, ncar
+          channel-priority: strict
       - name: Conda install (Darwin)
         if: matrix.os == 'macos-latest'
         run: |
-          conda install numpy=1.19 xarray dask pytest pytest-cov gfortran_osx-64 liblapack
+          conda env update --file build_envs/environment_Darwin.yml --prune
       - name: Conda install (Linux)
         if: matrix.os == 'ubuntu-latest'
         run: |
-          conda install numpy=1.19 xarray dask pytest pytest-cov gfortran_linux-64 liblapack
+          conda env update --file build_envs/environment_Linux.yml --prune
       - name: Install geocat-f2py
         run: |
           source build.sh
@@ -55,7 +55,7 @@ jobs:
         run: |
           python -m pytest test -v --cov=./src/geocat/f2py --cov-report=xml
       - name: Upload code coverage to Codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3.1.0
         with:
           file: ./coverage.xml
           flags: unittests
