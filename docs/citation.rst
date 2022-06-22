@@ -37,7 +37,7 @@ example:
 Geoscience Community Analysis Toolkit: GeoCAT-f2py (v2022.04.0) [Software].
 Boulder, CO, USA: UCAR/NCAR - Computational and Informational System Lab. doi:10.5281/zenodo.6654224.**
 
-Please find DOIs for all the GeoCAT-comp versions `here
+Please find DOIs for all the GeoCAT-f2py versions `here
 <https://zenodo.org/search?page=1&size=20&q=conceptrecid:%226654183%22&sort=-version&all_versions=True>`_.
 
 Please note: The DOI minting service, Zenodo, might be suggesting their own citation text (as
