@@ -62,26 +62,8 @@ intended primarily for internal use.
 
 # Citing GeoCAT-f2py
 
-NOTE: If you used GeoCAT-f2py through GeoCAT-comp, it is recommended that you cite GeoCAT-comp. Please
-refer to [GeoCAT-comp README](https://github.com/NCAR/geocat-comp#readme) for that purpose or
-[GeoCAT Citation page](https://geocat.ucar.edu/pages/citation.html) for general information about
-citing GeoCAT software packages.
-
-Hiwever, if you used GeoCAT-f2py as a standalomne software tool, cite GeoCAT-f2py using the following
-text:
-
-<> Visualization & Analysis Systems Technologies. (Year).
-Geoscience Community Analysis Toolkit (GeoCAT-f2py version \<version\>) [Software].
-Boulder, CO: UCAR/NCAR - Computational and Informational System Lab. doi:10.5065/A8PP-4358.
-
-Update the GeoCAT-f2py version and year as appropriate. For example:
-
-<> Visualization & Analysis Systems Technologies. (2021).
-Geoscience Community Analysis Toolkit (GeoCAT-f2py version 2021.04.0) [Software].
-Boulder, CO: UCAR/NCAR - Computational and Informational System Lab. doi:10.5065/A8PP-4358.
-
-For further information, please refer to
-[GeoCAT homepage - Citation](https://geocat.ucar.edu/pages/citation.html).
+If you use this software, please cite it as described at the [GeoCAT-f2py - Citation](
+https://geocat-f2py.readthedocs.io/en/latest/citation.html) page.
 
 
 
