@@ -488,8 +488,8 @@ def linint2(fi: supported_types,
     # Inner Fortran wrapper call
     fo = map_blocks(
         _linint2,
-        yi,
-        xi,
+        yi.data,
+        xi.data,
         fi.data,
         yo,
         xo,
