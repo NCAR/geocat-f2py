@@ -58,10 +58,11 @@ def py2fort_msg(ndarray, msg_py=None, msg_fort=None):
     else:
         msg_indices = (ndarray == msg_py)
 
+    returnarray = ndarray.copy()
     if msg_indices.any():
-        ndarray[msg_indices] = msg_fort
+        returnarray[msg_indices] = msg_fort
 
-    return ndarray, msg_py, msg_fort
+    return returnarray, msg_py, msg_fort
 
 
 #todo: Should we force output missing value to (1) always be np.nan or (2) whatever it was given in input
@@ -87,7 +88,9 @@ def fort2py_msg(ndarray, msg_fort=None, msg_py=None):
 
     msg_indices = (ndarray == msg_fort)
 
-    if msg_indices.any():
-        ndarray[msg_indices] = msg_py
+    returnarray = ndarray.copy()
 
-    return ndarray, msg_fort, msg_py
+    if msg_indices.any():
+        returnarray[msg_indices] = msg_py
+
+    return returnarray, msg_fort, msg_py
