@@ -266,10 +266,7 @@ def triple_to_grid(
         associated with the returned two-dimensional grid. The coordinate
         values must be monotonically increasing.
 
-    Other Parameters
-    ----------------
-
-    method : :obj:`int`:
+    method : :obj:`int`, optional
         An integer value that can be 0 or 1. The default value is 1.
         A value of 1 means to use the great circle distance formula
         for distance calculations.
@@ -279,7 +276,7 @@ def triple_to_grid(
         high resolution grid) and the number of observations
         relatively small.
 
-    domain : :obj:`float`:
+    domain : :obj:`float`, optional
         A float value that should be set to a value >= 0. The
         default value is 1.0. If present, the larger this factor,
         the wider the spatial domain allowed to influence grid boundary
@@ -287,7 +284,7 @@ def triple_to_grid(
         then values located outside the grid domain specified by
         `x_out` and `y_out` arguments will not be used.
 
-    distmx : :obj:`float`:
+    distmx : :obj:`float`, optional
         Setting `distmx` allows the user to specify a search
         radius (km) beyond which observations are not considered
         for nearest neighbor. Only applicable when `method = 1`.
@@ -295,13 +292,13 @@ def triple_to_grid(
         will have a nearest neighbor. It is suggested that users
         specify a reasonable value for `distmx`.
 
-    missing_value : :obj:`numpy.number`:
+    missing_value : :obj:`numpy.number`, optional
         A numpy scalar value that represent
         a missing value in `data`. The default value is `np.nan`.
         If specified explicitly, this argument allows the user to
         use a missing value scheme other than NaN or masked arrays.
 
-    meta : :obj:`bool`:
+    meta : :obj:`bool`, optional
         If set to True and the input array is an Xarray,
         the metadata from the input array will be copied to the
         output array; default is False.
