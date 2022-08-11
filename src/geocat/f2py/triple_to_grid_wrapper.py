@@ -229,6 +229,16 @@ def triple_to_grid(
     """Places unstructured (randomly-spaced) data onto the nearest locations of
     a rectilinear grid.
 
+    This function puts unstructured data (randomly-spaced) onto the nearest
+    locations of a rectilinear grid. A default value of `domain` option is
+    now set to 1.0 instead of 0.0.
+
+    This function does not perform interpolation; rather, each individual
+    data point is assigned to the nearest grid point. It is possible that
+    upon return, grid will contain grid points set to missing value if
+    no `x_in(n)`, `y_in(n)` are nearby.
+
+
     Parameters
     ----------
 
@@ -256,7 +266,7 @@ def triple_to_grid(
         associated with the returned two-dimensional grid. The coordinate
         values must be monotonically increasing.
 
-    Optional Parameters
+    Other Parameters
     -------------------
 
     method :obj:`int`:
@@ -305,18 +315,6 @@ def triple_to_grid(
         dimensions of `data`, N represent the size of `y_out`,
         and M represent the size of `x_out` coordinate vectors.
 
-    Description
-    -----------
-
-        This function puts unstructured data (randomly-spaced) onto the nearest
-        locations of a rectilinear grid. A default value of `domain` option is
-        now set to 1.0 instead of 0.0.
-
-        This function does not perform interpolation; rather, each individual
-        data point is assigned to the nearest grid point. It is possible that
-        upon return, grid will contain grid points set to missing value if
-        no `x_in(n)`, `y_in(n)` are nearby.
-
     Examples
     --------
 
@@ -324,27 +322,27 @@ def triple_to_grid(
 
     .. code-block:: python
 
-        import numpy as np
-        import xarray as xr
-        import geocat.comp
+    import numpy as np
+    import xarray as xr
+    import geocat.comp
 
-        # Open a netCDF data file using xarray default engine and load the data stream
-        ds = xr.open_dataset("./ruc.nc")
+    # Open a netCDF data file using xarray default engine and load the data stream
+    ds = xr.open_dataset("./ruc.nc")
 
-        # [INPUT] Grid & data info on the source curvilinear
-        data = ds.DIST_236_CBL[:]
-        x_in = ds.gridlat_236[:]
-        y_in = ds.gridlon_236[:]
-        x_out = ds.gridlat_236[:]
-        y_out = ds.gridlon_236[:]
+    # [INPUT] Grid & data info on the source curvilinear
+    data = ds.DIST_236_CBL[:]
+    x_in = ds.gridlat_236[:]
+    y_in = ds.gridlon_236[:]
+    x_out = ds.gridlat_236[:]
+    y_out = ds.gridlon_236[:]
 
 
-        # [OUTPUT] Grid on destination points grid (or read the 1D lat and lon from
-        #              an other .nc file.
-        newlat1D_points=np.linspace(lat2D_curv.min(), lat2D_curv.max(), 100)
-        newlon1D_points=np.linspace(lon2D_curv.min(), lon2D_curv.max(), 100)
+    # [OUTPUT] Grid on destination points grid (or read the 1D lat and lon from
+    #              an other .nc file.
+    newlat1D_points=np.linspace(lat2D_curv.min(), lat2D_curv.max(), 100)
+    newlon1D_points=np.linspace(lon2D_curv.min(), lon2D_curv.max(), 100)
 
-        output = geocat.comp.triple_to_grid(data, x_out, y_out, x_in, y_in)
+    output = geocat.comp.triple_to_grid(data, x_out, y_out, x_in, y_in)
     """
 
     if (x_in is None) | (y_in is None):
