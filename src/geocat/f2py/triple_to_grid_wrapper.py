@@ -318,7 +318,6 @@ def triple_to_grid(
     Example 1: Using triple_to_grid with :class:`xarray.DataArray` input
 
     .. code-block:: python
-
         import numpy as np
         import xarray as xr
         import geocat.comp
@@ -333,13 +332,12 @@ def triple_to_grid(
         x_out = ds.gridlat_236[:]
         y_out = ds.gridlon_236[:]
 
-
         # [OUTPUT] Grid on destination points grid (or read the 1D lat and lon from
-        #              an other .nc file.
+        # another .nc file.
         newlat1D_points=np.linspace(lat2D_curv.min(), lat2D_curv.max(), 100)
         newlon1D_points=np.linspace(lon2D_curv.min(), lon2D_curv.max(), 100)
 
-        output = geocat.comp.triple_to_grid(data, x_out, y_out, x_in, y_in)
+        output = geocat.comp.triple_to_grid(data, x_in, y_in, x_out, y_out)
     """
 
     if (x_in is None) | (y_in is None):
