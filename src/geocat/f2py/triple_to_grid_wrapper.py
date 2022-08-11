@@ -242,26 +242,26 @@ def triple_to_grid(
     Parameters
     ----------
 
-    data : :class:`xarray.DataArray`:, :class:`numpy.ndarray`:
+    data : :class:`xarray.DataArray`:, :class:`numpy.ndarray`
         A multi-dimensional array, whose rightmost dimension is the same
         length as `x_in` and `y_in`, containing the values associated with
         the "x" and "y" coordinates. Missing values may be present but
         will be ignored.
 
-    x_in : :class:`xarray.DataArray`:, :class:`numpy.ndarray`:
+    x_in : :class:`xarray.DataArray`:, :class:`numpy.ndarray`
         A one-dimensional array that specifies the x-coordinate
         associated with the input (`data`).
 
-    y_in : :class:`xarray.DataArray`:, :class:`numpy.ndarray`:
+    y_in : :class:`xarray.DataArray`:, :class:`numpy.ndarray`
         A one-dimensional array that specifies the y-coordinate
         associated with the input (`data`).
 
-    x_out : :class:`xarray.DataArray`:, :class:`numpy.ndarray`:
+    x_out : :class:`xarray.DataArray`:, :class:`numpy.ndarray`
         A one-dimensional array of length M containing the x-coordinates
         associated with the returned two-dimensional grid. The coordinate
         values must be monotonically increasing.
 
-    y_out : :class:`xarray.DataArray`: or :class:`numpy.ndarray`:
+    y_out : :class:`xarray.DataArray`: or :class:`numpy.ndarray`
         A one-dimensional array of length N containing the y-coordinates
         associated with the returned two-dimensional grid. The coordinate
         values must be monotonically increasing.
@@ -307,7 +307,7 @@ def triple_to_grid(
     Returns
     -------
 
-    grid : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    grid : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         The returned array will be K x N x M, where K represents the leftmost
         dimensions of `data`, N represent the size of `y_out`,
         and M represent the size of `x_out` coordinate vectors.
@@ -319,27 +319,27 @@ def triple_to_grid(
 
     .. code-block:: python
 
-    import numpy as np
-    import xarray as xr
-    import geocat.comp
+        import numpy as np
+        import xarray as xr
+        import geocat.comp
 
-    # Open a netCDF data file using xarray default engine and load the data stream
-    ds = xr.open_dataset("./ruc.nc")
+        # Open a netCDF data file using xarray default engine and load the data stream
+        ds = xr.open_dataset("./ruc.nc")
 
-    # [INPUT] Grid & data info on the source curvilinear
-    data = ds.DIST_236_CBL[:]
-    x_in = ds.gridlat_236[:]
-    y_in = ds.gridlon_236[:]
-    x_out = ds.gridlat_236[:]
-    y_out = ds.gridlon_236[:]
+        # [INPUT] Grid & data info on the source curvilinear
+        data = ds.DIST_236_CBL[:]
+        x_in = ds.gridlat_236[:]
+        y_in = ds.gridlon_236[:]
+        x_out = ds.gridlat_236[:]
+        y_out = ds.gridlon_236[:]
 
 
-    # [OUTPUT] Grid on destination points grid (or read the 1D lat and lon from
-    #              an other .nc file.
-    newlat1D_points=np.linspace(lat2D_curv.min(), lat2D_curv.max(), 100)
-    newlon1D_points=np.linspace(lon2D_curv.min(), lon2D_curv.max(), 100)
+        # [OUTPUT] Grid on destination points grid (or read the 1D lat and lon from
+        #              an other .nc file.
+        newlat1D_points=np.linspace(lat2D_curv.min(), lat2D_curv.max(), 100)
+        newlon1D_points=np.linspace(lon2D_curv.min(), lon2D_curv.max(), 100)
 
-    output = geocat.comp.triple_to_grid(data, x_out, y_out, x_in, y_in)
+        output = geocat.comp.triple_to_grid(data, x_out, y_out, x_in, y_in)
     """
 
     if (x_in is None) | (y_in is None):
