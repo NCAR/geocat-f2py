@@ -267,31 +267,31 @@ def triple_to_grid(
         values must be monotonically increasing.
 
     Other Parameters
-    -------------------
+    ----------------
 
-    method :obj:`int`:
+    method : :obj:`int`:
         An integer value that can be 0 or 1. The default value is 1.
         A value of 1 means to use the great circle distance formula
         for distance calculations.
-        Warning: `method` = 0, together with `domain` = 1.0, could
+        Warning: `method = 0`, together with `domain = 1.0`, could
         result in many of the target grid points to be set to the
         missing value if the number of grid points is large (ie: a
         high resolution grid) and the number of observations
         relatively small.
 
-    domain :obj:`float`:
+    domain : :obj:`float`:
         A float value that should be set to a value >= 0. The
         default value is 1.0. If present, the larger this factor,
         the wider the spatial domain allowed to influence grid boundary
-        points. Typically, `domain` is 1.0 or 2.0. If `domain` <= 0.0,
+        points. Typically, `domain` is 1.0 or 2.0. If `domain <= 0.0`,
         then values located outside the grid domain specified by
         `x_out` and `y_out` arguments will not be used.
 
-    distmx :obj:`float`:
+    distmx : :obj:`float`:
         Setting `distmx` allows the user to specify a search
         radius (km) beyond which observations are not considered
-        for nearest neighbor. Only applicable when `method` = 1.
-        The default `distmx`=1e20 (km) means that every grid point
+        for nearest neighbor. Only applicable when `method = 1`.
+        The default `distmx=1e20 (km)` means that every grid point
         will have a nearest neighbor. It is suggested that users
         specify a reasonable value for `distmx`.
 
