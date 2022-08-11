@@ -318,7 +318,7 @@ def triple_to_grid(
     Example 1: Using triple_to_grid with :class:`xarray.DataArray` input
 
     .. code-block:: python
-    
+
         import numpy as np
         import xarray as xr
         import geocat.comp
