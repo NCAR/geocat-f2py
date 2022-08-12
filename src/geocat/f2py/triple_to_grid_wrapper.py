@@ -248,7 +248,7 @@ def triple_to_grid(
         the "x" and "y" coordinates. Missing values may be present but
         will be ignored.
 
-    x_in : :class:`xarray.DataArray`:, :class:`numpy.ndarray`
+    x_in : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A one-dimensional array that specifies the x-coordinate
         associated with the input (`data`).
 
