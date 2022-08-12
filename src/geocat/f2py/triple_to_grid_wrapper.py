@@ -242,7 +242,7 @@ def triple_to_grid(
     Parameters
     ----------
 
-    data : :class:`xarray.DataArray`:, :class:`numpy.ndarray`
+    data : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A multi-dimensional array, whose rightmost dimension is the same
         length as `x_in` and `y_in`, containing the values associated with
         the "x" and "y" coordinates. Missing values may be present but
