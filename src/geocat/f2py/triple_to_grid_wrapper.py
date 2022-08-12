@@ -261,7 +261,7 @@ def triple_to_grid(
         associated with the returned two-dimensional grid. The coordinate
         values must be monotonically increasing.
 
-    y_out : :class:`xarray.DataArray`: or :class:`numpy.ndarray`
+    y_out : :class:`xarray.DataArray` or :class:`numpy.ndarray`
         A one-dimensional array of length N containing the y-coordinates
         associated with the returned two-dimensional grid. The coordinate
         values must be monotonically increasing.
