@@ -252,7 +252,7 @@ def triple_to_grid(
         A one-dimensional array that specifies the x-coordinate
         associated with the input (`data`).
 
-    y_in : :class:`xarray.DataArray`:, :class:`numpy.ndarray`
+    y_in : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A one-dimensional array that specifies the y-coordinate
         associated with the input (`data`).
 
