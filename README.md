@@ -3,6 +3,7 @@
 | **Docs**     |                                                                    [![Documentation Status][rtd-badge]][rtd-link]                                                                    |
 | **Package**  |                                                         [![Conda][conda-badge]][conda-link] [![PyPI][pypi-badge]][pypi-link]                                                         |
 | **License**  |                                                                        [![License][license-badge]][repo-link]                                                                        |
+| **Citing**   |                                                                             [![DOI][doi-badge]][doi-link]                                                                            |
 
 
 GeoCAT-comp is both the whole computational component of the [GeoCAT](https://geocat.ucar.edu/)
@@ -59,6 +60,14 @@ the gap between NumPy arrays and the compiled language data structures. These fu
 accessible under the `geocat.comp.f2py` namespace, but are minimally documented and are
 intended primarily for internal use.
 
+# Citing GeoCAT-f2py
+
+If you use this software, please cite it as described at the [GeoCAT-f2py - Citation](
+https://geocat-f2py.readthedocs.io/en/latest/citation.html) page.
+
+
+
+
 
 [github-ci-badge]: https://img.shields.io/github/workflow/status/NCAR/geocat-f2py/CI?label=CI&logo=github&style=for-the-badge
 [github-conda-build-badge]: https://img.shields.io/github/workflow/status/NCAR/geocat-f2py/build_test?label=conda-builds&logo=github&style=for-the-badge
@@ -73,4 +82,6 @@ intended primarily for internal use.
 [conda-badge]: https://img.shields.io/conda/vn/ncar/geocat-f2py?logo=anaconda&style=for-the-badge
 [conda-link]: https://anaconda.org/ncar/geocat-f2py
 [license-badge]: https://img.shields.io/github/license/NCAR/geocat-f2py?style=for-the-badge
+[doi-badge]: https://img.shields.io/badge/DOI-10.5065%2Fa8pp--4358-brightgreen?style=for-the-badge
+[doi-link]: https://doi.org/10.5065/a8pp-4358
 [repo-link]: https://github.com/NCAR/geocat-f2py

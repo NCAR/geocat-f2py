@@ -29,9 +29,3 @@ repos:
       exclude: src/geocat/f2py/fortran/
     - id: check-docstring-first    # Checks that code comes after the docstrings.
       exclude: src/geocat/f2py/fortran/
-
--   repo: https://github.com/PyCQA/isort    # To sort the imports
-    rev: 5.7.0
-    hooks:
-    - id: isort
-      exclude: src/geocat/f2py/fortran/

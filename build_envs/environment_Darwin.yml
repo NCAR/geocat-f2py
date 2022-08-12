@@ -4,12 +4,9 @@ channels:
   - ncar
 dependencies:
   - python
-  - numpy=1.19
-  - xarray
   - dask
-  - pytest  # for tests
-  - pytest-cov  # for tests
   - gfortran_osx-64
-  - liblapack
-  - pip:
-      - pre-commit
+  - numpy>=1.20.2
+  - pytest
+  - pytest-cov
+  - xarray
