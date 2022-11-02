@@ -85,8 +85,16 @@ def rcm2points(lat2d: supported_types,
     """Interpolates data on a curvilinear grid (i.e. RCM, WRF, NARR) to an
     unstructured grid.
 
-    Paraemeters
+    Interpolates data on a curvilinear grid, such as those used by the RCM
+    (Regional Climate Model), WRF (Weather Research and Forecasting) and NARR
+    (North American Regional Reanalysis) models/datasets to an unstructured grid.
+    All of these have latitudes that are oriented south-to-north. An inverse
+    distance squared algorithm is used to perform the interpolation. Missing
+    values are allowed and no extrapolation is performed.
+
+    Parameters
     -----------
+
     lat2d : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A two-dimensional array that specifies the latitudes locations of ``fi``. The latitude
         order must be south-to-north. Because this array is two-dimensional it is not an
@@ -127,16 +135,6 @@ def rcm2points(lat2d: supported_types,
             The interpolated grid. A multi-dimensional array of the same size as ``fi`` except that the
             rightmost dimension sizes have been replaced by the number of coordinate pairs (``lat1d``,
             ``lon1d``).
-
-    Description
-    -----------
-
-        Interpolates data on a curvilinear grid, such as those used by the RCM
-        (Regional Climate Model), WRF (Weather Research and Forecasting) and NARR
-        (North American Regional Reanalysis) models/datasets to an unstructured grid.
-        All of these have latitudes that are oriented south-to-north. An inverse
-        distance squared algorithm is used to perform the interpolation. Missing
-        values are allowed and no extrapolation is performed.
     """
 
     # Basic validity checks

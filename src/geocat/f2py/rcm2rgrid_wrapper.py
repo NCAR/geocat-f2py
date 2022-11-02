@@ -67,6 +67,28 @@ def rcm2rgrid(
     """Interpolates data on a curvilinear grid (i.e. RCM, WRF, NARR) to a
     rectilinear grid.
 
+    Interpolates RCM (Regional Climate Model), WRF (Weather Research and Forecasting) and
+    NARR (North American Regional Reanalysis) grids to a rectilinear grid. Actually, this
+    function will interpolate most grids that use curvilinear latitude/longitude grids.
+    No extrapolation is performed beyond the range of the input coordinates. Missing values
+    are allowed but ignored.
+
+    The weighting method used is simple inverse distance squared. Missing values are allowed
+    but ignored.
+
+    The code searches the input curvilinear grid latitudes and longitudes for the four
+    grid points that surround a specified output grid coordinate. Because one or more of
+    these input points could contain missing values, fewer than four points
+    could be used in the interpolation.
+
+    Curvilinear grids which have two-dimensional latitude and longitude coordinate axes present
+    some issues because the coordinates are not necessarily monotonically increasing. The simple
+    search algorithm used by ``rcm2rgrid`` is not capable of handling all cases. The result is that,
+    sometimes, there are small gaps in the interpolated grids. Any interior points not
+    interpolated in the initial interpolation pass will be filled using linear interpolation.
+
+    In some cases, edge points may not be filled.
+
     Parameters
     ----------
 
@@ -112,31 +134,6 @@ def rcm2rgrid(
         The interpolated grid. A multi-dimensional array
         of the same size as ``fi`` except that the rightmost dimension sizes have been
         replaced by the sizes of ``lat1d`` and ``lon1d``, respectively.
-
-    Description
-    -----------
-
-        Interpolates RCM (Regional Climate Model), WRF (Weather Research and Forecasting) and
-        NARR (North American Regional Reanalysis) grids to a rectilinear grid. Actually, this
-        function will interpolate most grids that use curvilinear latitude/longitude grids.
-        No extrapolation is performed beyond the range of the input coordinates. Missing values
-        are allowed but ignored.
-
-        The weighting method used is simple inverse distance squared. Missing values are allowed
-        but ignored.
-
-        The code searches the input curvilinear grid latitudes and longitudes for the four
-        grid points that surround a specified output grid coordinate. Because one or more of
-        these input points could contain missing values, fewer than four points
-        could be used in the interpolation.
-
-        Curvilinear grids which have two-dimensional latitude and longitude coordinate axes present
-        some issues because the coordinates are not necessarily monotonically increasing. The simple
-        search algorithm used by rcm2rgrid is not capable of handling all cases. The result is that,
-        sometimes, there are small gaps in the interpolated grids. Any interior points not
-        interpolated in the initial interpolation pass will be filled using linear interpolation.
-
-        In some cases, edge points may not be filled.
 
     Examples
     --------
@@ -226,6 +223,12 @@ def rgrid2rcm(
     """Interpolates data on a rectilinear lat/lon grid to a curvilinear grid
     like those used by the RCM, WRF and NARR models/datasets.
 
+    Interpolates data on a rectilinear lat/lon grid to a curvilinear grid, such as those
+    used by the RCM (Regional Climate Model), WRF (Weather Research and Forecasting) and
+    NARR (North American Regional Reanalysis) models/datasets. No extrapolation is
+    performed beyond the range of the input coordinates. The method used is simple inverse
+    distance weighting. Missing values are allowed but ignored.
+
     Parameters
     ----------
 
@@ -257,12 +260,12 @@ def rgrid2rcm(
         input (``fi``). Because this array is two-dimensional it is not an
         associated coordinate variable of ``fi``.
 
-    msg :obj:`numpy.number`
+    msg : :obj:`numpy.number`
         A numpy scalar value that represents a missing value in ``fi``.
         This argument allows a user to use a missing value scheme
         other than NaN or masked arrays, similar to what NCL allows.
 
-    meta :obj:`bool`
+    meta : :obj:`bool`
         If set to True and the input array is an Xarray, the metadata
         from the input array will be copied to the output array;
         default is False.
@@ -275,15 +278,6 @@ def rgrid2rcm(
         The interpolated grid. A multi-dimensional array of the same size as
         ``fi`` except that the rightmost dimension sizes have been replaced
         by the sizes of ``lat2d`` (or ``lon2d``).
-
-    Description
-    -----------
-
-        Interpolates data on a rectilinear lat/lon grid to a curvilinear grid, such as those
-    used by the RCM (Regional Climate Model), WRF (Weather Research and Forecasting) and
-    NARR (North American Regional Reanalysis) models/datasets. No extrapolation is
-    performed beyond the range of the input coordinates. The method used is simple inverse
-    distance weighting. Missing values are allowed but ignored.
 
     Examples
     --------

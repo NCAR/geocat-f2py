@@ -22,6 +22,19 @@ def dpres_plevel(pressure_levels: supported_types,
     """Calculates the pressure layer thicknesses of a constant pressure level
     coordinate system.
 
+    It is analogous to ``dpres_hybrid_ccm`` for hybrid coordinates. At each grid point the
+    sum of the pressure thicknesses equates to [``pressure_surface`` - ``pressure_top``]. At each
+    grid point, the returned values above ``pressure_top`` and below ``pressure_surface`` will
+    be set to the missing value of ``pressure_surface``. If there is no missing value
+    for ``pressure_surface`` then the missing value will be set to the default for
+    float or double appropriately. If ``pressure_top`` or ``pressure_surface`` is between
+    pressure_levels levels then the layer thickness is modifed accordingly.
+    If ``pressure_surface`` is set to a missing value, all layer thicknesses
+    are set to the appropriate missing value.
+
+    The primary purpose of this function is to return layer thicknesses to be used to
+    weight observations for integrations.
+
     Parameters
     ----------
 
@@ -60,27 +73,10 @@ def dpres_plevel(pressure_levels: supported_types,
         or (time,lev,lat,lon). The returned type will be double
         if ``pressure_surface`` is double, float otherwise.
 
-    Description
-    -----------
-
-        Calculates the layer pressure thickness of a constant pressure level system. It
-        is analogous to `dpres_hybrid_ccm` for hybrid coordinates. At each grid point the
-        sum of the pressure thicknesses equates to [pressure_surface - pressure_top]. At each
-        grid point, the returned values above `pressure_top` and below `pressure_surface` will
-        be set to the missing value of `pressure_surface`. If there is no missing value
-        for `pressure_surface` then the missing value will be set to the default for
-        float or double appropriately. If `pressure_top` or `pressure_surface` is between
-        pressure_levels levels then the layer thickness is modifed accordingly.
-        If `pressure_surface` is set to a missing value, all layer thicknesses
-        are set to the appropriate missing value.
-
-        The primary purpose of this function is to return layer thicknesses to be used to
-        weight observations for integrations.
-
     Examples
     --------
 
-    Example 1: Using dpres_plevel with :class:`xarray.DataArray` input
+    Example 1: Using ``dpres_plevel`` with :class:`xarray.DataArray` input
 
     .. code-block:: python
 

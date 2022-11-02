@@ -73,13 +73,13 @@ def moc_globe_atl(lat_aux_grid: supported_types,
         Latitude grid for transport diagnostics.
 
     a_wvel : :class:`xarray.DataArray`, :class:`numpy.ndarray`
-        Area weighted Eulerian-mean vertical velocity [``TAREA``*``WVEL``].
+        Area weighted Eulerian-mean vertical velocity [``TAREA x WVEL``].
 
     a_bolus : :class:`xarray.DataArray`, :class:`numpy.ndarray`
-        Area weighted Eddy-induced (bolus) vertical velocity [``TAREA``*``WISOP``].
+        Area weighted Eddy-induced (bolus) vertical velocity [``TAREA x WISOP``].
 
     a_submeso : :class:`xarray.DataArray`, :class:`numpy.ndarray`
-        Area weighted submeso vertical velocity [``TAREA``*``WSUBM``].
+        Area weighted submeso vertical velocity [``TAREA x WSUBM``].
 
     tlat : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         Array of t-grid latitudes.
@@ -105,13 +105,15 @@ def moc_globe_atl(lat_aux_grid: supported_types,
         A multi-dimensional array of size
         [``moc_comp``] x [``n_transport_reg``] x [``kdepth``] x [``nyaux``] where:
 
-        - `moc_comp` refers to the three components returned
-        - `n_transport_reg` refers to the Globe and Atlantic
-        - `kdepth` is the the number of vertical levels of the work arrays
-        - `nyaux` is the size of the `lat_aux_grid`
+        - ``moc_comp`` refers to the three components returned
+        - ``n_transport_reg`` refers to the Globe and Atlantic
+        - ``kdepth`` is the the number of vertical levels of the work arrays
+        - ``nyaux`` is the size of the ``lat_aux_grid``
 
     Examples
     --------
+
+    .. code-block:: python
 
         # Input data can be read from a data set as follows:
         import xarray as xr

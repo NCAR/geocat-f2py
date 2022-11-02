@@ -133,7 +133,7 @@ def grid_to_triple(
     -------
 
     out : :class:`xarray.DataArray`, :class:`numpy.ndarray`
-        The maximum size of the returned array will be 3 x ld, where ``ld <= ny x mx``.
+        The maximum size of the returned array will be ``3 x ld``, where ``ld <= ny x mx``.
         If no missing values are encountered in ``data``, then ``ld = ny x mx``. If missing
         values are encountered in ``data``, they are not returned and hence ``ld`` will be
         equal to ``ny x mx`` minus the number of missing values found in ``data``.
@@ -288,7 +288,7 @@ def triple_to_grid(
         Setting ``distmx`` allows the user to specify a search
         radius (km) beyond which observations are not considered
         for nearest neighbor. Only applicable when ``method = 1``.
-        The default `d`istmx=1e20 (km)`` means that every grid point
+        The default ``distmx=1e20 (km)`` means that every grid point
         will have a nearest neighbor. It is suggested that users
         specify a reasonable value for ``distmx``.
 
