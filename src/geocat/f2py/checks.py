@@ -19,54 +19,54 @@ def check(user_variable,
           exceptions=True):
     """Function of data checks for use in wrapper functions.
 
-    user_variable : :class:`xarray.DataArray` or :class:`numpy.ndarray`:
+    user_variable : :class:`xarray.DataArray` or :class:`numpy.ndarray`
         Variable of interest
 
-    data_type : :class:`type` or :type:`tuple of types`:
-        Desired data_type of user_variable
-        ex: data_type=np.ndarray
+    data_type : :class:`type` or :type:`tuple of types`
+        Desired ``data_type`` of ``user_variable``
+        ex: ``data_type=np.ndarray``
 
-    max_dimensions : :class:`tuple`:
-        Maximum number of dimensions needed from user_variable for function
-        ex: max_dimensions=(3) or max_dimensions=3
+    max_dimensions : :class:`tuple`
+        Maximum number of dimensions needed from ``user_variable`` for function
+        ex: ``max_dimensions=(3)`` or ``max_dimensions=3``
 
-    min_dimensions : :class:`tuple`:
-        Minimum number of dimensions needed from user_variable for function
-        ex: min_dimensions=(3) or min_dimensions=3
+    min_dimensions : :class:`tuple`
+        Minimum number of dimensions needed from ``user_variable`` for function
+        ex: ``min_dimensions=(3)`` or ``min_dimensions=3``
 
-    dimensions : :class:`tuple`:
-        Number of dimensions needed from user_variable for function
-        ex: dimensions=(3) or dimensions=3
+    dimensions : :class:`tuple`
+        Number of dimensions needed from ``user_variable`` for function
+        ex: ``dimensions=(3)`` or ``dimensions=3``
 
-    shape : :class:`tuple`:
-        Checks user_variable's shape
-        ex: shape=(3, 3, 3)
+    shape : :class:`tuple`
+        Checks ``user_variable``'s shape
+        ex: ``shape=(3, 3, 3)``
 
-    is_xarray : :class:`bool`:
-        Checking whether user_variable is of class xarray.DataArray.
+    is_xarray : :class:`bool`
+        Checking whether ``user_variable`` is of class ``xarray.DataArray``.
         Valid inputs are True or False
 
-    is_none : :class:`bool`:
-        Checking whether user_variable is of class NoneType.
+    is_none : :class:`bool`
+        Checking whether ``user_variable`` is of class ``NoneType``.
         Valid input is True or False
 
-    comparison : :class:`n/a`:
+    comparison : :class:`n/a`
         Compares user variable against item passed in as comparison
         Valid input is anything
 
-    unchunked_dims : :class:`tuple`:
+    unchunked_dims : :class:`tuple`
         Checks for unchunked dimensions in user_variable
-        ex: check(user_variable, unchunked_dims=[3]) *must include brackets*
+        ex: ``check(user_variable, unchunked_dims=[3])`` *must include brackets*
 
-    exceptions : :class:`bool`:
+    exceptions : :class:`bool`
         Allows user to turn off exceptions in the check functions
         Valid input is True or False
 
-    is_numpy : :class:`bool`:
-        Checks whether variable is of class numpy.ndarray
+    is_numpy : :class:`bool`
+        Checks whether variable is of class ``numpy.ndarray``
         Valid input is True or False
 
-    is_chunked : :class:`bool`:
+    is_chunked : :class:`bool`
         Checks whether variable is chunked
         Valid input is True or False
     """

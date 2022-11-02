@@ -66,32 +66,33 @@ def moc_globe_atl(lat_aux_grid: supported_types,
     """Facilitates calculating the meridional overturning circulation for the
     globe and Atlantic.
 
-    Args:
+    Parameters
+    ----------
 
-    lat_aux_grid : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    lat_aux_grid : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         Latitude grid for transport diagnostics.
 
-    a_wvel : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
-        Area weighted Eulerian-mean vertical velocity [TAREA*WVEL].
+    a_wvel : :class:`xarray.DataArray`, :class:`numpy.ndarray`
+        Area weighted Eulerian-mean vertical velocity [``TAREA``*``WVEL``].
 
-    a_bolus : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
-        Area weighted Eddy-induced (bolus) vertical velocity [TAREA*WISOP].
+    a_bolus : :class:`xarray.DataArray`, :class:`numpy.ndarray`
+        Area weighted Eddy-induced (bolus) vertical velocity [``TAREA``*``WISOP``].
 
-    a_submeso : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
-        Area weighted submeso vertical velocity [TAREA*WSUBM].
+    a_submeso : :class:`xarray.DataArray`, :class:`numpy.ndarray`
+        Area weighted submeso vertical velocity [``TAREA``*``WSUBM``].
 
-    tlat : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    tlat : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         Array of t-grid latitudes.
 
-    rmlak : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    rmlak : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         Basin index number: [0]=Globe, [1]=Atlantic
 
-    msg : :obj:`numpy.number`:
+    msg : :obj:`numpy.number`
       A numpy scalar value that represent a missing value.
       This argument allows a user to use a missing value scheme
       other than NaN or masked arrays, similar to what NCL allows.
 
-    meta : :obj:`bool`:
+    meta : :obj:`bool`
         If set to True and the input array is an Xarray, the metadata
         from the input array will be copied to the output array;
         default is False.
@@ -100,14 +101,14 @@ def moc_globe_atl(lat_aux_grid: supported_types,
     Returns
     -------
 
-    fo : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    fo : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A multi-dimensional array of size
-        [moc_comp] x [n_transport_reg] x [kdepth] x [nyaux] where:
+        [``moc_comp``] x [``n_transport_reg``] x [``kdepth``] x [``nyaux``] where:
 
-        - moc_comp refers to the three components returned
-        - n_transport_reg refers to the Globe and Atlantic
-        - kdepth is the the number of vertical levels of the work arrays
-        - nyaux is the size of the lat_aux_grid
+        - `moc_comp` refers to the three components returned
+        - `n_transport_reg` refers to the Globe and Atlantic
+        - `kdepth` is the the number of vertical levels of the work arrays
+        - `nyaux` is the size of the `lat_aux_grid`
 
     Examples
     --------

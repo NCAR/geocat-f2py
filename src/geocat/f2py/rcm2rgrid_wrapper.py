@@ -70,36 +70,36 @@ def rcm2rgrid(
     Parameters
     ----------
 
-    lat2d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    lat2d : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A two-dimensional array that specifies the latitudes locations of the input
-        (`fi`). Because this array is two-dimensional, it is not an associated
-        coordinate variable of `fi`; therefore, it always needs to be explicitly
+        (``fi``). Because this array is two-dimensional, it is not an associated
+        coordinate variable of ``fi``; therefore, it always needs to be explicitly
         provided. The latitude order must be south-to-north.
 
-    lon2d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    lon2d : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A two-dimensional array that specifies the longitudes locations of the input
-        (`fi`). Because this array is two-dimensional, it is not an associated
-        coordinate variable of `fi`; therefore, it always needs to be explicitly
+        (``fi``). Because this array is two-dimensional, it is not an associated
+        coordinate variable of ``fi``; therefore, it always needs to be explicitly
         provided. The latitude order must be west-to-east.
 
-    fi : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    fi : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A multi-dimensional array to be interpolated. The rightmost two
         dimensions (latitude, longitude) are the dimensions to be interpolated.
 
-    lat1d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    lat1d : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A one-dimensional array that specifies the latitude coordinates of
         the regular grid. Must be monotonically increasing.
 
-    lon1d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    lon1d : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A one-dimensional array that specifies the longitude coordinates of
         the regular grid. Must be monotonically increasing.
 
-    msg : :obj:`numpy.number`:
-        A numpy scalar value that represent a missing value in fi.
+    msg : :obj:`numpy.number`
+        A numpy scalar value that represent a missing value in ``fi``.
         This argument allows a user to use a missing value scheme
         other than NaN or masked arrays, similar to what NCL allows.
 
-    meta : :obj:`bool`:
+    meta : :obj:`bool`
         If set to True and the input array is an Xarray, the metadata
         from the input array will be copied to the output array;
         default is False.
@@ -108,10 +108,10 @@ def rcm2rgrid(
     Returns
     -------
 
-    fo : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    fo : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         The interpolated grid. A multi-dimensional array
-        of the same size as `fi` except that the rightmost dimension sizes have been
-        replaced by the sizes of `lat1d` and `lon1d`, respectively.
+        of the same size as ``fi`` except that the rightmost dimension sizes have been
+        replaced by the sizes of ``lat1d`` and ``lon1d``, respectively.
 
     Description
     -----------
@@ -229,40 +229,40 @@ def rgrid2rcm(
     Parameters
     ----------
 
-    lat1d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    lat1d : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A one-dimensional array that specifies the latitude coordinates of
         the regular grid. Must be monotonically increasing.
 
-        Note: It should only be explicitly provided when the input (`fi`) is
-        `numpy.ndarray`; otherwise, it should come from `fi.coords`.
+        Note: It should only be explicitly provided when the input (``fi``) is
+        ``numpy.ndarray``; otherwise, it should come from ``fi.coords``.
 
-    lon1d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    lon1d : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A one-dimensional array that specifies the longitude coordinates of
         the regular grid. Must be monotonically increasing.
 
-        Note: It should only be explicitly provided when the input (`fi`) is
-        `numpy.ndarray`; otherwise, it should come from `fi.coords`.
+        Note: It should only be explicitly provided when the input (``fi``) is
+        ``numpy.ndarray``; otherwise, it should come from ``fi.coords``.
 
-    fi : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    fi : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A multi-dimensional array to be interpolated. The rightmost two
         dimensions (latitude, longitude) are the dimensions to be interpolated.
 
-    lat2d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    lat2d : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A two-dimensional array that specifies the latitude locations of the
-        input (`fi`). Because this array is two-dimensional it is not an
-        associated coordinate variable of `fi`.
+        input (``fi``). Because this array is two-dimensional it is not an
+        associated coordinate variable of ``fi``.
 
-    lon2d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    lon2d : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A two-dimensional array that specifies the longitude locations of the
-        input (`fi`). Because this array is two-dimensional it is not an
-        associated coordinate variable of `fi`.
+        input (``fi``). Because this array is two-dimensional it is not an
+        associated coordinate variable of ``fi``.
 
-    msg :obj:`numpy.number`:
-        A numpy scalar value that represents a missing value in `fi`.
+    msg :obj:`numpy.number`
+        A numpy scalar value that represents a missing value in ``fi``.
         This argument allows a user to use a missing value scheme
         other than NaN or masked arrays, similar to what NCL allows.
 
-    meta :obj:`bool`:
+    meta :obj:`bool`
         If set to True and the input array is an Xarray, the metadata
         from the input array will be copied to the output array;
         default is False.
@@ -271,10 +271,10 @@ def rgrid2rcm(
     Returns
     -------
 
-    fo : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    fo : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         The interpolated grid. A multi-dimensional array of the same size as
-        `fi` except that the rightmost dimension sizes have been replaced
-        by the sizes of `lat2d` (or `lon2d`).
+        ``fi`` except that the rightmost dimension sizes have been replaced
+        by the sizes of ``lat2d`` (or ``lon2d``).
 
     Description
     -----------
