@@ -4,12 +4,14 @@ import numpy as np
 def get_msg_dtype(ty):
     if np.issubdtype(ty, np.integer):
         return np.iinfo(ty).max
-    elif np.issubdtype(ty, np.floating) or np.issubdtype(ty, np.complexfloating):
+    elif np.issubdtype(ty, np.floating) or np.issubdtype(
+            ty, np.complexfloating):
         return np.finfo(ty).max
     elif np.issubdtype(ty, np.flexible):
         return str('')
     else:
-        raise Exception(f"The ndarray.dtype.type of {ty.name} is not a supported type")
+        raise Exception(
+            f"The ndarray.dtype.type of {ty.name} is not a supported type")
 
 
 def get_py_msg_val(ty):
@@ -22,7 +24,8 @@ def get_py_msg_val(ty):
     elif np.issubdtype(ty, np.flexible):
         return str('')
     else:
-        raise Exception(f"The ndarray.dtype.type of {ty.name} is not a supported type")
+        raise Exception(
+            f"The ndarray.dtype.type of {ty.name} is not a supported type")
 
 
 def py2fort_msg(ndarray, msg_py=None, msg_fort=None):
@@ -34,7 +37,7 @@ def py2fort_msg(ndarray, msg_py=None, msg_fort=None):
 
     if msg_fort is None:
         msg_fort = get_msg_dtype(ndtype)
-        
+
     if np.isnan(msg_py):
         msg_indices = np.isnan(ndarray)
     else:
