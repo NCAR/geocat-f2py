@@ -67,39 +67,61 @@ def rcm2rgrid(
     """Interpolates data on a curvilinear grid (i.e. RCM, WRF, NARR) to a
     rectilinear grid.
 
+    Interpolates RCM (Regional Climate Model), WRF (Weather Research and Forecasting) and
+    NARR (North American Regional Reanalysis) grids to a rectilinear grid. Actually, this
+    function will interpolate most grids that use curvilinear latitude/longitude grids.
+    No extrapolation is performed beyond the range of the input coordinates. Missing values
+    are allowed but ignored.
+
+    The weighting method used is simple inverse distance squared. Missing values are allowed
+    but ignored.
+
+    The code searches the input curvilinear grid latitudes and longitudes for the four
+    grid points that surround a specified output grid coordinate. Because one or more of
+    these input points could contain missing values, fewer than four points
+    could be used in the interpolation.
+
+    Curvilinear grids which have two-dimensional latitude and longitude coordinate axes present
+    some issues because the coordinates are not necessarily monotonically increasing. The simple
+    search algorithm used by ``rcm2rgrid`` is not capable of handling all cases. The result is that,
+    sometimes, there are small gaps in the interpolated grids. Any interior points not
+    interpolated in the initial interpolation pass will be filled using linear interpolation.
+
+    In some cases, edge points may not be filled.
+
     Parameters
     ----------
 
-    lat2d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    lat2d : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A two-dimensional array that specifies the latitudes locations of the input
-        (`fi`). Because this array is two-dimensional, it is not an associated
-        coordinate variable of `fi`; therefore, it always needs to be explicitly
+        (``fi``). Because this array is two-dimensional, it is not an associated
+        coordinate variable of ``fi``; therefore, it always needs to be explicitly
         provided. The latitude order must be south-to-north.
 
-    lon2d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    lon2d : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A two-dimensional array that specifies the longitudes locations of the input
-        (`fi`). Because this array is two-dimensional, it is not an associated
-        coordinate variable of `fi`; therefore, it always needs to be explicitly
+        (``fi``). Because this array is two-dimensional, it is not an associated
+        coordinate variable of ``fi``; therefore, it always needs to be explicitly
         provided. The latitude order must be west-to-east.
 
-    fi : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    fi : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A multi-dimensional array to be interpolated. The rightmost two
         dimensions (latitude, longitude) are the dimensions to be interpolated.
 
-    lat1d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    lat1d : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A one-dimensional array that specifies the latitude coordinates of
         the regular grid. Must be monotonically increasing.
 
-    lon1d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    lon1d : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A one-dimensional array that specifies the longitude coordinates of
         the regular grid. Must be monotonically increasing.
 
-    msg : :obj:`numpy.number`:
-        A numpy scalar value that represent a missing value in fi.
+    msg : :obj:`numpy.number`
+        A numpy scalar value that represent a missing value in ``fi``.
         This argument allows a user to use a missing value scheme
         other than NaN or masked arrays, similar to what NCL allows.
 
-    meta : :obj:`bool`:
+    meta : :obj:`bool`
         If set to True and the input array is an Xarray, the metadata
         from the input array will be copied to the output array;
         default is False.
@@ -108,35 +130,10 @@ def rcm2rgrid(
     Returns
     -------
 
-    fo : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    fo : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         The interpolated grid. A multi-dimensional array
-        of the same size as `fi` except that the rightmost dimension sizes have been
-        replaced by the sizes of `lat1d` and `lon1d`, respectively.
-
-    Description
-    -----------
-
-        Interpolates RCM (Regional Climate Model), WRF (Weather Research and Forecasting) and
-        NARR (North American Regional Reanalysis) grids to a rectilinear grid. Actually, this
-        function will interpolate most grids that use curvilinear latitude/longitude grids.
-        No extrapolation is performed beyond the range of the input coordinates. Missing values
-        are allowed but ignored.
-
-        The weighting method used is simple inverse distance squared. Missing values are allowed
-        but ignored.
-
-        The code searches the input curvilinear grid latitudes and longitudes for the four
-        grid points that surround a specified output grid coordinate. Because one or more of
-        these input points could contain missing values, fewer than four points
-        could be used in the interpolation.
-
-        Curvilinear grids which have two-dimensional latitude and longitude coordinate axes present
-        some issues because the coordinates are not necessarily monotonically increasing. The simple
-        search algorithm used by rcm2rgrid is not capable of handling all cases. The result is that,
-        sometimes, there are small gaps in the interpolated grids. Any interior points not
-        interpolated in the initial interpolation pass will be filled using linear interpolation.
-
-        In some cases, edge points may not be filled.
+        of the same size as ``fi`` except that the rightmost dimension sizes have been
+        replaced by the sizes of ``lat1d`` and ``lon1d``, respectively.
 
     Examples
     --------
@@ -226,43 +223,49 @@ def rgrid2rcm(
     """Interpolates data on a rectilinear lat/lon grid to a curvilinear grid
     like those used by the RCM, WRF and NARR models/datasets.
 
+    Interpolates data on a rectilinear lat/lon grid to a curvilinear grid, such as those
+    used by the RCM (Regional Climate Model), WRF (Weather Research and Forecasting) and
+    NARR (North American Regional Reanalysis) models/datasets. No extrapolation is
+    performed beyond the range of the input coordinates. The method used is simple inverse
+    distance weighting. Missing values are allowed but ignored.
+
     Parameters
     ----------
 
-    lat1d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    lat1d : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A one-dimensional array that specifies the latitude coordinates of
         the regular grid. Must be monotonically increasing.
 
-        Note: It should only be explicitly provided when the input (`fi`) is
-        `numpy.ndarray`; otherwise, it should come from `fi.coords`.
+        Note: It should only be explicitly provided when the input (``fi``) is
+        ``numpy.ndarray``; otherwise, it should come from ``fi.coords``.
 
-    lon1d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    lon1d : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A one-dimensional array that specifies the longitude coordinates of
         the regular grid. Must be monotonically increasing.
 
-        Note: It should only be explicitly provided when the input (`fi`) is
-        `numpy.ndarray`; otherwise, it should come from `fi.coords`.
+        Note: It should only be explicitly provided when the input (``fi``) is
+        ``numpy.ndarray``; otherwise, it should come from ``fi.coords``.
 
-    fi : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    fi : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A multi-dimensional array to be interpolated. The rightmost two
         dimensions (latitude, longitude) are the dimensions to be interpolated.
 
-    lat2d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    lat2d : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A two-dimensional array that specifies the latitude locations of the
-        input (`fi`). Because this array is two-dimensional it is not an
-        associated coordinate variable of `fi`.
+        input (``fi``). Because this array is two-dimensional it is not an
+        associated coordinate variable of ``fi``.
 
-    lon2d : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    lon2d : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A two-dimensional array that specifies the longitude locations of the
-        input (`fi`). Because this array is two-dimensional it is not an
-        associated coordinate variable of `fi`.
+        input (``fi``). Because this array is two-dimensional it is not an
+        associated coordinate variable of ``fi``.
 
-    msg :obj:`numpy.number`:
-        A numpy scalar value that represents a missing value in `fi`.
+    msg : :obj:`numpy.number`
+        A numpy scalar value that represents a missing value in ``fi``.
         This argument allows a user to use a missing value scheme
         other than NaN or masked arrays, similar to what NCL allows.
 
-    meta :obj:`bool`:
+    meta : :obj:`bool`
         If set to True and the input array is an Xarray, the metadata
         from the input array will be copied to the output array;
         default is False.
@@ -271,19 +274,10 @@ def rgrid2rcm(
     Returns
     -------
 
-    fo : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    fo : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         The interpolated grid. A multi-dimensional array of the same size as
-        `fi` except that the rightmost dimension sizes have been replaced
-        by the sizes of `lat2d` (or `lon2d`).
-
-    Description
-    -----------
-
-        Interpolates data on a rectilinear lat/lon grid to a curvilinear grid, such as those
-    used by the RCM (Regional Climate Model), WRF (Weather Research and Forecasting) and
-    NARR (North American Regional Reanalysis) models/datasets. No extrapolation is
-    performed beyond the range of the input coordinates. The method used is simple inverse
-    distance weighting. Missing values are allowed but ignored.
+        ``fi`` except that the rightmost dimension sizes have been replaced
+        by the sizes of ``lat2d`` (or ``lon2d``).
 
     Examples
     --------
