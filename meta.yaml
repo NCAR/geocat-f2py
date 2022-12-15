@@ -22,8 +22,10 @@ requirements:
     - pip                                 # [build_platform != target_platform]
     - setuptools                          # [build_platform != target_platform]
     - numpy >=1.22                        # [build_platform != target_platform]
-    - {{ compiler('fortran') }}
     - cross-python_{{ target_platform }}  # [build_platform != target_platform]
+    - {{ compiler('fortran') }}
+    - {{ compiler('m2w64_c') }}           # [win]
+    - {{ compiler('m2w64_fortran') }}      # [win]
   host:
     - python
     - pip
