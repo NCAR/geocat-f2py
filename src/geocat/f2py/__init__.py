@@ -1,5 +1,5 @@
-# This prevents a python 3.9 bug
-import multiprocessing.popen_spawn_posix
+# # This prevents a python 3.9 bug
+# import multiprocessing.popen_spawn_posix
 
 from .dpres_plevel_wrapper import dpres_plevel
 from .errors import *

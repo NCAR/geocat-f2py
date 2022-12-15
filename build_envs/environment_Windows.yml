@@ -1,0 +1,13 @@
+name: geocat_f2py_build
+channels:
+  - conda-forge
+  - ncar
+  - msys2
+dependencies:
+  - python
+  - dask
+  - m2w64-toolchain
+  - numpy>=1.20.2
+  - pytest
+  - pytest-cov
+  - xarray
