@@ -1,7 +1,6 @@
 # This prevents a python 3.9 bug
 import multiprocessing.popen_spawn_posix
 
-from .dpres_plevel_wrapper import dpres_plevel
 from .errors import *
 from .linint2_wrapper import linint1, linint2, linint2_points, linint2pts
 from .missing_values import fort2py_msg, py2fort_msg
