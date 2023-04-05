@@ -106,37 +106,37 @@ def grid_to_triple(
     Parameters
     ----------
 
-    data : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    data : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         Two-dimensional input array of size ny x mx containing the data values.
-        Missing values may be present in `data`, but they are ignored.
+        Missing values may be present in ``data``, but they are ignored.
 
-    x_in : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    x_in : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A one-dimensional array that specifies the the right dimension coordinates of
-        the input (`data`).
+        the input (``data``).
 
-        Note: It should only be explicitly provided when the input (`fi`) is
-        `numpy.ndarray`; otherwise, it should come from `fi.coords`.
+        Note: It should only be explicitly provided when the input (``fi``) is
+        ``numpy.ndarray``; otherwise, it should come from ``fi.coords``.
 
-    y_in : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
+    y_in : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A one-dimensional array that specifies the the left dimension coordinates of
-        the input (`data`).
+        the input (``data``).
 
-        Note: It should only be explicitly provided when the input (`fi`) is
-        `numpy.ndarray`; otherwise, it should come from `fi.coords`.
+        Note: It should only be explicitly provided when the input (``fi``) is
+        ``numpy.ndarray``; otherwise, it should come from ``fi.coords``.
 
-    msg_py : :obj:`numpy.number`:
-        A numpy scalar value that represent a missing value in `data`.
+    msg_py : :obj:`numpy.number`
+        A numpy scalar value that represent a missing value in ``data``.
         This argument allows a user to use a missing value scheme
         other than NaN or masked arrays, similar to what NCL allows.
 
     Returns
     -------
 
-    out : :class:`xarray.DataArray`, :class:`numpy.ndarray`:
-        The maximum size of the returned array will be 3 x ld, where ld <= ny x mx.
-        If no missing values are encountered in `data`, then ld = ny x mx. If missing
-        values are encountered in `data`, they are not returned and hence ld will be
-        equal to ny x mx minus the number of missing values found in `data`.
+    out : :class:`xarray.DataArray`, :class:`numpy.ndarray`
+        The maximum size of the returned array will be ``3 x ld``, where ``ld <= ny x mx``.
+        If no missing values are encountered in ``data``, then ``ld = ny x mx``. If missing
+        values are encountered in ``data``, they are not returned and hence ``ld`` will be
+        equal to ``ny x mx`` minus the number of missing values found in ``data``.
 
     Examples
     --------
@@ -230,13 +230,13 @@ def triple_to_grid(
     a rectilinear grid.
 
     This function puts unstructured data (randomly-spaced) onto the nearest
-    locations of a rectilinear grid. A default value of `domain` option is
+    locations of a rectilinear grid. A default value of ``domain`` option is
     now set to 1.0 instead of 0.0.
 
     This function does not perform interpolation; rather, each individual
     data point is assigned to the nearest grid point. It is possible that
     upon return, grid will contain grid points set to missing value if
-    no `x_in(n)`, `y_in(n)` are nearby.
+    no ``x_in(n)``, ``y_in(n)`` are nearby.
 
 
     Parameters
@@ -244,25 +244,25 @@ def triple_to_grid(
 
     data : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A multi-dimensional array, whose rightmost dimension is the same
-        length as `x_in` and `y_in`, containing the values associated with
+        length as ``x_in`` and ``y_in``, containing the values associated with
         the "x" and "y" coordinates. Missing values may be present but
         will be ignored.
 
     x_in : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A one-dimensional array that specifies the x-coordinate
-        associated with the input (`data`).
+        associated with the input (``data``).
 
     y_in : :class:`xarray.DataArray`, :class:`numpy.ndarray`
         A one-dimensional array that specifies the y-coordinate
-        associated with the input (`data`).
+        associated with the input (``data``).
 
     x_out : :class:`xarray.DataArray`, :class:`numpy.ndarray`
-        A one-dimensional array of length M containing the x-coordinates
+        A one-dimensional array of length ``M`` containing the x-coordinates
         associated with the returned two-dimensional grid. The coordinate
         values must be monotonically increasing.
 
     y_out : :class:`xarray.DataArray` or :class:`numpy.ndarray`
-        A one-dimensional array of length N containing the y-coordinates
+        A one-dimensional array of length ``N`` containing the y-coordinates
         associated with the returned two-dimensional grid. The coordinate
         values must be monotonically increasing.
 
@@ -270,31 +270,31 @@ def triple_to_grid(
         An integer value that can be 0 or 1. The default value is 1.
         A value of 1 means to use the great circle distance formula
         for distance calculations.
-        Warning: `method = 0`, together with `domain = 1.0`, could
+        Warning: ``method = 0``, together with ``domain = 1.0``, could
         result in many of the target grid points to be set to the
         missing value if the number of grid points is large (ie: a
         high resolution grid) and the number of observations
         relatively small.
 
     domain : :obj:`float`, optional
-        A float value that should be set to a value >= 0. The
+        A float value that should be set to a value ``>= 0``. The
         default value is 1.0. If present, the larger this factor,
         the wider the spatial domain allowed to influence grid boundary
-        points. Typically, `domain` is 1.0 or 2.0. If `domain <= 0.0`,
+        points. Typically, ``domain`` is 1.0 or 2.0. If ``domain <= 0.0``,
         then values located outside the grid domain specified by
-        `x_out` and `y_out` arguments will not be used.
+        ``x_out`` and ``y_out`` arguments will not be used.
 
     distmx : :obj:`float`, optional
-        Setting `distmx` allows the user to specify a search
+        Setting ``distmx`` allows the user to specify a search
         radius (km) beyond which observations are not considered
-        for nearest neighbor. Only applicable when `method = 1`.
-        The default `distmx=1e20 (km)` means that every grid point
+        for nearest neighbor. Only applicable when ``method = 1``.
+        The default ``distmx=1e20 (km)`` means that every grid point
         will have a nearest neighbor. It is suggested that users
-        specify a reasonable value for `distmx`.
+        specify a reasonable value for ``distmx``.
 
     missing_value : :obj:`numpy.number`, optional
         A numpy scalar value that represent
-        a missing value in `data`. The default value is `np.nan`.
+        a missing value in ``data``. The default value is ``np.nan``.
         If specified explicitly, this argument allows the user to
         use a missing value scheme other than NaN or masked arrays.
 
@@ -308,9 +308,9 @@ def triple_to_grid(
     -------
 
     grid : :class:`xarray.DataArray`, :class:`numpy.ndarray`
-        The returned array will be K x N x M, where K represents the leftmost
-        dimensions of `data`, N represent the size of `y_out`,
-        and M represent the size of `x_out` coordinate vectors.
+        The returned array will be ``K`` x ``N`` x ``M``, where ``K`` represents the leftmost
+        dimensions of ``data``, N represent the size of ``y_out``,
+        and M represent the size of ``x_out`` coordinate vectors.
 
     Examples
     --------
