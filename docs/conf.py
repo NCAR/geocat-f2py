@@ -160,6 +160,12 @@ todo_include_todos = False
 
 # -- Options for HTML output -------------------------------------------------
 
+# Archive status
+html_theme_options = {
+    "announcement": "<div class='admonition warning'><p class='admonition-title'>Archived</p><p>You are viewing an archived version of GeoCAT-f2py documentation. This repo and documentation is now read-only.</p></div>"
+}
+
+
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
