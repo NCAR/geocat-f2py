@@ -168,15 +168,8 @@ rst_prolog = """.. attention::
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-
-#html_theme = 'alabaster'
-on_rtd = os.environ.get('READTHEDOCS') == 'True'
-if on_rtd:
-    html_theme = 'default'
-else:
-    import sphinx_rtd_theme
-    html_theme = 'sphinx_rtd_theme'
-    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+language = "en"
+html_theme = 'sphinx_book_theme'
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
