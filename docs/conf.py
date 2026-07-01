@@ -118,7 +118,7 @@ release = read_version()
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = 'en'
 
 # There are two options for replacing |today|: either, you set today to some
 # non-false value, then it is used:
@@ -168,7 +168,6 @@ rst_prolog = """.. attention::
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-language = "en"
 html_theme = 'sphinx_book_theme'
 
 # The name of an image file (relative to this directory) to place at the top
