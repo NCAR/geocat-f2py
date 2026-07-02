@@ -9,4 +9,4 @@ dependencies:
   - dask
   - liblapack
   - sphinx-autoapi
-  - sphinx_rtd_theme
+  - sphinx-rtd-theme
