@@ -162,7 +162,7 @@ todo_include_todos = False
 
 # Archive status
 rst_prolog = """.. attention::
-    You are viewing an archived version of GeoCAT-f2py documentation. This repo and documentation is now read-only.
+    You are viewing an archived version of GeoCAT-f2py documentation. This repo and documentation is now read-only. NCL to Python development continues on `GeoCAT-comp <https://geocat-comp.readthedocs.io/en/stable/>`__ and `GeoCAT Applications <https://ncar.github.io/geocat-applications/>`__
 """
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
