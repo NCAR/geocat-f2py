@@ -1,5 +1,5 @@
-# This prevents a python 3.9 bug
-import multiprocessing.popen_spawn_posix
+# # This prevents a python 3.9 bug
+# import multiprocessing.popen_spawn_posix
 
 from .errors import *
 from .linint2_wrapper import linint1, linint2, linint2_points, linint2pts

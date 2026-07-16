@@ -19,7 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ "ubuntu-latest", "macos-latest"]
+        os: [ "ubuntu-latest", "macos-latest", "windows-latest"]
         python-version: [ "3.8", "3.9", "3.10" ]
     steps:
       - name: Cancel previous runs
@@ -45,6 +45,10 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: |
           conda env update --file build_envs/environment_Linux.yml --prune
+      - name: Conda install (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          conda env update --file build_envs/environment_Windows.yml --prune
       - name: Install geocat-f2py
         run: |
           source build.sh
